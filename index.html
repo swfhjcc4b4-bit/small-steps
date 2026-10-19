@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261019015750";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261019025630";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -907,6 +907,33 @@ details.more[open] > summary h3::after { content: " −"; }
 .ex-sentence .q { font-size: clamp(22px, 3.4vw, 30px); color: var(--card-soft); }
 .ex-fill { color: var(--mint-deep); border-bottom: 4px solid var(--mint-deep); padding: 0 4px; }
 .ex-clock svg { width: min(62vw, 280px); height: auto; }
+.ex-jobs { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; align-items: flex-start; }
+.ex-job { display: grid; justify-items: center; gap: 6px; opacity: 0; animation: exPop 0.4s var(--spring) forwards; }
+.ex-job b { font-family: var(--font-read); font-size: clamp(30px, 3.9vw, 48px); line-height: 1.1; padding: 4px 12px; border-radius: 14px; color: var(--card-ink); }
+.ex-job small { font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.04em; }
+.ex-job.j-naming b { background: #CFE3FF; } .ex-job.j-naming small { color: #2B5FD9; }
+.ex-job.j-action b { background: #B9F5D2; } .ex-job.j-action small { color: var(--mint-deep); }
+.ex-job.j-describing b { background: #FFE48A; } .ex-job.j-describing small { color: #A86F00; }
+.ex-order { display: grid; gap: 10px; justify-items: center; }
+.ex-order .e { font-family: var(--font-emoji); font-size: clamp(64px, 10vw, 96px); line-height: 1; }
+.ex-order p { margin: 0; font-family: var(--font-read); font-weight: 700; font-size: clamp(26px, 4.4vw, 40px); padding: 6px 16px; border-radius: 16px; color: var(--card-ink); }
+.ex-order p.ok { background: #B9F5D2; }
+.ex-order p.no { background: #FFD6DC; color: var(--coral-deep); }
+.ex-seq3 { display: grid; gap: 12px; justify-items: center; width: 100%; }
+.ex-seq3 .txt { margin: 0; font-family: var(--font-read); font-weight: 700; font-size: clamp(22px, 3.4vw, 30px); line-height: 1.35; max-width: 30ch; text-align: center; color: var(--card-ink); }
+.ex-seq3 ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; width: min(100%, 520px); }
+.ex-seq3 li { display: grid; grid-template-columns: 5.4em minmax(0, 1fr); align-items: center; gap: 10px; font-family: var(--font-read); font-weight: 700; font-size: clamp(20px, 3vw, 26px); color: var(--card-ink); opacity: 0; animation: exStep 0.5s ease forwards; }
+.ex-seq3 li i { font-style: normal; font-family: var(--font-display); color: #fff; background: #8B5CF6; border-radius: 999px; padding: 4px 10px; text-align: center; font-size: 0.8em; }
+
+/* ---------- reading: sentence answers, long stories, riddles ---------- */
+.choices.v-sent { display: grid; grid-template-columns: minmax(0, 1fr); width: min(100%, 680px); margin: 0 auto; gap: clamp(10px, 1.8vh, 16px); }
+.choices.v-sent .ch-sent { min-width: 0; width: 100%; min-height: clamp(62px, 9vh, 92px); place-items: center start; text-align: left; padding: 10px 22px; border-radius: 26px;
+  font-family: var(--font-read); font-weight: 700; font-size: clamp(21px, 2.9vw, 32px); line-height: 1.2; }
+@supports (container-type: inline-size) { .choices.v-sent .ch-sent { min-width: 0; min-height: clamp(62px, 12cqi, 96px); font-size: clamp(22px, 5.2cqi, 34px); border-radius: 26px; } }
+.story.long { font-size: clamp(19px, min(3.3vw, 2.9vh), 30px); line-height: 1.55; max-width: 46ch; }
+.story.long.xl { font-size: clamp(17px, min(2.9vw, 2.5vh), 26px); max-width: 50ch; }
+.story.riddle { text-align: center; max-width: 26ch; }
+.big-pic.mid { font-size: clamp(80px, min(16vw, 13vh), 150px); }
 
 /* ---------- reading aloud ---------- */
 .subj-go.read { background: var(--sub-read); color: #2A0620; box-shadow: 0 3px 0 #B8338C; }
@@ -932,7 +959,7 @@ details.more[open] > summary h3::after { content: " −"; }
 .guide b { color: #fff; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ex-steps li, .ex-dot, .ex-tile, .ex-box.hit, .ex-col-row.ans span.hit { animation: none; opacity: 1; }
+  .ex-steps li, .ex-dot, .ex-tile, .ex-box.hit, .ex-col-row.ans span.hit, .ex-job, .ex-seq3 li { animation: none; opacity: 1; }
   .ex-hop { animation: none; stroke-dashoffset: 0; }
 }
 
@@ -942,6 +969,35 @@ details.more[open] > summary h3::after { content: " −"; }
 .setup .form { width: 100%; text-align: left; }
 .setup #s-pass { font-size: 20px; min-height: 54px; }
 a.link { color: var(--gold-hi); }
+
+/* ---------- book shelf ---------- */
+.shelf-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.shelf-tabs button { min-height: 42px; padding: 0 16px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-edge); color: var(--ink-soft); font-weight: 900; font-size: 16px; }
+.shelf-tabs button.on { background: #fff; color: var(--card-ink); border-color: #fff; }
+.shelf-tabs small { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold-hi); margin-left: 4px; }
+.shelf-tabs button.on small { color: #A86F00; }
+.shelf-h { margin: 14px 0 0; font-size: 19px; color: #fff; }
+.books { display: grid; gap: 10px; margin-top: 8px; }
+.book { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 14px; align-items: center; padding: 12px 14px; border-radius: 18px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-edge); }
+.book.owned { border-color: rgba(255, 197, 49, 0.6); background: rgba(255, 197, 49, 0.08); }
+.book-txt { display: grid; gap: 3px; min-width: 0; }
+.book-txt b { font-size: 17px; line-height: 1.25; color: #fff; }
+.book-txt .muted { font-size: 14px; }
+.book-txt .chips { margin-top: 2px; }
+.book-act { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.book-act .btn { white-space: nowrap; }
+a.btn { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+@media (max-width: 760px) { .book { grid-template-columns: minmax(0, 1fr); } .book-act { justify-content: flex-start; } }
+.week-row { display: flex; align-items: center; gap: 12px; }
+.week-n { font-size: 16px; color: var(--ink-soft); white-space: nowrap; }
+.week-n b { font-family: var(--font-display); font-weight: 400; font-size: 30px; color: var(--gold-hi); }
+.week-bar { flex: 1; height: 14px; border-radius: 999px; background: var(--glass-2); overflow: hidden; }
+.week-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--gold-hi), var(--gold)); }
+.read-list { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 6px; }
+.read-list li { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 4px 6px 12px; border-radius: 14px; background: rgba(255, 255, 255, 0.05); }
+.read-list .muted { font-size: 13px; }
+.mini-x { width: 36px; height: 36px; min-height: 0; flex: none; }
+.mini-x svg { width: 16px; height: 16px; }
 </style>
 <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div><canvas id="fx" aria-hidden="true"></canvas><div id="app"></div>
 <script>
@@ -1019,7 +1075,7 @@ function makeEngine(C) {
     if (!own.dailyMin) return SHEETS_DEF;
     const s = settingsOf(learner);
     const id = BY[levelId] ? levelId : (learner && BY[learner.levelId] ? learner.levelId : LEVELS[0].id);
-    const t = targetSeconds(id, s.sheetLen, s.pace, s.speak);
+    const t = targetSeconds(id, lenFor(id, s.sheetLen), s.pace, s.speak);
     return clamp(Math.round((s.dailyMin * 60) / t), SHEETS_MIN, SHEETS_MAX);
   }
   function todayPlan(learner, now) {
@@ -1079,12 +1135,21 @@ function makeEngine(C) {
     items.sort((x, y) => (y.miss - x.miss) || String(x.at).localeCompare(String(y.at)));
     return items.slice(0, max).map((r) => Object.assign(fromSpec(r.spec), { review: true, lv: r.lv }));
   }
+  /* Some reading levels are long (a story to read for each problem), so a level can cap the
+     problems on its sheet below the parent's setting. */
+  const lenFor = (levelId, n) => (BY[levelId] && BY[levelId].len ? Math.min(n, BY[levelId].len) : n);
   function makeSheet(levelId, n, learner) {
     const lv = BY[levelId];
     const rev = reviewPick(learner, levelId, Math.floor(n * REVIEW_SHARE));
     const seen = new Set(rev.map((p) => p.key));
     const out = [];
-    for (let i = 0; i < n - rev.length; i++) {
+    if (lv.multi) {
+      /* runs of problems that belong together, such as one story and all its questions */
+      for (let tries = 0; out.length < n - rev.length && tries < 60; tries++) {
+        lv.multi().forEach((p) => { if (out.length < n - rev.length && !seen.has(p.key)) { seen.add(p.key); p.lv = levelId; out.push(p); } });
+      }
+    }
+    for (let i = out.length; i < n - rev.length; i++) {
       let p = lv.gen(), t = 0;
       while (seen.has(p.key) && t++ < 40) p = lv.gen();
       seen.add(p.key);
@@ -1322,7 +1387,7 @@ function makeEngine(C) {
     todayKey, dayDiff, currentStreak, doneToday, placementInit, placementStep, probeOutcome,
     groupOf, kumonOf: groupOf, isTimed, groupTimed, groupLevels, groupLabel, sheetsPerDay, todayPlan, makeTest, testTarget,
     problemText: C.problemText, levelExample: C.levelExample || ((id) => C.problemText(BY[id].gen())), fmtTime, specOf, fromSpec, speaks,
-    example: (id) => (C.example ? C.example(canon(id)) : null), canon, perProblem
+    example: (id) => (C.example ? C.example(canon(id)) : null), canon, perProblem, lenFor
   };
 }
 if (typeof module !== 'undefined' && module.exports) module.exports = makeEngine;
@@ -1742,8 +1807,9 @@ const MathCurriculum = (() => {
 if (typeof module !== 'undefined' && module.exports) module.exports = MathCurriculum;
 /* Small Steps: reading curriculum. Follows the order of Kumon's early reading levels
    (7A familiar words, 6A rhyming, 5A letter sounds and simple words, 4A consonant
-   combinations and silent e, 3A vowel patterns and compound words, 2A function of words,
-   AI sentences and stories), adapted to tap answers with spoken prompts. */
+   combinations and silent e, 3A vowel patterns and compound words, 2A how words work in a
+   sentence: naming, action and describing words, word order, reading for meaning; AI stories
+   with questions; AII the order of events), adapted to tap answers with spoken prompts. */
 const ReadingCurriculum = (() => {
   'use strict';
   const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
@@ -1777,10 +1843,11 @@ const ReadingCurriculum = (() => {
     dice: '🎲', rock: '🪨', brick: '🧱', shell: '🐚', flag: '🚩', tent: '⛺', sled: '🛷', skate: '⛸️', smile: '😊', game: '🎮',
     crayon: '🖍️', broom: '🧹', chair: '🪑', watch: '⌚', bath: '🛀', king: '🤴', clown: '🤡', coin: '🪙', soap: '🧼',
     spoon: '🥄', fork: '🍴', bowl: '🥣', tie: '👔', umbrella: '☂️', violin: '🎻', yoyo: '🪀', vest: '🦺', girl: '👧', boy: '👦',
-    cloud: '☁️', fire: '🔥', ice: '🧊', scissors: '✂️', bulb: '💡', pencil: '✏️', phone: '📱', plate: '🍽️', plant: '🌱', tiger2: ''
+    cloud: '☁️', fire: '🔥', ice: '🧊', scissors: '✂️', bulb: '💡', pencil: '✏️', phone: '📱', plate: '🍽️', plant: '🌱',
+    sad: '😢', mad: '😠', nap: '😴', gas: '⛽', kid: '🧒', lip: '👄', hug: '🫂', icecream: '🍦', tiger2: ''
   };
   delete PIC.tiger2;
-  const SPOKEN = { yoyo: 'yo-yo', hotdog: 'hot dog', firetruck: 'fire truck' };
+  const SPOKEN = { yoyo: 'yo-yo', hotdog: 'hot dog', firetruck: 'fire truck', icecream: 'ice cream' };
   const spoken = (w) => SPOKEN[w] || w;
 
   /* Pictures that could be mistaken for each other never appear in the same set. */
@@ -1792,9 +1859,17 @@ const ReadingCurriculum = (() => {
     ['bird', 'hen'], ['flower', 'rose'], ['flower', 'sunflower'], ['house', 'hut'], ['ice', 'snowflake'], ['nut', 'peach'],
     ['plate', 'fork'], ['spoon', 'fork'], ['sun', 'sunglasses'], ['snowman', 'snowflake'], ['tooth', 'toothbrush'], ['rock', 'brick'],
     ['plant', 'leaf'], ['plant', 'tree'], ['leaf', 'tree'], ['car', 'firetruck'], ['truck', 'firetruck'], ['boy', 'girl'],
-    ['king', 'crown'], ['skate', 'skateboard'], ['ball', 'football'], ['egg', 'chick'], ['shell', 'snail'], ['shell', 'turtle']
+    ['king', 'crown'], ['skate', 'skateboard'], ['ball', 'football'], ['egg', 'chick'], ['shell', 'snail'], ['shell', 'turtle'],
+    ['icecream', 'ice'], ['icecream', 'cupcake'], ['nap', 'bed'], ['gas', 'car']
   ];
-  const clashes = (a, b) => CLASH.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
+  /* Faces and people look alike at a glance, so a set never has two of them. */
+  const PEOPLE = ['sad', 'mad', 'nap', 'smile', 'kid', 'hug', 'boy', 'girl', 'king', 'clown', 'cowboy'];
+  const clashes = (a, b) => (PEOPLE.includes(a) && PEOPLE.includes(b)) || CLASH.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
+  /* Wrong answers are made by changing letters, which can spell a word no child should see.
+     None of these is ever shown. */
+  const BLOCK = new Set(('fag fags fap vag nig cig sex fux dick cock rape rapes shart skank frig ladyboy hotbox gun guns tit tits cum crap ' +
+    'piss shit fart butt slut hoe kike spic jap porn boob boobs nude kill damn hell poop').split(' '));
+  const ok = (w) => !BLOCK.has(String(w).toLowerCase());
   /* Picture choices: the answer plus distractors that cannot be confused with it or each other. */
   function picSet(answer, pool, n, avoid) {
     const out = [answer];
@@ -1809,7 +1884,11 @@ const ReadingCurriculum = (() => {
   const EVERYDAY = ['cat', 'dog', 'pig', 'cow', 'hen', 'fox', 'bee', 'duck', 'frog', 'fish', 'bird', 'bear', 'lion', 'horse', 'sheep', 'snake',
     'whale', 'apple', 'banana', 'grapes', 'carrot', 'cake', 'egg', 'milk', 'bread', 'hat', 'ball', 'book', 'car', 'bus', 'boat', 'train',
     'plane', 'house', 'tree', 'sun', 'moon', 'star', 'shoe', 'sock', 'cup', 'bed', 'key', 'clock', 'drum', 'gift', 'hand', 'foot', 'nose',
-    'ear', 'monkey', 'rabbit', 'elephant', 'turtle', 'cookie', 'pizza', 'cheese', 'bike', 'kite', 'flower', 'umbrella', 'spoon', 'chair'];
+    'ear', 'monkey', 'rabbit', 'elephant', 'turtle', 'cookie', 'pizza', 'cheese', 'bike', 'kite', 'flower', 'umbrella', 'spoon', 'chair',
+    'owl', 'penguin', 'zebra', 'giraffe', 'tiger', 'mouse', 'goat', 'snail', 'crab', 'octopus', 'shark', 'spider', 'butterfly', 'ladybug',
+    'ant', 'pear', 'cherry', 'strawberry', 'watermelon', 'pineapple', 'corn', 'cupcake', 'pancake', 'popcorn', 'juice', 'icecream',
+    'rocket', 'truck', 'ship', 'tent', 'crown', 'ring', 'bell', 'broom', 'scissors', 'pencil', 'crayon', 'phone', 'glove', 'coat',
+    'shirt', 'backpack', 'snowman', 'rainbow', 'cloud', 'leaf', 'tooth', 'eye', 'toothbrush'];
 
   /* ---------- Rhymes (Kumon 6A) ---------- */
   const RHYMES = [
@@ -1842,11 +1921,11 @@ const ReadingCurriculum = (() => {
 
   /* ---------- Words to read ---------- */
   const CVC = {
-    a: ['cat', 'bat', 'hat', 'rat', 'map', 'van', 'can', 'bag', 'cap', 'ram', 'pan'],
+    a: ['cat', 'bat', 'hat', 'rat', 'map', 'van', 'can', 'bag', 'cap', 'ram', 'pan', 'nap', 'sad', 'mad', 'gas'],
     e: ['bed', 'hen', 'pen', 'net', 'web', 'ten', 'leg'],
-    i: ['pig', 'six', 'pin'],
+    i: ['pig', 'six', 'pin', 'kid', 'lip'],
     o: ['dog', 'fox', 'box', 'log'],
-    u: ['sun', 'bus', 'cup', 'bug', 'mug', 'nut', 'tub', 'hut']
+    u: ['sun', 'bus', 'cup', 'bug', 'mug', 'nut', 'tub', 'hut', 'hug']
   };
   const CVC_ALL = [].concat(CVC.a, CVC.e, CVC.i, CVC.o, CVC.u);
   const DIGRAPH = ['ship', 'shell', 'shoe', 'sheep', 'shirt', 'fish', 'shark', 'chick', 'cheese', 'cherry', 'chair', 'peach', 'watch',
@@ -1873,7 +1952,7 @@ const ReadingCurriculum = (() => {
      practises (the letter team, the blend, the magic e); `secondary` holds vowel swaps. */
   function nearMisses(word, kind) {
     const primary = [], secondary = [], seen = new Set([word]);
-    const add = (list, w) => { if (w && !seen.has(w) && /^[a-z]+$/.test(w) && w.length >= 2) { seen.add(w); list.push(w); } };
+    const add = (list, w) => { if (w && !seen.has(w) && /^[a-z]+$/.test(w) && w.length >= 2 && ok(w)) { seen.add(w); list.push(w); } };
     const firstV = word.search(/[aeiou]/);
     if (kind === 'silentE' && word.endsWith('e')) add(primary, word.slice(0, -1));
     if (kind === 'digraph') {
@@ -1966,7 +2045,7 @@ const ReadingCurriculum = (() => {
 
   /* ---------- Short stories (Kumon AI: sentences, sequence, answering questions) ---------- */
   const NAMES = ['Sam', 'Ann', 'Ben', 'Kim', 'Max', 'Liz', 'Tom', 'Mia', 'Jack', 'Pam', 'Dan', 'Meg'];
-  const COLORS = ['red', 'blue', 'green', 'yellow', 'pink', 'purple', 'orange'];
+  const COLORS = ['red', 'blue', 'green', 'yellow', 'black', 'purple', 'orange'];
   const THINGS = ['ball', 'hat', 'kite', 'cup', 'bag', 'bike', 'box', 'car'];
   const PETS = { dog: ['run', 'dig', 'bark'], cat: ['nap', 'purr'], fish: ['swim'], bird: ['sing', 'fly'], frog: ['hop', 'jump'] };
   const PLACES = ['park', 'farm', 'zoo', 'beach', 'shop', 'pool'];
@@ -2012,6 +2091,171 @@ const ReadingCurriculum = (() => {
     }
     return mk('story', ans, shuffle([ans].concat(wrong)), 'word', { t: 'story', text, q }, 'Read the story, then answer the question.',
       'st:' + text + '|' + q, 'story' + t, { text, q });
+  }
+
+  /* ---------- How words work (Kumon 2A): naming, action and describing words ---------- */
+  const NVA = {
+    dog: [['runs', 'digs', 'barks', 'naps', 'jumps'], ['big', 'little', 'brown', 'happy', 'fast', 'sleepy']],
+    cat: [['naps', 'runs', 'jumps', 'purrs'], ['little', 'black', 'sleepy', 'soft', 'happy']],
+    bird: [['sings', 'flies', 'hops'], ['little', 'blue', 'red', 'happy']],
+    fish: [['swims'], ['little', 'fast', 'orange']],
+    frog: [['hops', 'jumps', 'swims'], ['green', 'little', 'big', 'wet']],
+    duck: [['swims', 'quacks'], ['little', 'yellow', 'wet']],
+    cow: [['moos', 'eats', 'naps'], ['big', 'brown', 'black']],
+    horse: [['runs', 'eats', 'jumps'], ['big', 'brown', 'fast', 'tall']],
+    pig: [['eats', 'naps', 'digs'], ['big', 'little', 'muddy', 'happy']],
+    bear: [['naps', 'eats', 'climbs'], ['big', 'brown', 'sleepy', 'hungry']],
+    monkey: [['climbs', 'jumps', 'eats'], ['little', 'funny', 'brown']],
+    lion: [['roars', 'runs', 'naps'], ['big', 'hungry', 'sleepy']],
+    bee: [['buzzes', 'flies'], ['little', 'busy']],
+    baby: [['naps', 'smiles', 'claps', 'cries'], ['little', 'happy', 'sleepy', 'hungry']],
+    boy: [['runs', 'jumps', 'claps', 'sings', 'reads'], ['tall', 'happy', 'little', 'fast']],
+    girl: [['runs', 'jumps', 'claps', 'sings', 'reads'], ['tall', 'happy', 'little', 'fast']]
+  };
+  const NVA_NOUNS = Object.keys(NVA);
+  const baseOf = (v) => (v.endsWith('ies') ? v.slice(0, -3) + 'y' : v.endsWith('zzes') ? v.slice(0, -2) : v.slice(0, -1));
+  const anA = (w) => (/^[aeiou]/.test(w) ? 'an' : 'a');
+  const JOB = { naming: 'naming word', action: 'action word', describing: 'describing word' };
+  function nva() {
+    const n = pick(NVA_NOUNS), v = pick(NVA[n][0]), a = pick(NVA[n][1]), withCan = Math.random() < 0.4;
+    const verb = withCan ? baseOf(v) : v;
+    const text = withCan ? anA(a).replace('a', 'A') + ' ' + a + ' ' + n + ' can ' + verb + '.' : 'The ' + a + ' ' + n + ' ' + verb + '.';
+    const job = pick(Object.keys(JOB)), ans = job === 'naming' ? n : job === 'action' ? verb : a, q = 'Tap the ' + JOB[job] + '.';
+    return mk('nva', ans, shuffle([a, n, verb]), 'word', { t: 'qsent', q, text }, 'Read the sentence. ' + q, 'nv:' + text + '|' + job, 'nva' + job, { text, job });
+  }
+
+  /* ---------- Word order (Kumon 2A) ----------
+     The wrong orders are picked from lists of orders that are never a real sentence (no questions). */
+  const ORD_WE = ['run', 'sing', 'read', 'swim', 'jump', 'play', 'draw', 'dance', 'paint', 'skip'];
+  const ORD_IS = [['sun', 'hot', 'sun'], ['snow', 'cold', 'snowflake'], ['ice', 'cold', 'ice'], ['cake', 'sweet', 'cake'], ['fire', 'hot', 'fire'],
+    ['lion', 'big', 'lion'], ['mouse', 'small', 'mouse'], ['bus', 'big', 'bus'], ['banana', 'yellow', 'banana'], ['apple', 'red', 'apple'],
+    ['frog', 'green', 'frog'], ['milk', 'cold', 'milk'], ['rock', 'hard', 'rock'], ['ant', 'small', 'ant'], ['moon', 'bright', 'moon'], ['soup', 'hot', '']];
+  const ORD_WRONG = {
+    the3: [[1, 0, 2], [2, 1, 0], [0, 2, 1], [1, 2, 0], [2, 0, 1]],
+    the4: [[0, 2, 1, 3], [1, 0, 2, 3], [0, 1, 3, 2], [3, 0, 1, 2], [2, 1, 0, 3], [0, 3, 1, 2]],
+    see: [[0, 2, 1, 3], [1, 0, 2, 3], [0, 1, 3, 2], [3, 2, 1, 0], [2, 3, 1, 0]],
+    can: [[0, 1, 3, 2], [1, 0, 2, 3], [0, 2, 1, 3], [3, 2, 1, 0], [2, 3, 0, 1]],
+    we: [[0, 2, 1, 3], [1, 0, 2, 3], [0, 1, 3, 2], [3, 2, 1, 0], [1, 3, 0, 2]],
+    has: [[0, 1, 2, 4, 3], [0, 2, 1, 3, 4], [0, 1, 3, 2, 4], [4, 3, 2, 1, 0], [1, 2, 0, 3, 4]],
+    is: [[0, 1, 3, 2], [1, 0, 2, 3], [0, 2, 1, 3], [3, 2, 1, 0], [1, 3, 0, 2]]
+  };
+  function sentenceOf(words) {
+    const w = words.map((x) => (x === 'I' || NAMES.includes(x) ? x : x.toLowerCase()));
+    w[0] = w[0].charAt(0).toUpperCase() + w[0].slice(1);
+    return w.join(' ') + '.';
+  }
+  function order() {
+    const t = ri(1, 7);
+    let words, kind, pic = '';
+    if (t === 1) { const n = pick(NVA_NOUNS); words = ['The', n, pick(NVA[n][0])]; kind = 'the3'; pic = n; }
+    else if (t === 2) { const n = pick(NVA_NOUNS); words = ['The', pick(NVA[n][1]), n, pick(NVA[n][0])]; kind = 'the4'; pic = n; }
+    else if (t === 3) { const n = pick(NVA_NOUNS); words = ['I', 'see', 'a', n]; kind = 'see'; pic = n; }
+    else if (t === 4) { const n = pick(NVA_NOUNS); words = ['The', n, 'can', baseOf(pick(NVA[n][0]))]; kind = 'can'; pic = n; }
+    else if (t === 5) { words = ['We', 'like', 'to', pick(ORD_WE)]; kind = 'we'; }
+    else if (t === 6) { const th = pick(THINGS), c = pick(COLORS); words = [pick(NAMES), 'has', anA(c), c, th]; kind = 'has'; pic = th; }
+    else { const r = pick(ORD_IS); words = ['The', r[0], 'is', r[1]]; kind = 'is'; pic = r[2]; }
+    const right = sentenceOf(words), wrong = [];
+    shuffle(ORD_WRONG[kind]).forEach((perm) => { const s = sentenceOf(perm.map((i) => words[i])); if (wrong.length < 2 && s !== right && !wrong.includes(s)) wrong.push(s); });
+    return mk('order', right, shuffle([right].concat(wrong)), 'sent', { t: 'order', pic: PIC[pic] ? pic : '' },
+      'Which sentence is in the right order? Read each one.', 'or:' + right, 'order' + kind, { text: right });
+  }
+
+  /* ---------- Riddles (Kumon 2A: reading for meaning). Each wrong picture fails at least one clue. ---------- */
+  const RIDDLES = [
+    ['I am red and round. You can eat me. I grow on a tree.', 'apple', ['ball', 'sun', 'carrot']],
+    ['I am long and yellow. Monkeys like to eat me.', 'banana', ['carrot', 'apple', 'sock']],
+    ['I have four legs. I say woof. I like to dig.', 'dog', ['cat', 'fish', 'bird']],
+    ['I come out at night. I am big and round. I shine in the sky.', 'moon', ['sun', 'tree', 'house']],
+    ['I have wheels. I am big and yellow. I take kids to school.', 'bus', ['car', 'bike', 'boat']],
+    ['I live in the water. I have fins. I can swim.', 'fish', ['dog', 'bird', 'cow']],
+    ['I am made of snow. I have a carrot nose. I melt in the sun.', 'snowman', ['tree', 'sun', 'house']],
+    ['I have a very long neck. I eat leaves from tall trees.', 'giraffe', ['pig', 'mouse', 'duck']],
+    ['I can hop. I have long ears. I like to eat carrots.', 'rabbit', ['frog', 'cat', 'fish']],
+    ['You wear me on your foot. I have laces.', 'shoe', ['hat', 'glove', 'shirt']],
+    ['I am green. I can jump. I say ribbit.', 'frog', ['snake', 'cow', 'bee']],
+    ['I have pages. You can read me.', 'book', ['ball', 'cup', 'shoe']],
+    ['I have hands, but I cannot clap. I tell you the time.', 'clock', ['bell', 'key', 'cup']],
+    ['I fall from the clouds. I make things wet.', 'rain', ['sun', 'star', 'leaf']],
+    ['I am hot and bright. I am in the sky in the day.', 'sun', ['moon', 'star', 'cloud']],
+    ['I buzz. I can fly. I make honey.', 'bee', ['ant', 'bird', 'frog']],
+    ['I have eight legs. I make a web.', 'spider', ['ant', 'bee', 'snail']],
+    ['I am big and gray. I have a long trunk.', 'elephant', ['mouse', 'horse', 'pig']],
+    ['I am cold and sweet. I melt on a hot day.', 'icecream', ['cake', 'pizza', 'bread']],
+    ['I am small and slow. I leave a shiny trail.', 'snail', ['ant', 'frog', 'fish']],
+    ['I have a hard shell. I can swim. I am slow on land.', 'turtle', ['fish', 'frog', 'duck']],
+    ['I have wings. People ride inside me. I fly in the sky.', 'plane', ['car', 'boat', 'train']],
+    ['You sleep in me at night. I have a pillow and a blanket.', 'bed', ['chair', 'car', 'tub']],
+    ['I wear a crown. I live in a castle.', 'king', ['dog', 'tree', 'boat']],
+    ['I am orange. I grow in the ground. Rabbits like to eat me.', 'carrot', ['apple', 'banana', 'grapes']],
+    ['I am small. I have a long tail. I like cheese. I say squeak.', 'mouse', ['cat', 'dog', 'pig']],
+    ['I have two wheels. You push the pedals to ride me.', 'bike', ['car', 'bus', 'train']],
+    ['I am round. You can kick me or throw me.', 'ball', ['apple', 'sun', 'hat']],
+    ['I say moo. I give milk.', 'cow', ['pig', 'horse', 'sheep']],
+    ['I come from a hen. You can crack me.', 'egg', ['bread', 'apple', 'cheese']],
+    ['I have black and white stripes. I look like a horse.', 'zebra', ['horse', 'tiger', 'panda']],
+    ['I say quack. I swim on the pond.', 'duck', ['hen', 'frog', 'fish']],
+    ['I am purple. I grow in a bunch. You can eat me.', 'grapes', ['apple', 'banana', 'pear']],
+    ['I am small. I shine at night. I twinkle.', 'star', ['sun', 'tree', 'flower']],
+    ['I have many colors. I come out after the rain.', 'rainbow', ['cloud', 'sun', 'tree']],
+    ['You can sit on me. I have four legs, but I cannot walk.', 'chair', ['dog', 'cat', 'car']],
+    ['I keep your hands warm. I have five fingers.', 'glove', ['hat', 'shoe', 'sock']],
+    ['I am a big cat. I have a mane. I roar.', 'lion', ['cat', 'dog', 'cow']]
+  ];
+  function riddle() {
+    const i = ri(0, RIDDLES.length - 1), [text, ans, wrong] = RIDDLES[i];
+    return mk('riddle', ans, picSet(ans, wrong, 4), 'pic', { t: 'riddle', text }, 'Read the riddle. What am I?', 'rd:' + i, 'riddle', { text });
+  }
+
+  /* ---------- Passages (Kumon AI): a short story with several questions ----------
+     The stories are the read-aloud passages for Kumon 2A and AI (read-aloud.js). A sheet reads one
+     story and answers all of its questions in a row, then the next story. */
+  const RA = () => (typeof ReadAloud !== 'undefined' ? ReadAloud : (typeof require === 'function' ? require('./read-aloud.js') : null));
+  let PASSAGES = null;
+  function passages() {
+    if (PASSAGES) return PASSAGES;
+    const R = RA();
+    PASSAGES = [];
+    if (R) R.TIERS.forEach((t) => { if (t.lvl === 'cloze' || t.lvl === 'story') t.items.forEach((it) => { if (it.qs) PASSAGES.push(it); }); });
+    return PASSAGES;
+  }
+  function passageQ(it, k) {
+    const [q, ans, wrong] = it.qs[k];
+    return mk('passage', ans, shuffle([ans].concat(wrong)), 'sent', { t: 'story', text: it.text, q, long: true },
+      'Read the story, then answer the question.', 'pg:' + it.id + ':' + k, 'pg:' + it.id, { text: it.text, q });
+  }
+  function passage() { const it = pick(passages()); return passageQ(it, ri(0, it.qs.length - 1)); }
+  function passageSet() { const it = pick(passages()); return shuffle(it.qs.map((x, k) => k)).map((k) => passageQ(it, k)); }
+
+  /* ---------- First, next, last (Kumon AII: order of events). Some stories tell things out of
+     order ("after he played in the mud"), so the answer comes from reading, not from position. ---------- */
+  const SEQ = [
+    ['Mia put a seed in the dirt. She gave it water every day. Soon a little plant came up.', ['Mia planted a seed.', 'She gave it water.', 'A plant came up.']],
+    ['Ben put on his socks. Then he put on his shoes. Last, he tied the laces.', ['Ben put on his socks.', 'He put on his shoes.', 'He tied the laces.']],
+    ['Before bed, Kim took a bath. After her bath, she brushed her teeth. Then Dad read her a story.', ['Kim took a bath.', 'She brushed her teeth.', 'Dad read her a story.']],
+    ['Tom had a bath after he played in the mud. Then he put on his pajamas.', ['Tom played in the mud.', 'Tom had a bath.', 'He put on his pajamas.']],
+    ['The egg cracked open. A tiny chick came out. Soon the chick was walking around the yard.', ['The egg cracked open.', 'A chick came out.', 'The chick walked around.']],
+    ['Sam mixed the flour and eggs. He put the cake in the oven. When it was done, everyone ate a slice.', ['Sam mixed the flour and eggs.', 'He baked the cake.', 'Everyone ate cake.']],
+    ['Ana put on her helmet. She rode her bike to the park. At the park, she met her friends.', ['Ana put on her helmet.', 'She rode to the park.', 'She met her friends.']],
+    ['Dad washed the car. After that, he dried it with a towel. Then the car was shiny and clean.', ['Dad washed the car.', 'He dried it with a towel.', 'The car was shiny.']],
+    ['It started to rain, so Max ran inside. He took off his wet coat. Then he had a cup of warm milk.', ['It started to rain.', 'Max took off his coat.', 'Max had warm milk.']],
+    ['Liz ate lunch after she finished her painting. Then she went outside to play.', ['Liz finished her painting.', 'Liz ate lunch.', 'She went outside to play.']],
+    ['The caterpillar ate and ate. Then it made a cocoon. At last, it came out as a butterfly.', ['The caterpillar ate and ate.', 'It made a cocoon.', 'It came out as a butterfly.']],
+    ['Before school, Jack ate a big bowl of cereal. After school, he did his homework. At night, he went to sleep.', ['Jack ate cereal.', 'He did his homework.', 'He went to sleep.']],
+    ['Nina wrote a letter to Grandma. She put it in an envelope. Then she dropped it in the mailbox.', ['Nina wrote a letter.', 'She put it in an envelope.', 'She mailed the letter.']],
+    ['The snow melted in the sun. After the snow was gone, green grass came up. Then the first flowers opened.', ['The snow melted.', 'Green grass came up.', 'The flowers opened.']],
+    ['We went to the store to buy apples. At home, Mom cut them up. Then we baked an apple pie.', ['We bought apples.', 'Mom cut up the apples.', 'We baked a pie.']],
+    ['Before he jumped in the pool, Leo put on his goggles. He swam to the other side. Then he climbed out and dried off.', ['Leo put on his goggles.', 'He swam across the pool.', 'He dried off.']],
+    ['Ella fed her dog after she walked him. Then the dog took a long nap.', ['Ella walked her dog.', 'Ella fed her dog.', 'The dog took a nap.']],
+    ['The bus stopped at the corner. The kids climbed on. Then the bus drove to school.', ['The bus stopped.', 'The kids climbed on.', 'The bus drove to school.']],
+    ['Omar built a tower of blocks. His baby sister knocked it down. So Omar built it again, even taller.', ['Omar built a tower.', 'His sister knocked it down.', 'Omar built it again.']],
+    ['First the farmer planted corn. All summer the corn grew tall. In the fall, the farmer picked it.', ['The farmer planted corn.', 'The corn grew tall.', 'The farmer picked the corn.']],
+    ['The campers made a fire before they went into the tent. They cooked hot dogs on it. Later, they crawled into their sleeping bags.', ['The campers made a fire.', 'They cooked hot dogs.', 'They got in their sleeping bags.']],
+    ['Pam found a lost kitten. She took it to the vet. Then she brought it home and named it Pepper.', ['Pam found a kitten.', 'She took it to the vet.', 'She named it Pepper.']]
+  ];
+  const SEQ_Q = ['What happened first?', 'What happened next?', 'What happened last?'];
+  function seq() {
+    const i = ri(0, SEQ.length - 1), [text, ev] = SEQ[i], k = ri(0, 2);
+    return mk('seq', ev[k], shuffle(ev), 'sent', { t: 'story', text, q: SEQ_Q[k] }, 'Read the story, then answer the question.', 'sq:' + i + ':' + k, 'seq' + k, { text, q: SEQ_Q[k] });
   }
 
   function mk(kind, answer, choices, view, prompt, say, key, fam, data) {
@@ -2062,7 +2306,7 @@ const ReadingCurriculum = (() => {
         fakes.push(w.startsWith(p) ? swap + rest : rest + swap);
       });
       const out = [w];
-      shuffle(real).concat(shuffle(fakes), shuffle(COMPOUND)).forEach((x) => { if (out.length < 4 && !out.includes(x)) out.push(x); });
+      shuffle(real).concat(shuffle(fakes), shuffle(COMPOUND)).forEach((x) => { if (out.length < 4 && !out.includes(x) && ok(x)) out.push(x); });
       return mk('compound', w, shuffle(out), 'word', { t: 'pic', word: w }, 'Which word matches the picture?', 'cp:' + w, 'compound', { word: w });
     },
     cloze() {
@@ -2073,7 +2317,7 @@ const ReadingCurriculum = (() => {
       const i = ri(0, ASK.length - 1), [q, ans, wrong] = ASK[i];
       return mk('ask', ans, picSet(ans, wrong, 4), 'pic', { t: 'question', text: q }, 'Read the question.', 'as:' + i, 'ask', { text: q });
     },
-    story
+    story, nva, order, riddle, passage, seq
   };
   function vowelOf(w) { const m = w.match(/[aeiou]/); return m ? m[0] : ''; }
   function firstSound(table, kind) {
@@ -2105,7 +2349,9 @@ const ReadingCurriculum = (() => {
     { id: 'sentences', name: 'Sentences and stories' }
   ];
   const LEVELS = [];
-  const L = (id, stage, group, name, short, sec) => { LEVELS.push({ id, stage, group, name, short, sec, gen: G[id] }); };
+  /* opt.len caps the problems on a sheet for long reading; opt.multi makes a run of problems
+     that belong together (one story, its questions). */
+  const L = (id, stage, group, name, short, sec, opt) => { LEVELS.push(Object.assign({ id, stage, group, name, short, sec, gen: G[id] }, opt || {})); };
   L('rpic', 'listen', '7A', 'Picture words', 'Picture words', 6);
   L('rhyme', 'listen', '6A', 'Rhyming words', 'Rhymes', 8);
   L('lmatch', 'letters', '5A', 'Same letter', 'Same letter', 4);
@@ -2123,7 +2369,12 @@ const ReadingCurriculum = (() => {
   L('compound', 'words', '3A', 'Compound words', 'Compound words', 7);
   L('cloze', 'sentences', '2A', 'Finish the sentence', 'Finish the sentence', 10);
   L('ask', 'sentences', '2A', 'Read and pick', 'Read and pick', 10);
+  L('nva', 'sentences', '2A', 'Naming, action and describing words', 'Word jobs', 12);
+  L('order', 'sentences', '2A', 'Words in the right order', 'Word order', 18);
+  L('riddle', 'sentences', '2A', 'Riddles: What am I?', 'Riddles', 18);
   L('story', 'sentences', 'AI', 'Short stories', 'Stories', 30);
+  L('passage', 'sentences', 'AI', 'Read a story, answer questions', 'Story questions', 35, { len: 6, multi: passageSet });
+  L('seq', 'sentences', 'AII', 'First, next, last', 'First, next, last', 40, { len: 6 });
 
   /* ---------- Mistakes and hints ---------- */
   const TIPS = {
@@ -2143,13 +2394,18 @@ const ReadingCurriculum = (() => {
     sense: 'Read the sentence with your word in it. Does it make sense?',
     question: 'Read the question again, then check each picture.',
     story: 'Look back at the story to find the answer.',
+    wordJob: 'Naming words name things. Action words tell what they do. Describing words tell what they are like.',
+    order: 'Read each one out loud. The right one sounds like how we talk.',
+    riddle: 'Read every clue. The answer has to fit all of them.',
+    sequence: 'Look for clue words like first, then, before and after.',
     other: 'Try it again, slowly.'
   };
   const CODE_LABEL = {
     listen: 'Listening for words', rhyme: 'Rhymes', shape: 'Letter shapes', firstSound: 'First sounds', firstLetter: 'First letter',
     vowel: 'Vowel sounds', lastLetter: 'Last letter', lookAll: 'Sounding out', magicE: 'Magic e', digraph: 'Letter teams',
     vowelTeam: 'Vowel teams', compound: 'Compound words', sight: 'Sight words', sense: 'Word meaning', question: 'Reading questions',
-    story: 'Story questions', other: 'Other slips'
+    story: 'Story questions', wordJob: 'Naming, action and describing words', order: 'Word order', riddle: 'Riddles', sequence: 'Order of events',
+    other: 'Other slips'
   };
   function spellingCode(answer, given) {
     if (typeof given !== 'string') return 'lookAll';
@@ -2181,7 +2437,11 @@ const ReadingCurriculum = (() => {
       case 'sight1': case 'sight2': return 'sight';
       case 'cloze': return 'sense';
       case 'ask': return 'question';
-      case 'story': return 'story';
+      case 'story': case 'passage': return 'story';
+      case 'nva': return 'wordJob';
+      case 'order': return 'order';
+      case 'riddle': return 'riddle';
+      case 'seq': return 'sequence';
       default: return 'other';
     }
   }
@@ -2196,7 +2456,11 @@ const ReadingCurriculum = (() => {
       case 'sight1': case 'sight2': return 'find “' + d.word + '”';
       case 'cloze': return d.text;
       case 'ask': return d.text;
-      case 'story': return d.q;
+      case 'story': case 'passage': return d.q;
+      case 'nva': return JOB[d.job] + ' in “' + d.text + '”';
+      case 'order': return 'right order: ' + d.text;
+      case 'riddle': return d.text;
+      case 'seq': return d.q + ' (' + d.text.split(' ').slice(0, 5).join(' ') + ' …)';
       default: return 'spell ' + (d.word || '');
     }
   }
@@ -2224,7 +2488,17 @@ const ReadingCurriculum = (() => {
     compound: { show: { type: 'parts', parts: ['sun', 'flower'], word: 'sunflower', pic: PIC.sunflower }, steps: ['Two small words can make one big word.', 'sun + flower = sunflower.'] },
     cloze: { show: { type: 'sentence', text: 'The fish can ___.', fill: 'swim' }, steps: ['Read the whole sentence.', 'Try each word in the gap.', 'Pick the one that makes sense: The fish can swim.'] },
     ask: { show: { type: 'sentence', text: 'Which one can fly?', pic: PIC.bird }, steps: ['Read the question.', 'Think about each picture.', 'A bird can fly, so tap the bird.'] },
-    story: { show: { type: 'sentence', text: 'Sam has a red ball. Ben has a blue ball.', q: 'What color is Sam’s ball?', fill: 'red' }, steps: ['Read the story.', 'Read the question.', 'Look back at the story to find the answer: red.'] }
+    story: { show: { type: 'sentence', text: 'Sam has a red ball. Ben has a blue ball.', q: 'What color is Sam’s ball?', fill: 'red' }, steps: ['Read the story.', 'Read the question.', 'Look back at the story to find the answer: red.'] },
+    nva: { show: { type: 'jobs', words: [['The', ''], ['big', 'describing'], ['dog', 'naming'], ['runs.', 'action']] },
+      steps: ['A naming word names a person, an animal or a thing: dog.', 'An action word tells what it does: runs.', 'A describing word tells what it is like: big.'] },
+    order: { show: { type: 'order', right: 'The cat naps.', wrong: 'Cat the naps.', pic: PIC.cat },
+      steps: ['Words go in an order that makes sense.', 'Read each one out loud.', 'Pick the one that sounds like how we talk: The cat naps.'] },
+    riddle: { show: { type: 'sentence', text: 'I am long and yellow. Monkeys like to eat me.', q: 'What am I?', fill: 'a banana', pic: PIC.banana },
+      steps: ['Read every clue.', 'Think of something that fits all the clues.', 'Long, yellow, and monkeys eat it: a banana!'] },
+    passage: { show: { type: 'sentence', text: 'Ben has a little fish named Bubbles. Bubbles is orange and white.', q: 'What color is Bubbles?', fill: 'Orange and white' },
+      steps: ['Read the whole story first.', 'Then read the question.', 'Look back at the story to find the answer.', 'Each story has a few questions in a row.'] },
+    seq: { show: { type: 'seq3', text: 'Tom had a bath after he played in the mud. Then he put on his pajamas.', items: [['First', 'Tom played in the mud.'], ['Next', 'Tom had a bath.'], ['Last', 'He put on his pajamas.']] },
+      steps: ['Read the whole story.', 'Look for clue words like after, then and before.', 'Think about the order things really happened.'] }
   };
   function example(levelId) {
     const lv = LEVELS.find((l) => l.id === levelId), e = EX[levelId];
@@ -2236,7 +2510,8 @@ const ReadingCurriculum = (() => {
     key: 'reading', levels: LEVELS, stages: STAGES, tips: TIPS, codeLabels: CODE_LABEL, diagnose, problemText, refresh, example,
     groupLabel: (g) => 'Kumon ' + g, untimedGroups: { '7A': true, '6A': true, '5A': true, '4A': true, '3A': true }, minTestLevels: 2, alwaysSpeak: true,
     defaults: { sheetLen: 10, allowed: 1, dailyMin: 10 }, sheetsDefault: 5, sheetsMin: 5, sheetsMax: 10,
-    PIC, spoken, _data: { RHYMES, FIRST_A, FIRST_B, CVC, CVC_ALL, DIGRAPH, BLEND, SILENT_E, TEAMS, COMPOUND, SIGHT1, SIGHT2, CLOZE, ASK, EVERYDAY, CLASH, nearMisses, clashes }
+    PIC, spoken, _data: { RHYMES, FIRST_A, FIRST_B, CVC, CVC_ALL, DIGRAPH, BLEND, SILENT_E, TEAMS, COMPOUND, SIGHT1, SIGHT2, CLOZE, ASK, EVERYDAY, CLASH, PEOPLE, BLOCK,
+      NVA, ORD_WRONG, RIDDLES, SEQ, passages, passageSet, nearMisses, clashes }
   };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = ReadingCurriculum;
@@ -2598,37 +2873,71 @@ const ReadAloud = (() => {
       'In the summer we go to the beach. I play in the sand with my sister.'
     ] },
     { lvl: 'cloze', mode: 'read', goalWords: 50, goalSecs: 60, items: [
-      { text: 'Mia and her dad went to the park. They took a red ball and a blue kite. The wind was strong, so the kite went up high. Mia ran and ran with the string. Then the kite fell into a tree. Dad helped her get it down.', q: 'Where did the kite fall?', a: 'Into a tree' },
-      { text: 'Ben has a little fish named Bubbles. Bubbles is orange and white. Every morning, Ben gives Bubbles a pinch of food. Bubbles swims to the top to eat it. On Saturday, Ben cleaned the fish tank with his mom. Bubbles watched from a cup of water.', q: 'What color is Bubbles?', a: 'Orange and white' },
-      { text: 'It rained all day, so Kim could not play outside. She made a fort with chairs and a big sheet. She took her books and a flashlight into the fort. Her cat came in too. Kim read a story to the cat until it fell asleep.', q: 'What did Kim make?', a: 'A fort' },
-      { text: 'Sam planted a seed in a small pot. He put the pot by the window, where the sun could shine on it. Each day he gave it a little water. After one week, a tiny green leaf popped up. Sam was so happy that he showed his whole family.', q: 'Where did Sam put the pot?', a: 'By the window' },
-      { text: 'Grandpa and Liz went fishing at the lake. They sat on the dock and waited. For a long time, nothing happened. Then Liz felt a tug on her line. She pulled and pulled. It was not a fish. It was an old boot! They both laughed.', q: 'What did Liz pull out of the lake?', a: 'An old boot' },
-      { text: 'Max wanted to bake cookies. First, he and his mom mixed butter and sugar. Next, they added flour and eggs. Max stirred the dough with a big spoon. They put the cookies in the oven. When they came out, the kitchen smelled sweet. Max ate two right away.', q: 'What did Max stir the dough with?', a: 'A big spoon' },
-      { text: 'There was a small brown bird in our yard. It hopped on the grass, looking for worms. When my dog barked, the bird flew up to the fence. It sang a little song and then flew away to its nest in the big oak tree.', q: 'Where was the bird’s nest?', a: 'In the big oak tree' },
-      { text: 'Today was Pam’s first day at a new school. She felt a little scared. Her teacher, Mr. Lee, smiled and showed her where to sit. At lunch, a girl named Rosa asked Pam to play tag. By the end of the day, Pam had a new friend.', q: 'Who asked Pam to play tag?', a: 'Rosa' },
-      { text: 'The snow fell all night. In the morning, Jack and his sister put on their coats, hats and boots. They rolled three big snowballs to make a snowman. Jack used two rocks for its eyes. His sister gave it her red scarf. It looked very warm.', q: 'What did Jack use for the eyes?', a: 'Two rocks' },
-      { text: 'Ann has a pet turtle named Slow Joe. Slow Joe likes to sit on a rock under a warm lamp. He eats lettuce and little bugs. Some days he swims in his tank. Ann thinks Slow Joe is the best pet in the whole world.', q: 'What does Slow Joe eat?', a: 'Lettuce and little bugs' },
-      { text: 'On Sunday, the family went to the zoo. First they saw the lions sleeping in the sun. Next they watched the monkeys swing from the trees. Tom liked the giraffes best because their necks were so long. Before they went home, they all ate ice cream.', q: 'Which animals did Tom like best?', a: 'The giraffes' },
-      { text: 'Dan lost his blue mitten at the playground. He looked under the slide. He looked by the swings. He looked in the sandbox. At last he found it on top of the fence, where someone had put it so he could see it. He was very glad.', q: 'Where did Dan find his mitten?', a: 'On top of the fence' },
-      { text: 'Meg and her mom made a bird feeder. They spread peanut butter on a pine cone and rolled it in seeds. Then they hung it from a branch outside the kitchen window. The next day, four little birds came to eat. Meg counted them every morning.', q: 'How many birds came the next day?', a: 'Four' },
-      { text: 'It was a hot day at the beach. Liam built a sand castle with tall towers. He dug a moat around it and filled it with water. Then a big wave came and washed the castle away. Liam just smiled and started building a new one.', q: 'What washed the castle away?', a: 'A big wave' },
-      { text: 'Our class has a hamster named Peanut. Each week, one child takes care of him. This week it is my turn. I give Peanut fresh water and food. I clean his cage too. Peanut likes to run on his wheel at night when we are asleep.', q: 'When does Peanut run on his wheel?', a: 'At night' },
-      { text: 'Rosa wanted to learn to ride her bike without training wheels. Her dad held the back of the seat while she pedaled. She wobbled a lot at first. On the third try, Dad let go, and Rosa rode all the way to the corner by herself.', q: 'Who held the back of the seat?', a: 'Her dad' },
-      { text: 'The leaves on the big tree turned red, orange and yellow. When the wind blew, they fell to the ground. Tim and his brother raked them into a giant pile. Then they took turns jumping into it. The leaves went flying everywhere. They had to rake them up again.', q: 'What did Tim and his brother do with the pile?', a: 'Jumped into it' },
-      { text: 'Kate’s grandma lives on a farm. When Kate visits, she helps feed the chickens and collect the eggs. She also brushes the horse, whose name is Daisy. In the evening, they sit on the porch and listen to the frogs sing by the pond. It is her favorite place.', q: 'What is the horse’s name?', a: 'Daisy' },
-      { text: 'A little puppy followed Ben home from the store. It had no collar. Ben gave it some water and a blanket. Then he and his mom put up signs with the puppy’s picture. The next day, a girl came to the door. It was her lost puppy!', q: 'Who came to the door?', a: 'A girl' },
-      { text: 'Every night before bed, Mia brushes her teeth and puts on her pajamas. Then her dad reads her a story. Tonight the story was about a dragon who was afraid of the dark. Mia hugged her stuffed bunny and fell asleep before the end.', q: 'What was the dragon afraid of?', a: 'The dark' }
+      { text: 'Mia and her dad went to the park. They took a red ball and a blue kite. The wind was strong, so the kite went up high. Mia ran and ran with the string. Then the kite fell into a tree. Dad helped her get it down.', q: 'Where did the kite fall?', a: 'Into a tree', w: ['Into the pond', 'Onto the roof'],
+        more: [['What color was the kite?', 'Blue', ['Red', 'Green']], ['Who helped Mia get the kite down?', 'Her dad', ['Her mom', 'Her friend']]] },
+      { text: 'Ben has a little fish named Bubbles. Bubbles is orange and white. Every morning, Ben gives Bubbles a pinch of food. Bubbles swims to the top to eat it. On Saturday, Ben cleaned the fish tank with his mom. Bubbles watched from a cup of water.', q: 'What color is Bubbles?', a: 'Orange and white', w: ['Blue and white', 'Black and orange'],
+        more: [['When does Ben feed Bubbles?', 'Every morning', ['Every night', 'On Saturday']], ['Where did Bubbles wait while the tank was cleaned?', 'In a cup of water', ['In the sink', 'In the bathtub']]] },
+      { text: 'It rained all day, so Kim could not play outside. She made a fort with chairs and a big sheet. She took her books and a flashlight into the fort. Her cat came in too. Kim read a story to the cat until it fell asleep.', q: 'What did Kim make?', a: 'A fort', w: ['A cake', 'A kite'],
+        more: [['Why did Kim stay inside?', 'It rained all day', ['It was too hot', 'She was sick']], ['Who came into the fort?', 'Her cat', ['Her dog', 'Her mom']]] },
+      { text: 'Sam planted a seed in a small pot. He put the pot by the window, where the sun could shine on it. Each day he gave it a little water. After one week, a tiny green leaf popped up. Sam was so happy that he showed his whole family.', q: 'Where did Sam put the pot?', a: 'By the window', w: ['Under the bed', 'In the garden'],
+        more: [['What did Sam give the seed each day?', 'A little water', ['A little milk', 'A cookie']], ['What popped up after one week?', 'A tiny green leaf', ['A red flower', 'A big apple']]] },
+      { text: 'Grandpa and Liz went fishing at the lake. They sat on the dock and waited. For a long time, nothing happened. Then Liz felt a tug on her line. She pulled and pulled. It was not a fish. It was an old boot! They both laughed.', q: 'What did Liz pull out of the lake?', a: 'An old boot', w: ['A big fish', 'A hat'],
+        more: [['Where did they sit?', 'On the dock', ['In a boat', 'On the sand']], ['Who went fishing with Liz?', 'Grandpa', ['Grandma', 'Her brother']]] },
+      { text: 'Max wanted to bake cookies. First, he and his mom mixed butter and sugar. Next, they added flour and eggs. Max stirred the dough with a big spoon. They put the cookies in the oven. When they came out, the kitchen smelled sweet. Max ate two right away.', q: 'What did Max stir the dough with?', a: 'A big spoon', w: ['A fork', 'His hands'],
+        more: [['What did they mix first?', 'Butter and sugar', ['Flour and eggs', 'Milk and salt']], ['How many cookies did Max eat right away?', 'Two', ['One', 'Five']]] },
+      { text: 'There was a small brown bird in our yard. It hopped on the grass, looking for worms. When my dog barked, the bird flew up to the fence. It sang a little song and then flew away to its nest in the big oak tree.', q: 'Where was the bird’s nest?', a: 'In the big oak tree', w: ['On the fence', 'Under the porch'],
+        more: [['What was the bird looking for?', 'Worms', ['Seeds', 'Bread']], ['What made the bird fly up to the fence?', 'The dog barked', ['It started to rain', 'A cat ran by']]] },
+      { text: 'Today was Pam’s first day at a new school. She felt a little scared. Her teacher, Mr. Lee, smiled and showed her where to sit. At lunch, a girl named Rosa asked Pam to play tag. By the end of the day, Pam had a new friend.', q: 'Who asked Pam to play tag?', a: 'Rosa', w: ['Mr. Lee', 'Mia'],
+        more: [['How did Pam feel at first?', 'A little scared', ['Very angry', 'Sleepy']], ['Who is Mr. Lee?', 'Pam’s teacher', ['Pam’s dad', 'The bus driver']]] },
+      { text: 'The snow fell all night. In the morning, Jack and his sister put on their coats, hats and boots. They rolled three big snowballs to make a snowman. Jack used two rocks for its eyes. His sister gave it her red scarf. It looked very warm.', q: 'What did Jack use for the eyes?', a: 'Two rocks', w: ['Two buttons', 'Two carrots'],
+        more: [['How many snowballs did they roll?', 'Three', ['Two', 'Five']], ['What did his sister give the snowman?', 'Her red scarf', ['Her blue hat', 'Her boots']]] },
+      { text: 'Ann has a pet turtle named Slow Joe. Slow Joe likes to sit on a rock under a warm lamp. He eats lettuce and little bugs. Some days he swims in his tank. Ann thinks Slow Joe is the best pet in the whole world.', q: 'What does Slow Joe eat?', a: 'Lettuce and little bugs', w: ['Cookies and milk', 'Fish and rice'],
+        more: [['What kind of pet is Slow Joe?', 'A turtle', ['A fish', 'A frog']], ['Where does Slow Joe like to sit?', 'On a rock under a lamp', ['On Ann’s bed', 'In a tree']]] },
+      { text: 'On Sunday, the family went to the zoo. First they saw the lions sleeping in the sun. Next they watched the monkeys swing from the trees. Tom liked the giraffes best because their necks were so long. Before they went home, they all ate ice cream.', q: 'Which animals did Tom like best?', a: 'The giraffes', w: ['The lions', 'The monkeys'],
+        more: [['What were the lions doing?', 'Sleeping in the sun', ['Eating lunch', 'Swinging from trees']], ['What did they eat before they went home?', 'Ice cream', ['Pizza', 'Popcorn']]] },
+      { text: 'Dan lost his blue mitten at the playground. He looked under the slide. He looked by the swings. He looked in the sandbox. At last he found it on top of the fence, where someone had put it so he could see it. He was very glad.', q: 'Where did Dan find his mitten?', a: 'On top of the fence', w: ['Under the slide', 'In the sandbox'],
+        more: [['What color was the mitten?', 'Blue', ['Red', 'Green']], ['Where did Dan lose it?', 'At the playground', ['At school', 'At the store']]] },
+      { text: 'Meg and her mom made a bird feeder. They spread peanut butter on a pine cone and rolled it in seeds. Then they hung it from a branch outside the kitchen window. The next day, four little birds came to eat. Meg counted them every morning.', q: 'How many birds came the next day?', a: 'Four', w: ['Two', 'Ten'],
+        more: [['What did they spread on the pine cone?', 'Peanut butter', ['Jam', 'Honey']], ['Where did they hang the feeder?', 'Outside the kitchen window', ['By the front door', 'In the garage']]] },
+      { text: 'It was a hot day at the beach. Liam built a sand castle with tall towers. He dug a moat around it and filled it with water. Then a big wave came and washed the castle away. Liam just smiled and started building a new one.', q: 'What washed the castle away?', a: 'A big wave', w: ['The wind', 'A dog'],
+        more: [['What did Liam do after the castle was gone?', 'He built a new one', ['He cried', 'He went home']], ['What did Liam fill the moat with?', 'Water', ['Sand', 'Shells']]] },
+      { text: 'Our class has a hamster named Peanut. Each week, one child takes care of him. This week it is my turn. I give Peanut fresh water and food. I clean his cage too. Peanut likes to run on his wheel at night when we are asleep.', q: 'When does Peanut run on his wheel?', a: 'At night', w: ['In the morning', 'At lunch'],
+        more: [['What kind of animal is Peanut?', 'A hamster', ['A rabbit', 'A fish']], ['How often does a new child take care of Peanut?', 'Each week', ['Each day', 'Each year']]] },
+      { text: 'Rosa wanted to learn to ride her bike without training wheels. Her dad held the back of the seat while she pedaled. She wobbled a lot at first. On the third try, Dad let go, and Rosa rode all the way to the corner by herself.', q: 'Who held the back of the seat?', a: 'Her dad', w: ['Her mom', 'Her sister'],
+        more: [['On which try did Dad let go?', 'The third try', ['The first try', 'The tenth try']], ['How far did Rosa ride by herself?', 'To the corner', ['To school', 'Around the lake']]] },
+      { text: 'The leaves on the big tree turned red, orange and yellow. When the wind blew, they fell to the ground. Tim and his brother raked them into a giant pile. Then they took turns jumping into it. The leaves went flying everywhere. They had to rake them up again.', q: 'What did Tim and his brother do with the pile?', a: 'Jumped into it', w: ['Put it in a bag', 'Gave it to Mom'],
+        more: [['What made the leaves fall?', 'The wind', ['The rain', 'A bird']], ['What did they have to do at the end?', 'Rake them up again', ['Go to bed', 'Eat lunch']]] },
+      { text: 'Kate’s grandma lives on a farm. When Kate visits, she helps feed the chickens and collect the eggs. She also brushes the horse, whose name is Daisy. In the evening, they sit on the porch and listen to the frogs sing by the pond. It is her favorite place.', q: 'What is the horse’s name?', a: 'Daisy', w: ['Rosa', 'Pony'],
+        more: [['Who lives on the farm?', 'Kate’s grandma', ['Kate’s teacher', 'Kate’s friend']], ['What do they listen to in the evening?', 'Frogs singing', ['Birds singing', 'The radio']]] },
+      { text: 'A little puppy followed Ben home from the store. It had no collar. Ben gave it some water and a blanket. Then he and his mom put up signs with the puppy’s picture. The next day, a girl came to the door. It was her lost puppy!', q: 'Who came to the door?', a: 'A girl', w: ['A police officer', 'Ben’s dad'],
+        more: [['What did Ben give the puppy?', 'Water and a blanket', ['A bone and a ball', 'A collar']], ['What did Ben and his mom put up?', 'Signs with the puppy’s picture', ['A fence', 'A dog house']]] },
+      { text: 'Every night before bed, Mia brushes her teeth and puts on her pajamas. Then her dad reads her a story. Tonight the story was about a dragon who was afraid of the dark. Mia hugged her stuffed bunny and fell asleep before the end.', q: 'What was the dragon afraid of?', a: 'The dark', w: ['Fire', 'Mice'],
+        more: [['Who reads Mia a story?', 'Her dad', ['Her mom', 'Her teacher']], ['What did Mia hug?', 'Her stuffed bunny', ['Her pillow', 'Her cat']]] }
     ] },
     { lvl: 'story', mode: 'read', goalWords: 90, goalSecs: 90, items: [
-      { text: 'On a windy Saturday, Leo and his grandpa took a green kite to the hill behind their house. Grandpa held the kite while Leo ran with the string. The kite climbed higher and higher until it looked as small as a leaf. Then the string snapped, and the kite floated away over the trees. Leo was sad, but Grandpa had an idea. That afternoon, they built a new kite out of paper, sticks and string. Leo painted a big yellow sun on it.', q: 'What did Leo paint on the new kite?', a: 'A big yellow sun' },
-      { text: 'Nora found a tiny frog in the garden after the rain. It was bright green with gold eyes. She wanted to keep it, so she put it in a jar with some grass and a little water. That night, Nora could hear the frog trying to jump out. In the morning, she asked her mom what frogs need. Her mom said frogs need ponds, bugs and space to hop. Nora carried the jar back to the garden and let the frog go.', q: 'Why did Nora let the frog go?', a: 'Frogs need ponds, bugs and space to hop' },
-      { text: 'Every summer, the town has a big parade. This year, Omar’s class made a float that looked like a giant whale. The children painted it blue and gave it a spout made of streamers. On the day of the parade, Omar sat on top of the whale and waved to everyone. A band played loud music behind them. When the parade was over, the mayor gave Omar’s class a ribbon for the best float.', q: 'What did the class’s float look like?', a: 'A giant whale' },
-      { text: 'Ella’s tooth had been wiggly for a week. She wiggled it with her tongue during breakfast and during reading time. At lunch, she bit into a crunchy apple, and the tooth came out! Ella wrapped it in a napkin and showed her teacher. That night, she put the tooth under her pillow. In the morning, she found a shiny coin and a tiny note that said, “Keep brushing!”', q: 'What made the tooth come out?', a: 'A crunchy apple' },
-      { text: 'The baby ducks lined up behind their mother and walked to the pond. One duckling was too busy looking at a butterfly and fell behind. It peeped and peeped. The mother duck stopped, turned around and waited. When the little duckling caught up, they all slid into the water together and paddled across the pond in a neat line.', q: 'Why did the duckling fall behind?', a: 'It was looking at a butterfly' },
-      { text: 'Sam and his dad made pancakes for Mom’s birthday. Sam cracked the eggs, and Dad mixed the batter. They made the pancakes in the shape of hearts. Sam put strawberries on top and carried the plate to Mom’s room. Mom was still sleeping, so Sam whispered, “Happy birthday!” Mom opened her eyes and smiled. She said it was the best breakfast she ever had.', q: 'What shape were the pancakes?', a: 'Hearts' }
+      { text: 'On a windy Saturday, Leo and his grandpa took a green kite to the hill behind their house. Grandpa held the kite while Leo ran with the string. The kite climbed higher and higher until it looked as small as a leaf. Then the string snapped, and the kite floated away over the trees. Leo was sad, but Grandpa had an idea. That afternoon, they built a new kite out of paper, sticks and string. Leo painted a big yellow sun on it.', q: 'What did Leo paint on the new kite?', a: 'A big yellow sun', w: ['A green leaf', 'A red heart'],
+        more: [['What happened to the first kite?', 'The string snapped and it floated away', ['It got stuck in a tree', 'It fell in a pond']], ['What did they use to build the new kite?', 'Paper, sticks and string', ['Wood and nails', 'A plastic bag']]] },
+      { text: 'Nora found a tiny frog in the garden after the rain. It was bright green with gold eyes. She wanted to keep it, so she put it in a jar with some grass and a little water. That night, Nora could hear the frog trying to jump out. In the morning, she asked her mom what frogs need. Her mom said frogs need ponds, bugs and space to hop. Nora carried the jar back to the garden and let the frog go.', q: 'Why did Nora let the frog go?', a: 'Frogs need ponds, bugs and space to hop', w: ['The frog was too loud', 'Her cat wanted it'],
+        more: [['What color were the frog’s eyes?', 'Gold', ['Green', 'Black']], ['When did Nora find the frog?', 'After the rain', ['At night', 'On her birthday']]] },
+      { text: 'Every summer, the town has a big parade. This year, Omar’s class made a float that looked like a giant whale. The children painted it blue and gave it a spout made of streamers. On the day of the parade, Omar sat on top of the whale and waved to everyone. A band played loud music behind them. When the parade was over, the mayor gave Omar’s class a ribbon for the best float.', q: 'What did the class’s float look like?', a: 'A giant whale', w: ['A big ship', 'A green dragon'],
+        more: [['What did the mayor give the class?', 'A ribbon for the best float', ['A trophy', 'Ice cream']], ['What was the whale’s spout made of?', 'Streamers', ['Paper cups', 'Water']]] },
+      { text: 'Ella’s tooth had been wiggly for a week. She wiggled it with her tongue during breakfast and during reading time. At lunch, she bit into a crunchy apple, and the tooth came out! Ella wrapped it in a napkin and showed her teacher. That night, she put the tooth under her pillow. In the morning, she found a shiny coin and a tiny note that said, “Keep brushing!”', q: 'What made the tooth come out?', a: 'A crunchy apple', w: ['A carrot', 'Her toothbrush'],
+        more: [['What did Ella find under her pillow?', 'A shiny coin and a note', ['Her tooth', 'A new toothbrush']], ['Who did Ella show the tooth to?', 'Her teacher', ['Her brother', 'Her dog']]] },
+      { text: 'The baby ducks lined up behind their mother and walked to the pond. One duckling was too busy looking at a butterfly and fell behind. It peeped and peeped. The mother duck stopped, turned around and waited. When the little duckling caught up, they all slid into the water together and paddled across the pond in a neat line.', q: 'Why did the duckling fall behind?', a: 'It was looking at a butterfly', w: ['It was sleeping', 'It was eating bread'],
+        more: [['What did the mother duck do?', 'She stopped and waited', ['She flew away', 'She kept walking']], ['Where were the ducks going?', 'To the pond', ['To the barn', 'To the river']]] },
+      { text: 'Sam and his dad made pancakes for Mom’s birthday. Sam cracked the eggs, and Dad mixed the batter. They made the pancakes in the shape of hearts. Sam put strawberries on top and carried the plate to Mom’s room. Mom was still sleeping, so Sam whispered, “Happy birthday!” Mom opened her eyes and smiled. She said it was the best breakfast she ever had.', q: 'What shape were the pancakes?', a: 'Hearts', w: ['Stars', 'Circles'],
+        more: [['Whose birthday was it?', 'Mom’s', ['Dad’s', 'Sam’s']], ['What did Sam put on top?', 'Strawberries', ['Blueberries', 'Bananas']]] }
     ] }
   ];
-  const norm = (it, i, t) => (typeof it === 'string' ? { id: t.lvl + ':' + i, text: it } : Object.assign({ id: t.lvl + ':' + i }, it));
+  /* A passage with a question also carries wrong answers (`w`) and more questions (`more`), so the
+     Kumon AI story-question level can ask about it: `qs` lists every question as [q, answer, wrong]. */
+  const norm = (it, i, t) => {
+    if (typeof it === 'string') return { id: t.lvl + ':' + i, text: it };
+    const out = Object.assign({ id: t.lvl + ':' + i }, it);
+    if (it.q && it.w) out.qs = [[it.q, it.a, it.w]].concat(it.more || []);
+    delete out.more;
+    return out;
+  };
   TIERS.forEach((t) => { t.items = t.items.map((it, i) => norm(it, i, t)); });
   const BY_ID = {};
   TIERS.forEach((t) => t.items.forEach((it) => { BY_ID[it.id] = Object.assign({ mode: t.mode, lvl: t.lvl, goalWords: t.goalWords, goalSecs: t.goalSecs }, it); }));
@@ -2652,6 +2961,94 @@ const ReadAloud = (() => {
   return { TIERS, BY_ID, words, tierFor, next, get: (id) => BY_ID[id] || null };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = ReadAloud;
+/* Small Steps: the book shelf. Picture books and early readers for each Kumon reading level,
+   picked for this app: Kumon's own Recommended Reading List says it may not be reproduced, so it
+   is linked, not copied. "to" books are read aloud to the child; "alone" books are for the
+   child to read, with help as needed. */
+const Books = (() => {
+  'use strict';
+  const slug = (s) => String(s).toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const LIST = [];
+  const add = (shelf, how, rows) => rows.forEach(([t, a]) => LIST.push({ id: slug(t), t, a, shelf, how }));
+
+  add('7A', 'to', [
+    ['Goodnight Moon', 'Margaret Wise Brown'], ['Big Red Barn', 'Margaret Wise Brown'], ['Dear Zoo', 'Rod Campbell'],
+    ['Where’s Spot?', 'Eric Hill'], ['Polar Bear, Polar Bear, What Do You Hear?', 'Bill Martin Jr.'], ['The Very Busy Spider', 'Eric Carle'],
+    ['Good Night, Gorilla', 'Peggy Rathmann'], ['Little Blue Truck', 'Alice Schertle'], ['Moo, Baa, La La La!', 'Sandra Boynton'],
+    ['Freight Train', 'Donald Crews'], ['Owl Babies', 'Martin Waddell'], ['Guess How Much I Love You', 'Sam McBratney']
+  ]);
+  add('6A', 'to', [
+    ['Is Your Mama a Llama?', 'Deborah Guarino'], ['Each Peach Pear Plum', 'Janet and Allan Ahlberg'], ['Jamberry', 'Bruce Degen'],
+    ['Sheep in a Jeep', 'Nancy E. Shaw'], ['Llama Llama Red Pajama', 'Anna Dewdney'], ['Bear Snores On', 'Karma Wilson'],
+    ['The Napping House', 'Audrey Wood'], ['Silly Sally', 'Audrey Wood'], ['Hattie and the Fox', 'Mem Fox'],
+    ['Rosie’s Walk', 'Pat Hutchins'], ['Mr. Brown Can Moo! Can You?', 'Dr. Seuss'], ['The Foot Book', 'Dr. Seuss']
+  ]);
+  add('5A', 'to', [
+    ['Brown Bear, Brown Bear, What Do You See?', 'Bill Martin Jr.'], ['Chicka Chicka Boom Boom', 'Bill Martin Jr. and John Archambault'],
+    ['The Very Hungry Caterpillar', 'Eric Carle'], ['Caps for Sale', 'Esphyr Slobodkina'], ['Corduroy', 'Don Freeman'],
+    ['Harold and the Purple Crayon', 'Crockett Johnson'], ['The Snowy Day', 'Ezra Jack Keats'], ['Where the Wild Things Are', 'Maurice Sendak'],
+    ['We’re Going on a Bear Hunt', 'Michael Rosen'], ['The Gruffalo', 'Julia Donaldson'], ['Room on the Broom', 'Julia Donaldson'],
+    ['If You Give a Mouse a Cookie', 'Laura Numeroff'], ['Click, Clack, Moo: Cows That Type', 'Doreen Cronin'],
+    ['Don’t Let the Pigeon Drive the Bus!', 'Mo Willems'], ['Knuffle Bunny', 'Mo Willems'], ['Make Way for Ducklings', 'Robert McCloskey'],
+    ['Blueberries for Sal', 'Robert McCloskey'], ['Curious George', 'H. A. Rey'], ['The Carrot Seed', 'Ruth Krauss'],
+    ['Mike Mulligan and His Steam Shovel', 'Virginia Lee Burton']
+  ]);
+  add('5A', 'alone', [
+    ['Bob Books, Set 1: Beginning Readers', 'Bobby Lynn Maslen'], ['Cat on the Mat', 'Brian Wildsmith'], ['Go, Dog. Go!', 'P. D. Eastman'],
+    ['Hop on Pop', 'Dr. Seuss'], ['Biscuit', 'Alyssa Satin Capucilli'], ['I Will Surprise My Friend!', 'Mo Willems'],
+    ['Inside, Outside, Upside Down', 'Stan and Jan Berenstain'], ['Pete the Cat: I Love My White Shoes', 'Eric Litwin']
+  ]);
+  add('4A', 'to', [
+    ['Swimmy', 'Leo Lionni'], ['Frederick', 'Leo Lionni'], ['The Story of Ferdinand', 'Munro Leaf'], ['Strega Nona', 'Tomie dePaola'],
+    ['Leo the Late Bloomer', 'Robert Kraus'], ['Harry the Dirty Dog', 'Gene Zion'], ['Owl Moon', 'Jane Yolen'],
+    ['The Little House', 'Virginia Lee Burton'], ['Tacky the Penguin', 'Helen Lester'], ['Duck on a Bike', 'David Shannon'],
+    ['Giraffes Can’t Dance', 'Giles Andreae'], ['Dragons Love Tacos', 'Adam Rubin']
+  ]);
+  add('4A', 'alone', [
+    ['Put Me in the Zoo', 'Robert Lopshire'], ['Ten Apples Up On Top!', 'Theo. LeSieg'], ['A Fly Went By', 'Mike McClintock'],
+    ['We Are in a Book!', 'Mo Willems'], ['Today I Will Fly!', 'Mo Willems'], ['Mittens', 'Lola M. Schaefer']
+  ]);
+  add('3A', 'to', [
+    ['Officer Buckle and Gloria', 'Peggy Rathmann'], ['Sylvester and the Magic Pebble', 'William Steig'], ['Doctor De Soto', 'William Steig'],
+    ['Miss Rumphius', 'Barbara Cooney'], ['Stone Soup', 'Marcia Brown'], ['Ira Sleeps Over', 'Bernard Waber'],
+    ['Chrysanthemum', 'Kevin Henkes'], ['The Day the Crayons Quit', 'Drew Daywalt'], ['Madeline', 'Ludwig Bemelmans'],
+    ['Mirette on the High Wire', 'Emily Arnold McCully'], ['Bark, George', 'Jules Feiffer'], ['The Paper Bag Princess', 'Robert Munsch']
+  ]);
+  add('3A', 'alone', [
+    ['Fox in Socks', 'Dr. Seuss'], ['Robert the Rose Horse', 'Joan Heilbroner'], ['The Best Nest', 'P. D. Eastman'],
+    ['Waiting Is Not Easy!', 'Mo Willems'], ['Pete the Cat: Rocking in My School Shoes', 'Eric Litwin'], ['Albert the Albatross', 'Syd Hoff']
+  ]);
+  add('2A', 'alone', [
+    ['Green Eggs and Ham', 'Dr. Seuss'], ['The Cat in the Hat', 'Dr. Seuss'], ['One Fish Two Fish Red Fish Blue Fish', 'Dr. Seuss'],
+    ['Are You My Mother?', 'P. D. Eastman'], ['Sam and the Firefly', 'P. D. Eastman'], ['Big Dog... Little Dog', 'P. D. Eastman'],
+    ['Danny and the Dinosaur', 'Syd Hoff'], ['Sammy the Seal', 'Syd Hoff'], ['Little Bear', 'Else Holmelund Minarik'],
+    ['Frog and Toad Are Friends', 'Arnold Lobel'], ['Mouse Soup', 'Arnold Lobel'], ['Owl at Home', 'Arnold Lobel'],
+    ['Henry and Mudge: The First Book', 'Cynthia Rylant'], ['Mr. Putter & Tabby Pour the Tea', 'Cynthia Rylant'], ['Hi! Fly Guy', 'Tedd Arnold'],
+    ['There Is a Bird on Your Head!', 'Mo Willems'], ['Should I Share My Ice Cream?', 'Mo Willems'], ['Biscuit Finds a Friend', 'Alyssa Satin Capucilli'],
+    ['Morris the Moose', 'Bernard Wiseman'], ['Fox and His Friends', 'Edward Marshall']
+  ]);
+  add('A', 'alone', [
+    ['Frog and Toad Together', 'Arnold Lobel'], ['Days with Frog and Toad', 'Arnold Lobel'], ['Mouse Tales', 'Arnold Lobel'],
+    ['Grasshopper on the Road', 'Arnold Lobel'], ['Uncle Elephant', 'Arnold Lobel'], ['Small Pig', 'Arnold Lobel'],
+    ['Amelia Bedelia', 'Peggy Parish'], ['Nate the Great', 'Marjorie Weinman Sharmat'], ['Little Bear’s Visit', 'Else Holmelund Minarik'],
+    ['A Kiss for Little Bear', 'Else Holmelund Minarik'], ['Commander Toad in Space', 'Jane Yolen'], ['Poppleton', 'Cynthia Rylant'],
+    ['Three by the Sea', 'Edward Marshall'], ['Oliver', 'Syd Hoff'], ['Harry and the Lady Next Door', 'Gene Zion']
+  ]);
+
+  const SHELVES = [
+    { id: '7A', name: '7A', groups: ['7A'] }, { id: '6A', name: '6A', groups: ['6A'] }, { id: '5A', name: '5A', groups: ['5A'] },
+    { id: '4A', name: '4A', groups: ['4A'] }, { id: '3A', name: '3A', groups: ['3A'] }, { id: '2A', name: '2A', groups: ['2A'] },
+    { id: 'A', name: 'AI–AII', groups: ['AI', 'AII'] }
+  ];
+  const shelfOfGroup = (g) => (SHELVES.find((s) => s.groups.includes(g)) || SHELVES[0]).id;
+  const BY_ID = Object.fromEntries(LIST.map((b) => [b.id, b]));
+  const buyUrl = (b) => 'https://www.amazon.com/s?k=' + encodeURIComponent(b.t + ' ' + (b.a || '')).replace(/%20/g, '+') + '&i=stripbooks';
+  return {
+    LIST, SHELVES, BY_ID, shelfOfGroup, buyUrl, slug, WEEK_GOAL: 7,
+    KUMON_LIST: 'https://www.kumon.com/assets/ca-en/pdfs/Kumon_Recommended_Reading_List.pdf'
+  };
+})();
+if (typeof module !== 'undefined' && module.exports) module.exports = Books;
 /* Small Steps: the buddy. Four original characters (ladybug, slug, dragon, robot) drawn as SVG
    in a color the child picks, three growth stages, a swag shop, milestone unlocks and the star
    rules. Stars reward finishing and fixing, so a child who struggles still earns. No DOM. */
@@ -4670,16 +5067,22 @@ const Buddy3D = (() => {
    - A child's record: three-way merge against the last copy both sides agreed on. A field changed
      on only one side keeps that change; a field changed on both sides is merged one level down
      (each subject, the buddy, settings), and where both changed the same value the newer record wins.
-   - A month of sheets: every sheet from both sides, once each, in time order.
+   - A month of sheets: every sheet from both sides, once each, in time order. A sheet on both
+     sides keeps the fields of both (a later note such as "fixed" or "removed" is never lost).
    - Anything else: the newer copy. */
 const Merge = (() => {
   'use strict';
   const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
   const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
   const stamp = (d) => String((d && (d.updatedAt || d.lastAt)) || '');
+  /* b's copy of a shared item wins field by field */
   function unionById(a, b) {
     const seen = new Map();
-    (a || []).concat(b || []).forEach((s) => { if (s && s.id != null && !seen.has(s.id)) seen.set(s.id, s); else if (s && s.id == null) seen.set(Symbol('x'), s); });
+    (a || []).concat(b || []).forEach((s) => {
+      if (!s) return;
+      if (s.id == null) { seen.set(Symbol('x'), s); return; }
+      seen.set(s.id, seen.has(s.id) ? Object.assign({}, seen.get(s.id), s) : s);
+    });
     return Array.from(seen.values()).sort((x, y) => String(x.at || '').localeCompare(String(y.at || '')));
   }
   function merge3(base, mine, theirs, mineWins) {
@@ -5364,7 +5767,8 @@ const READ_INSTR = {
   fsB: 'Which letter does it start with?', cvcA: 'Read it. Tap its picture.', cvc: 'Read it. Tap its picture.', spell: 'Which word matches?',
   digraph: 'Which word matches?', blend: 'Which word matches?', silentE: 'Which word matches?', team: 'Which word matches?',
   compound: 'Which word matches?', sight1: 'Tap the word you hear', sight2: 'Tap the word you hear', cloze: 'Which word fits?',
-  ask: 'Read the question', story: 'Read the story'
+  ask: 'Read the question', story: 'Read the story', nva: 'Read the sentence', order: 'Which one is in the right order?', riddle: 'Read the riddle',
+  passage: 'Read the story', seq: 'Read the story'
 };
 function readingPrompt(p) {
   const pr = p.prompt || {}, PIC = ReadingCurriculum.PIC;
@@ -5377,7 +5781,10 @@ function readingPrompt(p) {
     case 'letter': return instr + '<div class="big-letter">' + esc(pr.letter) + '</div>';
     case 'sentence': return instr + '<div class="sentence">' + esc(pr.text).replace('___', '<span class="blank"></span>') + '</div>';
     case 'question': return '<div class="prompt"><span>' + esc(READ_INSTR.ask) + '</span></div><div class="sentence">' + esc(pr.text) + '</div>';
-    case 'story': return '<div class="story">' + esc(pr.text) + '</div><div class="story-q">' + esc(pr.q) + '</div>';
+    case 'story': return '<div class="story' + (pr.long ? ' long' + (String(pr.text).split(' ').length > 65 ? ' xl' : '') : '') + '">' + esc(pr.text) + '</div><div class="story-q">' + esc(pr.q) + '</div>';
+    case 'qsent': return '<div class="prompt">' + sayBtn + '<span>' + esc(pr.q) + '</span></div><div class="sentence">' + esc(pr.text) + '</div>';
+    case 'order': return instr + (pr.pic && PIC[pr.pic] ? '<div class="big-pic mid" role="img" aria-label="' + esc(ReadingCurriculum.spoken(pr.pic)) + '">' + PIC[pr.pic] + '</div>' : '');
+    case 'riddle': return '<div class="story riddle">' + esc(pr.text) + '</div><div class="story-q">What am I?</div>';
     default: return '';
   }
 }
@@ -5458,7 +5865,7 @@ function keypadHTML(input, okLabel, hint) {
 function padHTML(subj, p, ctx, okLabel) {
   if (p.mode === 'choice') {
     const wrong = ctx.wrongChoices || [], right = ctx.rightChoice;
-    const viewCls = p.kind === 'compare' ? 'cmp-card' : p.view === 'pic' ? 'ch-pic' : p.view === 'word' ? 'ch-word' : p.view === 'letter' ? 'ch-letter' : p.view === 'time' ? 'ch-time' : p.view === 'clock' ? 'ch-clock' : p.view === 'daypart' ? 'ch-day' : p.view === 'text' ? 'ch-text' : '';
+    const viewCls = p.kind === 'compare' ? 'cmp-card' : p.view === 'pic' ? 'ch-pic' : p.view === 'word' ? 'ch-word' : p.view === 'letter' ? 'ch-letter' : p.view === 'time' ? 'ch-time' : p.view === 'clock' ? 'ch-clock' : p.view === 'daypart' ? 'ch-day' : p.view === 'text' ? 'ch-text' : p.view === 'sent' ? 'ch-sent' : '';
     return '<div class="choices n' + p.choices.length + ' v-' + (p.kind === 'compare' ? 'cmp' : p.view || 'num') + '">' + p.choices.map((c, ci) => {
       const isWrong = wrong.indexOf(c) >= 0;
       const st = isWrong ? ' wrong' : right === c ? ' right' : '';
@@ -5628,7 +6035,7 @@ function startSheet(kidId, subj, opts) {
   if (!test && !(opts && opts.skipEx) && !exSeen(t, t.levelId) && openExample(kidId, subj, t.levelId, 'intro')) return;
   let problems, target, timed;
   if (test) { problems = E.makeTest(t.testFor, E.testNOf(t.testFor)); target = E.testTarget(problems, s.pace, s.speak); timed = E.groupTimed(t.testFor); }
-  else { problems = E.makeSheet(t.levelId, s.sheetLen, t); target = E.targetSeconds(t.levelId, s.sheetLen, s.pace, s.speak); timed = E.isTimed(t.levelId); }
+  else { const n = E.lenFor(t.levelId, s.sheetLen); problems = E.makeSheet(t.levelId, n, t); target = E.targetSeconds(t.levelId, n, s.pace, s.speak); timed = E.isTimed(t.levelId); }
   const plan = E.todayPlan(t);
   S.kid = kidId; S.subj = subj; S.result = null; S.fix = null;
   S.sheet = {
@@ -5733,11 +6140,11 @@ function collectStars(from, to) {
 /* ---------- results ---------- */
 function givenText(subj, p, r) {
   if (r.given == null) return 'No answer';
-  const shown = p.mode === 'clockset' || p.view === 'time' || p.view === 'clock' || (subj === 'clock' && p.input === 'time') ? fmtTime(r.given) : String(r.given);
+  const shown = p.mode === 'clockset' || p.view === 'time' || p.view === 'clock' || (subj === 'clock' && p.input === 'time') ? fmtTime(r.given) : p.view === 'pic' ? ReadingCurriculum.spoken(r.given) : String(r.given);
   return (p.mode === 'choice' ? 'Picked ' : p.mode === 'clockset' ? 'Showed ' : p.mode === 'numtap' ? 'Tapped ' : 'Wrote ') + shown;
 }
 function tileHTML(subj, p, r) {
-  const given = r.given == null ? '—' : (p.view === 'time' || p.view === 'clock' || (subj === 'clock' && p.input === 'time') ? fmtTime(r.given) : r.given);
+  const given = r.given == null ? '—' : (p.view === 'time' || p.view === 'clock' || (subj === 'clock' && p.input === 'time') ? fmtTime(r.given) : p.view === 'pic' ? ReadingCurriculum.spoken(r.given) : r.given);
   const verb = p.mode === 'choice' ? 'You picked ' : p.mode === 'clockset' ? 'You showed ' : p.mode === 'numtap' ? 'You tapped ' : 'You wrote ';
   const shown = p.mode === 'clockset' ? fmtTime(r.given) : given;
   return '<div class="tile ' + (r.ok ? 'ok' : 'no') + '"><span class="q">' + esc(ENG[subj].problemText(p)) + '</span>' +
@@ -6017,7 +6424,7 @@ function startPlacement(kidId, subj, auto, trial) {
 }
 function newProbe() {
   const P = S.place, E = ENG[P.subj], lv = E.LEVELS[P.st.idx];
-  P.levelId = lv.id; P.problems = E.makeSheet(lv.id, E.PROBE_N, null);
+  P.levelId = lv.id; P.problems = E.makeSheet(lv.id, E.lenFor(lv.id, E.PROBE_N), null);
   P.answers = []; P.idx = 0; P.input = ''; P.marks = {}; P.setH = 12; P.setM = 0; P.hand = 'hour'; P.start = Date.now(); P.paused = 0; P.locked = false;
 }
 function placeAnswer(v) {
@@ -6094,7 +6501,7 @@ const GRADE_NAME = Object.fromEntries(GRADES.map((g) => [g[0], g[1]]));
    3.MD.A.1. Kumon does not publish a level-to-grade chart, so this is not Kumon's KIS line. */
 const GRADE_END_IDS = {
   math: { '-3': 'c5', '-2': 'c10', '-1': 'c20', 0: 'a15', 1: 'subRev', 2: 'v33s', 3: 'dfact', 4: 'd2', 5: 'd2' },
-  reading: { '-3': 'rpic', '-2': 'rpic', '-1': 'lmatch', 0: 'sight1', 1: 'story', 2: 'story', 3: 'story', 4: 'story', 5: 'story' },
+  reading: { '-3': 'rpic', '-2': 'rpic', '-1': 'lmatch', 0: 'sight1', 1: 'seq', 2: 'seq', 3: 'seq', 4: 'seq', 5: 'seq' },
   clock: { '-3': 'cDay', '-2': 'cDay', '-1': 'cNum', 0: 'hRead', 1: 'hhSet', 2: 'ampm', 3: 'interval', 4: 'interval', 5: 'interval' }
 };
 /* Level ids, turned into positions on each subject's ladder once the ladders exist. */
@@ -6378,14 +6785,14 @@ function ratingsHTML(l, subj, E) {
 function startTrial(kidId, subj, opt) {
   const l = Store.learner(kidId);
   if (!l) return;
-  const E = ENG[subj], t = trackOf(l, subj), s = E.settingsOf(t), n = S.trialLen === 'short' ? 5 : s.sheetLen;
+  const E = ENG[subj], t = trackOf(l, subj), s = E.settingsOf(t), n0 = S.trialLen === 'short' ? 5 : s.sheetLen;
   let problems, target, timed, group, levelId = opt.levelId;
   if (opt.test) {
     group = opt.group; const lvls = E.groupLevels(group); levelId = lvls[lvls.length - 1];
     problems = E.makeTest(group, S.trialLen === 'short' ? 5 : E.testNOf(group)); target = E.testTarget(problems, s.pace, s.speak); timed = E.groupTimed(group);
   } else {
     if (!E.BY[levelId]) return;
-    problems = E.makeSheet(levelId, n, null); target = E.targetSeconds(levelId, n, s.pace, s.speak); timed = E.isTimed(levelId); group = E.groupOf(levelId);
+    const n = E.lenFor(levelId, n0); problems = E.makeSheet(levelId, n, null); target = E.targetSeconds(levelId, n, s.pace, s.speak); timed = E.isTimed(levelId); group = E.groupOf(levelId);
   }
   Sfx.unlock(); Sfx.pick();
   S.kid = kidId; S.subj = subj; S.result = null; S.fix = null; S.trial = null;
@@ -6402,7 +6809,7 @@ function finishTrial() {
   const secs = (Date.now() - sh.start - sh.paused) / 1000;
   stopTick(); releaseScreen();
   const g = E.grade(sh.problems, sh.answers), l = Store.learner(sh.kid), s = E.settingsOf(trackOf(l, sh.subj));
-  const full = sh.kind === 'test' ? E.testNOf(sh.group) : s.sheetLen, base = sh.kind === 'test' ? E.testAllowedOf(sh.group) : s.allowed;
+  const full = sh.kind === 'test' ? E.testNOf(sh.group) : E.lenFor(sh.levelId, s.sheetLen), base = sh.kind === 'test' ? E.testAllowedOf(sh.group) : s.allowed;
   const allowed = sh.problems.length >= full ? base : Math.floor((base * sh.problems.length) / full + 1e-9);
   const accOK = g.wrong <= allowed, timeOK = !sh.timed || secs <= sh.target;
   S.trial = { sh, g, secs, allowed, full, base, accOK, timeOK, pass: accOK && timeOK, rating: '', note: '' };
@@ -6524,6 +6931,9 @@ function exVisual(show) {
       return '<div class="ex-sentence">' + (show.pic ? '<span class="e" aria-hidden="true">' + show.pic + '</span>' : '') + '<p>' + t + '</p>' + (show.q ? '<p class="q">' + esc(show.q) + ' <span class="ex-fill">' + esc(show.fill) + '</span></p>' : '') + '</div>';
     }
     case 'clock': return '<div class="clock-wrap ex-clock">' + clockSVG(show.v, { noHands: show.noHands, handOnly: show.handOnly, minuteOnly: show.minuteOnly }) + '</div>';
+    case 'jobs': return '<div class="ex-jobs">' + show.words.map((w, i) => '<span class="ex-job' + (w[1] ? ' j-' + w[1] : '') + '" style="animation-delay:' + (0.3 + i * 0.45).toFixed(2) + 's"><b>' + esc(w[0]) + '</b><small>' + (w[1] ? esc(w[1]) : '&nbsp;') + '</small></span>').join('') + '</div>';
+    case 'order': return '<div class="ex-order">' + (show.pic ? '<span class="e" aria-hidden="true">' + show.pic + '</span>' : '') + '<p class="ok">✓ ' + esc(show.right) + '</p><p class="no">✗ ' + esc(show.wrong) + '</p></div>';
+    case 'seq3': return '<div class="ex-seq3"><p class="txt">' + esc(show.text) + '</p><ol>' + show.items.map((it, i) => '<li style="animation-delay:' + (0.5 + i * 0.6).toFixed(2) + 's"><i>' + esc(it[0]) + '</i><span>' + esc(it[1]) + '</span></li>').join('') + '</ol></div>';
     default: return '';
   }
 }
@@ -6665,9 +7075,11 @@ function guideHTML() {
     li('<b>Target times are Kumon’s.</b> From Kumon 3A in math the timer uses Kumon’s target time for each sheet. The earliest levels are untimed, as in Kumon.') +
     li('<b>Moving up takes passes on at least two different days.</b> Each Kumon level ends with a level test, like Kumon’s Achievement Test.') +
     li('<b>New levels start with a worked example.</b> Kumon sheets introduce each new step with an example. The “?” on a sheet shows it again.') +
+    li('<b>Reading follows Kumon’s order.</b> Pictures and rhymes, then letter sounds, words, sentences and stories. From Kumon 2A the sheets cover naming, action and describing words, word order and riddles; at AI, stories with several questions each; at AII, the order of events.') +
     '</ul></section></div><div class="panels"><section class="glass panel guide"><h3>Your part, about 5 minutes a day</h3><ol>' +
     li('<b>Sit nearby.</b> At the earliest levels the example screen tells you what to show first.') +
     li('<b>Listen to the read-aloud.</b> After the reading sheets, tap Start as they begin, tap any word they misread, skip or need help with, then tap Done. Ask the question at the end.') +
+    li('<b>Read a book together every day.</b> Parents → Reading → Books has books for each Kumon level. Mark the ones you have, tap “Read today” after reading one (+2 stars), and aim for a book a day.') +
     li('<b>Keep the paper handwriting.</b> The app uses a number pad, so writing numbers (Kumon 4A) and letters stays on paper.') +
     li('<b>Check Progress now and then.</b> Trouble spots shows the facts that keep coming back. The app steps back a level by itself after two weak sheets in a row.') +
     '</ol></section></div></div>';
@@ -6732,6 +7144,159 @@ async function siteKeySave() {
   } catch (e) { S.siteKey.msg = 'Could not save the key here. Try again.'; }
   render();
 }
+/* Small Steps: the book shelf (Parents → Reading → Books).
+   Books follow the child's Kumon reading level: the shelf opens on their level, with the levels
+   before and after one tap away. A grown-up marks the books the family has, logs each book read
+   (+2 stars for the child), and sees the week's count against a book a day.
+   Kept with the progress: which books the family has and books a grown-up added live on each
+   child's reading record (shared across children); each read is a session in the child's
+   'books' log. */
+const BOOK_STARS = 2;
+function bookMarks() {
+  const have = {}, own = {};
+  Store.learners().forEach((k) => {
+    const b = (k.reading && k.reading.books) || {};
+    Object.keys(b.have || {}).forEach((id) => { if (b.have[id]) have[id] = true; });
+    Object.keys(b.own || {}).forEach((id) => { if (b.own[id]) own[id] = Object.assign({ id, mine: true }, b.own[id]); });
+  });
+  return { have, own };
+}
+const bookById = (id, marks) => Books.BY_ID[id] || (marks || bookMarks()).own[id] || null;
+function shelfBooks(shelf, marks) {
+  const mine = Object.values(marks.own).filter((b) => b.shelf === shelf).sort((a, b) => String(a.at).localeCompare(String(b.at)));
+  return Books.LIST.filter((b) => b.shelf === shelf).concat(mine);
+}
+const bookReads = (kidId) => Store.sessionsFor(kidId, 'books').filter((s) => !s.removed);
+function weekBookReads(kidId) { const from = Date.now() - 7 * DAY_MS; return bookReads(kidId).filter((s) => new Date(s.at).getTime() >= from); }
+function readCounts(kidId) { const c = {}; bookReads(kidId).forEach((s) => { c[s.book] = (c[s.book] || 0) + 1; }); return c; }
+function kidShelf(l) { return Books.shelfOfGroup(ENG.reading.groupOf(trackOf(l, 'reading').levelId)); }
+/* The next book to read: one the family has and this child hasn't read, else one not read yet. */
+function nextBook(l, marks) {
+  const counts = readCounts(l.id), list = shelfBooks(kidShelf(l), marks);
+  return list.find((b) => marks.have[b.id] && !counts[b.id]) || list.find((b) => !counts[b.id]) || null;
+}
+function weekBarHTML(n) {
+  const goal = Books.WEEK_GOAL, pct = Math.min(100, Math.round((100 * n) / goal));
+  return '<div class="week-row"><span class="week-n"><b>' + n + '</b> of ' + goal + '</span><span class="week-bar" aria-hidden="true"><i style="width:' + pct + '%"></i></span></div>';
+}
+
+/* Progress tab: a short line about books, pointing to the shelf. */
+function booksSummaryHTML(l) {
+  const marks = bookMarks(), n = weekBookReads(l.id).length, nb = nextBook(l, marks), shelf = Books.SHELVES.find((s) => s.id === kidShelf(l));
+  return '<section class="glass panel"><h3>Books this week</h3>' + weekBarHTML(n) +
+    '<p class="sub">Goal: a book a day, read to ' + esc(l.name) + ' or read together. ' + (nb ? 'Next on the Kumon ' + esc(shelf.name) + ' shelf: <b>' + esc(nb.t) + '</b>.' : '') + '</p>' +
+    '<div class="actions"><button class="btn btn-glass btn-small" data-act="psec" data-sec="books">Open the book shelf</button></div></section>';
+}
+
+function bookRowHTML(b, marks, counts) {
+  const owned = !!marks.have[b.id], n = counts[b.id] || 0;
+  const chips = (n ? '<span class="chip chip-ok">Read ' + n + (n === 1 ? ' time' : ' times') + '</span>' : '') + (b.mine ? '<span class="chip">Added by you</span>' : '');
+  return '<div class="book' + (owned ? ' owned' : '') + '"><div class="book-txt"><b>' + esc(b.t) + '</b>' + (b.a ? '<span class="muted">' + esc(b.a) + '</span>' : '') + (chips ? '<span class="chips">' + chips + '</span>' : '') + '</div>' +
+    '<div class="book-act"><button class="btn btn-small ' + (owned ? 'btn-gold' : 'btn-glass') + '" data-act="bookHave" data-id="' + esc(b.id) + '" aria-pressed="' + owned + '">' + (owned ? 'We have it ✓' : 'We have it') + '</button>' +
+      '<button class="btn btn-small btn-glass" data-act="bookRead" data-id="' + esc(b.id) + '">Read today</button>' +
+      (b.mine ? '<button class="btn btn-small btn-danger" data-act="bookDel" data-id="' + esc(b.id) + '" aria-label="Remove ' + esc(b.t) + '">Remove</button>'
+        : '<a class="btn btn-small btn-glass" href="' + esc(Books.buyUrl(b)) + '" target="_blank" rel="noopener">Buy ↗</a>') + '</div></div>';
+}
+
+function booksHTML(l) {
+  const marks = bookMarks(), counts = readCounts(l.id), cur = kidShelf(l);
+  if (!S.bookShelf || !Books.SHELVES.some((s) => s.id === S.bookShelf) || S.bookShelfKid !== l.id) { S.bookShelf = cur; S.bookShelfKid = l.id; }
+  const shelf = Books.SHELVES.find((s) => s.id === S.bookShelf), list = shelfBooks(shelf.id, marks);
+  const tabs = '<div class="shelf-tabs" role="tablist" aria-label="Kumon reading levels">' + Books.SHELVES.map((s) => '<button role="tab" aria-selected="' + (s.id === shelf.id) + '" class="' + (s.id === shelf.id ? 'on' : '') + '" data-act="bookShelf" data-shelf="' + s.id + '">' +
+    esc(s.name) + (s.id === cur ? ' <small>now</small>' : '') + '</button>').join('') + '</div>';
+  const group = (how, title, help) => {
+    const rows = list.filter((b) => b.how === how);
+    return rows.length ? '<h4 class="shelf-h">' + title + '</h4><p class="help">' + help + '</p><div class="books">' + rows.map((b) => bookRowHTML(b, marks, counts)).join('') + '</div>' : '';
+  };
+  const read = group('to', 'Read aloud to ' + esc(l.name), 'You read; point to the pictures and words, and ask what will happen next.') +
+    group('alone', esc(l.name) + ' reads', 'Your child reads to you. Help with hard words, then let them try the page again.');
+  const left = '<section class="glass panel"><div class="kid-row" style="justify-content:space-between;flex-wrap:wrap;gap:10px"><h3>Book shelf: Kumon ' + esc(shelf.name) + '</h3>' +
+    (shelf.id === cur ? '<span class="chip chip-ok">' + esc(l.name) + '’s level now</span>' : '<span class="chip">' + (Books.SHELVES.findIndex((s) => s.id === shelf.id) > Books.SHELVES.findIndex((s) => s.id === cur) ? 'Coming up' : 'Earlier level') + '</span>') + '</div>' +
+    tabs + read + '</section>';
+  const week = weekBookReads(l.id);
+  const recent = week.slice(0, 10).map((s) => '<li><span><b>' + esc(s.title) + '</b> <span class="muted">' + esc(fmtWhen(s.at)) + '</span></span><button class="icon-btn mini-x" data-act="bookUndo" data-id="' + esc(s.id) + '" data-at="' + esc(s.at) + '" aria-label="Remove this read">' + ICON.close + '</button></li>').join('');
+  const right = '<section class="glass panel"><h3>' + esc(l.name) + '’s books this week</h3>' + weekBarHTML(week.length) +
+    '<p class="sub">Goal: a book a day. Each book logged gives ' + esc(l.name) + ' +' + BOOK_STARS + ' stars.</p>' + (recent ? '<ul class="read-list">' + recent + '</ul>' : '<p class="sub">No books logged this week yet. Tap “Read today” on a book after reading it.</p>') + '</section>' +
+    '<section class="glass panel"><h3>Add a book</h3><p class="sub">A book from home or the library. It goes on the Kumon ' + esc(shelf.name) + ' shelf.</p><div class="form">' +
+      '<div class="field"><label for="b-title">Title</label><input type="text" id="b-title" maxlength="80" autocomplete="off"></div>' +
+      '<div class="field"><label for="b-author">Author (optional)</label><input type="text" id="b-author" maxlength="60" autocomplete="off"></div>' +
+      '<div class="field"><label for="b-how">Who reads it</label><select id="b-how"><option value="to">I read it to ' + esc(l.name) + '</option><option value="alone">' + esc(l.name) + ' reads it</option></select></div></div>' +
+      '<div class="actions"><button class="btn btn-gold btn-small" data-act="bookAdd">Add to the shelf</button></div></section>' +
+    '<section class="glass panel"><h3>About these books</h3><p class="sub">These are well-known picture books and early readers picked for Small Steps, grouped by Kumon level. They are not Kumon’s list: Kumon’s Recommended Reading List says it may not be copied, so it isn’t in the app. You can read it here: ' +
+      '<a class="link" href="' + esc(Books.KUMON_LIST) + '" target="_blank" rel="noopener">Kumon Recommended Reading List (PDF)</a>.</p>' +
+      '<p class="sub">“Buy” opens an Amazon search for the book. Most of these are also at the public library.</p></section>';
+  return '<div class="panels two"><div class="panels">' + left + '</div><div class="panels">' + right + '</div></div>';
+}
+
+/* ---------- actions ---------- */
+function saveBooks(l, fn) {
+  const t = trackOf(l, 'reading'), b = Object.assign({ have: {}, own: {} }, t.books || {});
+  const nb = fn({ have: Object.assign({}, b.have), own: Object.assign({}, b.own) });
+  return putTrack(l, 'reading', Object.assign({}, t, { books: nb }));
+}
+function bookHave(id) {
+  const l = Store.learner(S.parentKid);
+  if (!l) return;
+  const owned = !!bookMarks().have[id];
+  if (owned) {
+    /* not ours any more: clear the mark wherever it was made */
+    Store.learners().forEach((k) => { const b = (k.reading && k.reading.books) || {}; if (b.have && b.have[id]) Store.saveLearner(saveBooks(k, (x) => { delete x.have[id]; return x; })); });
+  } else Store.saveLearner(saveBooks(l, (x) => { x.have[id] = ENG.reading.todayKey(); return x; }));
+  Sfx.tap(); render();
+}
+function bookRead(id) {
+  const l = Store.learner(S.parentKid), b = bookById(id);
+  if (!l || !b) return;
+  const now = new Date();
+  Store.appendSession(l.id, { id: Store.newId(), subject: 'books', kind: 'book', at: now.toISOString(), book: b.id, title: b.t, author: b.a || '', how: b.how, shelf: b.shelf });
+  let msg = 'Logged ' + b.t;
+  if (hasBuddy(l)) {
+    const cr = Buddy.credit(Buddy.of(l), BOOK_STARS, { noSheet: true, streak: bestStreak(l) });
+    Store.saveLearner(Object.assign({}, l, { buddy: cr.buddy }));
+    msg += ' · +' + BOOK_STARS + ' stars for ' + l.name;
+  }
+  Sfx.coin(); render(); toast(msg);
+}
+function bookUndo(sessionId, at) {
+  const l = Store.learner(S.parentKid);
+  if (!l) return;
+  Store.updateSession(l.id, sessionId, at, { removed: true }, 'books');
+  if (hasBuddy(l)) {
+    const b = Buddy.of(l), take = Math.min(BOOK_STARS, b.stars);
+    if (take) Store.saveLearner(Object.assign({}, l, { buddy: Object.assign({}, b, { stars: b.stars - take, lifetime: Math.max(0, b.lifetime - take) }) }));
+  }
+  Sfx.tap(); render(); toast('Read removed');
+}
+function bookAdd() {
+  const l = Store.learner(S.parentKid), te = document.getElementById('b-title'), ae = document.getElementById('b-author'), he = document.getElementById('b-how');
+  if (!l || !te) return;
+  const t = te.value.trim().slice(0, 80), a = ae ? ae.value.trim().slice(0, 60) : '';
+  if (!t) { toast('Type the book’s title first'); te.focus(); return; }
+  const id = 'u' + Store.newId();
+  Store.saveLearner(saveBooks(l, (x) => { x.own[id] = { t, a, shelf: S.bookShelf || kidShelf(l), how: he && he.value === 'alone' ? 'alone' : 'to', at: new Date().toISOString() }; return x; }));
+  Sfx.tap(); render(); toast(t + ' added to the shelf');
+}
+function bookDel(id) {
+  const b = bookMarks().own[id];
+  if (!b) return;
+  confirmBox('Remove ' + b.t + '?', 'It comes off the shelf for every child. Reads already logged stay in the record.', 'Remove', () => {
+    Store.learners().forEach((k) => { const bk = (k.reading && k.reading.books) || {}; if ((bk.own && bk.own[id]) || (bk.have && bk.have[id])) Store.saveLearner(saveBooks(k, (x) => { delete x.own[id]; delete x.have[id]; return x; })); });
+    render(); toast('Removed');
+  }, true);
+}
+document.addEventListener('click', (e) => {
+  const t = e.target.closest && e.target.closest('[data-act]');
+  if (!t || t.disabled) return;
+  switch (t.getAttribute('data-act')) {
+    case 'bookHave': bookHave(t.getAttribute('data-id')); break;
+    case 'bookRead': bookRead(t.getAttribute('data-id')); break;
+    case 'bookUndo': bookUndo(t.getAttribute('data-id'), t.getAttribute('data-at')); break;
+    case 'bookAdd': bookAdd(); break;
+    case 'bookDel': bookDel(t.getAttribute('data-id')); break;
+    case 'bookShelf': S.bookShelf = t.getAttribute('data-shelf'); Sfx.tap(); render(); break;
+    default: break;
+  }
+});
 /* Small Steps: home, buddy picker, shop, parent area, overlays, events and startup. */
 
 /* ---------- home ---------- */
@@ -7029,7 +7594,8 @@ function settingsHTML(l, E, t, subj) {
       '<p class="help">' + (subj === 'clock' ? 'Kumon has no clock program; 2 short sheets a day is plenty.' : 'Kumon’s instructor sets this. Kumon families report 5–10 sheets a subject a day, and Kumon suggests 10–15 minutes of focused work for young children.') + '</p></div>' +
     (subj === 'reading' ? '<div class="field"><label for="f-ra">Read aloud each day</label><select id="f-ra" data-set="readAloud">' + opt('1', 'On', s.readAloud === false ? '0' : '1') + opt('0', 'Off', s.readAloud === false ? '0' : '1') + '</select>' +
       '<p class="help">After the reading sheets, the reading tile says “Read to me.” You listen and tap any word that was missed.</p></div>' : '') +
-    '<div class="field"><label for="f-len">Problems per sheet</label><select id="f-len" data-set="sheetLen">' + opt(10, '10', s.sheetLen) + opt(15, '15', s.sheetLen) + opt(20, '20' + (subj === 'math' ? ' (about one Kumon worksheet)' : ''), s.sheetLen) + '</select></div>' +
+    '<div class="field"><label for="f-len">Problems per sheet</label><select id="f-len" data-set="sheetLen">' + opt(10, '10', s.sheetLen) + opt(15, '15', s.sheetLen) + opt(20, '20' + (subj === 'math' ? ' (about one Kumon worksheet)' : ''), s.sheetLen) + '</select>' +
+      (subj === 'reading' ? '<p class="help">The story levels (Kumon AI and AII) stop at 6 problems a sheet, because each one comes with a story to read.</p>' : '') + '</div>' +
     '<div class="field"><label for="f-allowed">Misses allowed to pass</label><select id="f-allowed" data-set="allowed">' + [0, 1, 2, 3].map((v) => opt(v, (v === 0 ? 'None' : String(v)) + ' (' + Math.round(100 * (s.sheetLen - v) / s.sheetLen) + '% to pass)', s.allowed)).join('') + '</select></div>' +
     '<div class="field"><label for="f-adv">Passed sheets to move up</label><select id="f-adv" data-set="toAdvance">' + [1, 2, 3, 4, 5].map((v) => opt(v, String(v), s.toAdvance)).join('') + '</select>' +
       '<p class="help">Passes must come from at least two different days. A perfect sheet in half the target time counts as two, and two of those in a row move up the same day.</p></div>' +
@@ -7090,18 +7656,20 @@ function viewParent() {
       '<div class="actions"><button class="btn btn-glass btn-small" data-act="place" data-kid="' + esc(l.id) + '">Run ' + SUBJ[subj].name.toLowerCase() + ' placement check now</button>' +
         '<button class="btn ' + (t.placeNext ? 'btn-gold' : 'btn-glass') + ' btn-small" data-act="placeNext">' + (t.placeNext ? 'Check queued for next visit ✓' : 'Check on ' + esc(l.name) + '’s next visit') + '</button></div>' +
       '<p class="sub">A queued check runs the next time ' + esc(l.name) + ' taps ' + SUBJ[subj].name + ' and sets the level automatically. A child’s first visit to a subject always starts with one.</p></section>';
-    const sec = S.parentSec || 'progress';
-    const secTabs = '<div class="sec-tabs" role="tablist">' + [['progress', 'Progress'], ['try', 'Try it yourself'], ['settings', 'Settings'], ['guide', 'How it works']].map((x) =>
+    const sec = S.parentSec === 'books' && subj !== 'reading' ? 'progress' : (S.parentSec || 'progress');
+    const secList = [['progress', 'Progress']].concat(subj === 'reading' ? [['books', 'Books']] : [], [['try', 'Try it yourself'], ['settings', 'Settings'], ['guide', 'How it works']]);
+    const secTabs = '<div class="sec-tabs' + (secList.length > 4 ? ' five' : '') + '" role="tablist">' + secList.map((x) =>
       '<button role="tab" aria-selected="' + (sec === x[0]) + '" class="sec-tab' + (sec === x[0] ? ' on' : '') + '" data-act="psec" data-sec="' + x[0] + '">' + x[1] + '</button>').join('') + '</div>';
     let inner;
     if (sec === 'try') inner = '<div class="panels two"><div class="panels">' + trialPanelHTML(l, subj, E, t) + '</div><div class="panels">' + ratingsHTML(l, subj, E) + '</div></div>';
     else if (sec === 'settings') inner = '<div class="panels two"><div class="panels">' + level + settingsHTML(l, E, t, subj) + '</div><div class="panels">' + buddyPanelHTML(l) + devicePanelHTML() + '</div></div>';
     else if (sec === 'guide') inner = guideHTML();
-    else inner = '<div class="panels two"><div class="panels">' + overview + levelChartHTML(subj, E, t, sessions, l) + worksheetGridHTML(subj, E, sessions) + '</div><div class="panels">' + (subj === 'reading' ? readAloudHTML(l) : '') + studyCalendarHTML(l) + troubleHTML(E, t, sessions) +
+    else if (sec === 'books') inner = booksHTML(l);
+    else inner = '<div class="panels two"><div class="panels">' + overview + levelChartHTML(subj, E, t, sessions, l) + worksheetGridHTML(subj, E, sessions) + '</div><div class="panels">' + (subj === 'reading' ? readAloudHTML(l) + booksSummaryHTML(l) : '') + studyCalendarHTML(l) + troubleHTML(E, t, sessions) +
       '<details class="glass panel more"><summary><h3 style="display:inline">All sheets as a table</h3></summary>' + historyHTML(E, sessions).replace(/^<section class="glass panel">/, '<div>').replace(/<\/section>$/, '</div>') + '</details></div></div>';
     body = '<div class="kid-row parent-nav">' + seg + secTabs + '</div>' + inner;
   }
-  const where = Store.backend === 'site' ? 'Progress is stored in your family’s private folder and syncs across your devices.' : Store.mode === 'db' ? 'Progress is stored with this page in Claude. The kids’ website copies it every hour from 7am to 9pm.' : Store.mode === 'local' ? 'Progress is stored in this browser only.' : '';
+  const where = Store.backend === 'site' ? 'Progress is stored in your family’s private folder and syncs across your devices.' : Store.mode === 'db' ? 'Progress is stored with this page in Claude. The kids’ website copies it every hour from 3pm to 10pm.' : Store.mode === 'local' ? 'Progress is stored in this browser only.' : '';
   return '<div class="screen"><header class="topbar"><button class="icon-btn" data-act="home">' + ICON.back + '<span>Kids</span></button><h1 style="font-size:34px">Parents</h1><span class="spacer"></span>' + soundBtn() + '</header>' +
     storageNote() + '<div class="tabs">' + tabs + '</div>' + body + (where ? '<p class="muted" style="font-size:14px">' + esc(where) + '</p>' : '') + '</div>';
 }
