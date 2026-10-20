@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261020203713";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261020211313";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -65,7 +65,7 @@ button { cursor: pointer; touch-action: manipulation; border: 0; background: non
 #app {
   position: relative; z-index: 1; min-height: 100%; max-width: 1120px; margin: 0 auto;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 14px 36px; display: flex; flex-direction: column; gap: 18px;
+  padding-top: max(14px, env(safe-area-inset-top, 0px)); padding-bottom: 36px; display: flex; flex-direction: column; gap: 18px;
 }
 .screen { display: flex; flex-direction: column; gap: 18px; animation: screenIn 0.38s var(--spring) both; }
 @keyframes screenIn { from { opacity: 0; transform: translateY(14px) scale(0.985); } to { opacity: 1; transform: none; } }
@@ -733,6 +733,7 @@ details.more[open] > summary h3::after { content: " −"; }
   .slot-tab { min-height: 54px; font-size: 21px; padding: 0 20px; }
 }
 
+.shop-list { display: grid; gap: 14px; min-width: 0; align-content: start; }
 /* Shop: food helps the buddy grow. The growth bar shows stars in gold and food in green. */
 .stage-info { display: contents; }
 .grow-bar { display: flex; }
@@ -740,7 +741,7 @@ details.more[open] > summary h3::after { content: " −"; }
 .grow-bar b:not(:last-child) { border-radius: 999px 0 0 999px; }
 .grow-bar i { display: block; height: 100%; border-radius: 0 999px 999px 0; background: linear-gradient(90deg, #6BE89A, #2FB574); box-shadow: 0 0 12px rgba(52, 210, 123, 0.55); }
 .treat-row { display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: center; }
-.grow-chip { display: inline-flex; align-items: center; gap: 2px; font-family: var(--font-display); font-size: 16px; line-height: 1.2; color: #0E3B22; background: #7BE8A6; border-radius: 999px; padding: 2px 9px 2px 10px; box-shadow: 0 3px 0 #2A9D5E; }
+.grow-chip { display: inline-flex; align-items: center; gap: 3px; font-family: var(--font-display); font-size: 16px; line-height: 1.2; color: #0E3B22; background: #7BE8A6; border-radius: 999px; padding: 2px 9px 2px 10px; box-shadow: 0 3px 0 #2A9D5E; }
 .grow-chip i { font-style: normal; font-family: var(--font-emoji); font-size: 14px; }
 .fav-flag { position: absolute; top: 8px; left: 8px; z-index: 1; font-size: 11px; font-weight: 900; color: #B42E27; background: #FFFFFF; border-radius: 999px; padding: 2px 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25); }
 .ate-badge { position: absolute; top: 8px; right: 8px; z-index: 1; font-family: var(--font-display); font-size: 15px; line-height: 1.2; color: #FFFFFF; background: rgba(20, 16, 60, 0.8); border: 1px solid var(--glass-edge); border-radius: 999px; padding: 1px 8px; }
@@ -768,6 +769,39 @@ details.more[open] > summary h3::after { content: " −"; }
   .shop-stage .try-note .btn { min-height: 44px; padding: 4px 18px; font-size: 18px; }
   .shop-stage .goal { padding: 6px 8px 6px 6px; grid-template-columns: 44px minmax(0, 1fr); }
   .shop-stage .goal-art { width: 44px; height: 38px; }
+}
+/* Phones held upright: the closet's title, buddy bar and tabs stay put and only the items scroll,
+   three to a row. The screen is exactly as tall as the window, so the page itself never scrolls. */
+@media (max-width: 699px) and (min-height: 600px) {
+  .shop-screen { height: calc(100vh - max(14px, env(safe-area-inset-top, 0px))); height: calc(100dvh - max(14px, env(safe-area-inset-top, 0px))); margin-bottom: -36px; gap: 10px; }
+  .shop-screen .topbar { flex: none; }
+  .shop-screen .shop { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+  .shop-screen .shop-stage { position: relative; top: auto; flex: none; padding: 12px 12px 8px 8px; }
+  .shop-screen .shop-stage .stage-buddy { width: 112px; }
+  .shop-screen .shop-list { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+  .shop-screen .slot-tabs { flex: none; }
+  .shop-screen .slot-tab { min-height: 54px; padding: 4px 2px; border-radius: 16px; }
+  .shop-screen .slot-tab .slot-ico { font-size: 22px; }
+  .shop-screen .slot-tab .slot-name { font-size: 12px; }
+  .shop-screen .items {
+    flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+    grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; align-content: start;
+    margin: 0 -6px; padding: 4px 6px calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+  .shop-screen .item-card { padding: 8px 6px 10px; gap: 6px; border-radius: 18px; }
+  .shop-screen .item-card .art { padding: 4px; border-radius: 12px; }
+  .shop-screen .item-card b { font-size: 15px; }
+  .shop-screen .item-card .price, .shop-screen .item-card .chip { font-size: 14px; }
+  .shop-screen .item-card .chip { padding: 3px 8px; }
+  .shop-screen .item-card .price { padding: 1px 7px 1px 4px; gap: 2px; }
+  .shop-screen .item-card .price svg { width: 15px; height: 15px; }
+  .shop-screen .grow-chip { font-size: 14px; padding: 1px 6px; gap: 2px; }
+  .shop-screen .grow-chip i { font-size: 12px; }
+  .shop-screen .treat-row { gap: 3px; flex-wrap: nowrap; }
+  .shop-screen .fav-word { display: none; }
+  .shop-screen .fav-flag { top: 6px; left: 6px; font-size: 12px; padding: 1px 6px; }
+  .shop-screen .ate-badge { top: 6px; right: 6px; font-size: 13px; padding: 0 6px; }
+  .shop-screen .goal-flag { top: 6px; left: 6px; font-size: 10px; padding: 1px 6px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -8167,14 +8201,14 @@ function viewShop() {
   const items = list.map((it) => {
     const owned = b.owned.includes(it.id), wearing = Buddy.isWorn(b, it.id), can = !owned && !it.unlock && b.stars >= it.price;
     let status;
-    if (it.use) status = '<span class="treat-row"><span class="price' + (b.stars >= it.price ? ' can' : ' short') + '">' + ICON.star + it.price + '</span><span class="grow-chip" aria-label="grows ' + (it.grow || 0) + '">+' + (it.grow || 0) + ' <i aria-hidden="true">🌱</i></span></span>';
+    if (it.use) status = '<span class="treat-row"><span class="price' + (b.stars >= it.price ? ' can' : ' short') + '">' + ICON.star + it.price + '</span><span class="grow-chip" aria-label="grows ' + (it.grow || 0) + '">+' + (it.grow || 0) + '<i aria-hidden="true">🌱</i></span></span>';
     else if (wearing) status = '<span class="chip chip-ok">' + (it.slot === 'trick' ? 'Picked' : it.slot === 'bg' ? 'Here now' : 'Wearing') + '</span>';
     else if (owned) status = '<span class="chip">' + (it.slot === 'trick' ? 'Tap to pick' : 'Tap to wear') + '</span>';
     else if (it.unlock) status = '<span class="chip">' + ICON.lock.replace('<svg', '<svg style="width:14px;height:14px"') + ' ' + esc(Buddy.ACHIEVE[it.unlock]) + '</span>';
     else status = '<span class="price' + (can ? ' can' : ' short') + '">' + ICON.star + it.price + '</span>';
     const art3d = it.slot === 'trick' ? '' : ' data-item3d="' + it.id + (it.slot === 'paint' ? '@' + color : '') + '"';
     return '<button class="item-card' + (wearing ? ' wearing' : '') + (can || (it.use && b.stars >= it.price) ? ' can-buy' : '') + (S.tryOn === it.id ? ' trying' : '') + (!owned && it.unlock ? ' locked' : '') + '" data-act="item" data-id="' + it.id + '">' +
-      (b.goal === it.id ? '<span class="goal-flag">Saving</span>' : '') + (it.use && fav && fav.id === it.id ? '<span class="fav-flag">♥ Favorite</span>' : '') + (it.use && ate[it.id] ? '<span class="ate-badge" aria-label="eaten ' + ate[it.id] + ' times">×' + ate[it.id] + '</span>' : '') + '<span class="art' + (it.slot === 'bg' ? ' place' : '') + '"' + art3d + '>' + Buddy.itemSVG(it.id, color) + '</span><b>' + esc(it.name) + '</b>' + status + '</button>';
+      (b.goal === it.id ? '<span class="goal-flag">Saving</span>' : '') + (it.use && fav && fav.id === it.id ? '<span class="fav-flag" aria-label="Favorite">♥<span class="fav-word"> Favorite</span></span>' : '') + (it.use && ate[it.id] ? '<span class="ate-badge" aria-label="eaten ' + ate[it.id] + ' times">×' + ate[it.id] + '</span>' : '') + '<span class="art' + (it.slot === 'bg' ? ' place' : '') + '"' + art3d + '>' + Buddy.itemSVG(it.id, color) + '</span><b>' + esc(it.name) + '</b>' + status + '</button>';
   }).join('');
   const tryIt = S.tryOn && Buddy.ITEM[S.tryOn], wornTrick = b.wear.trick && Buddy.ITEM[b.wear.trick];
   let note = '';
@@ -8189,9 +8223,9 @@ function viewShop() {
   else if (slot === 'side') note = '<p class="muted try-hint">Two friends can come along. Tap a friend to bring it or send it home.</p>';
   else if (Buddy.goalOf(b)) note = goalHTML(b, l.id);
   const back = S.shopFrom === 'between' ? 'Back' : 'Home';
-  return '<div class="screen"><header class="topbar"><button class="icon-btn" data-act="shopBack" aria-label="' + back + '">' + ICON.back + '</button><h1 style="font-size:clamp(28px,4.6vw,40px)">' + esc(b.name) + '’s closet</h1><span class="spacer"></span>' + starTotalChip(l, b.stars) + '</header>' +
+  return '<div class="screen shop-screen"><header class="topbar"><button class="icon-btn" data-act="shopBack" aria-label="' + back + '">' + ICON.back + '</button><h1 style="font-size:clamp(28px,4.6vw,40px)">' + esc(b.name) + '’s closet</h1><span class="spacer"></span>' + starTotalChip(l, b.stars) + '</header>' +
     '<div class="shop"><section class="glass shop-stage' + (tryIt ? ' trying' : '') + '"><div class="stage-buddy">' + Buddy.svg(b, { mood: 'idle', tryOn: S.tryOn }) + '</div><div class="stage-info"><span class="badge-level">' + ['Little', 'Big', 'Hero'][stage] + ' ' + esc(Buddy.TYPE[b.type].name.toLowerCase()) + '</span>' + growth + note + '</div></section>' +
-    '<section style="display:grid;gap:14px;min-width:0"><div class="slot-tabs">' + tabs + '</div><div class="items">' + items + '</div></section></div></div>';
+    '<section class="shop-list"><div class="slot-tabs">' + tabs + '</div><div class="items" data-keep="items-' + slot + '">' + items + '</div></section></div></div>';
 }
 function sayItem(it, b) {
   if (!it) return;
@@ -8487,7 +8521,11 @@ function render() {
     place: viewPlace, placeDone: viewPlaceDone, checkIntro: viewCheckIntro, checkDone: viewCheckDone, trialDone: viewTrialDone, parent: viewParent, pick: viewPick, shop: viewShop, home: viewHome,
     example: viewExample, read: viewRead };
   const vfn = Store.mode === 'setup' ? viewSetup : (views[S.view] || viewHome);
+  /* lists that scroll on their own (the closet's items on phones) keep their place across redraws */
+  const kept = {};
+  app.querySelectorAll('[data-keep]').forEach((el) => { kept[el.getAttribute('data-keep')] = el.scrollTop; });
   app.innerHTML = vfn() + overlayHTML() + '<div class="toast" id="toast" role="status"' + (S.toast ? '' : ' hidden') + '>' + esc(S.toast) + '</div>';
+  app.querySelectorAll('[data-keep]').forEach((el) => { const k = el.getAttribute('data-keep'); if (kept[k]) el.scrollTop = kept[k]; });
   if (same) app.querySelectorAll('.screen').forEach((el) => el.classList.add('still'));
   S.anim = false;
   if (S.view === 'sheet') updateClock();
