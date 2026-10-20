@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261020211313";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261020223031";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -734,6 +734,9 @@ details.more[open] > summary h3::after { content: " −"; }
 }
 
 .shop-list { display: grid; gap: 14px; min-width: 0; align-content: start; }
+/* Parents: daily load and tiring signs */
+.load-signs { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 15px; }
+.load-h { margin: 4px 0 0; font-size: 16px; font-weight: 900; }
 /* Shop: food helps the buddy grow. The growth bar shows stars in gold and food in green. */
 .stage-info { display: contents; }
 .grow-bar { display: flex; }
@@ -5886,6 +5889,187 @@ const Merge = (() => {
   return { mergeDoc, merge3, unionById, eq };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = Merge;
+/* Small Steps: practice load and fatigue, worked out from the sheet logs. Parents → Progress in the
+   app and the parents' dashboard (tools/dashboard.js) both use this file, so they show the same numbers.
+
+   Load, per subject and per day: sheets, problems (extra practice after a mistake included), minutes
+   spent answering (corrections included), and sittings. Sheets close together make one sitting; a gap
+   of more than 12 minutes starts a new one. A sitting's length runs from the start of its first sheet
+   to the end of its last, so it includes the results screens in between.
+
+   Kumon's yardsticks: about 20 to 30 minutes a day per subject once a child has built up to it, and
+   10 to 15 minutes of focused work can be enough for young children (kumon.com). Standard time per
+   math sheet, corrections included: 1 to 2 minutes at levels 3A, 2A and A (Kumon Table of Learning
+   Materials, Math).
+
+   Signs of tiring, looked for within each sitting (a break resets a child, and a new level is slower
+   for a while, so only sheets of the same subject and level in one sitting are compared):
+   - slowing down: the sitting's last sheets of a level take 30% longer than its earlier ones (each
+     against its target time) without fewer mistakes, since slowing down to get things right is
+     learning, not tiring (needs 3 sheets of that level in the sitting);
+   - more mistakes: the last sheets have at least 2 more mistakes than the earlier ones and are under
+     90% right first time (needs 3 sheets);
+   - more long pauses: problems that took at least 8 seconds and at least 3 times the usual time on
+     their sheet, at least 3 of them in the second half of a sitting and twice as many as in the first
+     half (needs the seconds per problem that sheets carry from October 20, 2026 on);
+   - a long sitting: 25 minutes or more;
+   - a sheet stopped partway.
+   No sign in a day: Fresh. One: Watch. Two or more: Tired. */
+const Metrics = (() => {
+  'use strict';
+  const SUBJECTS = ['math', 'reading', 'clock'];
+  const NAMES = { math: 'Math', reading: 'Reading', clock: 'Clock' };
+  const GAP_MIN = 12;
+  const KUMON = {
+    dayMin: { young: [10, 15], full: [20, 30] },
+    mathSct: { '3A': [1, 2], '2A': [1, 2], A: [1, 2] }
+  };
+  const LIMIT = { slowPct: 30, moreMistakes: 2, rightFirstOk: 90, sameLevel: 3, longSitMin: 25, pauseSec: 8, pauseX: 3, pauseMin: 3 };
+
+  /* The calendar day of a time stamp: in the given IANA time zone, or the device's own. */
+  function dayKey(iso, tz) {
+    const d = new Date(iso);
+    if (tz && typeof Intl !== 'undefined') {
+      try { return new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d); } catch (e) { /* fall back to local time */ }
+    }
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  const work = (s) => (s.secs || 0) + (s.fixSecs || 0);
+  const isSheet = (s) => !!s && (s.kind === 'sheet' || s.kind === 'test') && s.n > 0 && !!s.at;
+  const r1 = (x) => Math.round(x * 10) / 10;
+  const mean = (a) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0);
+  function median(a) {
+    if (!a.length) return 0;
+    const b = a.slice().sort((x, y) => x - y), m = b.length >> 1;
+    return b.length % 2 ? b[m] : (b[m - 1] + b[m]) / 2;
+  }
+  /* Where a subject's daily minutes sit against Kumon's guidance. */
+  function band(min) {
+    if (min < KUMON.dayMin.young[0]) return { id: 'light', label: 'Light' };
+    if (min <= KUMON.dayMin.young[1]) return { id: 'young', label: 'Kumon range for young children' };
+    if (min <= KUMON.dayMin.full[1]) return { id: 'full', label: 'Kumon full range' };
+    return { id: 'over', label: 'Over Kumon’s range' };
+  }
+  /* Each problem on a sheet: 1 where it was a long pause, 0 where not (null when the sheet has no
+     seconds per problem, as before October 20, 2026). */
+  function pauseFlags(s) {
+    const t = (s.items || []).map((it) => (Array.isArray(it) && typeof it[3] === 'number' ? it[3] : null));
+    const known = t.filter((x) => x != null && x > 0);
+    if (known.length < 3 || known.length < t.length / 2) return null;
+    const m = median(known);
+    return t.map((x) => (x != null && x >= LIMIT.pauseSec && x >= LIMIT.pauseX * m ? 1 : 0));
+  }
+  function sittingsOf(sheets) {
+    const out = [];
+    sheets.forEach((s) => {
+      const end = Date.parse(s.at), start = end - work(s) * 1000, cur = out[out.length - 1];
+      if (!cur || start - cur.end > GAP_MIN * 60000) out.push({ start, end, work: work(s), list: [s] });
+      else { cur.end = Math.max(cur.end, end); cur.work += work(s); cur.list.push(s); }
+    });
+    return out.map((x) => ({ start: new Date(x.start).toISOString(), end: new Date(x.end).toISOString(), min: r1((x.end - x.start) / 60000), answerMin: r1(x.work / 60), sheets: x.list.length, list: x.list }));
+  }
+  /* Signs of tiring inside one sitting. */
+  function sittingSigns(sit) {
+    const signs = [];
+    const groups = {};
+    sit.list.forEach((s) => { const k = s.subj + '|' + s.levelId; (groups[k] = groups[k] || []).push(s); });
+    Object.values(groups).forEach((g) => {
+      if (g.length < LIMIT.sameLevel) return;
+      const k = Math.max(1, Math.floor(g.length / 3)), early = g.slice(0, g.length - k), late = g.slice(-k), subj = g[0].subj;
+      const pace = (s) => (s.target > 0 && s.secs > 0 ? s.secs / s.target : null);
+      const pe = median(early.map(pace).filter((x) => x != null)), pl = mean(late.map(pace).filter((x) => x != null));
+      const we = median(early.map((s) => s.wrong || 0)), wl = mean(late.map((s) => s.wrong || 0));
+      const nl = late.reduce((a, s) => a + s.n, 0), rightLate = nl ? Math.round((100 * (nl - late.reduce((a, s) => a + (s.wrong || 0), 0))) / nl) : 100;
+      const slow = pe > 0 && pl > 0 ? Math.round((pl / pe - 1) * 100) : null;
+      if (slow != null && slow >= LIMIT.slowPct && wl >= we) signs.push({ id: 'slower', subj, pct: slow, text: NAMES[subj] + ' got ' + slow + '% slower near the end of a sitting' });
+      if (wl - we >= LIMIT.moreMistakes && rightLate < LIMIT.rightFirstOk) signs.push({ id: 'mistakes', subj, text: 'More ' + NAMES[subj].toLowerCase() + ' mistakes near the end of a sitting (' + rightLate + '% right first time)' });
+    });
+    const flags = sit.list.map(pauseFlags);
+    if (flags.every((f) => f != null)) {
+      const all = flags.reduce((a, f) => a.concat(f), []), h = Math.floor(all.length / 2);
+      const early = all.slice(0, h).reduce((a, b) => a + b, 0), late = all.slice(h).reduce((a, b) => a + b, 0);
+      if (late >= LIMIT.pauseMin && late >= 2 * Math.max(1, early)) signs.push({ id: 'pauses', text: 'More long pauses later in a sitting (' + early + ' in the first half, ' + late + ' in the second)' });
+    }
+    if (sit.min >= LIMIT.longSitMin) signs.push({ id: 'long', text: 'One sitting ran ' + Math.round(sit.min) + ' minutes' });
+    return signs;
+  }
+  function subjectDay(list, stops) {
+    const n1 = list.reduce((a, s) => a + s.n, 0), wrong = list.reduce((a, s) => a + (s.wrong || 0), 0);
+    const answerSec = list.reduce((a, s) => a + work(s), 0);
+    const out = {
+      sheets: list.length, plan: list.reduce((a, s) => Math.max(a, s.plan || 0), 0) || null,
+      problems: list.reduce((a, s) => a + s.n + (s.extras || 0), 0), mistakes: wrong,
+      rightFirst: n1 ? Math.round((100 * (n1 - wrong)) / n1) : null,
+      answerMin: r1(answerSec / 60), minPerSheet: list.length ? r1(answerSec / 60 / list.length) : null,
+      levels: list.map((s) => s.levelId).filter((x, i, a) => x && a.indexOf(x) === i), group: list.length ? list[list.length - 1].group || '' : '',
+      stops: stops.length
+    };
+    out.band = band(out.answerMin);
+    return out;
+  }
+  function summarize(d) {
+    const sheets = d.sheets.slice().sort((a, b) => String(a.at).localeCompare(String(b.at)));
+    const subjects = {};
+    SUBJECTS.forEach((k) => {
+      const list = sheets.filter((s) => s.subj === k), st = d.stops.filter((x) => x.subj === k);
+      if (list.length || st.length) subjects[k] = subjectDay(list, st);
+    });
+    const sittings = sittingsOf(sheets);
+    /* signs from each sitting; a kind of sign counts once a day (the strongest one is kept) */
+    const signs = [], seen = {};
+    sittings.forEach((sit) => sittingSigns(sit).forEach((g) => {
+      const key = g.id + '|' + (g.subj || '');
+      if (seen[key] == null) { seen[key] = signs.length; signs.push(g); }
+      else if ((g.pct || 0) > (signs[seen[key]].pct || 0)) signs[seen[key]] = g;
+    }));
+    const longest = sittings.reduce((a, s) => Math.max(a, s.min), 0);
+    if (d.stops.length) signs.push({ id: 'stopped', text: 'Stopped ' + d.stops.length + (d.stops.length === 1 ? ' sheet' : ' sheets') + ' partway' });
+    let pauses = null;
+    const pf = sheets.map(pauseFlags).filter((f) => f != null);
+    if (pf.length) pauses = { total: pf.reduce((a, f) => a + f.reduce((x, y) => x + y, 0), 0), sheets: pf.length };
+    const total = {
+      sheets: sheets.length, problems: Object.values(subjects).reduce((a, x) => a + x.problems, 0),
+      answerMin: r1(sheets.reduce((a, s) => a + work(s), 0) / 60), appMin: r1(sittings.reduce((a, s) => a + s.min, 0)),
+      sittings: sittings.length, longestSittingMin: r1(longest), mistakes: Object.values(subjects).reduce((a, x) => a + x.mistakes, 0),
+      firstAt: sheets.length ? sheets[0].at : null, lastAt: sheets.length ? sheets[sheets.length - 1].at : null
+    };
+    const level = signs.length === 0 ? 'fresh' : signs.length === 1 ? 'watch' : 'tired';
+    return { day: d.day, total, subjects, sittings: sittings.map((x) => ({ start: x.start, end: x.end, min: x.min, answerMin: x.answerMin, sheets: x.sheets })), pauses, stops: d.stops.length, signs, level, levelLabel: { fresh: 'Fresh', watch: 'Watch', tired: 'Tired' }[level] };
+  }
+  /* logs: { math: [...], reading: [...], clock: [...] }; stops likewise. Days come back newest first. */
+  function days(logs, stops, opts) {
+    const tz = opts && opts.tz, byDay = {};
+    const put = (k) => byDay[k] || (byDay[k] = { day: k, sheets: [], stops: [] });
+    SUBJECTS.forEach((subj) => {
+      ((logs && logs[subj]) || []).forEach((s) => { if (isSheet(s)) put(dayKey(s.at, tz)).sheets.push(Object.assign({ subj }, s)); });
+      ((stops && stops[subj]) || []).forEach((x) => { if (x && x.at) put(dayKey(x.at, tz)).stops.push(Object.assign({ subj }, x)); });
+    });
+    return Object.values(byDay).map(summarize).sort((a, b) => b.day.localeCompare(a.day));
+  }
+  /* The last n calendar days ending today (practice or not), newest first. */
+  function lastDays(list, n, today) {
+    const by = {}; list.forEach((d) => { by[d.day] = d; });
+    const out = [], p = today.split('-').map(Number);
+    for (let i = 0; i < n; i++) {
+      const t = new Date(Date.UTC(p[0], p[1] - 1, p[2] - i)), k = t.toISOString().slice(0, 10);
+      out.push(by[k] || { day: k, none: true });
+    }
+    return out;
+  }
+  /* A week at a glance: days practiced, averages over the days practiced, and the tiring signs seen. */
+  function week(list, today) {
+    const w = lastDays(list, 7, today), on = w.filter((d) => !d.none);
+    const avg = (f) => (on.length ? r1(mean(on.map(f))) : null);
+    const planned = on.map((d) => Object.values(d.subjects).filter((x) => x.plan).map((x) => Math.min(1, x.sheets / x.plan))).reduce((a, b) => a.concat(b), []);
+    return {
+      daysPracticed: on.length, answerMin: avg((d) => d.total.answerMin), appMin: avg((d) => d.total.appMin), problems: avg((d) => d.total.problems),
+      planDone: planned.length ? Math.round(100 * mean(planned)) : null,
+      tired: on.filter((d) => d.level === 'tired').length, watch: on.filter((d) => d.level === 'watch').length
+    };
+  }
+  return { SUBJECTS, NAMES, KUMON, LIMIT, GAP_MIN, dayKey, days, lastDays, week, band, sittingsOf };
+})();
+if (typeof module !== 'undefined' && module.exports) module.exports = Metrics;
 /* Small Steps: the kids' website keeps progress in a private GitHub folder.
    This module gives the store the same small database surface the Claude page provides
    (collection(name).onSnapshot, doc(path).set / delete), backed by the GitHub API:
@@ -6833,11 +7017,25 @@ function startSheet(kidId, subj, opts) {
     kid: kidId, subj, kind: test ? 'test' : 'sheet', group: test ? t.testFor : E.groupOf(t.levelId), levelId: t.levelId,
     problems, answers: new Array(problems.length).fill(null), idx: 0, input: '', marks: {}, setH: 12, setM: 0, hand: 'hour',
     start: Date.now(), paused: 0, locked: false, target, timed, speak: E.speaks(s.speak), showTimer: s.showTimer !== false && timed,
-    dayNo: plan.done + 1, dayTotal: Math.max(plan.total, plan.done + 1)
+    dayNo: plan.done + 1, dayTotal: Math.max(plan.total, plan.done + 1),
+    /* seconds spent on each problem, for the parents' fatigue view (long pauses, slowing down) */
+    qAt: Date.now(), qPaused: 0, qSecs: []
   };
   S.view = 'sheet'; S.anim = true;
   render(); window.scrollTo(0, 0);
   holdScreen(); speakCurrent(); startTick();
+}
+
+/* A sheet stopped partway is not scored; it is noted on the child's record for the parents'
+   fatigue view: when, how far in, and how long it had run. */
+function logStop() {
+  const sh = S.sheet;
+  if (!sh || sh.trial || S.view !== 'sheet') return;
+  const l = Store.learner(sh.kid);
+  if (!l) return;
+  const t = trackOf(l, sh.subj);
+  const stop = { at: new Date().toISOString(), lv: sh.levelId, kind: sh.kind, done: sh.answers.filter((a) => a != null).length, n: sh.problems.length, secs: Math.round((Date.now() - sh.start - sh.paused) / 1000), day: sh.dayNo };
+  Store.saveLearner(putTrack(l, sh.subj, Object.assign({}, t, { stops: (t.stops || []).concat([stop]).slice(-40) })));
 }
 
 /* A short pause after each answer shows what was picked; it does not count against the time. */
@@ -6852,11 +7050,13 @@ function sheetAnswer(v) {
   const sh = S.sheet;
   if (sh.locked) return;
   sh.answers[sh.idx] = v; sh.locked = true;
+  if (sh.qSecs) sh.qSecs[sh.idx] = Math.max(0, (Date.now() - sh.qAt - (sh.paused - sh.qPaused)) / 1000);
   Sfx.tap(); markPicked(v);
   const t0 = Date.now();
   after(BEAT_MS, () => {
     if (S.view !== 'sheet' || S.sheet !== sh) return;
     sh.paused += Date.now() - t0; sh.locked = false;
+    sh.qAt = Date.now(); sh.qPaused = sh.paused;
     sh.idx++; sh.input = ''; sh.marks = {}; sh.setH = 12; sh.setM = 0; sh.hand = 'hour';
     if (sh.idx >= sh.problems.length) return finishSheet();
     S.anim = true; render(); speakCurrent();
@@ -6904,8 +7104,9 @@ function finishSheet() {
     n: sh.problems.length, wrong: g.wrong, secs: Math.round(secs), target: sh.target, pass: ev.pass, boost: ev.boost, codes: g.codes,
     missed: sh.problems.filter((p, i) => !g.res[i].ok).slice(0, 12).map((p) => E.problemText(p)),
     reviewItems: sh.problems.filter((p) => p.review).length, stars: credit ? award.total : 0,
-    items: sh.problems.map((p, i) => [E.problemText(p), givenText(sh.subj, p, g.res[i]), g.res[i].ok ? 1 : 0]),
-    change: ev.levelUp ? 'up' : ev.stepBack ? 'back' : ev.returned ? 'return' : ev.testReady ? 'test' : '', to: ev.to
+    items: sh.problems.map((p, i) => [E.problemText(p), givenText(sh.subj, p, g.res[i]), g.res[i].ok ? 1 : 0, Math.round(((sh.qSecs && sh.qSecs[i]) || 0) * 10) / 10]),
+    change: ev.levelUp ? 'up' : ev.stepBack ? 'back' : ev.returned ? 'return' : ev.testReady ? 'test' : '', to: ev.to,
+    day: sh.dayNo, plan: sh.dayTotal
   };
   Store.saveLearner(l2);
   Store.appendSession(sh.kid, session);
@@ -7545,6 +7746,33 @@ function studyCalendarHTML(l) {
   return '<section class="glass panel"><div class="kid-row" style="justify-content:space-between"><h3>Study calendar</h3><span class="chip">' + esc(monthName) + '</span></div>' +
     '<div class="cal">' + cells + '</div>' +
     '<div class="ws-legend">' + SUBJECTS.map((sj) => '<span><i class="sw" style="background:' + sj.acc + '"></i>' + sj.name + ' · ' + totals[sj.key] + ' sheets</span>').join('') + '<span>' + studied + ' days practiced</span></div></section>';
+}
+
+/* ---------- daily load and tiring signs (all subjects; same numbers as the parents' dashboard) ---------- */
+function loadPanelHTML(l) {
+  const logs = {}, stops = {};
+  SUBJECTS.forEach((sj) => { logs[sj.key] = Store.sessionsFor(l.id, sj.key); stops[sj.key] = trackOf(l, sj.key).stops || []; });
+  const all = Metrics.days(logs, stops), today = ENG.math.todayKey(), week = Metrics.lastDays(all, 7, today);
+  const d = all[0] || null, isToday = d && d.day === today;
+  const f1 = (x) => (x == null ? '—' : String(Math.round(x * 10) / 10));
+  const dayName = (k) => { try { return new Date(k + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }); } catch (e) { return k; } };
+  const chip = (x) => '<span class="chip ' + ({ fresh: 'chip-ok', watch: 'chip-warn', tired: 'chip-bad' }[x.level] || '') + '">' + esc(x.levelLabel) + '</span>';
+  let body = '';
+  if (!d) body = '<p class="sub">No sheets yet.</p>';
+  else {
+    const rows = SUBJECTS.filter((sj) => d.subjects[sj.key]).map((sj) => {
+      const x = d.subjects[sj.key];
+      return '<tr><td>' + sj.name + '</td><td>' + x.sheets + (x.plan ? ' of ' + x.plan : '') + '</td><td>' + x.problems + '</td><td>' + f1(x.answerMin) + '</td><td>' + (x.rightFirst == null ? '—' : x.rightFirst + '%') + '</td></tr>';
+    }).join('');
+    body = '<div class="kid-row" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><b>' + (isToday ? 'Today' : 'Last practice: ' + esc(dayName(d.day))) + '</b>' + chip(d) + '</div>' +
+      (d.signs.length ? '<ul class="load-signs">' + d.signs.map((g) => '<li>' + esc(g.text) + '</li>').join('') + '</ul>' : '<p class="sub">No signs of tiring.</p>') +
+      '<div class="table-wrap"><table class="hist"><thead><tr><th>Subject</th><th>Sheets</th><th>Problems</th><th>Minutes answering</th><th>Right first time</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+      '<div class="stats"><div class="stat"><b>' + f1(d.total.answerMin) + '</b><span>minutes answering</span></div><div class="stat"><b>' + f1(d.total.appMin) + '</b><span>minutes in the app</span></div><div class="stat"><b>' + d.total.sittings + '</b><span>' + (d.total.sittings === 1 ? 'sitting' : 'sittings') + ', longest ' + f1(d.total.longestSittingMin) + ' min</span></div></div>';
+  }
+  const wk = week.map((x) => '<tr><td>' + esc(dayName(x.day)) + '</td>' + (x.none ? '<td colspan="4" class="muted">No practice</td>' : '<td>' + f1(x.total.answerMin) + '</td><td>' + f1(x.total.appMin) + '</td><td>' + x.total.problems + '</td><td>' + chip(x) + '</td>') + '</tr>').join('');
+  return '<section class="glass panel"><h3>Daily load and tiring signs</h3>' + body +
+    '<h4 class="load-h">Last 7 days</h4><div class="table-wrap"><table class="hist"><thead><tr><th>Day</th><th>Answering</th><th>In the app</th><th>Problems</th><th>Signs</th></tr></thead><tbody>' + wk + '</tbody></table></div>' +
+    '<p class="sub">Minutes answering include corrections; minutes in the app also count the results screens, from the first sheet of a sitting to the last (a gap over 12 minutes starts a new sitting). Kumon: about 20–30 minutes a day per subject once built up, and 10–15 focused minutes can be enough for young children. Tiring signs are looked for inside each sitting: slowing down without fewer mistakes, more mistakes, more long pauses, a sitting of 25 minutes or more, or a sheet stopped partway. Fresh: none. Watch: one. Tired: two or more.</p></section>';
 }
 
 /* ---------- parent trials ---------- */
@@ -8466,7 +8694,7 @@ function viewParent() {
     else if (sec === 'settings') inner = '<div class="panels two"><div class="panels">' + level + settingsHTML(l, E, t, subj) + '</div><div class="panels">' + buddyPanelHTML(l) + devicePanelHTML() + '</div></div>';
     else if (sec === 'guide') inner = guideHTML();
     else if (sec === 'books') inner = booksHTML(l);
-    else inner = '<div class="panels two"><div class="panels">' + overview + levelChartHTML(subj, E, t, sessions, l) + worksheetGridHTML(subj, E, sessions) + '</div><div class="panels">' + (subj === 'reading' ? readAloudHTML(l) + booksSummaryHTML(l) : '') + studyCalendarHTML(l) + troubleHTML(E, t, sessions) +
+    else inner = '<div class="panels two"><div class="panels">' + overview + levelChartHTML(subj, E, t, sessions, l) + worksheetGridHTML(subj, E, sessions) + '</div><div class="panels">' + loadPanelHTML(l) + (subj === 'reading' ? readAloudHTML(l) + booksSummaryHTML(l) : '') + studyCalendarHTML(l) + troubleHTML(E, t, sessions) +
       '<details class="glass panel more"><summary><h3 style="display:inline">All sheets as a table</h3></summary>' + historyHTML(E, sessions).replace(/^<section class="glass panel">/, '<div>').replace(/<\/section>$/, '</div>') + '</details></div></div>';
     body = '<div class="kid-row parent-nav">' + seg + secTabs + '</div>' + inner;
   }
@@ -8618,7 +8846,7 @@ document.addEventListener('click', (e) => {
       render();
       break;
     }
-    case 'quit': if (S.sheet && S.sheet.trial) { backToTrials('Trial stopped'); break; } confirmBox('Stop this sheet?', 'It won’t be scored or saved.', 'Stop sheet', () => goHome(), true); break;
+    case 'quit': if (S.sheet && S.sheet.trial) { backToTrials('Trial stopped'); break; } confirmBox('Stop this sheet?', 'It won’t be scored or saved.', 'Stop sheet', () => { logStop(); goHome(); }, true); break;
     case 'quitPlace': if (S.place && S.place.trial) { backToTrials('Trial stopped'); break; } confirmBox('Stop the check?', 'The level stays as it is.', 'Stop check', () => { const P = S.place, k = P && P.kid; S.place = null; releaseScreen(); if (P && P.auto) return goHome(); S.parentKid = k; S.view = 'parent'; render(); }, true); break;
     case 'startFix': startFix(); break;
     case 'afterSheet': Sfx.tap(); afterSheet(); break;
