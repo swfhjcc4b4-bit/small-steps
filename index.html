@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261021202014";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261021203650";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -3528,7 +3528,7 @@ const Buddy = (() => {
     boston: '<rect width="200" height="220" fill="#A9D4F5"/><g fill="#8FA9C8"><rect x="62" y="70" width="18" height="66"/><rect x="84" y="56" width="16" height="80"/><rect x="104" y="80" width="16" height="56"/></g><path d="M84 56 L92 44 L100 56 Z" fill="#7C96B8"/><rect x="18" y="108" width="40" height="28" fill="#C0603E"/><rect x="30" y="100" width="16" height="8" fill="#fff"/><path d="M28 100 A10 10 0 0 1 48 100 Z" fill="#FFC531"/><rect y="134" width="200" height="30" fill="#3C7FC4"/><path d="M0 142 q12 -4 24 0 t24 0 t24 0 t24 0 t24 0 t24 0 t24 0 t24 0 t24 0" stroke="#CFE6FA" stroke-width="2" fill="none"/><g stroke="#fff" stroke-width="3" fill="none"><path d="M140 136 L150 86 L160 136 M178 136 L188 86 L198 136"/><path d="M130 128 L200 128"/></g><g stroke="#fff" stroke-width="1" opacity=".8"><path d="M150 90 L132 128 M150 90 L142 128 M150 90 L160 128 M150 90 L170 128 M188 90 L176 128 M188 90 L196 128"/></g><rect y="162" width="200" height="58" fill="#79B95A"/><g><rect x="4" y="110" width="30" height="62" fill="#B5462E"/><rect x="34" y="104" width="30" height="68" fill="#A63F2A"/><path d="M10 120 h6 v8 h-6 Z M22 120 h6 v8 h-6 Z M10 136 h6 v8 h-6 Z M22 136 h6 v8 h-6 Z M40 116 h6 v8 h-6 Z M52 116 h6 v8 h-6 Z M40 132 h6 v8 h-6 Z M52 132 h6 v8 h-6 Z" fill="#2B2F45"/><rect x="15" y="156" width="8" height="16" fill="#1F3D2B"/><rect x="45" y="156" width="8" height="16" fill="#1F3D2B"/><rect x="2" y="106" width="64" height="4" fill="#fff"/></g><g transform="translate(110 172)"><rect x="-3" y="-30" width="6" height="30" fill="#8B5A3C"/><circle cx="0" cy="-40" r="16" fill="#E8752A"/><circle cx="-12" cy="-32" r="10" fill="#D9452B"/><circle cx="12" cy="-32" r="10" fill="#F2B33D"/></g><g fill="#E8752A"><circle cx="140" cy="190" r="2.5"/><circle cx="170" cy="200" r="2.5"/><circle cx="60" cy="196" r="2.5"/></g>'
   };
   /* Paint jobs: patterns for the flat buddy, and the color its shading is based on. */
-  const PAINT_BC = { rainbow: '#3D7BEA', galaxy: '#23408F', gold: '#E0A800', redpaint: '#E03131', mustard: '#CC9A06' };
+  const PAINT_BC = { rainbow: '#3D7BEA', galaxy: '#23408F', gold: '#E9B30C', redpaint: '#E03131', mustard: '#AD8200', pdots: '#7B4FD6' };
   function paintDefs(id, paint, base) {
     switch (paint) {
       case 'dots': return '<pattern id="' + id + '" width="18" height="18" patternUnits="userSpaceOnUse"><rect width="18" height="18" fill="' + base + '"/><circle cx="5" cy="5" r="3.2" fill="#fff" fill-opacity=".85"/><circle cx="14" cy="14" r="3.2" fill="#fff" fill-opacity=".85"/></pattern>';
@@ -3536,8 +3536,8 @@ const Buddy = (() => {
       case 'sparkle': return '<pattern id="' + id + '" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="' + base + '"/><circle cx="4" cy="6" r="1.4" fill="#fff"/><circle cx="16" cy="3" r="1" fill="#FFE48A"/><circle cx="11" cy="14" r="1.6" fill="#fff"/><circle cx="21" cy="18" r="1.1" fill="#FFE48A"/><circle cx="5" cy="20" r="1" fill="#fff"/></pattern>';
       case 'rainbow': return '<linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F03E3E"/><stop offset=".2" stop-color="#FF9F43"/><stop offset=".4" stop-color="#FFD43B"/><stop offset=".6" stop-color="#51CF66"/><stop offset=".8" stop-color="#4DABF7"/><stop offset="1" stop-color="#4C5FD5"/></linearGradient>';
       case 'galaxy': return '<pattern id="' + id + '" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="#13205A"/><circle cx="10" cy="12" r="9" fill="#1F8FBF" fill-opacity=".55"/><circle cx="30" cy="30" r="10" fill="#2E7BD6" fill-opacity=".45"/><circle cx="6" cy="30" r="1.2" fill="#fff"/><circle cx="22" cy="8" r="1" fill="#fff"/><circle cx="34" cy="16" r="1.4" fill="#fff"/><circle cx="18" cy="24" r=".9" fill="#FFE48A"/></pattern>';
-      case 'gold': return '<linearGradient id="' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF0B3"/><stop offset=".45" stop-color="#FFC531"/><stop offset="1" stop-color="#B8860B"/></linearGradient>';
-      case 'pdots': return '<pattern id="' + id + '" width="18" height="18" patternUnits="userSpaceOnUse"><rect width="18" height="18" fill="' + base + '"/><circle cx="5" cy="5" r="3.4" fill="#7C3AED"/><circle cx="14" cy="14" r="3.4" fill="#7C3AED"/></pattern>';
+      case 'gold': return '<linearGradient id="' + id + '" x1="0" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="#FFF8D6"/><stop offset=".18" stop-color="#FFE27A"/><stop offset=".36" stop-color="#F2B91C"/><stop offset=".5" stop-color="#FFEFA8"/><stop offset=".64" stop-color="#E8A80E"/><stop offset=".82" stop-color="#B57D06"/><stop offset="1" stop-color="#FFD75E"/></linearGradient>';
+      case 'pdots': return '<pattern id="' + id + '" width="18" height="18" patternUnits="userSpaceOnUse"><rect width="18" height="18" fill="' + PAINT_BC.pdots + '"/><circle cx="5" cy="5" r="3.2" fill="#fff" fill-opacity=".92"/><circle cx="14" cy="14" r="3.2" fill="#fff" fill-opacity=".92"/></pattern>';
       case 'tinydots': return '<pattern id="' + id + '" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="' + base + '"/><circle cx="2" cy="2" r="1.1" fill="#fff" fill-opacity=".92"/><circle cx="5.5" cy="5.5" r="1.1" fill="#fff" fill-opacity=".92"/></pattern>';
       case 'redpaint': case 'mustard': return '<pattern id="' + id + '" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="' + PAINT_BC[paint] + '"/></pattern>';
       default: return '';
@@ -3840,7 +3840,9 @@ const Buddy3D = (() => {
   };
   function seeded(n) { let x = n; return () => (x = (x * 16807) % 2147483647) / 2147483647; }
   /* Solid paints recolor the buddy itself, so the shading follows the new color. */
-  const SOLID_PAINT = { redpaint: '#E03131', mustard: '#CC9A06' };
+  const SOLID_PAINT = { redpaint: '#E03131', mustard: '#AD8200' };
+  /* Patterns with a color of their own: the buddy takes that color, the pattern goes on top. */
+  const PAINT_BASE = { pdots: '#7B4FD6' };
   function paintTex(paint, base) {
     return canvasTex('paint:' + paint + ':' + base, 256, 256, (x, w, h) => {
       const rnd = seeded(7);
@@ -3848,7 +3850,7 @@ const Buddy3D = (() => {
         x.fillStyle = base; x.fillRect(0, 0, w, h); x.fillStyle = 'rgba(255,255,255,0.93)';
         for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) [[32, 32], [96, 96]].forEach((q) => { x.beginPath(); x.arc(i * 128 + q[0], j * 128 + q[1], 21, 0, Math.PI * 2); x.fill(); });
       } else if (paint === 'pdots') {
-        x.fillStyle = base; x.fillRect(0, 0, w, h); x.fillStyle = '#7C3AED';
+        x.fillStyle = PAINT_BASE.pdots; x.fillRect(0, 0, w, h); x.fillStyle = 'rgba(255,255,255,0.93)';
         for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) [[32, 32], [96, 96]].forEach((q) => { x.beginPath(); x.arc(i * 128 + q[0], j * 128 + q[1], 21, 0, Math.PI * 2); x.fill(); });
       } else if (paint === 'tinydots') {
         x.fillStyle = base; x.fillRect(0, 0, w, h); x.fillStyle = 'rgba(255,255,255,0.93)';
@@ -3891,7 +3893,7 @@ const Buddy3D = (() => {
   };
   function paintMat(paint, base, kind, fb) {
     const like = { roughness: fb.roughness, clearcoat: fb.clearcoat || 0, clearcoatRoughness: fb.clearcoatRoughness || 0.1, envMapIntensity: TUNE.env };
-    if (paint === 'gold') return new T.MeshPhysicalMaterial({ color: lin('#FFC531'), metalness: 0.9, roughness: 0.26, clearcoat: 0.6, clearcoatRoughness: 0.12, envMapIntensity: 1.1 });
+    if (paint === 'gold') return new T.MeshPhysicalMaterial({ color: lin('#FFC23A'), metalness: 1, roughness: 0.24, clearcoat: 1, clearcoatRoughness: 0.05, envMap: goldEnv(), envMapIntensity: 1.6 });
     if (SOLID_PAINT[paint]) return new T.MeshPhysicalMaterial(Object.assign(like, { color: lin(SOLID_PAINT[paint]), clearcoat: Math.max(like.clearcoat, 0.6) }));
     const map = tiled(paintTex(paint, base), paint === 'rainbow' ? 'none' : kind);
     const m = new T.MeshPhysicalMaterial(Object.assign(like, { color: 0xffffff, map }));
@@ -5515,7 +5517,7 @@ const Buddy3D = (() => {
 
   /* ---------- a whole buddy ---------- */
   function build(look) {
-    const type = ANCHOR[look.t] ? look.t : 'ladybug', A = ANCHOR[type], w = look.w || {}, base = SOLID_PAINT[w.paint] || look.c || '#E8453C';
+    const type = ANCHOR[look.t] ? look.t : 'ladybug', A = ANCHOR[type], w = look.w || {}, base = SOLID_PAINT[w.paint] || PAINT_BASE[w.paint] || look.c || '#E8453C';
     const paint = w.paint && ['dots', 'stripes', 'sparkle', 'rainbow', 'galaxy', 'gold', 'pdots', 'tinydots'].indexOf(w.paint) >= 0 ? w.paint : '';
     const c = Object.assign(tones(base), paint ? PAINT_TONE[paint] || {} : {});
     if (paint) c.skin = (kind, fb) => paintMat(paint, base, kind, fb);
@@ -5572,6 +5574,23 @@ const Buddy3D = (() => {
   }
 
   /* ---------- renderer ---------- */
+  /* Gold reflects a warm, bright room of its own: in the cool main room it reads as dark yellow. */
+  let goldTex = null;
+  function goldEnv() {
+    if (goldTex || !renderer) return goldTex;
+    /* a dark warm studio with bright soft boxes: the gold shows deep amber with bright yellow-white highlights */
+    const s = new T.Scene(), geo = new T.SphereGeometry(20, 48, 24), p = geo.attributes.position, cols = [];
+    const top = lin('#FFE7B0'), mid = lin('#6E4A14'), low = lin('#1E1100');
+    for (let i = 0; i < p.count; i++) { const y = p.getY(i) / 20; const k = y > 0 ? mid.clone().lerp(top, Math.pow(y, 1.6)) : mid.clone().lerp(low, Math.pow(-y, 0.5)); cols.push(k.r, k.g, k.b); }
+    geo.setAttribute('color', new T.Float32BufferAttribute(cols, 3));
+    s.add(new T.Mesh(geo, new T.MeshBasicMaterial({ vertexColors: true, side: T.BackSide })));
+    [[12, 8, [-9, 9, 12], 6], [7, 10, [13, 6, 6], 4], [20, 2.5, [0, -1, 16], 2.4], [5, 14, [-15, 2, -4], 3], [10, 4, [2, 16, -6], 5]].forEach((q) => {
+      const m = new T.Mesh(new T.PlaneGeometry(q[0], q[1]), new T.MeshBasicMaterial({ color: new T.Color(q[3], q[3] * 0.95, q[3] * 0.8), side: T.DoubleSide }));
+      m.position.set(q[2][0], q[2][1], q[2][2]); m.lookAt(0, 0, 0); s.add(m);
+    });
+    const pm = new T.PMREMGenerator(renderer); goldTex = pm.fromScene(s, 0.02).texture; pm.dispose(); geo.dispose();
+    return goldTex;
+  }
   function makeEnv() {
     const s = new T.Scene(), geo = new T.SphereGeometry(20, 48, 24), p = geo.attributes.position, cols = [];
     const top = lin('#FFFFFF'), mid = lin('#C8D3F0'), low = lin('#141A4A'), warm = lin('#FFD2A6'), cool = lin('#8FE9FF');
