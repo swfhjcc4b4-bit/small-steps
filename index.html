@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261020223031";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261021002017";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1038,6 +1038,7 @@ details.more[open] > summary h3::after { content: " −"; }
 .ra-w:focus-visible { outline: 3px solid #8B5CF6; }
 .ra-w.miss { background: #FFD6DC; color: var(--coral-deep); text-decoration: line-through; text-decoration-thickness: 3px; }
 .ra-ctl { display: grid; gap: 14px; justify-items: center; }
+.ra-card.list .ra-text { word-spacing: .6em; text-align: center; }
 .ra-result { width: 100%; padding: 16px 18px; border-radius: 22px; display: grid; gap: 10px; }
 .ra-stats { display: flex; gap: 10px 22px; flex-wrap: wrap; justify-content: center; font-size: 18px; }
 .ra-stats b { font-family: var(--font-display); font-size: 26px; font-weight: 400; color: var(--gold-hi); }
@@ -2898,7 +2899,9 @@ if (typeof module !== 'undefined' && module.exports) module.exports = TimeCurric
    aloud, and at 2A the aim is a passage of about 50 words read aloud within a minute (Kumon
    Table of Learning Materials, English). All text here is written for this app.
    Each passage belongs to the reading level it is first readable at; a child gets passages from
-   the highest of those levels at or below their own. */
+   the highest of those levels at or below their own. At the short-a and short-vowel levels the
+   child reads single words that only use sounds already taught: sentences need the, is, it and
+   and, which the app teaches at Sight words 1, so sentences start there. */
 const ReadAloud = (() => {
   'use strict';
   /* mode: 'repeat' (grown-up says each word, child says it back), 'recite' (grown-up reads a
@@ -2912,25 +2915,36 @@ const ReadAloud = (() => {
       'A cat in a hat. A bat on a mat.', 'A frog on a log. A dog in the fog.', 'A bee in a tree. One, two, three!',
       'A fox in a box. A goat in a coat.', 'A bug in a mug. Give it a hug.', 'A king with a ring. Hear the bell ring.'
     ] },
+    /* Short a, then all short vowels: single words, read alone. */
     { lvl: 'cvcA', mode: 'read', items: [
-      'A cat. A fat cat. The fat cat sat.', 'Pam has a hat. The hat is tan.', 'A rat ran. The cat ran. The rat ran and ran.',
-      'Sam has a bag. The bag has a map.', 'Dad can nap. Can Sam nap? Sam can nap.', 'A man and a van. The man has a can.',
-      'The cat sat on a mat. Pat sat on a mat.', 'I can tap. I can pat. I can nap.', 'A bat had a hat. A cat had a cap.',
-      'Max has a pan. Jan has a can.', 'Nan has a bat and a cap.', 'The van is tan. Dad has the van.',
-      'Sam ran at the cat. The cat ran at the rat.', 'Pam has ham. Sam has jam.', 'Can a cat nap in a bag? A cat can.',
-      'Jan and Dan sat. Jan had a fan.'
+      'cat hat bat mat rat sat', 'man can fan pan van tan', 'cap map nap tap lap gap', 'dad had mad sad bad pad',
+      'ham jam ram yam ran pan', 'cat map bag fan jam dad', 'van hat cap sad ram tag', 'nap bat pan mad rag can'
     ] },
     { lvl: 'cvc', mode: 'read', items: [
-      'The dog is on the log. The dog can sit.', 'A pig in a big wig. The pig can dig.', 'Ted has a red bed. Ted is in bed.',
-      'The bug is on a rug. The bug is snug.', 'A fox in a box. The fox can hop.', 'The sun is hot. The pup can nap in the sun.',
-      'Ben has a net. Ben can get a bug.', 'Mom has a mug. Dad has a cup.', 'Tim can hop. Tim can jog. Tim can run.',
-      'The hen sat on ten eggs.', 'Get on the big red bus. It is fun.', 'Jen hid the pup in the hut.',
-      'Bob had a hat. The hat had a dot. It is a big dot.', 'Kim has a pet pig. The pig is in the mud.'
+      'pig big dig wig fig pin', 'bed red ten hen pet net', 'dog log hop pot top box', 'sun bug cup mud hut tub',
+      'cat pig dog sun bed fox', 'hen mug lip box jam web', 'kid pot bus ten van rug', 'hop sit run get tap dig',
+      'six fun mop wet cab nut', 'jog hug zip yes not bad'
     ] },
+    /* From Sight words 1: sentences of short-vowel words and the sight words taught so far. */
     { lvl: 'sight1', mode: 'read', items: [
       'I can see a big red bus. It can go up and down the hill.', 'Come and play with me. We can jump and run.',
       'Look at the little yellow duck. It is in the tub.', 'Where is my blue cup? Here it is. It is in the bag.',
-      'We go to the park. I can run, and you can jump.', 'The funny dog can sit. Can you find the funny dog?'
+      'We go to the park. I can run, and you can jump.', 'The funny dog can sit. Can you find the funny dog?',
+      'A cat. A fat cat. The fat cat sat.', 'Pam has a hat. The hat is tan.',
+      'A rat ran. The cat ran. The rat ran and ran.', 'Sam has a bag. The bag has a map.',
+      'Dad can nap. Can Sam nap? Sam can nap.', 'A man and a van. The man has a can.',
+      'The cat sat on a mat. Pat sat on a mat.', 'I can tap. I can pat. I can nap.',
+      'A bat had a hat. A cat had a cap.', 'Max has a pan. Jan has a can.',
+      'Nan has a bat and a cap.', 'The van is tan. Dad has the van.',
+      'Sam ran at the cat. The cat ran at the rat.', 'Pam has ham. Sam has jam.',
+      'Can a cat nap in a bag? A cat can.', 'Jan and Dan sat. Jan had a fan.',
+      'The dog is on the log. The dog can sit.', 'A pig in a big wig. The pig can dig.',
+      'Ted has a red bed. Ted is in bed.', 'The bug is on a rug. The bug is red.',
+      'A fox in a box. The fox can hop.', 'The sun is hot. The pup can nap in the sun.',
+      'Ben has a net. Ben can get a bug.', 'Mom has a mug. Dad has a cup.',
+      'Tim can hop. Tim can jog. Tim can run.', 'The hen sat on ten eggs.',
+      'Get on the big red bus. It is fun.', 'Jen hid the pup in the hut.',
+      'Bob had a hat. The hat had a dot. It is a big dot.', 'Kim has a pet pig. The pig is in the mud.'
     ] },
     { lvl: 'digraph', mode: 'read', items: [
       'The ship is on the sea. A fish can swim by the ship.', 'Chad has a red truck. The truck can go fast.',
@@ -3042,15 +3056,25 @@ const ReadAloud = (() => {
     TIERS.forEach((t) => { const i = levelIndexOf(t.lvl); if (i >= 0 && i <= here) best = t; });
     return best;
   }
-  /* Next passage: one not read yet in this tier, else the one read longest ago. */
+  /* A read that was too hard: the grown-up tapped Too hard, or under half the words were right. */
+  const tooHard = (h) => !!h && (!!h.skipped || (h.words > 0 && h.missed != null && (h.words - h.missed) / h.words < 0.5));
+  /* Next passage: one not read yet in its tier, else the one read longest ago. After a read that was
+     too hard, the next one comes from the tier below the one that was too hard (unless the child's
+     level has since dropped below it); a good read there brings the child's own tier back. */
   function next(levelIndexOf, levelId, history) {
-    const t = tierFor(levelIndexOf, levelId), last = {};
-    (history || []).forEach((h) => { if (h && h.item && (!last[h.item] || h.at > last[h.item])) last[h.item] = h.at; });
+    let t = tierFor(levelIndexOf, levelId);
+    const hist = (history || []).filter((h) => h && h.item), last = {};
+    const latest = hist.reduce((a, h) => (!a || String(h.at) > String(a.at) ? h : a), null);
+    if (tooHard(latest)) {
+      const here = TIERS.indexOf(t), was = TIERS.findIndex((x) => x.lvl === latest.tier);
+      if (was >= 0 && was <= here) t = TIERS[Math.max(0, was - 1)];
+    }
+    hist.forEach((h) => { if (!last[h.item] || h.at > last[h.item]) last[h.item] = h.at; });
     const fresh = t.items.filter((it) => !last[it.id]);
     const pickFrom = fresh.length ? fresh : t.items.slice().sort((a, b) => String(last[a.id]).localeCompare(String(last[b.id])));
     return BY_ID[(fresh.length ? pickFrom[Math.floor(Math.random() * pickFrom.length)] : pickFrom[0]).id];
   }
-  return { TIERS, BY_ID, words, tierFor, next, get: (id) => BY_ID[id] || null };
+  return { TIERS, BY_ID, words, tierFor, next, tooHard, get: (id) => BY_ID[id] || null };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = ReadAloud;
 /* Small Steps: the book shelf. Picture books and early readers for each Kumon reading level,
@@ -8049,18 +8073,35 @@ function raSave() {
   goHome();
   toast(cr ? '+2 stars for reading aloud!' : 'Reading saved');
 }
+/* Too hard for now: saved as too hard, no stars, and the day's read-aloud counts as done so the tile
+   doesn't ask again today. The next read comes from an easier set (ReadAloud.next). */
+function raSkip() {
+  const R = S.ra;
+  if (!R) return goHome();
+  const l = Store.learner(R.kid);
+  if (!l) return goHome();
+  const E = ENG.reading, t = trackOf(l, 'reading'), now = new Date();
+  Store.appendSession(R.kid, { id: Store.newId(), subject: 'readaloud', kind: 'read', at: now.toISOString(), item: R.item.id, mode: R.item.mode, tier: R.item.lvl,
+    levelId: E.canon(t.levelId), words: R.words.length, missed: null, skipped: true, secs: null, wpm: null, q: null, goalMet: null, missedWords: [] });
+  Store.saveLearner(putTrack(l, 'reading', Object.assign({}, t, { raDay: E.todayKey(now) })));
+  clearInterval(raTimer); releaseScreen(); S.ra = null;
+  Sfx.tap();
+  goHome();
+  toast('Saved as too hard. The next one will be easier.');
+}
 function viewRead() {
   const R = S.ra, l = Store.learner(R.kid) || { name: '' }, it = R.item, who = esc(l.name || 'your child');
   const how = it.mode === 'repeat' ? 'Say each word and point to it. ' + who + ' says it back. Tap any word ' + who + ' can’t say yet.'
     : it.mode === 'recite' ? 'Read one line and ' + who + ' says it back, then ' + who + ' says it all alone. Tap any word that was missed.'
     : 'Tap Start as ' + who + ' begins. Tap any word ' + who + ' misreads, skips or needs help with. Tap Done at the end.';
+  const skip = '<button class="btn btn-glass" data-act="raSkip">Too hard for now</button>';
   const head = '<div class="hud"><button class="icon-btn" data-act="raQuit" aria-label="Stop">' + ICON.close + '</button><div class="hud-title" style="--acc:' + SUBJ.reading.acc + '">' + miniBuddy(l) +
     '<div><b>' + esc(l.name) + ' reads to you</b><small><span class="sub-chip">Reading</span> Read aloud' + (it.goalSecs ? ' · goal: ' + it.goalWords + ' words in ' + ENG.math.fmtTime(it.goalSecs) : '') + '</small></div></div>' +
     (it.mode === 'read' ? '<span class="ra-time" id="raTime">' + ENG.math.fmtTime(R.phase === 'done' ? R.secs : R.phase === 'reading' ? (Date.now() - R.start) / 1000 : 0) + '</span>' : '') + '</div>';
   const words = R.words.map((w, i) => '<button class="ra-w' + (R.miss[i] ? ' miss' : '') + '" data-act="raWord" data-i="' + i + '"' + (R.phase === 'ready' ? ' tabindex="-1"' : '') + '>' + esc(w) + '</button>').join(' ');
   let ctl = '';
-  if (R.phase === 'ready') ctl = '<button class="btn btn-gold btn-big" data-act="raStart">Start</button>';
-  else if (R.phase === 'reading') ctl = '<button class="btn btn-gold btn-big" data-act="raDone">Done</button>';
+  if (R.phase === 'ready') ctl = '<div class="actions center"><button class="btn btn-gold btn-big" data-act="raStart">Start</button>' + skip + '</div>';
+  else if (R.phase === 'reading') ctl = '<div class="actions center"><button class="btn btn-gold btn-big" data-act="raDone">Done</button>' + skip + '</div>';
   else {
     const r = raResult(R);
     const stats = '<div class="ra-stats"><span><b>' + r.right + ' of ' + r.n + '</b> words right (' + r.pct + '%)</span>' +
@@ -8072,16 +8113,17 @@ function viewRead() {
     ctl = '<div class="ra-result glass">' + stats + q + '</div>' + (it.q && R.q == null ? '' : '<div class="actions center"><button class="btn btn-gold btn-big" data-act="raSave">Save</button><button class="btn btn-glass" data-act="raAgain">Read it again</button></div>');
   }
   return '<div class="screen fill ra-screen">' + head + '<p class="ra-how">' + how + '</p>' +
-    '<section class="card ra-card ra-' + it.mode + (R.words.length <= 14 ? ' short' : '') + (S.anim ? ' enter' : '') + '"><div class="ra-text">' + words + '</div></section>' +
+    '<section class="card ra-card ra-' + it.mode + (R.words.length <= 14 ? ' short' : '') + (/[.?!,]/.test(it.text) ? '' : ' list') + (S.anim ? ' enter' : '') + '"><div class="ra-text">' + words + '</div></section>' +
     '<div class="ra-ctl">' + ctl + '</div></div>';
 }
 
 /* ---------- parents: reading aloud record and the guide ---------- */
 function readAloudHTML(l) {
   const list = Store.sessionsFor(l.id, 'readaloud').slice(0, 12);
-  const rows = list.map((s) => '<tr><td>' + esc(fmtWhen(s.at)) + '</td><td>' + (s.words - s.missed) + '/' + s.words + (s.missedWords && s.missedWords.length ? '<div class="muted">' + esc(s.missedWords.slice(0, 5).join(' · ')) + '</div>' : '') + '</td><td>' +
+  const rows = list.map((s) => s.skipped ? '<tr><td>' + esc(fmtWhen(s.at)) + '</td><td><span class="chip">Too hard</span><div class="muted">' + esc(String(s.words)) + ' words</div></td><td>—</td><td>—</td></tr>' :
+    '<tr><td>' + esc(fmtWhen(s.at)) + '</td><td>' + (s.words - s.missed) + '/' + s.words + (s.missedWords && s.missedWords.length ? '<div class="muted">' + esc(s.missedWords.slice(0, 5).join(' · ')) + '</div>' : '') + '</td><td>' +
     (s.secs ? ENG.math.fmtTime(s.secs) + (s.wpm ? ' · ' + s.wpm + ' wpm' : '') : '—') + '</td><td>' + (s.q == null ? '—' : s.q ? '<span class="chip chip-ok">Knew it</span>' : '<span class="chip">Not yet</span>') + (s.goalMet ? ' <span class="chip chip-ok">Goal</span>' : '') + '</td></tr>').join('');
-  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” Kumon’s 2A goal is a passage of about 50 words read aloud within a minute.</p>' +
+  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. “Too hard for now” saves it as too hard, and the next one comes from an easier set. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute.</p>' +
     (rows ? '<div class="table-wrap"><table class="hist"><thead><tr><th>When</th><th>Words right</th><th>Time</th><th>Question</th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="sub">Nothing read aloud yet.</p>') +
     '<div class="actions"><button class="btn btn-glass btn-small" data-act="raNow" data-kid="' + esc(l.id) + '">Start a read-aloud now</button></div></section>';
 }
@@ -8793,6 +8835,7 @@ document.addEventListener('click', (e) => {
     case 'raWord': raWord(Number(t.getAttribute('data-i'))); break;
     case 'raQ': if (S.ra) { S.ra.q = t.getAttribute('data-v') === '1'; Sfx.tap(); render(); } break;
     case 'raSave': raSave(); break;
+    case 'raSkip': raSkip(); break;
     case 'raAgain': if (S.ra) { S.ra.miss = {}; S.ra.q = null; S.ra.phase = S.ra.item.mode === 'read' ? 'ready' : 'reading'; S.ra.start = Date.now(); Sfx.tap(); render(); } break;
     case 'raQuit': clearInterval(raTimer); releaseScreen(); S.ra = null; Sfx.tap(); goHome(); break;
     case 'raNow': { const kid = t.getAttribute('data-kid'); S.view = 'home'; startRead(kid); break; }
