@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261022024733";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261022033025";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -6108,7 +6108,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = Merge;
    - more long pauses: problems that took at least 8 seconds and at least 3 times the usual time on
      their sheet, at least 3 of them in the second half of a sitting and twice as many as in the first
      half (needs the seconds per problem that sheets carry from October 20, 2026 on);
-   - a long sitting: 25 minutes or more;
+   - a long sitting: 30 minutes or more (a one-sitting day of about 20 minutes' answering runs 25 to 29
+     minutes with the results screens, so that alone is not a sign);
    - a sheet stopped partway after at least one answer (one left with nothing answered is a child
      changing subjects, not tiring).
    No sign in a day: Fresh. One: Watch. Two or more: Tired. */
@@ -6121,7 +6122,7 @@ const Metrics = (() => {
     dayMin: { young: [10, 15], full: [20, 30] },
     mathSct: { '3A': [1, 2], '2A': [1, 2], A: [1, 2] }
   };
-  const LIMIT = { slowPct: 30, moreMistakes: 2, rightFirstOk: 90, sameLevel: 3, longSitMin: 25, pauseSec: 8, pauseX: 3, pauseMin: 3 };
+  const LIMIT = { slowPct: 30, moreMistakes: 2, rightFirstOk: 90, sameLevel: 3, longSitMin: 30, pauseSec: 8, pauseX: 3, pauseMin: 3 };
 
   /* The calendar day of a time stamp: in the given IANA time zone, or the device's own. */
   function dayKey(iso, tz) {
@@ -7971,7 +7972,7 @@ function loadPanelHTML(l) {
   const wk = week.map((x) => '<tr><td>' + esc(dayName(x.day)) + '</td>' + (x.none ? '<td colspan="4" class="muted">No practice</td>' : '<td>' + f1(x.total.answerMin) + '</td><td>' + f1(x.total.appMin) + '</td><td>' + x.total.problems + '</td><td>' + chip(x) + '</td>') + '</tr>').join('');
   return '<section class="glass panel"><h3>Daily load and tiring signs</h3>' + body +
     '<h4 class="load-h">Last 7 days</h4><div class="table-wrap"><table class="hist"><thead><tr><th>Day</th><th>Answering</th><th>In the app</th><th>Problems</th><th>Signs</th></tr></thead><tbody>' + wk + '</tbody></table></div>' +
-    '<p class="sub">Minutes answering include corrections; minutes in the app also count the results screens, from the first sheet of a sitting to the last (a gap over 12 minutes starts a new sitting). Kumon: about 20–30 minutes a day per subject once built up, and 10–15 focused minutes can be enough for young children. Tiring signs are looked for inside each sitting: slowing down without fewer mistakes, more mistakes, more long pauses, a sitting of 25 minutes or more, or a sheet stopped partway after at least one answer. Fresh: none. Watch: one. Tired: two or more.</p></section>';
+    '<p class="sub">Minutes answering include corrections; minutes in the app also count the results screens, from the first sheet of a sitting to the last (a gap over 12 minutes starts a new sitting). Kumon: about 20–30 minutes a day per subject once built up, and 10–15 focused minutes can be enough for young children. Tiring signs are looked for inside each sitting: slowing down without fewer mistakes, more mistakes, more long pauses, a sitting of 30 minutes or more, or a sheet stopped partway after at least one answer. Fresh: none. Watch: one. Tired: two or more.</p></section>';
 }
 
 /* ---------- parent trials ---------- */
