@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261021203650";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261022022044";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -7285,7 +7285,8 @@ function finishSheet() {
   stopTick(); releaseScreen();
   const g = E.grade(sh.problems, sh.answers);
   const l = Store.learner(sh.kid), t = trackOf(l, sh.subj), now = new Date();
-  const out = E.applyResult(t, { kind: sh.kind, timed: sh.timed, levelId: sh.levelId, n: sh.problems.length, wrong: g.wrong, secs, target: sh.target, problems: sh.problems, res: g.res }, now);
+  let out = E.applyResult(t, { kind: sh.kind, timed: sh.timed, levelId: sh.levelId, n: sh.problems.length, wrong: g.wrong, secs, target: sh.target, problems: sh.problems, res: g.res }, now);
+  if (sh.subj === 'reading' && sh.kind !== 'test') out = readGate(sh.kid, t, out);
   const ev = out.ev;
   const dayGoal = out.learner.dayCount === out.learner.planSheets;
   const award = Buddy.award(ev, { wrong: g.wrong, dayGoal });
@@ -7301,7 +7302,7 @@ function finishSheet() {
     missed: sh.problems.filter((p, i) => !g.res[i].ok).slice(0, 12).map((p) => E.problemText(p)),
     reviewItems: sh.problems.filter((p) => p.review).length, stars: credit ? award.total : 0,
     items: sh.problems.map((p, i) => [E.problemText(p), givenText(sh.subj, p, g.res[i]), g.res[i].ok ? 1 : 0, Math.round(((sh.qSecs && sh.qSecs[i]) || 0) * 10) / 10]),
-    change: ev.levelUp ? 'up' : ev.stepBack ? 'back' : ev.returned ? 'return' : ev.testReady ? 'test' : '', to: ev.to,
+    change: ev.levelUp ? 'up' : ev.stepBack ? 'back' : ev.returned ? 'return' : ev.testReady ? 'test' : ev.readGate ? 'readFirst' : '', to: ev.to,
     day: sh.dayNo, plan: sh.dayTotal
   };
   Store.saveLearner(l2);
@@ -7362,6 +7363,7 @@ function viewResults() {
   let progress = '';
   if (ev.top) progress = '<p class="res-line"><b>Top of the ladder!</b> Every level is done.</p>';
   else if (ev.levelUp) progress = '<p class="res-line"><b>New level:</b> ' + esc(E.BY[ev.to].name) + '</p>';
+  else if (ev.readGate) progress = '<p class="res-line"><b>Ready to move up!</b> Read to a grown-up first.</p>';
   else if (ev.testFailed) progress = '<p class="res-line"><b>Next:</b> one practice sheet, then the level test again.</p>';
   else if (ev.testReady) progress = '<p class="res-line"><b>Next:</b> the level test!</p>';
   else if (ev.returned) progress = '<p class="res-line"><b>Back to:</b> ' + esc(E.BY[ev.to].name) + '</p>';
@@ -7557,7 +7559,7 @@ function playSubject(kidId, subj) {
   if (!l) return;
   if (subj === 'reading' && !needsCheck(l, subj)) {
     const t = trackOf(l, 'reading');
-    if (!(t.testFor && !t.testWait) && ENG.reading.todayPlan(t).left === 0 && raOn(t) && !raToday(t)) return startRead(kidId);
+    if (!(t.testFor && !t.testWait) && (ENG.reading.todayPlan(t).left === 0 || raGateOn(t)) && raOn(t) && !raToday(t)) return startRead(kidId);
   }
   if (!needsCheck(l, subj)) return startSheet(kidId, subj);
   S.kid = kidId; S.subj = subj; S.view = 'checkIntro'; S.anim = true;
@@ -8236,14 +8238,42 @@ function raSave() {
   Store.appendSession(R.kid, { id: Store.newId(), subject: 'readaloud', kind: 'read', at: now.toISOString(), item: R.item.id, mode: R.item.mode, tier: R.item.lvl,
     levelId: E.canon(t.levelId), words: r.n, missed: r.miss, secs: R.item.mode === 'read' ? r.secs : null, wpm: r.wpm, q: R.q, goalMet: r.goal ? r.goal.met : null,
     missedWords: Object.keys(R.miss).map((i) => R.words[i].replace(/[^A-Za-z’']/g, '')).slice(0, 12) });
-  const b = Buddy.of(l), cr = hasBuddy(l) ? Buddy.credit(b, 2, { noSheet: true, streak: bestStreak(l) }) : null;
-  let l2 = putTrack(l, 'reading', Object.assign({}, t, { raDay: E.todayKey(now), raCount: (t.raCount || 0) + 1 }));
+  /* a good read at the level's own set lets a waiting level-up through */
+  const gate = raGateOn(t) ? t.raGate : null;
+  const opens = !!gate && R.item.lvl === ReadAloud.tierFor(E.levelIndex, gate.level).lvl && r.n > 0 && r.right / r.n >= RA_GATE;
+  const b = Buddy.of(l), cr = hasBuddy(l) ? Buddy.credit(b, opens ? 7 : 2, { noSheet: true, levelUp: opens && !gate.apply.testFor, streak: bestStreak(l) }) : null;
+  let l2 = putTrack(l, 'reading', Object.assign({}, t, { raDay: E.todayKey(now), raCount: (t.raCount || 0) + 1 }, opens ? Object.assign({}, gate.apply, { raGate: null }) : {}));
   if (cr) l2 = Object.assign({}, l2, { buddy: cr.buddy });
   Store.saveLearner(l2);
   clearInterval(raTimer); releaseScreen(); S.ra = null;
   Sfx.fanfare();
   goHome();
-  toast(cr ? '+2 stars for reading aloud!' : 'Reading saved');
+  if (opens) {
+    after(150, () => Confetti.party());
+    toast(gate.apply.testFor ? 'Great reading! Next: the level test.' : 'Great reading! New level: ' + E.BY[gate.apply.levelId].name);
+  } else toast(cr ? '+2 stars for reading aloud!' : 'Reading saved');
+}
+/* Moving up at the word levels waits for reading aloud. The picture sheets can be passed from a letter
+   or two, so once a child has passed enough sheets to move up from a word level (or to take the level
+   test), the move waits for a Read to me at that level with at least 80% of the words right (5 of 6).
+   Sheets go on meanwhile; a sheet that isn't passed resets the run as usual and drops the wait. */
+const RA_GATE = 0.8;
+const raGateOn = (t) => !!(t && t.raGate && t.raGate.level === ENG.reading.canon(t.levelId));
+function goodRead(kidId, lv) {
+  const tier = ReadAloud.tierFor(ENG.reading.levelIndex, lv).lvl;
+  return Store.sessionsFor(kidId, 'readaloud').some((x) => x.levelId === lv && x.tier === tier && !x.skipped && x.words > 0 && x.missed != null && (x.words - x.missed) / x.words >= RA_GATE);
+}
+function readGate(kidId, before, out) {
+  const E = ENG.reading, lv = E.canon(before.levelId), ev = out.ev;
+  let after = out.learner;
+  if (!ev.pass && after.raGate) after = Object.assign({}, after, { raGate: null });
+  const moving = (ev.levelUp && !ev.returned) || ev.testReady;
+  if (!E.BY[lv] || E.BY[lv].stage !== 'words' || !moving || !raOn(before) || goodRead(kidId, lv)) return { learner: after, ev };
+  const apply = {};
+  ['levelId', 'testFor', 'testWait', 'passes', 'runDays', 'lastBoost', 'lowRun', 'backFrom'].forEach((k) => { apply[k] = after[k]; });
+  const held = Object.assign({}, after, { levelId: before.levelId, testFor: before.testFor || '', testWait: !!before.testWait, backFrom: before.backFrom || '',
+    passes: Math.max(before.passes || 0, E.settingsOf(before).toAdvance), runDays: before.runDays || [], raGate: { level: lv, apply } });
+  return { learner: held, ev: Object.assign({}, ev, { levelUp: false, testReady: false, readGate: true, to: lv }) };
 }
 /* Too hard for now: saved as too hard, no stars, and the day's read-aloud counts as done so the tile
    doesn't ask again today. The next read comes from an easier set (ReadAloud.next). */
@@ -8295,7 +8325,8 @@ function readAloudHTML(l) {
   const rows = list.map((s) => s.skipped ? '<tr><td>' + esc(fmtWhen(s.at)) + '</td><td><span class="chip">Too hard</span><div class="muted">' + esc(String(s.words)) + ' words</div></td><td>—</td><td>—</td></tr>' :
     '<tr><td>' + esc(fmtWhen(s.at)) + '</td><td>' + (s.words - s.missed) + '/' + s.words + (s.missedWords && s.missedWords.length ? '<div class="muted">' + esc(s.missedWords.slice(0, 5).join(' · ')) + '</div>' : '') + '</td><td>' +
     (s.secs ? ENG.math.fmtTime(s.secs) + (s.wpm ? ' · ' + s.wpm + ' wpm' : '') : '—') + '</td><td>' + (s.q == null ? '—' : s.q ? '<span class="chip chip-ok">Knew it</span>' : '<span class="chip">Not yet</span>') + (s.goalMet ? ' <span class="chip chip-ok">Goal</span>' : '') + '</td></tr>').join('');
-  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. “Too hard for now” saves it as too hard, and the next one comes from an easier set. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute.</p>' +
+  const rt = trackOf(l, 'reading'), wait = raGateOn(rt) ? '<p class="sub"><b>Waiting to move up:</b> ' + esc(l.name) + ' has passed the sheets on ' + esc(ENG.reading.BY[rt.raGate.level].name) + '. A Read to me with at least 5 of 6 words right moves ' + esc(l.name) + ' up.</p>' : '';
+  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. “Too hard for now” saves it as too hard, and the next one comes from an easier set. At the word levels, moving up waits for a Read to me with at least 5 of 6 words right, since the picture sheets can be passed from a letter or two. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute.</p>' + wait +
     (rows ? '<div class="table-wrap"><table class="hist"><thead><tr><th>When</th><th>Words right</th><th>Time</th><th>Question</th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="sub">Nothing read aloud yet.</p>') +
     '<div class="actions"><button class="btn btn-glass btn-small" data-act="raNow" data-kid="' + esc(l.id) + '">Start a read-aloud now</button></div></section>';
 }
@@ -8547,7 +8578,7 @@ function subjectTile(l, subj) {
   let plan = E.todayPlan(t);
   const testNext = !!(t.testFor && !t.testWait);
   /* reading counts the day's read-aloud as one more piece of the day */
-  const ra = subj.key === 'reading' && raOn(t), raDone = ra && raToday(t), raNext = ra && !raDone && plan.left === 0;
+  const ra = subj.key === 'reading' && raOn(t), raDone = ra && raToday(t), raNext = ra && !raDone && (plan.left === 0 || raGateOn(t));
   if (ra) plan = { done: plan.done + (raDone ? 1 : 0), total: plan.total + 1, left: plan.left + (raDone ? 0 : 1) };
   const go = testNext ? '<span class="subj-go test">Level test!</span>' : raNext ? '<span class="subj-go read">Read to me</span>' : plan.left === 0 ? '<span class="subj-go done">Done ✓</span>' : '<span class="subj-go">' + (plan.done === 0 ? 'Play' : plan.done + ' of ' + plan.total) + '</span>';
   return '<button class="subj ' + subj.cls + '" data-act="start" data-kid="' + esc(l.id) + '" data-subj="' + subj.key + '" aria-label="' + subj.name + ', ' + esc(lv.name) + '">' +
