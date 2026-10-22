@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261022135545";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261022165642";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -726,8 +726,6 @@ details.more[open] > summary h3::after { content: " −"; }
   .pick-card .buddy-svg { max-width: 230px; }
   .pick-card b { font-size: 28px; }
   .shop { grid-template-columns: minmax(0, 1fr); }
-  .shop-stage { position: static; }
-  .shop-stage .stage-buddy { width: min(330px, 46vw); }
   .items { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
   .item-card b { font-size: 21px; }
   .slot-tab { min-height: 54px; font-size: 21px; padding: 0 20px; }
@@ -805,6 +803,31 @@ details.more[open] > summary h3::after { content: " −"; }
   .shop-screen .fav-flag { top: 6px; left: 6px; font-size: 12px; padding: 1px 6px; }
   .shop-screen .ate-badge { top: 6px; right: 6px; font-size: 13px; padding: 0 6px; }
   .shop-screen .goal-flag { top: 6px; left: 6px; font-size: 10px; padding: 1px 6px; }
+}
+/* Tablets held upright, as on phones: the closet's title, buddy and tabs stay put and only the items
+   scroll, so the buddy stays in view while trying things on or eating a treat. The buddy sits on the
+   left of its panel, with its size and growth (or the item being tried on) on the right. */
+@media (min-width: 700px) and (orientation: portrait) {
+  .shop-screen { height: calc(100vh - max(14px, env(safe-area-inset-top, 0px))); height: calc(100dvh - max(14px, env(safe-area-inset-top, 0px))); margin-bottom: -36px; gap: 14px; }
+  .shop-screen .topbar { flex: none; }
+  .shop-screen .shop { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 14px; }
+  .shop-screen .shop-stage {
+    flex: none; position: relative; top: auto;
+    grid-template-columns: min(250px, 32vw) minmax(0, 1fr); align-items: center; justify-items: stretch; text-align: left;
+    gap: 22px; padding: 12px 26px 10px 14px;
+  }
+  .shop-screen .shop-stage .stage-buddy { width: min(250px, 32vw); }
+  .shop-screen .stage-info { display: grid; gap: 12px; justify-items: start; align-content: center; min-width: 0; }
+  .shop-screen .shop-stage .grow-bar { max-width: none; }
+  .shop-screen .shop-stage .grow-text, .shop-screen .shop-stage .try-hint { margin: 0; text-align: left; }
+  .shop-screen .shop-stage.trying .badge-level, .shop-screen .shop-stage.trying .grow-bar, .shop-screen .shop-stage.trying .grow-text { display: none; }
+  .shop-screen .shop-stage .try-note { justify-items: start; text-align: left; }
+  .shop-screen .shop-list { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 14px; }
+  .shop-screen .slot-tabs { flex: none; }
+  .shop-screen .items {
+    flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+    align-content: start; margin: 0 -6px; padding: 4px 6px calc(24px + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
