@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261022165642";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261026205613";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -582,6 +582,17 @@ table.hist td { padding: 8px; border-bottom: 1px solid var(--glass-edge); vertic
 .ws-legend span { display: inline-flex; align-items: center; gap: 6px; }
 .ws-legend .sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; background: var(--sp); }
 .ws-legend .ws-dot { position: static; }
+.ws-pass { position: absolute; left: 6px; bottom: 3px; font-style: normal; font-size: 12px; font-weight: 900; line-height: 1; color: var(--mint); }
+.ws-legend .ws-pass { position: static; font-size: 14px; }
+.chg-list { display: grid; gap: 8px; }
+.chg-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; border-bottom: 1px solid var(--glass-edge); padding-bottom: 8px; font-size: 15px; }
+.chg-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.chg-row p { margin: 3px 0 0; color: var(--ink-soft); font-size: 14px; }
+.chg-row .muted { font-size: 13px; }
+.chip-void { color: var(--ink-soft); background: transparent; border-style: dashed; }
+.chip-wrap { white-space: normal; border-radius: 14px; line-height: 1.3; }
+table.hist tr.voided td { opacity: 0.55; }
+table.hist .btn-link { display: inline-block; margin-top: 4px; padding: 2px 0; }
 .cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
 .cal-dow { text-align: center; font-size: 12px; color: var(--ink-faint); font-weight: 900; }
 .cal-day { aspect-ratio: 1; border-radius: 10px; background: rgba(255, 255, 255, 0.05); display: grid; place-items: center; align-content: center; gap: 3px; font-size: 13px; color: var(--ink-faint); }
@@ -1246,13 +1257,22 @@ function makeEngine(C) {
   /* ---------- Building a sheet ---------- */
   const REVIEW_SHARE = 0.3;
   const REVIEW_CAP = 40;
+  /* From an item's second miss on, its next turn is a new item of the same kind (to check the idea,
+     not the memory of one answer); the turn after that brings the original back. */
   function reviewPick(learner, levelId, max) {
     if (!learner || max <= 0) return [];
     const R = learner.review || {};
     const cur = levelIndex(levelId);
-    const items = Object.values(R).filter((r) => r && r.spec && levelIndex(r.lv) >= 0 && levelIndex(r.lv) <= cur);
-    items.sort((x, y) => (y.miss - x.miss) || String(x.at).localeCompare(String(y.at)));
-    return items.slice(0, max).map((r) => Object.assign(fromSpec(r.spec), { review: true, lv: r.lv }));
+    const items = Object.entries(R).filter(([, r]) => r && r.spec && levelIndex(r.lv) >= 0 && levelIndex(r.lv) <= cur);
+    items.sort(([, x], [, y]) => (y.miss - x.miss) || String(x.at).localeCompare(String(y.at)));
+    return items.slice(0, max).map(([key, r]) => {
+      const orig = Object.assign(fromSpec(r.spec), { review: true, lv: r.lv });
+      if (r.sib) {
+        const s = similar(orig);
+        if (s && s.key !== orig.key) return Object.assign(s, { review: true, lv: r.lv, sibOf: key });
+      }
+      return orig;
+    });
   }
   /* Some reading levels are long (a story to read for each problem), so a level can cap the
      problems on its sheet below the parent's setting. */
@@ -1316,7 +1336,8 @@ function makeEngine(C) {
     return { res, wrong, codes };
   }
   /* Review deck: a missed item comes back in later sheets until it is answered right on
-     the first try twice in a row. */
+     the first try twice in a row. From its second miss on, a miss sends a new item of the same
+     kind first (see reviewPick); answering that one, right or wrong, brings the original back next. */
   function updateReview(review, problems, res, now, defaultLv) {
     const R = Object.assign({}, review || {});
     const at = now.toISOString();
@@ -1324,13 +1345,16 @@ function makeEngine(C) {
     problems.forEach((p, i) => {
       const r = res[i];
       if (!r) return;
+      if (p.sibOf && R[p.sibOf]) R[p.sibOf] = Object.assign({}, R[p.sibOf], { sib: false });
       const e = seen[p.key] || (seen[p.key] = { p, wrong: false });
       if (!r.ok) { e.wrong = true; e.p = p; }
     });
     Object.keys(seen).forEach((k) => {
       const e = seen[k], cur = R[k];
       if (e.wrong) {
-        R[k] = { lv: e.p.lv || (cur && cur.lv) || defaultLv, spec: specOf(e.p), miss: (cur ? cur.miss : 0) + 1, ok: 0, at };
+        const miss = (cur ? cur.miss : 0) + 1;
+        const sp = specOf(e.p); delete sp.sibOf;
+        R[k] = { lv: e.p.lv || (cur && cur.lv) || defaultLv, spec: sp, miss, ok: 0, at, sib: miss >= 2 };
       } else if (cur) {
         const ok = (cur.ok || 0) + 1;
         if (ok >= 2) delete R[k];
@@ -1405,8 +1429,13 @@ function makeEngine(C) {
       if (pass) {
         L2.lowRun = 0;
         if (learner.backFrom && BY[learner.backFrom]) {
-          L2.levelId = learner.backFrom; L2.backFrom = ''; resetRun();
-          ev.returned = true; ev.to = L2.levelId;
+          /* review after a step back: back up once passes in a row reach two different days */
+          L2.passes = (learner.passes || 0) + 1;
+          L2.runDays = (learner.runDays || []).filter((x) => x !== tk).concat([tk]).slice(-3);
+          if (L2.runDays.length >= MIN_DAYS) {
+            L2.levelId = learner.backFrom; L2.backFrom = ''; resetRun();
+            ev.returned = true; ev.to = L2.levelId;
+          } else ev.waitDay = true;
         } else if (learner.testFor) {
           L2.testWait = false; ev.testReady = true;
         } else {
@@ -1426,7 +1455,9 @@ function makeEngine(C) {
         }
       } else {
         resetRun();
-        L2.lowRun = acc < 0.7 ? (learner.lowRun || 0) + 1 : 0;
+        /* a rushed sheet (much faster than usual and 70% or less) says nothing about the level,
+           so it neither counts toward a step back nor clears the count */
+        L2.lowRun = r.rushed ? (learner.lowRun || 0) : acc < 0.7 ? (learner.lowRun || 0) + 1 : 0;
         if (s.autoBack && L2.lowRun >= 2 && i > 0 && !learner.backFrom) {
           L2.backFrom = learner.levelId; L2.levelId = LEVELS[i - 1].id; L2.lowRun = 0;
           ev.stepBack = true; ev.to = L2.levelId;
@@ -1498,9 +1529,11 @@ function makeEngine(C) {
   }
 
   const fmtTime = (secs) => { secs = Math.max(0, Math.round(secs)); return Math.floor(secs / 60) + ':' + String(secs % 60).padStart(2, '0'); };
+  /* The hint after a miss, worded with the problem's own numbers where the curriculum can. */
+  const tipFor = (code, p) => (C.tipFor && C.tipFor(code, p)) || C.tips[code || 'other'] || C.tips.other;
 
   return {
-    C, LEVELS, BY, STAGES, STAGE_NAME, TIPS: C.tips, CODE_LABEL: C.codeLabels, DEFAULTS, PACE,
+    C, LEVELS, BY, STAGES, STAGE_NAME, TIPS: C.tips, CODE_LABEL: C.codeLabels, DEFAULTS, PACE, tipFor,
     PROBE_N, PROBE_ALLOWED, PROBE_STEP, GROUPS, TEST_N, TEST_ALLOWED, testNOf, testAllowedOf, MIN_DAYS,
     levelIndex, settingsOf, targetSeconds, makeSheet, similar, grade, diagnose, updateReview, applyResult,
     todayKey, dayDiff, currentStreak, doneToday, placementInit, placementStep, probeOutcome,
@@ -1635,7 +1668,9 @@ const MathCurriculum = (() => {
   L('c20', 'count', 'Count to 20', 'Count to 20', 12, () => P.count(ri(8, 20), 20));
   L('n30', 'count', 'What comes next, to 30', 'Next, to 30', 7, () => P.next(ri(4, 27), 'keypad', 30));
   L('m50', 'count', 'Missing numbers to 50', 'Missing, to 50', 8, () => P.missing(ri(10, 47), ri(1, 3)));
-  L('cmp', 'count', 'Which is bigger?', 'Bigger number', 5, () => { const a = ri(1, 20); let b = ri(1, 20); while (b === a) b = ri(1, 20); return P.compare(a, b); });
+  /* Comparing: numbers to 10 first (the kindergarten standard), then two numbers from 11 to 20 */
+  L('cmp10', 'count', 'Which is bigger? Up to 10', 'Bigger, to 10', 5, () => { const a = ri(1, 10); let b = ri(1, 10); while (b === a) b = ri(1, 10); return P.compare(a, b); });
+  L('cmp', 'count', 'Which is bigger? 11 to 20', 'Bigger, 11 to 20', 5, () => { const a = ri(11, 20); let b = ri(11, 20); while (b === a) b = ri(11, 20); return P.compare(a, b); });
 
   /* 3A: numbers to 100 and 120, then +1, +2, +3 in Kumon's ranges (12+1 up to 1000+1; 14+2 up to
      32+2; 14+3 up to 21+3), then +1 to +3 mixed. Kumon: 1–2 minutes a sheet. */
@@ -1711,7 +1746,7 @@ const MathCurriculum = (() => {
   /* Each level's Kumon math level (Kumon's table of learning materials). */
   const KUMON = {};
   const grp = (g, ids) => ids.split(' ').forEach((id) => { KUMON[id] = g; });
-  grp('6A', 'c5 c10 f10'); grp('5A', 'n10 c20 n30 m50 cmp');
+  grp('6A', 'c5 c10 f10'); grp('5A', 'n10 c20 n30 m50 cmp10 cmp');
   grp('3A', 'm100 m120 a1 a1b a1c a2 a2b a3 a3b a13');
   grp('2A', 'a4 a5 a15 a6 a7 a17 a8 a9 a910 a110');
   grp('A', 'sum12 sum15 sum18 sum20 sum24 sum28 sumRev sub1 sub2 sub3 sub10 sub12 sub14 sub16 sub20 subRev');
@@ -1877,7 +1912,8 @@ const MathCurriculum = (() => {
     n10: () => ({ show: { type: 'seq', run: [3, 4, 5, 6], gap: 3 }, steps: ['Count up: 3, 4, 5…', 'What comes next is 6.'], eq: '3, 4, 5, 6' }),
     n30: () => ({ show: { type: 'seq', run: [17, 18, 19, 20], gap: 3 }, steps: ['Count up: 17, 18, 19…', 'After 19 comes 20.'], eq: '17, 18, 19, 20' }),
     m50: () => ({ show: { type: 'seq', run: [26, 27, 28, 29], gap: 2 }, steps: ['Count along the row: 26, 27…', '28 is missing. Then comes 29.'], eq: '26, 27, 28, 29' }),
-    cmp: () => ({ show: { type: 'big', text: '9   or   12' }, steps: ['Count up: 9 comes before 12.', 'The number that comes later is bigger, so 12 is bigger.'], eq: '12 is bigger' }),
+    cmp10: () => ({ show: { type: 'big', text: '4   or   7' }, steps: ['Count up: 4 comes before 7.', 'The number that comes later is bigger, so 7 is bigger.'], eq: '7 is bigger' }),
+    cmp: () => ({ show: { type: 'big', text: '13   or   16' }, steps: ['Count up from 10: 11, 12, 13, 14, 15, 16.', '16 comes later, so 16 is bigger.'], eq: '16 is bigger' }),
     m100: () => ({ show: { type: 'seq', run: [57, 58, 59, 60], gap: 3 }, steps: ['Count along the row: 57, 58, 59…', 'After 59 comes 60.'], eq: '57, 58, 59, 60' }),
     m120: () => ({ show: { type: 'seq', run: [108, 109, 110, 111], gap: 2 }, steps: ['Count along the row: 108, 109…', '110 is missing. Then comes 111.'], eq: '108, 109, 110, 111' }),
     a1: () => exAdd(6, 1), a1b: () => exAdd(19, 1), a1c: () => { const e = exAdd(59, 1); e.steps.push('It works for big numbers too: 299 + 1 = 300.'); return e; },
@@ -1910,6 +1946,16 @@ const MathCurriculum = (() => {
     return ex;
   }
 
+  /* Counting on and back: the hint walks through this problem's own numbers, as the worked example does. */
+  function tipFor(code, p) {
+    const d = (p && p.data) || {};
+    if (p && p.kind === 'h' && d.b >= 1 && d.b <= 5) {
+      const hops = [];
+      if (code === 'countOn' && d.op === 'add') { for (let k = 1; k <= d.b; k++) hops.push(d.a + k); return 'Start at ' + d.a + '. Count on ' + d.b + ': ' + hops.join(', ') + '.'; }
+      if (code === 'countBack' && d.op === 'sub') { for (let k = 1; k <= d.b; k++) hops.push(d.a - k); return 'Start at ' + d.a + '. Count back ' + d.b + ': ' + hops.join(', ') + '.'; }
+    }
+    return null;
+  }
   /* A stored problem coming back from the review deck: fresh dot layout, ordered choices. */
   function refresh(p) {
     if (p.kind === 'count') { p.data.seed = ri(1, 99999); if (p.choices) p.choices.sort((a, b) => a - b); }
@@ -1917,7 +1963,7 @@ const MathCurriculum = (() => {
     return p;
   }
   return {
-    key: 'math', levels: LEVELS, stages: STAGES, tips: TIPS, codeLabels: CODE_LABEL, diagnose, problemText, levelExample, refresh, example, aliases: ALIASES,
+    key: 'math', levels: LEVELS, stages: STAGES, tips: TIPS, tipFor, codeLabels: CODE_LABEL, diagnose, problemText, levelExample, refresh, example, aliases: ALIASES,
     groupLabel: (g) => 'Kumon ' + g, untimedGroups: { '6A': true, '5A': true }, minTestLevels: 1, probeStep: 5,
     defaults: { sheetLen: 20, allowed: 2, dailyMin: 15 }, sheetsDefault: 5, sheetsMin: 5, sheetsMax: 10, sheetUnit: 20,
     SIGN, WORDS, _internal: { hasCarry, hasBorrow, noCarryAdd, smallFromLarge, noCarryMul, nearChoices }
@@ -6180,7 +6226,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = Merge;
    - a long sitting: 30 minutes or more (a one-sitting day of about 20 minutes' answering runs 25 to 29
      minutes with the results screens, so that alone is not a sign);
    - a sheet stopped partway after at least one answer (one left with nothing answered is a child
-     changing subjects, not tiring).
+     changing subjects, not tiring);
+   - rushing: a sheet answered at under 70% of the child's usual speed on that level (the median
+     seconds per problem across two or more earlier sheets there) and 70% right or less. Fast and
+     accurate is never rushing. A rushed sheet doesn't count toward an automatic step back.
    No sign in a day: Fresh. One: Watch. Two or more: Tired. */
 const Metrics = (() => {
   'use strict';
@@ -6191,7 +6240,7 @@ const Metrics = (() => {
     dayMin: { young: [10, 15], full: [20, 30] },
     mathSct: { '3A': [1, 2], '2A': [1, 2], A: [1, 2] }
   };
-  const LIMIT = { slowPct: 30, moreMistakes: 2, rightFirstOk: 90, sameLevel: 3, longSitMin: 30, pauseSec: 8, pauseX: 3, pauseMin: 3 };
+  const LIMIT = { slowPct: 30, moreMistakes: 2, rightFirstOk: 90, sameLevel: 3, longSitMin: 30, pauseSec: 8, pauseX: 3, pauseMin: 3, rushSpeed: 0.7, rushRight: 70, rushPrior: 2, rushWindow: 10 };
 
   /* The calendar day of a time stamp: in the given IANA time zone, or the device's own. */
   function dayKey(iso, tz) {
@@ -6225,6 +6274,32 @@ const Metrics = (() => {
     if (known.length < 3 || known.length < t.length / 2) return null;
     const m = median(known);
     return t.map((x) => (x != null && x >= LIMIT.pauseSec && x >= LIMIT.pauseX * m ? 1 : 0));
+  }
+  /* Rushing (see the notes at the top): the median seconds a problem on this sheet against the same
+     on the child's earlier sheets of that level. Returns null when there isn't enough to judge. */
+  function itemMedian(s) {
+    const t = (s.items || []).map((it) => (Array.isArray(it) && typeof it[3] === 'number' ? it[3] : null)).filter((x) => x != null && x > 0);
+    return t.length >= 3 ? median(t) : null;
+  }
+  function rushOf(sheet, prior) {
+    if (!sheet || !sheet.n) return null;
+    const m = itemMedian(sheet);
+    if (m == null) return null;
+    const right = Math.round((100 * (sheet.n - (sheet.wrong || 0))) / sheet.n);
+    const usualList = (prior || []).map(itemMedian).filter((x) => x != null).slice(-LIMIT.rushWindow);
+    if (usualList.length < LIMIT.rushPrior) return null;
+    const usual = median(usualList);
+    return { rushed: right <= LIMIT.rushRight && m < LIMIT.rushSpeed * usual, median: m, usual, ratio: m / usual, right };
+  }
+  /* each sheet of one subject, oldest first, marked rushed or not against its level's earlier sheets */
+  function markRushed(list) {
+    const byLevel = {};
+    return list.slice().sort((a, b) => String(a.at).localeCompare(String(b.at))).map((s) => {
+      const prior = byLevel[s.levelId] || (byLevel[s.levelId] = []);
+      const r = rushOf(s, prior);
+      prior.push(s);
+      return r && r.rushed ? Object.assign({}, s, { rushed: true }) : s;
+    });
   }
   function sittingsOf(sheets) {
     const out = [];
@@ -6291,6 +6366,8 @@ const Metrics = (() => {
     }));
     const longest = sittings.reduce((a, s) => Math.max(a, s.min), 0);
     if (d.stops.length) signs.push({ id: 'stopped', text: 'Stopped ' + d.stops.length + (d.stops.length === 1 ? ' sheet' : ' sheets') + ' partway' });
+    const rushed = sheets.filter((s) => s.rushed);
+    if (rushed.length) signs.push({ id: 'rushed', text: 'Rushed ' + rushed.length + (rushed.length === 1 ? ' sheet' : ' sheets') + ': much faster than usual and 70% right or less' });
     let pauses = null;
     const pf = sheets.map(pauseFlags).filter((f) => f != null);
     if (pf.length) pauses = { total: pf.reduce((a, f) => a + f.reduce((x, y) => x + y, 0), 0), sheets: pf.length };
@@ -6308,7 +6385,7 @@ const Metrics = (() => {
     const tz = opts && opts.tz, byDay = {};
     const put = (k) => byDay[k] || (byDay[k] = { day: k, sheets: [], stops: [] });
     SUBJECTS.forEach((subj) => {
-      ((logs && logs[subj]) || []).forEach((s) => { if (isSheet(s)) put(dayKey(s.at, tz)).sheets.push(Object.assign({ subj }, s)); });
+      markRushed(((logs && logs[subj]) || []).filter(isSheet)).forEach((s) => put(dayKey(s.at, tz)).sheets.push(Object.assign({ subj }, s)));
       ((stops && stops[subj]) || []).forEach((x) => { if (x && x.at && (x.done || 0) > 0) put(dayKey(x.at, tz)).stops.push(Object.assign({ subj }, x)); });
     });
     return Object.values(byDay).map(summarize).sort((a, b) => b.day.localeCompare(a.day));
@@ -6334,7 +6411,7 @@ const Metrics = (() => {
       tired: on.filter((d) => d.level === 'tired').length, watch: on.filter((d) => d.level === 'watch').length
     };
   }
-  return { SUBJECTS, NAMES, KUMON, LIMIT, GAP_MIN, dayKey, days, lastDays, week, band, sittingsOf };
+  return { SUBJECTS, NAMES, KUMON, LIMIT, GAP_MIN, dayKey, days, lastDays, week, band, sittingsOf, rushOf, markRushed, itemMedian };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = Metrics;
 /* Small Steps: the kids' website keeps progress in a private GitHub folder.
@@ -6686,10 +6763,11 @@ const Store = (() => {
     return Promise.all(jobs).catch(onWriteError);
   }
 
-  function sessionsFor(learnerId, subject) {
+  /* Newest first. A sheet or read a parent voided is left out unless opts.withVoided. */
+  function sessionsFor(learnerId, subject, opts) {
     const out = [];
-    const want = subject || 'math';
-    Object.values(state.logs).forEach((doc) => { if (doc && doc.learnerId === learnerId && (doc.subject || 'math') === want && Array.isArray(doc.sessions)) out.push.apply(out, doc.sessions); });
+    const want = subject || 'math', all = !!(opts && opts.withVoided);
+    Object.values(state.logs).forEach((doc) => { if (doc && doc.learnerId === learnerId && (doc.subject || 'math') === want && Array.isArray(doc.sessions)) doc.sessions.forEach((s) => { if (s && (all || !s.voided)) out.push(s); }); });
     return out.sort((a, b) => String(b.at).localeCompare(String(a.at)));
   }
 
@@ -7167,6 +7245,22 @@ function putTrack(l, subj, t) {
   return Object.assign({}, l, { [subj]: t });
 }
 function bestStreak(l) { return Math.max.apply(null, SUBJECTS.map((s) => ENG[s.key].currentStreak(trackOf(l, s.key)))); }
+
+/* Undo: each sheet or read saves how its subject stood before it (level, passes, the day's count, and
+   the review-deck entries it changed), so a parent can void the newest one and have it done again.
+   The last few are kept; a level a parent sets by hand clears them. */
+const LV_FIELDS = ['levelId', 'passes', 'runDays', 'lastBoost', 'lowRun', 'backFrom', 'testFor', 'testWait', 'sheets', 'passed', 'dayStreak', 'planDay', 'planSheets', 'dayCount', 'lastDay', 'lastAt', 'raGate', 'raDay', 'raCount'];
+const UNDO_KEEP = 5;
+function snapOf(t) { const o = {}; LV_FIELDS.forEach((k) => { o[k] = t[k] === undefined ? null : t[k]; }); return JSON.parse(JSON.stringify(o)); }
+function revDiff(before, after) {
+  const a = before || {}, b = after || {}, out = {};
+  Array.from(new Set(Object.keys(a).concat(Object.keys(b)))).forEach((k) => { if (JSON.stringify(a[k]) !== JSON.stringify(b[k])) out[k] = a[k] ? JSON.parse(JSON.stringify(a[k])) : null; });
+  return out;
+}
+function pushUndo(after, sid, before) {
+  const entry = { sid, at: new Date().toISOString(), snap: snapOf(before), rev: revDiff(before.review, after.review) };
+  return Object.assign({}, after, { undo: (before.undo || []).concat([entry]).slice(-UNDO_KEEP) });
+}
 const hasBuddy = (l) => !!(l && l.buddy && l.buddy.type);
 function miniBuddy(l, mood) { return hasBuddy(l) ? '<span class="mini-buddy">' + Buddy.svg(Buddy.of(l), { mood: mood || 'idle' }) + '</span>' : ''; }
 const buddyName = (l) => (hasBuddy(l) ? (l.buddy.name || Buddy.TYPE[l.buddy.type].defaultName) : 'your buddy');
@@ -7223,14 +7317,30 @@ function updateInputUI() {
   const ok = document.getElementById('okKey');
   if (ok && p.mode === 'keypad') ok.disabled = !c.input;
 }
+/* An answer that looks unfinished (the first digit of a longer answer, or a clock left at 12:00 without
+   being set) gets "Check your answer" once instead of being marked; pressing again sends it as it is. */
+function unfinished(c, p) {
+  if (c.nudged === p) return false;
+  if (p.mode === 'clockset') return c.touched !== p && p.answer !== 1200;
+  if (p.mode !== 'keypad' || !c.input) return false;
+  const want = p.kind === 'v' ? String(p.answer).split('').reverse().join('') : String(p.answer);
+  return c.input.length < want.length && want.indexOf(c.input) === 0 && inputValue(p, c.input) !== p.answer;
+}
+function nudge(c, p) {
+  c.nudged = p;
+  Sfx.tap(); toast('Check your answer');
+  if (c.speak) Speech.say('Check your answer.');
+  const card = document.querySelector('.play .card');
+  if (card) { card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); }
+}
 function pressKey(k) {
   const c = activeCtx(), p = activeProblem();
   if (!c || !p || c.locked) return;
-  if (p.mode === 'clockset') { if (k === 'ok') submitAnswer((c.setH || 12) * 100 + (c.setM || 0)); return; }
+  if (p.mode === 'clockset') { if (k === 'ok') { if (unfinished(c, p)) return nudge(c, p); submitAnswer((c.setH || 12) * 100 + (c.setM || 0)); } return; }
   if (p.mode !== 'keypad') return;
   Sfx.key();
   if (k === 'back') { c.input = c.input.slice(0, -1); updateInputUI(); return; }
-  if (k === 'ok') { if (c.input) submitAnswer(inputValue(p, c.input)); return; }
+  if (k === 'ok') { if (c.input) { if (unfinished(c, p)) return nudge(c, p); submitAnswer(inputValue(p, c.input)); } return; }
   if (/^\d$/.test(k) && c.input.length < maxLen(p)) { c.input += k; updateInputUI(); }
 }
 function speakCurrent(force) {
@@ -7247,6 +7357,7 @@ function setClockHand(n) {
   const c = activeCtx(), p = activeProblem();
   if (!c || !p || p.mode !== 'clockset' || c.locked) return;
   if (p.prompt.hourOnly || c.hand === 'hour') c.setH = n; else c.setM = (n % 12) * 5;
+  c.touched = p;
   Sfx.key();
   const wrap = document.querySelector('.clock-wrap');
   if (wrap) wrap.innerHTML = clockSVG((c.setH || 12) * 100 + (c.setM || 0), { setting: true, active: p.prompt.hourOnly ? 'hour' : c.hand });
@@ -7356,26 +7467,32 @@ function finishSheet() {
   stopTick(); releaseScreen();
   const g = E.grade(sh.problems, sh.answers);
   const l = Store.learner(sh.kid), t = trackOf(l, sh.subj), now = new Date();
-  let out = E.applyResult(t, { kind: sh.kind, timed: sh.timed, levelId: sh.levelId, n: sh.problems.length, wrong: g.wrong, secs, target: sh.target, problems: sh.problems, res: g.res }, now);
+  const items = sh.problems.map((p, i) => [E.problemText(p), givenText(sh.subj, p, g.res[i]), g.res[i].ok ? 1 : 0, Math.round(((sh.qSecs && sh.qSecs[i]) || 0) * 10) / 10]);
+  /* Much faster than usual at this level and 70% right or less: rushing. It doesn't count toward a
+     step back, and the buddy asks for slowing down. (The same rule marks it on the dashboard.) */
+  const prior = Store.sessionsFor(sh.kid, sh.subj).filter((x) => (x.kind === 'sheet' || x.kind === 'test') && x.n > 0 && x.levelId === sh.levelId).reverse();
+  const rush = Metrics.rushOf({ n: sh.problems.length, wrong: g.wrong, items }, prior), rushed = !!(rush && rush.rushed);
+  let out = E.applyResult(t, { kind: sh.kind, timed: sh.timed, levelId: sh.levelId, n: sh.problems.length, wrong: g.wrong, secs, target: sh.target, problems: sh.problems, res: g.res, rushed }, now);
   if (sh.subj === 'reading' && sh.kind !== 'test') out = readGate(sh.kid, t, out);
   const ev = out.ev;
   const dayGoal = out.learner.dayCount === out.learner.planSheets;
   const award = Buddy.award(ev, { wrong: g.wrong, dayGoal });
-  let l2 = putTrack(l, sh.subj, out.learner);
+  const sid = Store.newId();
+  let l2 = putTrack(l, sh.subj, pushUndo(out.learner, sid, t));
   let credit = null;
   if (g.wrong === 0) {
     credit = Buddy.credit(Buddy.of(l2), award.total, { levelUp: ev.levelUp, testPassed: ev.testPassed, streak: bestStreak(l2) });
     l2 = Object.assign({}, l2, { buddy: credit.buddy });
   }
   const session = {
-    id: Store.newId(), at: now.toISOString(), subject: sh.subj, kind: sh.kind, group: sh.group, timed: sh.timed, levelId: sh.levelId,
+    id: sid, at: now.toISOString(), subject: sh.subj, kind: sh.kind, group: sh.group, timed: sh.timed, levelId: sh.levelId,
     n: sh.problems.length, wrong: g.wrong, secs: Math.round(secs), target: sh.target, pass: ev.pass, boost: ev.boost, codes: g.codes,
     missed: sh.problems.filter((p, i) => !g.res[i].ok).slice(0, 12).map((p) => E.problemText(p)),
-    reviewItems: sh.problems.filter((p) => p.review).length, stars: credit ? award.total : 0,
-    items: sh.problems.map((p, i) => [E.problemText(p), givenText(sh.subj, p, g.res[i]), g.res[i].ok ? 1 : 0, Math.round(((sh.qSecs && sh.qSecs[i]) || 0) * 10) / 10]),
+    reviewItems: sh.problems.filter((p) => p.review).length, stars: credit ? award.total : 0, items,
     change: ev.levelUp ? 'up' : ev.stepBack ? 'back' : ev.returned ? 'return' : ev.testReady ? 'test' : ev.readGate ? 'readFirst' : '', to: ev.to,
     day: sh.dayNo, plan: sh.dayTotal
   };
+  if (rushed) session.rushed = true;
   Store.saveLearner(l2);
   Store.appendSession(sh.kid, session);
   S.result = { sh, g, secs, ev, session, award, credit, dayGoal, starsBefore: Buddy.of(l).stars, learnerBefore: l, trackBefore: t, celebrated: false };
@@ -7389,6 +7506,7 @@ function playResults() {
   lit.forEach((on, i) => { if (on) after(120 + i * 350, () => Sfx.star(i)); });
   if (R.ev.pass && R.g.wrong === 0) after(1050, () => Confetti.fromEl(document.querySelector('.stars3'), 50));
   if (R.credit) after(1250, () => collectStars(R.starsBefore, R.credit.buddy.stars));
+  if (R.session.rushed && R.sh.speak) after(700, () => Speech.say('Whoa, that was fast! Let’s slow down and check each one.'));
 }
 function collectStars(from, to) {
   const chip = document.getElementById('starChip'), total = document.getElementById('starTotal');
@@ -7439,6 +7557,7 @@ function viewResults() {
   else if (ev.testReady) progress = '<p class="res-line"><b>Next:</b> the level test!</p>';
   else if (ev.returned) progress = '<p class="res-line"><b>Back to:</b> ' + esc(E.BY[ev.to].name) + '</p>';
   else if (ev.stepBack) progress = '<p class="res-line"><b>Next:</b> a little review on ' + esc(E.BY[ev.to].name) + '</p>';
+  else if (t.backFrom && E.BY[t.backFrom] && ev.pass) progress = '<p class="res-line"><b>Next:</b> pass one on another day to go back to ' + esc(E.BY[t.backFrom].name) + '</p>';
   else if (!t.backFrom && !t.testFor) {
     const need = s.toAdvance, have = Math.min(need, t.passes || 0);
     let dots = '';
@@ -7447,9 +7566,9 @@ function viewResults() {
   }
   const pending = R.g.wrong > 0;
   const bname = buddyName(l);
-  const talk = pending
+  const talk = (R.session.rushed ? 'Whoa, that was fast! Let’s slow down and check each one. ' : '') + (pending
     ? 'Fix ' + (R.g.wrong === 1 ? 'the miss' : 'the ' + R.g.wrong + ' misses') + ' and I’ll collect <b>+' + R.award.total + ' stars</b>!'
-    : 'We earned <b>+' + R.award.total + ' stars</b>!';
+    : 'We earned <b>+' + R.award.total + ' stars</b>!');
   const stars = [true, ev.pass, R.g.wrong === 0].map((on) => starSVG(on)).join('');
   const action = pending ? '<button class="btn btn-gold btn-big" data-act="startFix">Fix my mistakes</button>' : '<button class="btn btn-gold btn-big" data-act="afterSheet">Continue</button>';
   return '<div class="screen"><div class="topbar"><span class="sub-chip" style="--acc:' + SUBJ[sh.subj].acc + '">' + SUBJ[sh.subj].name + '</span><span class="muted">' + esc(isTest ? 'Level test' : lv.name) + '</span><span class="spacer"></span>' + starTotalChip(l, R.starsBefore) + '</div>' +
@@ -7473,8 +7592,8 @@ function startFix() {
 }
 function fixHintText(it) {
   const E = ENG[S.result.sh.subj];
-  if (it.type === 'extra') return it.tries > 0 && it.code ? E.TIPS[it.code] : 'One more like that one!';
-  const tip = E.TIPS[it.code || 'other'];
+  if (it.type === 'extra') return it.tries > 0 && it.code ? E.tipFor(it.code, it.p) : 'One more like that one!';
+  const tip = E.tipFor(it.code, it.p);
   if ((it.p.mode === 'choice' || it.p.mode === 'numtap') && it.tries === 0) return tip;
   const shownRaw = it.lastGiven != null ? it.lastGiven : it.given;
   const shown = shownRaw == null ? null : (it.p.view === 'time' || it.p.mode === 'clockset' || it.p.input === 'time' ? fmtTime(shownRaw) : shownRaw);
@@ -7514,7 +7633,7 @@ function fixAnswer(v) {
     F.flash = 'no'; F.input = ''; Sfx.wrong();
     if (it.p.mode === 'choice' || it.p.mode === 'numtap') F.wrongChoices = F.wrongChoices.concat([v]);
     S.anim = false; render();
-    if (F.speak) Speech.say(E.TIPS[it.code || 'other']);
+    if (F.speak) Speech.say(E.tipFor(it.code, it.p));
   }
 }
 function finishFix() {
@@ -7524,7 +7643,13 @@ function finishFix() {
   let l = Store.learner(R.sh.kid);
   if (l) {
     let t = trackOf(l, R.sh.subj);
-    if (extras.length) t = Object.assign({}, t, { review: E.updateReview(t.review, extras.map((x) => x.p), extras.map((x) => ({ ok: !!x.firstOk })), new Date(), R.sh.levelId) });
+    if (extras.length) {
+      const nr = E.updateReview(t.review, extras.map((x) => x.p), extras.map((x) => ({ ok: !!x.firstOk })), new Date(), R.sh.levelId);
+      /* the extras change the review deck too; voiding this sheet puts those entries back as well */
+      const st = (t.undo || []).slice(), top = st[st.length - 1];
+      if (top && top.sid === R.session.id) st[st.length - 1] = Object.assign({}, top, { rev: Object.assign({}, revDiff(t.review, nr), top.rev) });
+      t = Object.assign({}, t, { review: nr, undo: st });
+    }
     l = putTrack(l, R.sh.subj, t);
     R.starsBefore = Buddy.of(l).stars;
     R.credit = Buddy.credit(Buddy.of(l), R.award.total, { levelUp: R.ev.levelUp, testPassed: R.ev.testPassed, streak: bestStreak(l) });
@@ -7576,7 +7701,7 @@ function viewChange() {
   if (ev.top) { h = 'Top of the ladder!'; p = 'Every level in ' + SUBJ[R.sh.subj].name.toLowerCase() + ' is done. Keep practicing to get even faster.'; mood = 'cheer'; }
   else if (ev.testFailed) { h = 'Almost!'; p = 'One practice sheet, then the level test again.'; mood = 'think'; }
   else if (ev.testReady) { h = 'Level test time!'; p = 'Every step of this level is done. Pass a ' + E.testNOf(trackOf(l, R.sh.subj).testFor || R.sh.group) + '-problem test to move up.'; mood = 'cheer'; }
-  else if (ev.stepBack) { h = 'A little review'; p = 'The next sheets practice ' + E.BY[ev.to].name + '. Pass one and you go right back to ' + E.BY[ev.from].name + '.'; mood = 'think'; }
+  else if (ev.stepBack) { h = 'A little review'; p = 'The next sheets practice ' + E.BY[ev.to].name + '. Pass one here on two different days and you go back to ' + E.BY[ev.from].name + '.'; mood = 'think'; }
   else { h = 'Back on track!'; p = 'Review done. The next sheet picks up where you left off.'; mood = 'cheer'; }
   return '<div class="screen center"><section class="glass cele">' + (mood === 'cheer' ? '<div class="rays"></div>' : '') + '<h2 class="cele-title" style="font-size:clamp(44px,8vw,76px)">' + esc(h) + '</h2>' +
     (hasBuddy(l) ? '<div class="stage-buddy">' + Buddy.svg(Buddy.of(l), { mood }) + '</div>' : '') +
@@ -7651,7 +7776,7 @@ function finishCheck() {
   releaseScreen();
   if (!l) return goHome();
   const E = ENG[P.subj], rec = E.LEVELS[P.st.result];
-  const t = Object.assign({}, trackOf(l, P.subj), { levelId: rec.id, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', placeNext: false, placedAt: new Date().toISOString() });
+  const t = Object.assign({}, trackOf(l, P.subj), { levelId: rec.id, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', placeNext: false, placedAt: new Date().toISOString(), undo: [] });
   let l2 = putTrack(l, P.subj, t);
   const before = Buddy.of(l2).stars;
   let credit = null;
@@ -7738,7 +7863,7 @@ function usePlacement() {
   const P = S.place, l = Store.learner(P.kid);
   if (!l) return;
   const E = ENG[P.subj], rec = E.LEVELS[P.st.result];
-  const t = Object.assign({}, trackOf(l, P.subj), { levelId: rec.id, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', placeNext: false, placedAt: new Date().toISOString() });
+  const t = Object.assign({}, trackOf(l, P.subj), { levelId: rec.id, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', placeNext: false, placedAt: new Date().toISOString(), undo: [] });
   Store.saveLearner(putTrack(l, P.subj, t));
   Store.appendSession(l.id, { id: Store.newId(), at: new Date().toISOString(), subject: P.subj, kind: 'placement', levelId: rec.id, n: P.st.probes, from: P.fromLevel });
   S.parentKid = l.id; S.parentSubj = P.subj; S.place = null; S.view = 'parent'; render(); toast(l.name + ' now starts ' + SUBJ[P.subj].name.toLowerCase() + ' at ' + rec.short);
@@ -7793,7 +7918,26 @@ function effectiveGrade(l) {
   return Math.min(5, GRADE_NUM[l.grade] + Math.max(0, now - set));
 }
 const gradeName = (g) => { const f = GRADES.find((x) => x[2] === g); return f ? f[1] : 'Grade ' + g; };
-const shortGroup = (subj, g) => (subj === 'clock' ? (g === 'PK' ? 'Pre-K' : 'Gr ' + String(g).replace(/^G/, '')) : g);
+/* The school grade a level's content belongs to: the first grade whose end level is at or past it.
+   Levels are labelled grade first with the Kumon level in brackets, "Kindergarten (Kumon 3A)";
+   clock has no Kumon program, so it shows the grade alone. */
+function levelGrade(subj, levelId) {
+  const i = ENG[subj].levelIndex(levelId), ends = GRADE_END[subj];
+  for (let g = -3; g <= 5; g++) if (ends[g] >= i) return g;
+  return 5;
+}
+const gradeWord = (g, form) => (g <= -2 ? (form === 'band' ? 'Age 3' : 'Preschool') : g === -1 ? 'Pre-K' : g === 0 ? (form === 'long' ? 'Kindergarten' : 'K') : (form === 'long' ? 'Grade ' : 'Gr ') + g);
+function gradeLabel(subj, levelId, short) {
+  const E = ENG[subj], lv = E.BY[levelId];
+  if (!lv) return '';
+  const g = gradeWord(levelGrade(subj, levelId), short ? 'short' : 'long');
+  return subj === 'clock' ? g : g + ' (' + (short ? lv.group : E.groupLabel(lv.group)) + ')';
+}
+/* a level test covers a Kumon group; it is labelled by the group's last level */
+function groupGradeLabel(subj, group, short) {
+  const ids = ENG[subj].groupLevels(group);
+  return ids.length ? gradeLabel(subj, ids[ids.length - 1], short) : ENG[subj].groupLabel(group);
+}
 
 /* Phones get a narrower chart drawing so its labels stay readable; re-drawn when the width crosses over. */
 const chartNarrow = () => typeof window !== 'undefined' && window.innerWidth < 620;
@@ -7806,7 +7950,7 @@ function levelHistory(E, sessions, t) {
   sessions.slice().sort((a, b) => String(a.at).localeCompare(String(b.at))).forEach((s) => {
     let i = E.levelIndex(s.levelId);
     if (i < 0) return;
-    if (s.change === 'up' && s.to && E.levelIndex(s.to) >= 0) i = E.levelIndex(s.to);
+    if (s.change === 'up' && s.to && !s.undoneAt && E.levelIndex(s.to) >= 0) i = E.levelIndex(s.to);
     const k = dayKey(new Date(s.at)), cur = by.get(k) || { k, i: -1, n: 0, place: false };
     if (s.kind === 'placement') { cur.place = true; cur.i = i; } else { cur.i = Math.max(cur.i, i); cur.n++; }
     by.set(k, cur);
@@ -7840,20 +7984,20 @@ function levelChartHTML(subj, E, t, sessions, l) {
   if (proj) vals.push(Math.min(N - 1, proj.i + proj.rate * ((x1 - proj.from) / DAY_MS)));
   let y0 = Math.max(0, Math.floor(Math.min.apply(null, vals)) - 2), y1 = Math.min(N - 1, Math.ceil(Math.max.apply(null, vals)) + 2);
   if (y1 - y0 < 8) { y1 = Math.min(N - 1, y0 + 8); y0 = Math.max(0, y1 - 8); }
-  const narrow = chartNarrow(), W = narrow ? 380 : 640, Ht = narrow ? 250 : 300, L = narrow ? 34 : 54, R = narrow ? 78 : 92, T = 14, B = 30, pw = W - L - R, ph = Ht - T - B;
+  const narrow = chartNarrow(), W = narrow ? 380 : 640, Ht = narrow ? 250 : 300, L = narrow ? 46 : 58, R = narrow ? 78 : 92, T = 14, B = 30, pw = W - L - R, ph = Ht - T - B;
   const X = (d) => L + ((d - x0) / (x1 - x0)) * pw, Y = (i) => T + ph - ((i - (y0 - 0.5)) / (y1 - y0 + 1)) * ph;
   let s = '<svg viewBox="0 0 ' + W + ' ' + Ht + '" role="img" aria-label="' + esc(l.name + '’s ' + SUBJ[subj].name.toLowerCase() + ' level over time: now ' + E.BY[t.levelId].name) + '">';
   s += '<defs><clipPath id="lvClip"><rect x="' + L + '" y="' + T + '" width="' + pw + '" height="' + ph + '"/></clipPath></defs>';
-  /* group bands, labelled on the left like Kumon's level axis */
+  /* school-grade bands, labelled on the left (the levels each grade's content covers) */
   const groups = [];
-  E.LEVELS.forEach((lv, i) => { const last = groups[groups.length - 1]; if (!last || last.g !== lv.group) groups.push({ g: lv.group, a: i, b: i }); else last.b = i; });
+  E.LEVELS.forEach((lv, i) => { const gg = Math.max(-2, levelGrade(subj, lv.id)), last = groups[groups.length - 1]; if (!last || last.g !== gg) groups.push({ g: gg, a: i, b: i }); else last.b = i; });
   groups.forEach((gr, gi) => {
     const a = Math.max(gr.a, y0), b = Math.min(gr.b, y1);
     if (a > b) return;
     const top = Y(b + 0.5), bot = Y(a - 0.5);
     if (gi % 2 === 0) s += '<rect class="lv-band" x="' + L + '" y="' + top.toFixed(1) + '" width="' + pw + '" height="' + (bot - top).toFixed(1) + '"/>';
     s += '<line class="lv-grid" x1="' + L + '" x2="' + (L + pw) + '" y1="' + bot.toFixed(1) + '" y2="' + bot.toFixed(1) + '"/>';
-    s += '<text class="lv-ylab" x="' + (L - 10) + '" y="' + ((top + bot) / 2 + 4).toFixed(1) + '">' + esc(shortGroup(subj, gr.g)) + '</text>';
+    s += '<text class="lv-ylab" x="' + (L - 10) + '" y="' + ((top + bot) / 2 + 4).toFixed(1) + '">' + esc(gradeWord(gr.g, 'band')) + '</text>';
   });
   /* weekly ticks */
   const tick = new Date(x0); tick.setDate(tick.getDate() + ((8 - tick.getDay()) % 7));
@@ -7963,16 +8107,17 @@ function worksheetGridHTML(subj, E, sessions) {
     const cells = list.map((s) => {
       const pct = Math.round((100 * (s.n - s.wrong)) / s.n), lv = E.BY[s.levelId], sp = speedOf(s);
       const tag = (s.kind === 'test' ? 'Test ' : '#') + num[s.id];
-      const aria = (s.kind === 'test' ? 'Level test ' : (lv ? lv.name : s.levelId) + ' sheet ') + num[s.id] + ', ' + pct + ' percent, ' + E.fmtTime(s.secs) + ', ' + SPEED_WORD[sp] + (s.wrong && s.fixed ? ', corrected' : '');
+      const aria = (s.kind === 'test' ? 'Level test ' : (lv ? lv.name : s.levelId) + ' sheet ') + num[s.id] + ', ' + pct + ' percent, ' + E.fmtTime(s.secs) + ', ' + SPEED_WORD[sp] + (s.pass ? ', passed' : '') + (s.wrong && s.fixed ? ', corrected' : '');
       return '<button class="ws-cell sp-' + sp + '" data-act="sheetInfo" data-id="' + esc(s.id) + '" aria-label="' + esc(aria) + '">' +
         '<span class="ws-lv">' + esc(tag) + '</span><b class="ws-score' + (pct === 100 ? ' full' : '') + '">' + pct + '</b>' +
-        '<span class="ws-time">' + E.fmtTime(s.secs) + '</span>' + (s.wrong && s.fixed ? '<i class="ws-dot" aria-hidden="true"></i>' : '') + '</button>';
+        '<span class="ws-time">' + E.fmtTime(s.secs) + '</span>' + (s.pass ? '<i class="ws-pass" aria-hidden="true">✓</i>' : '') + (s.wrong && s.fixed ? '<i class="ws-dot" aria-hidden="true"></i>' : '') + '</button>';
     }).join('');
     const names = []; list.forEach((s) => { const nm = s.kind === 'test' ? 'Level test' : (E.BY[s.levelId] || {}).name || s.levelId; if (names[names.length - 1] !== nm) names.push(nm); });
-    return '<div class="ws-day"><div class="ws-head"><b>' + esc(fmtDay(k)) + '</b><span>' + list.length + ' sheet' + (list.length === 1 ? '' : 's') + ' · ' + mins.toFixed(1) + ' min</span></div><div class="ws-lvls">' + esc(names.join(' → ')) + '</div><div class="ws-cells">' + cells + '</div></div>';
+    const passedN = list.filter((s) => s.pass).length;
+    return '<div class="ws-day"><div class="ws-head"><b>' + esc(fmtDay(k)) + '</b><span>' + list.length + ' sheet' + (list.length === 1 ? '' : 's') + ', ' + passedN + ' passed · ' + mins.toFixed(1) + ' min</span></div><div class="ws-lvls">' + esc(names.join(' → ')) + '</div><div class="ws-cells">' + cells + '</div></div>';
   }).join('');
-  const legend = '<div class="ws-legend"><span><i class="sw sp-fast"></i>Faster than target</span><span><i class="sw sp-ok"></i>Within target</span><span><i class="sw sp-slow"></i>Slower</span><span><i class="sw sp-none"></i>No time limit</span><span><i class="ws-dot"></i>Corrected</span></div>';
-  return head + '<p class="sub">Score and time for every sheet, newest day first, numbered within each level and colored by time against the target, like Kumon’s study records. Tap a sheet to see each answer.</p>' + legend + '<div class="ws-days">' + rows + '</div></section>';
+  const legend = '<div class="ws-legend"><span><i class="sw sp-fast"></i>Faster than target</span><span><i class="sw sp-ok"></i>Within target</span><span><i class="sw sp-slow"></i>Slower</span><span><i class="sw sp-none"></i>No time limit</span><span><i class="ws-pass">✓</i>Passed</span><span><i class="ws-dot"></i>Corrected</span></div>';
+  return head + '<p class="sub">Score and time for every sheet, newest day first, numbered within each level and colored by time against the target, like Kumon’s study records. ✓ marks a passed sheet: the score and the time both met the bar. Tap a sheet to see each answer.</p>' + legend + '<div class="ws-days">' + rows + '</div></section>';
 }
 function sheetInfoHTML(kidId, id) {
   let s = null, subj = S.parentSubj;
@@ -7985,7 +8130,9 @@ function sheetInfoHTML(kidId, id) {
     : (s.missed && s.missed.length ? '<p class="sub">Missed: ' + esc(s.missed.join(' · ')) + '</p><p class="sub">Answer-by-answer detail is kept for sheets finished from now on.</p>' : '<p class="sub">No misses.</p>');
   return '<div class="overlay" role="dialog" aria-modal="true" aria-labelledby="siTitle"><div class="dialog glass sheet-dialog"><div class="kid-row" style="justify-content:space-between"><h2 id="siTitle" style="font-size:26px">' + esc(s.kind === 'test' ? 'Level test' : lv ? lv.name : s.levelId) + '</h2><button class="icon-btn" data-act="closeOverlay" aria-label="Close">' + ICON.close + '</button></div>' +
     '<p class="sub">' + esc(when) + ' · ' + SUBJ[subj].name + '</p>' +
-    '<div class="stats"><div class="stat"><b>' + pct + '%</b><span>' + (s.n - s.wrong) + ' of ' + s.n + ' right first time</span></div><div class="stat"><b>' + E.fmtTime(s.secs) + '</b><span>' + (s.timed === false ? 'no time limit' : 'target ' + E.fmtTime(s.target)) + '</span></div><div class="stat"><b>' + (s.pass ? 'Passed' : 'Repeat') + '</b><span>' + (s.wrong ? (s.fixed ? 'corrected in ' + E.fmtTime(s.fixSecs || 0) : 'not corrected') : 'nothing to fix') + '</span></div></div>' + items + '</div></div>';
+    '<div class="stats"><div class="stat"><b>' + pct + '%</b><span>' + (s.n - s.wrong) + ' of ' + s.n + ' right first time</span></div><div class="stat"><b>' + E.fmtTime(s.secs) + '</b><span>' + (s.timed === false ? 'no time limit' : 'target ' + E.fmtTime(s.target)) + '</span></div><div class="stat"><b>' + (s.pass ? 'Passed ✓' : 'Repeat') + '</b><span>' + (s.wrong ? (s.fixed ? 'corrected in ' + E.fmtTime(s.fixSecs || 0) : 'not corrected') : 'nothing to fix') + '</span></div></div>' + items +
+    '<div class="actions"><button class="btn btn-glass btn-small" data-act="voidAsk" data-kid="' + esc(kidId) + '" data-subj="' + subj + '" data-id="' + esc(s.id) + '">Void this sheet</button></div>' +
+    '<p class="sub">Void a sheet finished by mistake: it comes off the record and is done again. It asks your × question first.</p></div></div>';
 }
 
 /* ---------- study calendar ---------- */
@@ -8049,9 +8196,9 @@ function trialPanelHTML(l, subj, E, t) {
   const i = E.levelIndex(t.levelId), cur = E.LEVELS[i], next = E.LEVELS[i + 1], s = E.settingsOf(t);
   const len = S.trialLen || 'full', group = E.groupOf(t.levelId), hasTest = E.groupLevels(group).length >= 2;
   const card = (act, title, sub, extra) => '<button class="trial-card" data-act="' + act + '"' + (extra || '') + '><b>' + esc(title) + '</b><span>' + esc(sub) + '</span></button>';
-  const cards = (next ? card('trialNext', 'Next level', next.name + ' · ' + E.groupLabel(next.group)) : '') +
-    card('trialCur', 'Current level', cur.name + ' · ' + E.groupLabel(cur.group)) +
-    (hasTest ? card('trialTest', 'Level test', E.groupLabel(group) + ' · ' + E.testNOf(group) + ' problems') : '') +
+  const cards = (next ? card('trialNext', 'Next level', next.name + ' · ' + gradeLabel(subj, next.id)) : '') +
+    card('trialCur', 'Current level', cur.name + ' · ' + gradeLabel(subj, cur.id)) +
+    (hasTest ? card('trialTest', 'Level test', groupGradeLabel(subj, group) + ' · ' + E.testNOf(group) + ' problems') : '') +
     card('trialPlace', 'Placement check', 'The check ' + l.name + ' would take, start to finish');
   return '<section class="glass panel"><h3>Try it before ' + esc(l.name) + ' does</h3>' +
     '<p class="sub">Play a sheet exactly as ' + esc(l.name) + ' would see it: the same kind of problems, timer and pass mark. Nothing is saved to ' + esc(l.name) + '’s record and no stars are earned. Rate it at the end and the levels and timing can be tuned to your notes.</p>' +
@@ -8064,7 +8211,7 @@ function ratingsHTML(l, subj, E) {
   const word = { easy: 'Too easy', right: 'About right', hard: 'Too hard' };
   const cls = { easy: 'chip-warn', right: 'chip-ok', hard: 'chip-bad' };
   const rows = list.map((f) => {
-    const lv = E.BY[f.levelId], what = f.kind === 'placement' ? 'Placement check' : f.kind === 'test' ? 'Level test · ' + E.groupLabel(f.group || '') : lv ? lv.name : f.levelId;
+    const lv = E.BY[f.levelId], what = f.kind === 'placement' ? 'Placement check' : f.kind === 'test' ? 'Level test · ' + groupGradeLabel(subj, f.group || '') : lv ? lv.name : f.levelId;
     const score = f.kind === 'placement' ? (lv ? 'suggested ' + lv.short : '') : (f.n - f.wrong) + '/' + f.n + ' · ' + E.fmtTime(f.secs) + (f.timed ? ' of ' + E.fmtTime(f.target) : '');
     return '<div class="rate-row"><div><b>' + esc(what) + '</b><span class="muted"> · ' + esc(fmtWhen(f.at)) + ' · ' + esc(score) + '</span>' + (f.note ? '<p>' + esc(f.note) + '</p>' : '') + '</div>' + (f.rating ? '<span class="chip ' + cls[f.rating] + '">' + word[f.rating] + '</span>' : '') + '</div>';
   }).join('');
@@ -8106,7 +8253,7 @@ function finishTrial() {
 }
 function viewTrialDone() {
   const T = S.trial, sh = T.sh, E = ENG[sh.subj], l = Store.learner(sh.kid) || {}, lv = E.BY[sh.levelId], n = sh.problems.length;
-  const what = sh.kind === 'test' ? 'Level test · ' + E.groupLabel(sh.group) : lv.name;
+  const what = sh.kind === 'test' ? 'Level test · ' + groupGradeLabel(sh.subj, sh.group) : lv.name;
   const verdict = T.pass ? 'would pass' : !T.accOK ? 'too many misses' : 'over the time target';
   const tiles = sh.problems.map((p, i) => tileHTML(sh.subj, p, T.g.res[i])).join('');
   const r = T.rating, rb = (k, label) => '<button class="' + (r === k ? 'on' : '') + '" data-act="trialRate" data-r="' + k + '">' + label + '</button>';
@@ -8292,7 +8439,15 @@ function startRead(kidId) {
   Sfx.unlock(); Sfx.pick(); render(); window.scrollTo(0, 0); holdScreen();
 }
 function raStart() { const R = S.ra; if (!R) return; R.phase = 'reading'; R.start = Date.now(); Sfx.tap(); render(); clearInterval(raTimer); raTimer = setInterval(raTick, 500); }
-function raDone() { const R = S.ra; if (!R) return; R.secs = (Date.now() - R.start) / 1000; R.phase = 'done'; clearInterval(raTimer); Sfx.complete(); render(); }
+/* Done and Too hard each ask the grown-up's × question first, so a stray tap can't end a reading.
+   The reading time stops at the tap on Done, not when the question is answered. */
+function raDone() {
+  const R = S.ra;
+  if (!R) return;
+  const secs = (Date.now() - R.start) / 1000;
+  Sfx.tap();
+  openGate(() => { if (S.ra !== R) return; R.secs = secs; R.phase = 'done'; clearInterval(raTimer); Sfx.complete(); render(); }, 'Answer to finish the reading.');
+}
 function raWord(i) { const R = S.ra; if (!R || R.phase === 'ready') return; if (R.miss[i]) delete R.miss[i]; else R.miss[i] = true; Sfx.key(); render(); }
 function raResult(R) {
   const n = R.words.length, miss = Object.keys(R.miss).length, right = n - miss;
@@ -8306,14 +8461,16 @@ function raSave() {
   const l = Store.learner(R.kid);
   if (!l) return goHome();
   const E = ENG.reading, t = trackOf(l, 'reading'), r = raResult(R), now = new Date();
-  Store.appendSession(R.kid, { id: Store.newId(), subject: 'readaloud', kind: 'read', at: now.toISOString(), item: R.item.id, mode: R.item.mode, tier: R.item.lvl,
-    levelId: E.canon(t.levelId), words: r.n, missed: r.miss, secs: R.item.mode === 'read' ? r.secs : null, wpm: r.wpm, q: R.q, goalMet: r.goal ? r.goal.met : null,
-    missedWords: Object.keys(R.miss).map((i) => R.words[i].replace(/[^A-Za-z’']/g, '')).slice(0, 12) });
   /* a good read at the level's own set lets a waiting level-up through */
   const gate = raGateOn(t) ? t.raGate : null;
   const opens = !!gate && R.item.lvl === ReadAloud.tierFor(E.levelIndex, gate.level).lvl && r.n > 0 && r.right / r.n >= RA_GATE;
   const b = Buddy.of(l), cr = hasBuddy(l) ? Buddy.credit(b, opens ? 7 : 2, { noSheet: true, levelUp: opens && !gate.apply.testFor, streak: bestStreak(l) }) : null;
-  let l2 = putTrack(l, 'reading', Object.assign({}, t, { raDay: E.todayKey(now), raCount: (t.raCount || 0) + 1 }, opens ? Object.assign({}, gate.apply, { raGate: null }) : {}));
+  const sid = Store.newId();
+  Store.appendSession(R.kid, Object.assign({ id: sid, subject: 'readaloud', kind: 'read', at: now.toISOString(), item: R.item.id, mode: R.item.mode, tier: R.item.lvl,
+    levelId: E.canon(t.levelId), words: r.n, missed: r.miss, secs: R.item.mode === 'read' ? r.secs : null, wpm: r.wpm, q: R.q, goalMet: r.goal ? r.goal.met : null,
+    missedWords: Object.keys(R.miss).map((i) => R.words[i].replace(/[^A-Za-z’']/g, '')).slice(0, 12), stars: cr ? (opens ? 7 : 2) : 0 },
+    opens ? { change: gate.apply.testFor ? 'test' : 'up', from: gate.level, to: gate.apply.levelId } : {}));
+  let l2 = putTrack(l, 'reading', pushUndo(Object.assign({}, t, { raDay: E.todayKey(now), raCount: (t.raCount || 0) + 1 }, opens ? Object.assign({}, gate.apply, { raGate: null }) : {}), sid, t));
   if (cr) l2 = Object.assign({}, l2, { buddy: cr.buddy });
   Store.saveLearner(l2);
   clearInterval(raTimer); releaseScreen(); S.ra = null;
@@ -8350,13 +8507,19 @@ function readGate(kidId, before, out) {
    doesn't ask again today. The next read comes from an easier set (ReadAloud.next). */
 function raSkip() {
   const R = S.ra;
+  if (!R) return;
+  Sfx.tap();
+  openGate(() => { if (S.ra === R) raSkipNow(); }, 'Answer to save this one as too hard.');
+}
+function raSkipNow() {
+  const R = S.ra;
   if (!R) return goHome();
   const l = Store.learner(R.kid);
   if (!l) return goHome();
-  const E = ENG.reading, t = trackOf(l, 'reading'), now = new Date();
-  Store.appendSession(R.kid, { id: Store.newId(), subject: 'readaloud', kind: 'read', at: now.toISOString(), item: R.item.id, mode: R.item.mode, tier: R.item.lvl,
-    levelId: E.canon(t.levelId), words: R.words.length, missed: null, skipped: true, secs: null, wpm: null, q: null, goalMet: null, missedWords: [] });
-  Store.saveLearner(putTrack(l, 'reading', Object.assign({}, t, { raDay: E.todayKey(now) })));
+  const E = ENG.reading, t = trackOf(l, 'reading'), now = new Date(), sid = Store.newId();
+  Store.appendSession(R.kid, { id: sid, subject: 'readaloud', kind: 'read', at: now.toISOString(), item: R.item.id, mode: R.item.mode, tier: R.item.lvl,
+    levelId: E.canon(t.levelId), words: R.words.length, missed: null, skipped: true, secs: null, wpm: null, q: null, goalMet: null, missedWords: [], stars: 0 });
+  Store.saveLearner(putTrack(l, 'reading', pushUndo(Object.assign({}, t, { raDay: E.todayKey(now) }), sid, t)));
   clearInterval(raTimer); releaseScreen(); S.ra = null;
   Sfx.tap();
   goHome();
@@ -8392,12 +8555,14 @@ function viewRead() {
 
 /* ---------- parents: reading aloud record and the guide ---------- */
 function readAloudHTML(l) {
-  const list = Store.sessionsFor(l.id, 'readaloud').slice(0, 12);
-  const rows = list.map((s) => s.skipped ? '<tr><td>' + esc(fmtWhen(s.at)) + '</td><td><span class="chip">Too hard</span><div class="muted">' + esc(String(s.words)) + ' words</div></td><td>—</td><td>—</td></tr>' :
-    '<tr><td>' + esc(fmtWhen(s.at)) + '</td><td>' + (s.words - s.missed) + '/' + s.words + (s.missedWords && s.missedWords.length ? '<div class="muted">' + esc(s.missedWords.slice(0, 5).join(' · ')) + '</div>' : '') + '</td><td>' +
-    (s.secs ? ENG.math.fmtTime(s.secs) + (s.wpm ? ' · ' + s.wpm + ' wpm' : '') : '—') + '</td><td>' + (s.q == null ? '—' : s.q ? '<span class="chip chip-ok">Knew it</span>' : '<span class="chip">Not yet</span>') + (s.goalMet ? ' <span class="chip chip-ok">Goal</span>' : '') + '</td></tr>').join('');
+  const list = Store.sessionsFor(l.id, 'readaloud', { withVoided: true }).slice(0, 12);
+  /* a read saved by mistake can be voided: it comes off the record and the next read is picked as if it never happened */
+  const end = (s) => (s.voided ? '<div><span class="chip chip-void">Voided</span></div>' : '<div><button class="btn-link" data-act="voidAsk" data-kid="' + esc(l.id) + '" data-subj="readaloud" data-id="' + esc(s.id) + '">Void</button></div>');
+  const rows = list.map((s) => (s.skipped ? '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '</td><td><span class="chip">Too hard</span><div class="muted">' + esc(String(s.words)) + ' words</div></td><td>—</td><td>—' + end(s) + '</td></tr>' :
+    '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '</td><td>' + (s.words - s.missed) + '/' + s.words + (s.missedWords && s.missedWords.length ? '<div class="muted">' + esc(s.missedWords.slice(0, 5).join(' · ')) + '</div>' : '') + '</td><td>' +
+    (s.secs ? ENG.math.fmtTime(s.secs) + (s.wpm ? ' · ' + s.wpm + ' wpm' : '') : '—') + '</td><td>' + (s.q == null ? '—' : s.q ? '<span class="chip chip-ok">Knew it</span>' : '<span class="chip">Not yet</span>') + (s.goalMet ? ' <span class="chip chip-ok">Goal</span>' : '') + end(s) + '</td></tr>')).join('');
   const rt = trackOf(l, 'reading'), wait = raGateOn(rt) ? '<p class="sub"><b>Waiting to move up:</b> ' + esc(l.name) + ' has passed the sheets on ' + esc(ENG.reading.BY[rt.raGate.level].name) + '. A Read to me with at least 5 of 6 words right moves ' + esc(l.name) + ' up.</p>' : '';
-  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. “Too hard for now” saves it as too hard, and the next one comes from an easier set. At the word levels, moving up waits for a Read to me with at least 5 of 6 words right, since the picture sheets can be passed from a letter or two. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute.</p>' + wait +
+  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. “Too hard for now” saves it as too hard, and the next one comes from an easier set. At the word levels, moving up waits for a Read to me with at least 5 of 6 words right, since the picture sheets can be passed from a letter or two. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute. Done and Too hard ask a grown-up’s × question first. A read saved by mistake can be voided: it comes off the record and the next read is picked as if it never happened.</p>' + wait +
     (rows ? '<div class="table-wrap"><table class="hist"><thead><tr><th>When</th><th>Words right</th><th>Time</th><th>Question</th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="sub">Nothing read aloud yet.</p>') +
     '<div class="actions"><button class="btn btn-glass btn-small" data-act="raNow" data-kid="' + esc(l.id) + '">Start a read-aloud now</button></div></section>';
 }
@@ -8413,10 +8578,10 @@ function guideHTML() {
     li('<b>Reading follows Kumon’s order.</b> Pictures and rhymes, then letter sounds, words, sentences and stories. From Kumon 2A the sheets cover naming, action and describing words, word order and riddles; at AI, stories with several questions each; at AII, the order of events.') +
     '</ul></section></div><div class="panels"><section class="glass panel guide"><h3>Your part, about 5 minutes a day</h3><ol>' +
     li('<b>Sit nearby.</b> At the earliest levels the example screen tells you what to show first.') +
-    li('<b>Listen to the read-aloud.</b> After the reading sheets, tap Start as they begin, tap any word they misread, skip or need help with, then tap Done. Ask the question at the end.') +
+    li('<b>Listen to the read-aloud.</b> After the reading sheets, tap Start as they begin, tap any word they misread, skip or need help with, then tap Done and answer the × question. Ask the question at the end.') +
     li('<b>Read a book together every day.</b> Parents → Reading → Books has books for each Kumon level. Mark the ones you have, tap “Read today” after reading one (+2 stars), and aim for a book a day.') +
     li('<b>Keep the paper handwriting.</b> The app uses a number pad, so writing numbers (Kumon 4A) and letters stays on paper.') +
-    li('<b>Check Progress now and then.</b> Trouble spots shows the facts that keep coming back. The app steps back a level by itself after two weak sheets in a row.') +
+    li('<b>Check Progress now and then.</b> Trouble spots shows the facts that keep coming back. The app moves levels by itself, and Level changes lists each move with Undo. A sheet or read saved by mistake can be voided after your × question, and it is done again.') +
     '</ol></section></div></div>';
 }
 
@@ -8838,9 +9003,11 @@ function confirmBuy() {
 }
 
 /* ---------- overlays ---------- */
-function openGate(then) {
+/* The grown-ups' × question: opens Parents, and stands in front of anything a stray tap shouldn't do
+   (finishing a reading, voiding a sheet). `why` says what answering does. */
+function openGate(then, why) {
   const a = 6 + Math.floor(Math.random() * 4), b = 6 + Math.floor(Math.random() * 4);
-  S.overlay = { type: 'gate', a, b, input: '', then, msg: '' };
+  S.overlay = { type: 'gate', a, b, input: '', then, msg: '', why: why || 'Answer to open Parents.' };
   render();
 }
 function gateKey(k) {
@@ -8863,7 +9030,7 @@ function overlayHTML() {
     for (let i = 1; i <= 9; i++) keys += '<button class="key" data-act="gkey" data-k="' + i + '">' + i + '</button>';
     keys += '<button class="key" data-act="gkey" data-k="back" aria-label="Delete">' + ICON.del + '</button><button class="key" data-act="gkey" data-k="0">0</button><button class="key key-ok" data-act="gkey" data-k="ok">Enter</button>';
     return '<div class="overlay" role="dialog" aria-modal="true" aria-labelledby="gateTitle"><div class="dialog glass"><h2 id="gateTitle">For grown-ups</h2>' +
-      '<p>Answer to open Parents.' + (o.msg ? ' ' + esc(o.msg) : '') + '</p><div class="gate-q">' + o.a + ' × ' + o.b + ' = ?</div>' +
+      '<p>' + esc(o.why || 'Answer to open Parents.') + (o.msg ? ' ' + esc(o.msg) : '') + '</p><div class="gate-q">' + o.a + ' × ' + o.b + ' = ?</div>' +
       '<div class="gate-ans" aria-live="polite">' + esc(o.input) + '</div><div class="keypad">' + keys + '</div><button class="btn btn-glass" data-act="closeOverlay">Cancel</button></div></div>';
   }
   if (o.type === 'buy') {
@@ -8884,7 +9051,7 @@ function overlayHTML() {
 function fmtWhen(iso) { try { return new Date(iso).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); } catch (e) { return iso; } }
 function levelOptions(E, selected) {
   return E.STAGES.map((st) => '<optgroup label="' + esc(st.name) + '">' +
-    E.LEVELS.filter((l) => l.stage === st.id).map((l) => '<option value="' + l.id + '"' + (l.id === selected ? ' selected' : '') + '>' + (E.levelIndex(l.id) + 1) + '. ' + esc(l.name) + ' · ' + esc(E.groupLabel(l.group)) + '</option>').join('') + '</optgroup>').join('');
+    E.LEVELS.filter((l) => l.stage === st.id).map((l) => '<option value="' + l.id + '"' + (l.id === selected ? ' selected' : '') + '>' + (E.levelIndex(l.id) + 1) + '. ' + esc(l.name) + ' · ' + esc(gradeLabel(E.C.key, l.id, true)) + '</option>').join('') + '</optgroup>').join('');
 }
 function opt(v, label, cur) { return '<option value="' + esc(v) + '"' + (String(v) === String(cur) ? ' selected' : '') + '>' + esc(label) + '</option>'; }
 function statsHTML(E, t, sessions) {
@@ -8895,8 +9062,9 @@ function statsHTML(E, t, sessions) {
   const timedRecent = last10.filter((s) => s.timed !== false);
   const pace = timedRecent.length ? Math.round(100 * timedRecent.reduce((a, s) => a + s.secs / s.target, 0) / timedRecent.length) : null;
   const passed = last10.filter((s) => s.pass).length, plan = E.todayPlan(t);
+  const today = E.todayKey(), passedToday = sheets.filter((s) => s.pass && E.todayKey(new Date(s.at)) === today).length;
   const cell = (b, span) => '<div class="stat"><b>' + b + '</b><span>' + span + '</span></div>';
-  return '<div class="stats">' + cell(plan.done + '/' + plan.total, 'sheets today') + cell(E.currentStreak(t), 'day streak') + cell(week, 'sheets in 7 days') +
+  return '<div class="stats">' + cell(plan.done + '/' + plan.total, 'sheets today, ' + passedToday + ' passed') + cell(E.currentStreak(t), 'day streak') + cell(week, 'sheets in 7 days') +
     cell(last10.length ? passed + '/' + last10.length : '—', 'passed, last 10') + cell(acc == null ? '—' : acc + '%', 'first-try accuracy') + cell(pace == null ? '—' : pace + '%', 'time vs target, timed sheets') + '</div>';
 }
 function ladderHTML(E, t) {
@@ -8915,19 +9083,22 @@ function troubleHTML(E, t, sessions) {
   return '<section class="glass panel"><h3>Trouble spots</h3>' + (rows ? '<p class="sub">These come back in the next sheets until they’re right twice in a row.</p><div class="trouble">' + rows + '</div>' : '<p class="sub">Nothing missed is waiting for review.</p>') +
     (chips ? '<p class="sub">Kinds of mistakes, last 20 sheets</p><div class="chips">' + chips + '</div>' : '') + '</section>';
 }
-function historyHTML(E, sessions) {
+function historyHTML(E, sessions, kidId) {
   if (!sessions.length) return '<section class="glass panel"><h3>Sheets</h3><p class="sub">Finished sheets show up here with score, time, fixes and stars.</p></section>';
+  const subj = E.C.key;
   const rows = sessions.slice(0, 30).map((s) => {
     const lv = E.BY[s.levelId];
     if (s.kind === 'placement') return '<tr><td>' + esc(fmtWhen(s.at)) + '</td><td colspan="4">Placement check → ' + esc(lv ? lv.name : '') + '</td></tr>';
     const isTest = s.kind === 'test';
-    const res = s.pass ? '<span class="chip chip-ok">' + (isTest ? 'Test passed' : s.boost ? 'Passed ×2' : 'Passed') + '</span>' : '<span class="chip">' + (isTest ? 'Test not passed' : 'Repeat') + '</span>';
-    const change = s.change === 'up' ? ' <span class="chip chip-ok">Level up</span>' : s.change === 'back' ? ' <span class="chip chip-warn">Review</span>' : s.change === 'return' ? ' <span class="chip chip-ok">Back up</span>' : s.change === 'test' ? ' <span class="chip chip-warn">Test next</span>' : '';
+    const res = s.voided ? '<span class="chip chip-void">Voided</span>' : s.pass ? '<span class="chip chip-ok">' + (isTest ? 'Test passed' : s.boost ? 'Passed ×2' : 'Passed') + ' ✓</span>' : '<span class="chip">' + (isTest ? 'Test not passed' : 'Repeat') + '</span>';
+    const change = s.voided ? '' : (s.change === 'up' ? ' <span class="chip chip-ok">Level up</span>' : s.change === 'back' ? ' <span class="chip chip-warn">Review</span>' : s.change === 'return' ? ' <span class="chip chip-ok">Back up</span>' : s.change === 'test' ? ' <span class="chip chip-warn">Test next</span>' : '') +
+      (s.undoneAt ? ' <span class="chip">Move undone</span>' : '') + (s.rushed ? ' <span class="chip chip-warn">Rushed</span>' : '');
     const fix = s.wrong ? (s.fixed ? 'Fixed in ' + E.fmtTime(s.fixSecs || 0) : 'Not fixed') : '—';
     const missed = s.missed && s.missed.length ? '<div class="muted">' + esc(s.missed.slice(0, 4).join(' · ')) + (s.missed.length > 4 ? ' …' : '') + '</div>' : '';
-    const levelCell = isTest ? 'Level test · ' + esc(E.groupLabel(s.group || '')) : esc(lv ? lv.short : s.levelId);
+    const levelCell = isTest ? 'Level test · ' + esc(groupGradeLabel(subj, s.group || '', true)) : esc(lv ? lv.short : s.levelId);
     const timeCell = E.fmtTime(s.secs) + (s.timed === false ? ' (untimed)' : ' / ' + E.fmtTime(s.target));
-    return '<tr><td>' + esc(fmtWhen(s.at)) + '</td><td>' + levelCell + '</td><td>' + (s.n - s.wrong) + '/' + s.n + missed + '</td><td>' + timeCell + '</td><td>' + res + change + '<div class="muted">' + fix + (s.stars ? ' · +' + s.stars + ' stars' : '') + '</div></td></tr>';
+    const act = s.voided ? '' : '<button class="btn-link" data-act="voidAsk" data-kid="' + esc(kidId) + '" data-subj="' + subj + '" data-id="' + esc(s.id) + '">Void</button>';
+    return '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '</td><td>' + levelCell + '</td><td>' + (s.n - s.wrong) + '/' + s.n + missed + '</td><td>' + timeCell + '</td><td>' + res + change + '<div class="muted">' + fix + (s.stars && !s.voided ? ' · +' + s.stars + ' stars' : '') + '</div>' + act + '</td></tr>';
   }).join('');
   return '<section class="glass panel"><h3>Sheets</h3><div class="table-wrap"><table class="hist"><thead><tr><th>When</th><th>Level</th><th>Score</th><th>Time / target</th><th>Result</th></tr></thead><tbody>' + rows + '</tbody></table></div></section>';
 }
@@ -8949,7 +9120,7 @@ function settingsHTML(l, E, t, subj) {
     '<div class="field"><label for="f-timer">Show the timer</label><select id="f-timer" data-set="showTimer">' + opt('1', 'On', s.showTimer ? '1' : '0') + opt('0', 'Off', s.showTimer ? '1' : '0') + '</select>' +
       '<p class="help">Off hides the timer bar from the child. Time is still measured and still counts toward passing.</p></div>' + speakRow +
     '<div class="field"><label for="f-back">Step back after two weak sheets</label><select id="f-back" data-set="autoBack">' + opt('1', 'On', s.autoBack ? '1' : '0') + opt('0', 'Off', s.autoBack ? '1' : '0') + '</select>' +
-      '<p class="help">Below 70% on two sheets in a row moves to the level before for review. One pass there moves back up.</p></div>' +
+      '<p class="help">Below 70% on two sheets in a row moves to the level before for review. Passes there on two different days move back up. A rushed sheet (much faster than usual and 70% or less) doesn’t count toward a step back.</p></div>' +
     '</div></section>';
 }
 function buddyPanelHTML(l) {
@@ -8987,14 +9158,14 @@ function viewParent() {
   if (S.parentKid === '__add') body = addFormHTML();
   else {
     const l = Store.learner(S.parentKid), subj = S.parentSubj, E = ENG[subj], t = trackOf(l, subj), lv = E.BY[t.levelId] || E.LEVELS[0], s = E.settingsOf(t);
-    const sessions = Store.sessionsFor(l.id, subj);
+    const sessions = Store.sessionsFor(l.id, subj), withVoided = Store.sessionsFor(l.id, subj, { withVoided: true });
     const seg = '<div class="seg">' + SUBJECTS.map((x) => '<button class="' + (x.key === subj ? 'on' : '') + '" style="--acc:' + x.acc + '" data-act="psub" data-subj="' + x.key + '">' + x.name + '</button>').join('') + '</div>';
     const flags = [];
-    if (t.testFor) flags.push('<span class="chip chip-warn">' + (t.testWait ? 'Level test missed: one practice sheet, then retake' : esc(E.groupLabel(t.testFor)) + ' level test is next') + '</span>');
-    if (t.backFrom) flags.push('<span class="chip chip-warn">Reviewing ' + esc(lv.short) + ', back to ' + esc(E.BY[t.backFrom].short) + ' after one pass</span>');
+    if (t.testFor) flags.push('<span class="chip chip-warn">' + (t.testWait ? 'Level test missed: one practice sheet, then retake' : esc(groupGradeLabel(subj, t.testFor)) + ' level test is next') + '</span>');
+    if (t.backFrom && E.BY[t.backFrom]) flags.push('<span class="chip chip-warn chip-wrap">Reviewing ' + esc(lv.short) + '. Back to ' + esc(E.BY[t.backFrom].short) + ' after passes on two different days (' + Math.min(2, (t.runDays || []).length) + ' of 2)</span>');
     else if ((t.lowRun || 0) >= 1) flags.push('<span class="chip chip-bad">Last sheet under 70%</span>');
     const overview = '<section class="glass panel" style="--acc:' + SUBJ[subj].acc + '"><div class="kid-row" style="justify-content:space-between"><h3>' + esc(lv.name) + '</h3><span class="sub-chip">' + SUBJ[subj].name + '</span></div>' +
-      '<p class="sub">Level ' + (E.levelIndex(lv.id) + 1) + ' of ' + E.LEVELS.length + ' · ' + esc(E.STAGE_NAME[lv.stage]) + ' · closest to ' + esc(E.groupLabel(lv.group)) + (lv.timed ? '' : ' (untimed)') + ' · ' + Math.min(t.passes || 0, s.toAdvance) + ' of ' + s.toAdvance + ' passes to move up</p>' +
+      '<p class="sub">Level ' + (E.levelIndex(lv.id) + 1) + ' of ' + E.LEVELS.length + ' · ' + esc(E.STAGE_NAME[lv.stage]) + ' · ' + esc(gradeLabel(subj, lv.id)) + (lv.timed ? '' : ' · untimed') + (t.backFrom ? '' : ' · ' + Math.min(t.passes || 0, s.toAdvance) + ' of ' + s.toAdvance + ' passes to move up') + '</p>' +
       (flags.length ? '<div class="chips">' + flags.join('') + '</div>' : '') + statsHTML(E, t, sessions) + ladderHTML(E, t) + '</section>';
     const level = '<section class="glass panel"><h3>Level</h3><div class="form"><div class="field"><label for="f-level">Current level</label><select id="f-level" data-set="levelId">' + levelOptions(E, t.levelId) + '</select></div></div>' +
       '<p class="sub">Changing the level resets passes at that level. The placement check takes about 5–8 minutes and suggests a start just below what your child can already do, as Kumon does.</p>' +
@@ -9010,8 +9181,8 @@ function viewParent() {
     else if (sec === 'settings') inner = '<div class="panels two"><div class="panels">' + level + settingsHTML(l, E, t, subj) + '</div><div class="panels">' + buddyPanelHTML(l) + devicePanelHTML() + '</div></div>';
     else if (sec === 'guide') inner = guideHTML();
     else if (sec === 'books') inner = booksHTML(l);
-    else inner = '<div class="panels two"><div class="panels">' + overview + levelChartHTML(subj, E, t, sessions, l) + worksheetGridHTML(subj, E, sessions) + '</div><div class="panels">' + loadPanelHTML(l) + (subj === 'reading' ? readAloudHTML(l) + booksSummaryHTML(l) : '') + studyCalendarHTML(l) + troubleHTML(E, t, sessions) +
-      '<details class="glass panel more"><summary><h3 style="display:inline">All sheets as a table</h3></summary>' + historyHTML(E, sessions).replace(/^<section class="glass panel">/, '<div>').replace(/<\/section>$/, '</div>') + '</details></div></div>';
+    else inner = '<div class="panels two"><div class="panels">' + changesHTML(l) + overview + levelChartHTML(subj, E, t, sessions, l) + worksheetGridHTML(subj, E, sessions) + '</div><div class="panels">' + loadPanelHTML(l) + (subj === 'reading' ? readAloudHTML(l) + booksSummaryHTML(l) : '') + studyCalendarHTML(l) + troubleHTML(E, t, sessions) +
+      '<details class="glass panel more"><summary><h3 style="display:inline">All sheets as a table</h3></summary>' + historyHTML(E, withVoided, l.id).replace(/^<section class="glass panel">/, '<div>').replace(/<\/section>$/, '</div>') + '</details></div></div>';
     body = '<div class="kid-row parent-nav">' + seg + secTabs + '</div>' + inner;
   }
   const where = Store.backend === 'site' ? 'Progress is stored in your family’s private folder and syncs across your devices.' : Store.mode === 'db' ? 'Progress is stored with this page in Claude. The kids’ website copies it every hour from 3pm to 10pm.' : Store.mode === 'local' ? 'Progress is stored in this browser only.' : '';
@@ -9028,8 +9199,13 @@ function setLearnerField(key, raw) {
   else {
     const subj = S.parentSubj, E = ENG[subj], t = trackOf(l, subj), s = E.settingsOf(t);
     const nt = Object.assign({}, t, { settings: Object.assign({}, s) });
-    if (key === 'levelId') { if (!E.BY[raw]) return; Object.assign(nt, { levelId: raw, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '' }); }
-    else if (key === 'sheetLen') { const n = parseInt(raw, 10); nt.settings.sheetLen = n; nt.settings.allowed = Math.floor(n / 10); nt.planDay = ''; msg = 'Saved. Misses allowed set to ' + nt.settings.allowed + ' to keep the bar at ' + Math.round(100 * (n - nt.settings.allowed) / n) + '%'; }
+    if (key === 'levelId') { if (!E.BY[raw]) return; Object.assign(nt, { levelId: raw, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', raGate: null, undo: [] }); }
+    else if (key === 'sheetLen') {
+      /* a new sheet length keeps the same pass bar: 100% stays 100%, 90% stays about 90% */
+      const n = parseInt(raw, 10), share = s.sheetLen ? (s.allowed || 0) / s.sheetLen : 0;
+      nt.settings.sheetLen = n; nt.settings.allowed = Math.floor(n * share + 1e-9); nt.planDay = '';
+      msg = nt.settings.allowed ? 'Saved. Misses allowed set to ' + nt.settings.allowed + ' to keep the bar at ' + Math.round(100 * (n - nt.settings.allowed) / n) + '%' : 'Saved. Still no misses allowed (100% to pass)';
+    }
     else if (key === 'allowed' || key === 'toAdvance') nt.settings[key] = parseInt(raw, 10);
     else if (key === 'dailyMin') { nt.settings.dailyMin = parseInt(raw, 10); nt.planDay = ''; }
     else if (key === 'sheetsDay') { nt.settings.sheetsDay = parseInt(raw, 10); nt.planDay = ''; }
@@ -9051,6 +9227,120 @@ function addKid() {
   Store.saveLearner({ id, name, color: f.color, levelId: f.levelId, passes: 0, lowRun: 0, backFrom: '', sheets: 0, passed: 0, dayStreak: 0, lastDay: '', order, review: {},
     settings: Object.assign({}, ENG.math.DEFAULTS), createdAt: new Date().toISOString(), buddy: Buddy.fresh() });
   S.addForm = null; S.parentKid = id; render(); toast(name + ' added');
+}
+
+/* ---------- voiding a sheet or read, undoing a level change ---------- */
+/* log kinds: 'math', 'reading', 'clock' (sheets) and 'readaloud' (reads, which belong to reading) */
+const trackKey = (kind) => (kind === 'readaloud' ? 'reading' : kind);
+const findSession = (kidId, kind, sid) => Store.sessionsFor(kidId, kind, { withVoided: true }).find((x) => x.id === sid) || null;
+/* The newest sheet or read of a subject is undone fully from the state saved before it (level, passes,
+   review deck, the day's count). An older one only comes off the record, because newer work built on
+   it; if it was today, the day's count drops by one so it is done again. Stars it earned are taken
+   back quietly: no message to the child and no animation. */
+function voidPlan(kidId, kind, sid) {
+  const l = Store.learner(kidId), s = findSession(kidId, kind, sid);
+  if (!l || !s || s.voided) return null;
+  const t = trackOf(l, trackKey(kind)), st = t.undo || [], top = st[st.length - 1], tk = ENG.math.todayKey();
+  const today = ENG.math.todayKey(new Date(s.at)) === tk;
+  const counted = kind === 'readaloud' ? t.raDay === tk : t.lastDay === tk && (t.dayCount || 0) > 0;
+  return { l, s, t, full: !!(top && top.sid === sid), today, counted };
+}
+function askVoid(kidId, kind, sid) {
+  const v = voidPlan(kidId, kind, sid);
+  if (!v) return;
+  const s = v.s, name = v.l.name, read = kind === 'readaloud';
+  const what = read ? 'Read to me' : s.kind === 'test' ? SUBJ[kind].name.toLowerCase() + ' level test' : SUBJ[kind].name.toLowerCase() + ' sheet';
+  const score = read ? (s.skipped ? 'too hard' : (s.words - s.missed) + ' of ' + s.words + ' words') : (s.n - s.wrong) + ' of ' + s.n;
+  let effect = v.full
+    ? 'It comes off the record, and everything it changed (level, passes, the day’s count) goes back to before it.' + (v.today ? ' ' + name + ' does it again.' : '')
+    : 'It comes off the record. Newer ' + (read ? 'reads' : 'sheets') + ' came after it, so the level and passes stay as they are.' + (v.today && v.counted ? ' ' + name + ' does one more today.' : '');
+  if (s.stars) effect += ' The ' + s.stars + ' stars it earned are taken back.';
+  Sfx.tap();
+  openGate(() => doVoid(kidId, kind, sid), 'Void ' + name + '’s ' + what + ' from ' + fmtWhen(s.at) + ' (' + score + ')? ' + effect + ' Answer to void it.');
+}
+function doVoid(kidId, kind, sid) {
+  const v = voidPlan(kidId, kind, sid);
+  if (!v) { render(); return; }
+  const now = new Date();
+  let t = v.t;
+  if (v.full) {
+    const st = t.undo.slice(), top = st.pop(), rev = Object.assign({}, t.review || {});
+    Object.keys(top.rev || {}).forEach((k) => { if (top.rev[k]) rev[k] = top.rev[k]; else delete rev[k]; });
+    t = Object.assign({}, t, top.snap, { review: rev, undo: st });
+  } else if (v.today && v.counted) {
+    t = kind === 'readaloud' ? Object.assign({}, t, { raDay: '', raCount: Math.max(0, (t.raCount || 0) - 1) }) : Object.assign({}, t, { dayCount: Math.max(0, (t.dayCount || 0) - 1) });
+  }
+  let l2 = putTrack(v.l, trackKey(kind), t);
+  if (v.s.stars) { const b = Buddy.of(l2); l2 = Object.assign({}, l2, { buddy: Object.assign({}, b, { stars: Math.max(0, b.stars - v.s.stars) }) }); }
+  Store.saveLearner(l2);
+  Store.updateSession(kidId, sid, v.s.at, { voided: true, voidedAt: now.toISOString(), voidUndo: v.full }, kind);
+  if (S.overlay && S.overlay.type === 'sheet') S.overlay = null;
+  render();
+  toast('Voided' + (v.full ? '. Everything it changed is back to before.' : v.today && v.counted ? '. One more to do today.' : ''));
+}
+
+/* Level changes the app made by itself in the last two weeks, newest first, for every subject. The
+   newest change in a subject can be undone while the child is still where it put them. */
+const CHANGE_DAYS = 14;
+function levelChanges(l) {
+  const since = Date.now() - CHANGE_DAYS * 86400000, out = [];
+  ['math', 'reading', 'clock', 'readaloud'].forEach((kind) => {
+    Store.sessionsFor(l.id, kind).forEach((s) => {
+      if (['up', 'back', 'return'].indexOf(s.change) < 0 || !s.to || new Date(s.at).getTime() < since) return;
+      out.push({ kind, subj: trackKey(kind), s, from: kind === 'readaloud' ? s.from : s.levelId, to: s.to, change: s.change });
+    });
+  });
+  out.sort((a, b) => String(b.s.at).localeCompare(String(a.s.at)));
+  const seen = {};
+  out.forEach((c) => {
+    if (seen[c.subj]) return;
+    seen[c.subj] = true;
+    const E = ENG[c.subj], t = trackOf(l, c.subj), at = E.canon(t.levelId) === E.canon(c.to), back = t.backFrom ? E.canon(t.backFrom) : '';
+    c.canUndo = !c.s.undoneAt && at && (c.change === 'back' ? back === E.canon(c.from) : !back);
+  });
+  return out;
+}
+function changeText(c) {
+  const E = ENG[c.subj], nm = (id) => (E.BY[id] ? E.BY[id].name : id);
+  if (c.change === 'up') return { head: 'Moved up', line: nm(c.from) + ' → ' + nm(c.to) + (c.kind === 'readaloud' ? ', after reading aloud' : c.s.kind === 'test' ? ', after passing the level test' : '') };
+  if (c.change === 'back') return { head: 'Stepped back for review', line: nm(c.from) + ' → ' + nm(c.to) + ', after two sheets under 70%' };
+  return { head: 'Back up after review', line: nm(c.from) + ' → ' + nm(c.to) };
+}
+function changesHTML(l) {
+  const list = levelChanges(l);
+  if (!list.length) return '';
+  const rows = list.slice(0, 8).map((c) => {
+    const tx = changeText(c);
+    const end = c.s.undoneAt ? '<span class="chip">Undone</span>' : c.canUndo ? '<button class="btn btn-glass btn-small" data-act="undoChange" data-kid="' + esc(l.id) + '" data-subj="' + c.kind + '" data-id="' + esc(c.s.id) + '">Undo</button>' : '';
+    return '<div class="chg-row"><div><b>' + SUBJ[c.subj].name + ': ' + esc(tx.head) + '</b> <span class="muted">' + esc(fmtWhen(c.s.at)) + '</span><p>' + esc(tx.line) + '</p></div>' + end + '</div>';
+  }).join('');
+  return '<section class="glass panel"><h3>Level changes</h3><p class="sub">The app moves levels by itself, the way a Kumon instructor would. Undo puts the newest change in a subject back; passes there start again from 0.</p><div class="chg-list">' + rows + '</div></section>';
+}
+function askUndoChange(kidId, kind, sid) {
+  const l = Store.learner(kidId);
+  if (!l) return;
+  const c = levelChanges(l).find((x) => x.s.id === sid && x.kind === kind);
+  if (!c || !c.canUndo) { toast('That change can’t be undone now'); render(); return; }
+  const E = ENG[c.subj];
+  const body = c.change === 'return'
+    ? l.name + ' goes back to ' + E.BY[c.from].name + ' for more review. Passes there on two different days move back up to ' + E.BY[c.to].name + '.'
+    : l.name + ' goes back to ' + E.BY[c.from].name + '. Passes there start again from 0.';
+  Sfx.tap();
+  confirmBox('Undo this level change?', body, 'Undo', () => doUndoChange(kidId, kind, sid));
+}
+function doUndoChange(kidId, kind, sid) {
+  const l = Store.learner(kidId);
+  if (!l) return;
+  const c = levelChanges(l).find((x) => x.s.id === sid && x.kind === kind);
+  if (!c || !c.canUndo) { render(); return; }
+  const t = trackOf(l, c.subj), run = { passes: 0, runDays: [], lastBoost: false, lowRun: 0, undo: [] };
+  let nt;
+  if (c.change === 'up') nt = Object.assign({}, t, run, { levelId: c.from, testFor: '', testWait: false, backFrom: '', raGate: null });
+  else if (c.change === 'back') nt = Object.assign({}, t, run, { levelId: c.from, backFrom: '' });
+  else nt = Object.assign({}, t, run, { levelId: c.from, backFrom: c.to });
+  Store.saveLearner(putTrack(l, c.subj, nt));
+  Store.updateSession(kidId, sid, c.s.at, { undoneAt: new Date().toISOString() }, kind);
+  render(); toast(l.name + ' is back on ' + ENG[c.subj].BY[c.from].short);
 }
 
 /* ---------- render ---------- */
@@ -9130,6 +9420,8 @@ document.addEventListener('click', (e) => {
     case 'placeRate': if (S.place) { const ta = document.getElementById('placeNote'); if (ta) S.place.note = ta.value; S.place.rating = t.getAttribute('data-r'); Sfx.tap(); render(); } break;
     case 'placeSave': { const ta = document.getElementById('placeNote'); if (ta && S.place) S.place.note = ta.value; savePlaceRating(); break; }
     case 'sheetInfo': S.overlay = { type: 'sheet', kid: S.parentKid, id: t.getAttribute('data-id') }; Sfx.tap(); render(); break;
+    case 'voidAsk': askVoid(t.getAttribute('data-kid'), t.getAttribute('data-subj'), t.getAttribute('data-id')); break;
+    case 'undoChange': askUndoChange(t.getAttribute('data-kid'), t.getAttribute('data-subj'), t.getAttribute('data-id')); break;
     case 'checkPlay': startSheet(S.checkDone.kid, S.checkDone.subj); break;
     case 'placeNext': {
       const l = Store.learner(S.parentKid), subj = S.parentSubj;
@@ -9208,7 +9500,7 @@ document.addEventListener('click', (e) => {
       const l = Store.learner(S.parentKid), subj = S.parentSubj, E = ENG[subj];
       if (l) confirmBox('Reset ' + l.name + '’s ' + SUBJ[subj].name.toLowerCase() + '?', 'The level goes back to the start of its stage; passes and the review deck clear. History, stars and buddy stay.', 'Reset', () => {
         const t2 = trackOf(l, subj), first = E.LEVELS.find((x) => x.stage === (E.BY[t2.levelId] || E.LEVELS[0]).stage);
-        Store.saveLearner(putTrack(l, subj, Object.assign({}, t2, { levelId: first.id, passes: 0, lowRun: 0, backFrom: '', review: {}, testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '' }))); render(); toast('Progress reset');
+        Store.saveLearner(putTrack(l, subj, Object.assign({}, t2, { levelId: first.id, passes: 0, lowRun: 0, backFrom: '', review: {}, testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', raGate: null, undo: [] }))); render(); toast('Progress reset');
       }, true);
       break;
     }
