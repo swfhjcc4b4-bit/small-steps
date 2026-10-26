@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261026212607";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261026231814";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1128,6 +1128,12 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .read-list .muted { font-size: 13px; }
 .mini-x { width: 36px; height: 36px; min-height: 0; flex: none; }
 .mini-x svg { width: 16px; height: 16px; }
+/* "We read a book" on a child's card, with today's count */
+.book-btn { position: relative; }
+.book-btn svg { width: 20px; height: 20px; flex: none; }
+.book-n { position: absolute; top: -6px; right: -4px; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: var(--gold); color: var(--gold-ink); font-style: normal; font-size: 13px; font-weight: 900; display: grid; place-items: center; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); }
+.bq-how { display: flex; flex-wrap: wrap; border-radius: 22px; }
+.bq-how button { flex: 1 1 auto; }
 </style>
 <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div><canvas id="fx" aria-hidden="true"></canvas><div id="app"></div>
 <script>
@@ -2364,7 +2370,123 @@ const ReadingCurriculum = (() => {
     ['I have many colors. I come out after the rain.', 'rainbow', ['cloud', 'sun', 'tree']],
     ['You can sit on me. I have four legs, but I cannot walk.', 'chair', ['dog', 'cat', 'car']],
     ['I keep your hands warm. I have five fingers.', 'glove', ['hat', 'shoe', 'sock']],
-    ['I am a big cat. I have a mane. I roar.', 'lion', ['cat', 'dog', 'cow']]
+    ['I am a big cat. I have a mane. I roar.', 'lion', ['cat', 'dog', 'cow']],
+    /* more riddles (October 26), so a child on this level rarely meets the same one twice in a week */
+    ['I have four legs and a long tail. I say meow. I like to chase mice.', 'cat', ['dog', 'cow', 'duck']],
+    ['I have a curly tail. I say oink. I like to roll in the mud.', 'pig', ['cow', 'dog', 'horse']],
+    ['I live on a farm. I lay eggs. I say cluck, cluck.', 'hen', ['duck', 'cow', 'owl']],
+    ['I am a bird. I stay up all night. I say hoo, hoo.', 'owl', ['duck', 'hen', 'bat']],
+    ['I am big and furry. I sleep all winter. I love to eat honey.', 'bear', ['lion', 'cow', 'pig']],
+    ['I am a big wild cat. My orange fur has black stripes.', 'tiger', ['lion', 'zebra', 'cat']],
+    ['I am big and fast. You can ride on my back. I say neigh.', 'horse', ['cow', 'pig', 'dog']],
+    ['My coat is soft white wool. I say baa. I live on a farm.', 'sheep', ['cow', 'pig', 'horse']],
+    ['I have horns and a little beard. I can climb up rocks. I say maa.', 'goat', ['cow', 'pig', 'horse']],
+    ['I have no legs. I am long and thin. I hiss as I slide on the ground.', 'snake', ['snail', 'frog', 'cat']],
+    ['I am the biggest animal in the sea. I blow water out of the top of my head.', 'whale', ['shark', 'crab', 'octopus']],
+    ['I live in the sea. I have lots of sharp teeth. A fin sticks up from my back.', 'shark', ['crab', 'octopus', 'turtle']],
+    ['I live by the sea. I walk sideways. I have two big claws.', 'crab', ['turtle', 'fish', 'snail']],
+    ['I live in the sea. I have eight long arms. I can squirt ink.', 'octopus', ['spider', 'crab', 'fish']],
+    ['I am a bird, but I cannot fly. I am black and white. I swim in icy water.', 'penguin', ['duck', 'owl', 'zebra']],
+    ['I live in the trees. I swing from branch to branch. I love to eat bananas.', 'monkey', ['elephant', 'lion', 'frog']],
+    ['I am a baby bird. I am small, soft and yellow. I say peep, peep.', 'chick', ['owl', 'bee', 'penguin']],
+    ['I live in the cold sea. I have flippers and whiskers. I can bark and clap.', 'seal', ['penguin', 'fish', 'dog']],
+    ['I look like a big dog. I live in the woods. I howl at the moon.', 'wolf', ['bear', 'cat', 'lion']],
+    ['I am a bear. I am black and white. I munch on bamboo all day.', 'panda', ['zebra', 'penguin', 'cow']],
+    ['I am a big white bird with a long neck. I glide on the lake.', 'swan', ['duck', 'owl', 'hen']],
+    ['I float on my back in the sea. I use a rock to crack open shells.', 'otter', ['fish', 'frog', 'turtle']],
+    ['I am black with a white stripe down my back. If you scare me, I make a big stink!', 'skunk', ['zebra', 'panda', 'cat']],
+    ['I have big, bright wings. I was a caterpillar before. I sip from flowers.', 'butterfly', ['bee', 'bird', 'ladybug']],
+    ['I am a little red bug with black spots. I can fly.', 'ladybug', ['ant', 'bee', 'spider']],
+    ['I am very small. I live with lots of friends in a hill of dirt. I can carry a big crumb.', 'ant', ['bee', 'spider', 'snail']],
+    ['I can fly, but I am not a bird. I sleep upside down all day.', 'bat', ['owl', 'bee', 'butterfly']],
+    ['I am red with a big bushy tail. I am quick and clever. I live in the woods.', 'fox', ['dog', 'cat', 'lion']],
+    ['I have feathers and wings. I build a nest in a tree. I sing in the morning.', 'bird', ['bee', 'bat', 'butterfly']],
+    ['I am a green fruit. I am round at the bottom and thin at the top.', 'pear', ['apple', 'grapes', 'banana']],
+    ['I am small, round and red. I have a long stem. There is a pit inside me.', 'cherry', ['apple', 'grapes', 'strawberry']],
+    ['I am yellow. I grow in rows on a tall plant. You eat me off the cob.', 'corn', ['banana', 'carrot', 'apple']],
+    ['I am made from wheat. I come in a loaf. You need two slices of me to make a sandwich.', 'bread', ['cake', 'egg', 'cheese']],
+    ['I am made from milk. I can be yellow with holes. Mice like me.', 'cheese', ['bread', 'egg', 'cake']],
+    ['I am round and flat. I have cheese and red sauce on top. You eat me in slices.', 'pizza', ['pie', 'cake', 'cookie']],
+    ['I am round and sweet. I can have chocolate chips. I taste good with milk.', 'cookie', ['pizza', 'apple', 'egg']],
+    ['I am white. I come from a cow. You drink me from a glass.', 'milk', ['juice', 'egg', 'cheese']],
+    ['I am made from fruit. You drink me with a straw.', 'juice', ['milk', 'pizza', 'bread']],
+    ['I am sweet and soft. You put candles on me for a birthday.', 'cake', ['pizza', 'bread', 'cookie']],
+    ['I have a crust. Inside I am full of fruit. You bake me in the oven.', 'pie', ['pizza', 'cake', 'cookie']],
+    ['I am white and fluffy. I pop when I get hot. You eat me at the movies.', 'popcorn', ['rice', 'bread', 'cookie']],
+    ['I am flat and round. You eat me for breakfast with syrup on top.', 'pancake', ['pizza', 'cookie', 'egg']],
+    ['I am big and green on the outside. I am red and juicy inside. I have black seeds.', 'watermelon', ['apple', 'grapes', 'banana']],
+    ['I am a red fruit. My seeds are on the outside. I have a little green top.', 'strawberry', ['cherry', 'apple', 'grapes']],
+    ['I have spiky leaves on my head and a rough skin. Inside I am yellow and sweet.', 'pineapple', ['banana', 'apple', 'pear']],
+    ['I am long. I sit in a bun. People put mustard on me.', 'hotdog', ['pizza', 'banana', 'cake']],
+    ['I am lots of tiny white grains. You can eat me in a bowl.', 'rice', ['bread', 'egg', 'milk']],
+    ['I am a soft fruit with fuzzy skin. I have a big pit in the middle.', 'peach', ['apple', 'banana', 'grapes']],
+    ['I am a little cake in a paper cup. I have frosting on top.', 'cupcake', ['cookie', 'pie', 'pizza']],
+    ['You wear me on your head. I keep the sun off your face.', 'hat', ['shoe', 'glove', 'sock']],
+    ['I show you how to get to places. I have roads and rivers on me, but I fold up small.', 'map', ['book', 'flag', 'key']],
+    ['I am flat and made of metal. You cook eggs in me on the stove.', 'pan', ['cup', 'plate', 'bowl']],
+    ['You write with me. I use ink.', 'pen', ['book', 'scissors', 'spoon']],
+    ['I am full of holes. You can catch fish or bugs with me.', 'net', ['box', 'cup', 'hat']],
+    ['I am made of thin, sticky thread. A spider makes me to catch bugs.', 'web', ['net', 'ball', 'leaf']],
+    ['I have six flat sides. You can put things inside me and close my lid.', 'box', ['ball', 'cup', 'hat']],
+    ['I was part of a tree. Now I lie on the ground. A frog can sit on me in the pond.', 'log', ['rock', 'boat', 'chair']],
+    ['You drink from me. I can hold juice or water. I have a straw.', 'cup', ['plate', 'spoon', 'bowl']],
+    ['You sit in me to get clean. I fill up with warm water.', 'tub', ['bed', 'chair', 'boat']],
+    ['I have four wheels. I take your family to the store.', 'car', ['bike', 'boat', 'plane']],
+    ['I float on the water. People ride in me. I can have a sail.', 'boat', ['car', 'plane', 'train']],
+    ['I am very long. I run on tracks. I go choo-choo.', 'train', ['bus', 'car', 'plane']],
+    ['I am big and strong. I carry heavy things down the road.', 'truck', ['bike', 'boat', 'plane']],
+    ['I zoom up, up, up into space. Fire comes out of my bottom.', 'rocket', ['plane', 'kite', 'bird']],
+    ['I fly in the sky on a long string. I need the wind to go up.', 'kite', ['plane', 'bird', 'rocket']],
+    ['I am made of metal. I go ding-dong. I hang up high.', 'bell', ['drum', 'key', 'cup']],
+    ['I am small and made of metal. I open a lock.', 'key', ['coin', 'spoon', 'bell']],
+    ['You wear me on your foot. I go inside your shoe.', 'sock', ['shoe', 'glove', 'hat']],
+    ['You wear me when it is cold outside. I have buttons or a zipper.', 'coat', ['hat', 'shoe', 'sock']],
+    ['I am gold. A king or a queen wears me on their head.', 'crown', ['hat', 'ring', 'coin']],
+    ['You hit me with sticks. I go boom, boom!', 'drum', ['bell', 'violin', 'ball']],
+    ['I am wrapped in paper with a bow. You get me on your birthday.', 'gift', ['cake', 'book', 'ball']],
+    ['I have a door, windows and a roof. A family lives in me.', 'house', ['car', 'bus', 'tree']],
+    ['I am tall. I have a trunk, branches and leaves. Birds build nests in me.', 'tree', ['flower', 'elephant', 'house']],
+    ['I am green in the summer. I turn red or orange in the fall. Then I drop to the ground.', 'leaf', ['flower', 'star', 'ball']],
+    ['I am a tall yellow flower. I turn my face to follow the sun.', 'sunflower', ['tree', 'corn', 'carrot']],
+    ['I am brown and shaped like an egg. You throw me and catch me in a game.', 'football', ['egg', 'rock', 'shoe']],
+    ['You use me with toothpaste. I clean your teeth.', 'toothbrush', ['spoon', 'soap', 'pencil']],
+    ['I stand by the road. The mail carrier puts letters in me.', 'mailbox', ['car', 'tree', 'bus']],
+    ['I have two straps. You wear me on your back to carry books to school.', 'backpack', ['coat', 'hat', 'box']],
+    ['You wear me on your face. I keep the bright sun out of your eyes.', 'sunglasses', ['glove', 'sock', 'shoe']],
+    ['I go boom in the night sky. I make bright colors and sparkles.', 'fireworks', ['star', 'moon', 'drum']],
+    ['I have four little wheels and a flat board. You stand on me and roll.', 'skateboard', ['bike', 'car', 'sled']],
+    ['I am tiny, cold and white. I fall from the sky in winter. No two of us are the same.', 'snowflake', ['rain', 'star', 'leaf']],
+    ['I have a handle and a spout. I hold hot tea.', 'teapot', ['cup', 'bowl', 'spoon']],
+    ['I am big and red. I have a long ladder and a loud siren. I help put out fires.', 'firetruck', ['bus', 'boat', 'train']],
+    ['You sleep in me when you go camping. You set me up with poles.', 'tent', ['house', 'bed', 'car']],
+    ['I slide down snowy hills. You sit on me and hold on tight.', 'sled', ['bike', 'car', 'skateboard']],
+    ['I keep you dry in the rain. You open me up and hold me over your head.', 'umbrella', ['glove', 'sock', 'shoe']],
+    ['I have two sharp blades. I cut paper.', 'scissors', ['spoon', 'pencil', 'cup']],
+    ['You write and draw with me. I have an eraser on my end.', 'pencil', ['spoon', 'scissors', 'cup']],
+    ['You can talk to Grandma with me, even when she is far away.', 'phone', ['book', 'key', 'cup']],
+    ['I have a long handle. You use me to sweep the floor.', 'broom', ['spoon', 'umbrella', 'pencil']],
+    ['You eat soup with me. I am round at one end.', 'spoon', ['scissors', 'pencil', 'key']],
+    ['You eat cereal out of me. I am round and deep.', 'bowl', ['plate', 'spoon', 'hat']],
+    ['I have strings. You play me with a bow under your chin.', 'violin', ['drum', 'bell', 'phone']],
+    ['I go down and up on a string. You hold me in your hand.', 'yoyo', ['kite', 'ball', 'drum']],
+    ['I am white and fluffy. I float in the sky. Rain falls from me.', 'cloud', ['sun', 'star', 'popcorn']],
+    ['I am hot and orange. I crackle and pop. Never touch me!', 'fire', ['ice', 'leaf', 'rock']],
+    ['I am frozen water. I am cold and hard. I melt in your hand.', 'ice', ['rock', 'milk', 'glove']],
+    ['I light up a room. You turn me on with a switch.', 'bulb', ['sun', 'star', 'moon']],
+    ['I am hard and gray. I sit in the dirt. I never grow.', 'rock', ['tree', 'flower', 'apple']],
+    ['You find me on the beach. A sea animal used to live inside me.', 'shell', ['rock', 'ball', 'leaf']],
+    ['I wave in the wind on a tall pole. I can have stars and stripes.', 'flag', ['kite', 'tree', 'shirt']],
+    ['I have a red nose and big shoes. I make people laugh at the circus.', 'clown', ['dog', 'lion', 'elephant']],
+    ['I am small, round and made of metal. You can save me in a bank.', 'coin', ['key', 'ball', 'cookie']],
+    ['I make lots of bubbles. You use me to wash your hands.', 'soap', ['toothbrush', 'cup', 'spoon']],
+    ['You wear me on your wrist. I tell you the time.', 'watch', ['clock', 'ring', 'glove']],
+    ['I have five fingers. You wave me to say hi.', 'hand', ['foot', 'ear', 'nose']],
+    ['I have five toes. I go inside your shoe.', 'foot', ['hand', 'sock', 'ear']],
+    ['I am in the middle of your face. I help you smell.', 'nose', ['ear', 'eye', 'hand']],
+    ['You have two of me, one on each side of your head. I help you hear.', 'ear', ['eye', 'nose', 'hand']],
+    ['You have two of me. I help you see. I can blink.', 'eye', ['ear', 'nose', 'foot']],
+    ['I am white and hard. You brush me two times a day. I help you chew.', 'tooth', ['bone', 'egg', 'ice']],
+    ['I am hard and white. I am inside your body. Dogs love to chew me.', 'bone', ['egg', 'rock', 'cup']]
   ];
   function riddle() {
     const i = ri(0, RIDDLES.length - 1), [text, ans, wrong] = RIDDLES[i];
@@ -2415,7 +2537,36 @@ const ReadingCurriculum = (() => {
     ['Omar built a tower of blocks. His baby sister knocked it down. So Omar built it again, even taller.', ['Omar built a tower.', 'His sister knocked it down.', 'Omar built it again.']],
     ['First the farmer planted corn. All summer the corn grew tall. In the fall, the farmer picked it.', ['The farmer planted corn.', 'The corn grew tall.', 'The farmer picked the corn.']],
     ['The campers made a fire before they went into the tent. They cooked hot dogs on it. Later, they crawled into their sleeping bags.', ['The campers made a fire.', 'They cooked hot dogs.', 'They got in their sleeping bags.']],
-    ['Pam found a lost kitten. She took it to the vet. Then she brought it home and named it Pepper.', ['Pam found a kitten.', 'She took it to the vet.', 'She named it Pepper.']]
+    ['Pam found a lost kitten. She took it to the vet. Then she brought it home and named it Pepper.', ['Pam found a kitten.', 'She took it to the vet.', 'She named it Pepper.']],
+    /* more stories (October 26) */
+    ['Zoe got a new puppy. She named him Rocket. Then she taught him to sit.', ['Zoe got a puppy.', 'She named him Rocket.', 'She taught him to sit.']],
+    ['Before the game, Eli put on his cleats. He kicked the ball into the goal. After the game, his team ate oranges.', ['Eli put on his cleats.', 'He kicked the ball into the goal.', 'His team ate oranges.']],
+    ['Mom filled the pool with water. Then the kids put on their swimsuits. Last, they jumped in with a big splash.', ['Mom filled the pool.', 'The kids put on their swimsuits.', 'They jumped in.']],
+    ['Ray brushed his teeth after he ate breakfast. Then he got on the bus to school.', ['Ray ate breakfast.', 'Ray brushed his teeth.', 'He got on the bus.']],
+    ['The baker mixed the dough. Next, she shaped it into loaves. Then she baked the bread until it was brown.', ['The baker mixed the dough.', 'She shaped the loaves.', 'She baked the bread.']],
+    ['The tadpole swam in the pond. Slowly it grew legs. At last, it hopped out as a frog.', ['The tadpole swam in the pond.', 'It grew legs.', 'It hopped out as a frog.']],
+    ['Before dinner, Lee and his sister set the table. After dinner, they washed the dishes. Then they played a game.', ['They set the table.', 'They washed the dishes.', 'They played a game.']],
+    ['Gus planted a pumpkin seed in May. All summer, the vine grew and grew. In October, he picked a giant pumpkin.', ['Gus planted a seed.', 'The vine grew.', 'He picked a pumpkin.']],
+    ['Ivy painted a picture of the sea. She let the paint dry. Then she hung it on the wall.', ['Ivy painted a picture.', 'She let the paint dry.', 'She hung it on the wall.']],
+    ['The power went out in the storm. Dad lit a candle. When the lights came back on, everyone cheered.', ['The power went out.', 'Dad lit a candle.', 'The lights came back on.']],
+    ['Noah fell and scraped his knee. His mom washed it. Then she put a bandage on it.', ['Noah scraped his knee.', 'His mom washed it.', 'She put on a bandage.']],
+    ['Before Jada went down the slide, she climbed the ladder. At the bottom, she landed in the sand.', ['Jada climbed the ladder.', 'She went down the slide.', 'She landed in the sand.']],
+    ['The farmer milked the cow. He poured the milk into a big can. Then he drove it to town.', ['The farmer milked the cow.', 'He poured the milk into a can.', 'He drove it to town.']],
+    ['Kai found his library book under the bed after he looked everywhere else. Then he took it back to the library.', ['Kai looked everywhere.', 'He found the book under the bed.', 'He took it back to the library.']],
+    ['The puppy chewed up a shoe. Dad found the pieces. After that, he bought the puppy a chew toy.', ['The puppy chewed a shoe.', 'Dad found the pieces.', 'He bought a chew toy.']],
+    ['First, Grandma cut up the apples. Next, she cooked them in a pot. At the end, we had warm applesauce.', ['Grandma cut up the apples.', 'She cooked them in a pot.', 'We had applesauce.']],
+    ['Sara wrapped a gift for her dad. She hid it in the closet. On his birthday, she gave it to him.', ['Sara wrapped a gift.', 'She hid it in the closet.', 'She gave it to her dad.']],
+    ['The frog hopped onto a log after it caught a fly. Then it took a nap in the sun.', ['The frog caught a fly.', 'It hopped onto a log.', 'It took a nap.']],
+    ['The class rode a bus to the farm. They fed the goats. Before they left, they went on a hay ride.', ['The class rode to the farm.', 'They fed the goats.', 'They went on a hay ride.']],
+    ['Ben woke up and saw snow outside. He put on his boots and ran out. Then he made a snow angel.', ['Ben saw snow outside.', 'He put on his boots.', 'He made a snow angel.']],
+    ['Before the race, Theo tied his shoes tight. When the race began, he ran as fast as he could. He crossed the line in second place.', ['Theo tied his shoes.', 'He ran as fast as he could.', 'He crossed the line.']],
+    ['Lily cracked two eggs into a bowl. She stirred them with a fork. Then Dad cooked them in a pan.', ['Lily cracked the eggs.', 'She stirred them.', 'Dad cooked them.']],
+    ['The robin built a nest. She laid three blue eggs in it. A few weeks later, three baby birds hatched.', ['The robin built a nest.', 'She laid three eggs.', 'Baby birds hatched.']],
+    ['Max turned off the light after he finished his book. Then he fell asleep.', ['Max finished his book.', 'He turned off the light.', 'He fell asleep.']],
+    ['We drove to the beach. We set up our big umbrella. After lunch, we looked for shells.', ['We drove to the beach.', 'We set up the umbrella.', 'We looked for shells.']],
+    ['The clown juggled three balls. Then he rode a tiny bike. At the end of the show, everyone clapped.', ['The clown juggled.', 'He rode a tiny bike.', 'Everyone clapped.']],
+    ['Mia put her wet socks by the fire. When they were dry, she put them back on. Then she went out to sled again.', ['Mia put her socks by the fire.', 'She put the dry socks on.', 'She went out to sled.']],
+    ['Our cat climbed up the tall tree. Then she was too scared to come down. A firefighter used a ladder to get her.', ['The cat climbed the tree.', 'She was scared to come down.', 'A firefighter got her down.']]
   ];
   const SEQ_Q = ['What happened first?', 'What happened next?', 'What happened last?'];
   function seq() {
@@ -3104,7 +3255,50 @@ const ReadAloud = (() => {
       { text: 'The baby ducks lined up behind their mother and walked to the pond. One duckling was too busy looking at a butterfly and fell behind. It peeped and peeped. The mother duck stopped, turned around and waited. When the little duckling caught up, they all slid into the water together and paddled across the pond in a neat line.', q: 'Why did the duckling fall behind?', a: 'It was looking at a butterfly', w: ['It was sleeping', 'It was eating bread'],
         more: [['What did the mother duck do?', 'She stopped and waited', ['She flew away', 'She kept walking']], ['Where were the ducks going?', 'To the pond', ['To the barn', 'To the river']]] },
       { text: 'Sam and his dad made pancakes for Mom’s birthday. Sam cracked the eggs, and Dad mixed the batter. They made the pancakes in the shape of hearts. Sam put strawberries on top and carried the plate to Mom’s room. Mom was still sleeping, so Sam whispered, “Happy birthday!” Mom opened her eyes and smiled. She said it was the best breakfast she ever had.', q: 'What shape were the pancakes?', a: 'Hearts', w: ['Stars', 'Circles'],
-        more: [['Whose birthday was it?', 'Mom’s', ['Dad’s', 'Sam’s']], ['What did Sam put on top?', 'Strawberries', ['Blueberries', 'Bananas']]] }
+        more: [['Whose birthday was it?', 'Mom’s', ['Dad’s', 'Sam’s']], ['What did Sam put on top?', 'Strawberries', ['Blueberries', 'Bananas']]] },
+      /* more stories (October 26): a new one most days for a month at these levels */
+      { text: 'Jamal and his mom went to the library on Tuesday. Jamal wanted a book about sharks. The librarian, Ms. Ortiz, showed him a whole shelf of ocean books. He picked one about sharks and one about octopuses. At home, Jamal read about a shark that can glow in the dark. At dinner, he told his family that an octopus has three hearts. His mom said she had learned two new things that day, and so had he.', q: 'What did Jamal want a book about?', a: 'Sharks', w: ['Trains', 'Dinosaurs'],
+        more: [['Who showed Jamal the ocean books?', 'Ms. Ortiz, the librarian', ['His mom', 'His teacher']], ['How many hearts does an octopus have?', 'Three', ['One', 'Two']]] },
+      { text: 'Dark clouds rolled over the town, and the wind began to howl. Ava and her brother Leo watched from the window as the rain poured down. Then the lights went out! Dad found a flashlight and some candles. The family sat together on the couch and told stories. Leo told one about a brave raccoon. When the storm passed, they went outside. A huge branch had fallen in the yard, and there was a big puddle by the gate. Leo jumped right in.', q: 'Who found a flashlight?', a: 'Dad', w: ['Ava', 'Leo'],
+        more: [['What was Leo’s story about?', 'A brave raccoon', ['A big storm', 'A lost puppy']], ['What had fallen in the yard?', 'A huge branch', ['The fence', 'A bird’s nest']]] },
+      { text: 'Mr. Hall’s class took a trip to the fire station. A firefighter named Rosa showed them the big red truck. She let each child sit in the driver’s seat. Then she put on her heavy coat, boots and helmet, and it took her less than one minute! She told the class to stay low and get out fast if there is ever a fire at home. Before they left, the class gave the firefighters a card that said, “Thank you for keeping us safe.”', q: 'What was the firefighter’s name?', a: 'Rosa', w: ['Mr. Hall', 'Ruby'],
+        more: [['What should you do if there is a fire at home?', 'Stay low and get out fast', ['Hide under the bed', 'Open all the windows']], ['What did the class give the firefighters?', 'A thank-you card', ['A cake', 'A red helmet']]] },
+      { text: 'Grandpa hung a bird feeder in the yard, but a squirrel kept eating the seeds. First, Grandpa moved the feeder higher. The squirrel jumped onto it from a tree. Next, he hung it on a long wire. The squirrel ran along the wire like an acrobat. At last, Grandpa gave up. He put a small dish of corn on the ground just for the squirrel. Now the squirrel eats the corn, and the birds get the seeds. Everyone is happy, even Grandpa.', q: 'What kept eating the seeds?', a: 'A squirrel', w: ['A crow', 'A mouse'],
+        more: [['What did Grandpa put out for the squirrel?', 'A dish of corn', ['A bowl of nuts', 'A pile of bread']], ['How did the squirrel get to the feeder on the wire?', 'It ran along the wire', ['It flew', 'It climbed a ladder']]] },
+      { text: 'Mateo’s soccer team, the Comets, had a big game on Saturday. In the first half, the other team scored two goals. At halftime, Coach Kim told the Comets to pass the ball more. In the second half, Mateo passed to his friend Ana, and she scored. Then Ana passed back to Mateo, and he scored too! The game ended in a tie, two to two. Everyone shook hands, and the coach brought orange slices for both teams to share.', q: 'What is the name of Mateo’s team?', a: 'The Comets', w: ['The Rockets', 'The Stars'],
+        more: [['What did Coach Kim tell the team to do?', 'Pass the ball more', ['Run faster', 'Kick harder']], ['How did the game end?', 'In a tie, two to two', ['The Comets won', 'The other team won']]] },
+      { text: 'Ruby’s family moved to a new apartment on the fifth floor. There were boxes everywhere. Ruby helped by carrying the light boxes with her books and games. Her big brother carried the heavy ones up the stairs. That night, they ate pizza on the floor because the table was not set up yet. From her new window, Ruby could see the whole park and the river beyond it. She decided that the new place was not so bad after all.', q: 'What floor is the new apartment on?', a: 'The fifth floor', w: ['The first floor', 'The tenth floor'],
+        more: [['Why did they eat on the floor?', 'The table was not set up yet', ['They were having a picnic', 'The chairs were broken']], ['What could Ruby see from her window?', 'The park and the river', ['The ocean', 'Her old school']]] },
+      { text: 'For the science fair, Hugo and his dad built a volcano out of clay. They painted it brown and green. Inside the top, they hid a cup with baking soda in it. When it was time to show the judges, Hugo poured in some vinegar mixed with red paint. The volcano bubbled and foamed over its sides like real lava. The judges clapped and laughed. One of them asked Hugo to do it again, so he did.', q: 'What did they build the volcano out of?', a: 'Clay', w: ['Paper', 'Sand'],
+        more: [['What did Hugo pour into the volcano?', 'Vinegar mixed with red paint', ['Water and sugar', 'Orange juice']], ['What did one judge ask Hugo to do?', 'Do it again', ['Clean it up', 'Make it bigger']]] },
+      { text: 'Dad and Eli went camping in the woods. They set up their tent next to a quiet stream. After dinner, they sat by the fire and roasted marshmallows. When it got dark, Eli heard strange sounds. Something hooted in a tree. Something splashed in the stream. Dad turned on the flashlight, and they saw an owl on a branch and a beaver swimming by. Eli was not scared anymore. He fell asleep listening to the night.', q: 'Where did they set up the tent?', a: 'Next to a stream', w: ['On top of a hill', 'In the backyard'],
+        more: [['What was hooting in the tree?', 'An owl', ['A beaver', 'A bat']], ['What did they roast by the fire?', 'Marshmallows', ['Hot dogs', 'Corn']]] },
+      { text: 'Every spring, Grandma and Theo plant a garden. This year they planted tomatoes, beans and sunflowers. Theo’s job was to water the plants each morning before breakfast. By July, the sunflowers were taller than Grandpa! The beans climbed up a string fence. When the tomatoes turned red, Grandma and Theo picked a whole basket. They made a big bowl of salsa and shared it with the neighbors at a picnic.', q: 'What was Theo’s job?', a: 'Watering the plants', w: ['Picking the beans', 'Pulling the weeds'],
+        more: [['What grew taller than Grandpa?', 'The sunflowers', ['The beans', 'The tomatoes']], ['What did they make with the tomatoes?', 'Salsa', ['Soup', 'Pizza']]] },
+      { text: 'It was time to leave for school, but Nico could find only one shoe. He looked under his bed. He looked in the closet and behind the door. His dog, Biscuit, was wagging her tail in the hall. Nico followed Biscuit to her bed in the kitchen. There was his shoe, and it was a little wet! Biscuit had taken it to play with. Nico laughed, wiped it off and ran to catch the bus.', q: 'What is the dog’s name?', a: 'Biscuit', w: ['Rocket', 'Pepper'],
+        more: [['Where did Nico find his shoe?', 'In the dog’s bed', ['Under his bed', 'In the closet']], ['Why was the shoe wet?', 'Biscuit had played with it', ['It rained', 'Nico stepped in a puddle']]] },
+      { text: 'After a summer rain, the sun came out, and Maya saw a rainbow over the hill. She counted the colors: red, orange, yellow, green, blue and purple. Her dad said that a rainbow happens when sunlight shines through tiny drops of water in the air. The drops bend the light and split it into colors. Maya tried it with the garden hose. She stood with her back to the sun and sprayed a fine mist, and a small rainbow appeared!', q: 'Where did Maya see the rainbow?', a: 'Over the hill', w: ['Over the lake', 'In her room'],
+        more: [['What makes a rainbow?', 'Sunlight shining through drops of water', ['Clouds bumping together', 'Wind blowing the rain']], ['What did Maya use to make her own rainbow?', 'The garden hose', ['A flashlight', 'Her crayons']]] },
+      { text: 'Ken and his uncle built a treehouse in the old maple tree. First, they drew a plan on paper. Next, they bought wood and nails at the hardware store. Ken handed his uncle the boards while his uncle hammered them in place. It took them three weekends to finish. The treehouse had a window, a rope ladder and a flag on top. Now Ken reads comics up there, and his cat climbs up to visit.', q: 'Who built the treehouse with Ken?', a: 'His uncle', w: ['His dad', 'His friend'],
+        more: [['What did they do first?', 'Drew a plan on paper', ['Bought wood', 'Hammered the boards']], ['How long did it take to finish?', 'Three weekends', ['One day', 'Two months']]] },
+      { text: 'Lena went ice skating for the first time. Her skates felt wobbly, so she held on to the wall. A teacher named Mr. Park showed her how to bend her knees and push with one foot and then the other. Lena fell down twice, but she got up each time. By the end of the lesson, she could skate all the way around the rink without holding on. She smiled so much that her cheeks hurt.', q: 'Who taught Lena to skate?', a: 'Mr. Park', w: ['Her mom', 'Mr. Hall'],
+        more: [['How many times did Lena fall?', 'Two times', ['One time', 'Five times']], ['What could Lena do by the end of the lesson?', 'Skate around the rink without holding on', ['Skate backward', 'Spin in a circle']]] },
+      { text: 'The second graders held a bake sale to buy new books for their classroom. Ben brought banana bread. Tia brought oatmeal cookies, and Raj brought brownies. They sold everything in one hour! When they counted the money, they had forty dollars. Their teacher took them to the bookstore, and each child picked one book for the class library. Ben picked a book about planets, and Tia picked one about dogs.', q: 'Why did the class have a bake sale?', a: 'To buy new books', w: ['To buy a class pet', 'To go on a trip'],
+        more: [['How much money did they make?', 'Forty dollars', ['Ten dollars', 'One hundred dollars']], ['What kind of book did Ben pick?', 'A book about planets', ['A book about trains', 'A book about bugs']]] },
+      { text: 'Aunt Rose took Owen on a boat to watch whales. The boat sailed far out on the ocean. For a long time, they saw only waves and seagulls. Then the captain pointed and shouted, “Look!” A huge gray whale blew a spout of water high into the air. Its giant tail rose out of the sea and slapped down with a splash. Owen got wet from head to toe, but he did not mind at all.', q: 'Who took Owen on the boat?', a: 'Aunt Rose', w: ['Grandpa', 'His teacher'],
+        more: [['What did they see for a long time?', 'Only waves and seagulls', ['Lots of whales', 'Other boats']], ['How did Owen get wet?', 'The whale’s tail splashed down', ['It started to rain', 'He fell in the water']]] },
+      { text: 'On a hot day, Zara and her friend Kenji set up a lemonade stand. They made a sign that said, “Cold Lemonade, 50 cents.” At first, nobody came. Then the mail carrier stopped and bought two cups. A man walking his dog bought one too. Soon there was a line of thirsty neighbors. By noon, the pitcher was empty. Zara and Kenji used the money they made to buy ice pops for both of them.', q: 'How much did a cup of lemonade cost?', a: '50 cents', w: ['One dollar', '10 cents'],
+        more: [['Who bought lemonade first?', 'The mail carrier', ['A man with a dog', 'Zara’s mom']], ['What did they buy with their money?', 'Ice pops', ['A new pitcher', 'Toys']]] },
+      { text: 'Malik’s class visited the history museum. In the biggest room stood the bones of a dinosaur taller than a house. The guide said it ate only plants and weighed as much as five elephants. Next, the class saw a dinosaur egg as big as a football. Malik’s favorite part was a tooth from a T. rex. It was as long as his hand! On the bus ride home, everyone talked about dinosaurs.', q: 'What did the big dinosaur eat?', a: 'Plants', w: ['Fish', 'Other dinosaurs'],
+        more: [['How big was the dinosaur egg?', 'As big as a football', ['As big as a car', 'As small as a grape']], ['What was Malik’s favorite part?', 'A T. rex tooth', ['The dinosaur egg', 'The gift shop']]] },
+      { text: 'Mrs. Green lives next door, and she hurt her ankle. She could not walk her dog, Max. So every afternoon, Ivan and his dad walked Max around the block. Ivan also carried in her mail and watered her plants. After two weeks, Mrs. Green’s ankle was better. She baked Ivan a tray of oatmeal cookies to say thank you. Ivan shared them with his dad on the front steps.', q: 'Why could Mrs. Green not walk her dog?', a: 'She hurt her ankle', w: ['It was raining', 'She was at work'],
+        more: [['What else did Ivan do to help?', 'Carried in her mail and watered her plants', ['Cooked her dinner', 'Washed her car']], ['What did Mrs. Green bake for Ivan?', 'Oatmeal cookies', ['A pie', 'Banana bread']]] },
+      { text: 'For his birthday, Tariq got a robot kit with two hundred pieces. He and his grandma spread the pieces out on the kitchen table. They followed the steps in the booklet, one page at a time. When a wheel would not turn, Tariq found a screw in the wrong place and fixed it. At last, they put in the batteries. The little robot rolled across the floor, beeped two times and bumped into the cat.', q: 'How many pieces were in the kit?', a: 'Two hundred', w: ['Ten', 'One thousand'],
+        more: [['Why would the wheel not turn?', 'A screw was in the wrong place', ['The battery was dead', 'The cat broke it']], ['What did the robot bump into?', 'The cat', ['The table', 'Grandma']]] },
+      { text: 'One clear night, Mom took Pia up the hill behind their house to look at the stars. They brought a blanket and a jar of hot cocoa. Mom pointed to seven stars shaped like a big spoon. She said it was called the Big Dipper. Then a bright light zoomed across the sky. “A shooting star!” Pia shouted. Mom said it was really a tiny rock burning up high in the sky. Pia made a wish anyway.', q: 'What is the group of stars shaped like a spoon called?', a: 'The Big Dipper', w: ['The Milky Way', 'The Moon'],
+        more: [['What did they bring?', 'A blanket and hot cocoa', ['A tent and snacks', 'A telescope and a map']], ['What is a shooting star, really?', 'A tiny rock burning up in the sky', ['A star falling down', 'A plane with lights']]] },
+      { text: 'Dev and his grandpa rode the train to the city. Dev sat by the window and counted the cows in the fields. The conductor came by and punched a hole in their tickets. When the train went through a long, dark tunnel, the lights inside turned on. In the city, they ate noodles at a busy restaurant and visited a tall clock tower. On the ride home, Dev fell asleep with his head on Grandpa’s arm.', q: 'What did Dev count from the window?', a: 'Cows in the fields', w: ['Cars on the road', 'Birds in the sky'],
+        more: [['What did the conductor do?', 'Punched a hole in their tickets', ['Sold them snacks', 'Drove the train']], ['What did they eat in the city?', 'Noodles', ['Pizza', 'Tacos']]] }
     ] }
   ];
   /* A passage with a question also carries wrong answers (`w`) and more questions (`more`), so the
@@ -6982,6 +7176,7 @@ const ICON = {
   close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
   bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
+  book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.5c3-1.6 6-1.6 9 .6 3-2.2 6-2.2 9-.6v13.6c-3-1.6-6-1.6-9 .6-3-2.2-6-2.2-9-.6z"/><path d="M12 6.1v13.6"/></svg>',
   del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5h11v14H9l-6-7z"/><path d="M12.5 9.5l5 5M17.5 9.5l-5 5"/></svg>',
   math: '<svg viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="10" fill="#FFB020"/><path d="M11 13h8M15 9v8M23 13h7M11 27l6 6M17 27l-6 6M23 27h7M23 33h7" stroke="#3A2200" stroke-width="3" stroke-linecap="round"/></svg>',
   reading: '<svg viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="10" fill="#FF5FC8"/><path d="M8 12c4-2 8-2 12 1 4-3 8-3 12-1v17c-4-2-8-2-12 1-4-3-8-3-12-1z" fill="#fff"/><path d="M20 13v17" stroke="#C02F8C" stroke-width="2"/><text x="14" y="25" font-family="Andika, sans-serif" font-weight="700" font-size="9" fill="#C02F8C" text-anchor="middle">A</text><text x="26" y="25" font-family="Andika, sans-serif" font-weight="700" font-size="9" fill="#C02F8C" text-anchor="middle">a</text></svg>',
@@ -8579,7 +8774,7 @@ function guideHTML() {
     '</ul></section></div><div class="panels"><section class="glass panel guide"><h3>Your part, about 5 minutes a day</h3><ol>' +
     li('<b>Sit nearby.</b> At the earliest levels the example screen tells you what to show first.') +
     li('<b>Listen to the read-aloud.</b> After the reading sheets, tap Start as they begin, tap any word they misread, skip or need help with, then tap Done and answer the × question. Ask the question at the end.') +
-    li('<b>Read a book together every day.</b> Parents → Reading → Books has books for each Kumon level. Mark the ones you have, tap “Read today” after reading one (+2 stars), and aim for a book a day.') +
+    li('<b>Read a book together every day.</b> After reading any book, tap “We read a book” on your child’s card and answer the × question (+2 stars). Parents → Reading → Books has suggestions for each Kumon level and this week’s count.') +
     li('<b>Keep the paper handwriting.</b> The app uses a number pad, so writing numbers (Kumon 4A) and letters stays on paper.') +
     li('<b>Check Progress now and then.</b> Trouble spots shows the facts that keep coming back. The app moves levels by itself, and Level changes lists each move with Undo. A sheet or read saved by mistake can be voided after your × question, and it is done again.') +
     '</ol></section></div></div>';
@@ -8716,7 +8911,7 @@ function booksHTML(l) {
   const week = weekBookReads(l.id);
   const recent = week.slice(0, 10).map((s) => '<li><span><b>' + esc(s.title) + '</b> <span class="muted">' + esc(fmtWhen(s.at)) + '</span></span><button class="icon-btn mini-x" data-act="bookUndo" data-id="' + esc(s.id) + '" data-at="' + esc(s.at) + '" aria-label="Remove this read">' + ICON.close + '</button></li>').join('');
   const right = '<section class="glass panel"><h3>' + esc(l.name) + '’s books this week</h3>' + weekBarHTML(week.length) +
-    '<p class="sub">Goal: a book a day. Each book logged gives ' + esc(l.name) + ' +' + BOOK_STARS + ' stars.</p>' + (recent ? '<ul class="read-list">' + recent + '</ul>' : '<p class="sub">No books logged this week yet. Tap “Read today” on a book after reading it.</p>') + '</section>' +
+    '<p class="sub">Goal: a book a day. Each book logged gives ' + esc(l.name) + ' +' + BOOK_STARS + ' stars.</p>' + (recent ? '<ul class="read-list">' + recent + '</ul>' : '<p class="sub">No books logged this week yet. Tap “We read a book” on ' + esc(l.name) + '’s card after reading any book, or “Read today” on a book here.</p>') + '</section>' +
     '<section class="glass panel"><h3>Add a book</h3><p class="sub">A book from home or the library. It goes on the Kumon ' + esc(shelf.name) + ' shelf.</p><div class="form">' +
       '<div class="field"><label for="b-title">Title</label><input type="text" id="b-title" maxlength="80" autocomplete="off"></div>' +
       '<div class="field"><label for="b-author">Author (optional)</label><input type="text" id="b-author" maxlength="60" autocomplete="off"></div>' +
@@ -8726,6 +8921,49 @@ function booksHTML(l) {
       '<a class="link" href="' + esc(Books.KUMON_LIST) + '" target="_blank" rel="noopener">Kumon Recommended Reading List (PDF)</a>.</p>' +
       '<p class="sub">“Buy” opens an Amazon search for the book. Most of these are also at the public library.</p></section>';
   return '<div class="panels two"><div class="panels">' + left + '</div><div class="panels">' + right + '</div></div>';
+}
+
+/* ---------- "We read a book" on each child's card ----------
+   Any book read with the child counts, not only the shelf's: after the grown-up's × question, an
+   optional title and who read it, then +2 stars. It is logged like a shelf read (the child's 'books'
+   log, marked quick), so it shows in the week's count here and on the dashboard, and the × in this
+   page's list takes it back. */
+const todayBookReads = (kidId) => { const tk = ENG.reading.todayKey(); return bookReads(kidId).filter((s) => ENG.reading.todayKey(new Date(s.at)) === tk); };
+function bookQuickButton(l) {
+  const n = todayBookReads(l.id).length;
+  return '<button class="icon-btn book-btn" data-act="bookQuick" data-kid="' + esc(l.id) + '" aria-label="We read a book' + (n ? ', ' + n + ' logged today' : '') + '">' + ICON.book +
+    '<span>We read a book</span>' + (n ? '<i class="book-n" aria-hidden="true">' + n + '</i>' : '') + '</button>';
+}
+function bookQuick(kidId) {
+  const l = Store.learner(kidId);
+  if (!l) return;
+  Sfx.tap();
+  openGate(() => { S.overlay = { type: 'bookLog', kid: kidId, title: '', how: 'to' }; render(); }, 'Answer to log a book read with ' + l.name + '.');
+}
+function bookQuickHTML(o) {
+  const l = Store.learner(o.kid) || { name: '' }, nm = esc(l.name || 'your child');
+  const how = (k, label) => '<button class="' + (o.how === k ? 'on' : '') + '" data-act="bookQuickHow" data-how="' + k + '" aria-pressed="' + (o.how === k) + '">' + label + '</button>';
+  return '<div class="overlay" role="dialog" aria-modal="true" aria-labelledby="bqTitle"><div class="dialog glass"><h2 id="bqTitle">A book with ' + nm + '</h2>' +
+    '<p>Any book counts: from home, school or the library.' + (hasBuddy(l) ? ' ' + nm + ' gets +' + BOOK_STARS + ' stars.' : '') + '</p>' +
+    '<div class="form"><div class="field"><label for="bq-title">Title (you can leave it blank)</label><input type="text" id="bq-title" maxlength="80" autocomplete="off" value="' + esc(o.title || '') + '"></div>' +
+    '<div class="field"><label>Who read it</label><div class="seg bq-how" role="group" aria-label="Who read it">' + how('to', 'I read it to ' + nm) + how('together', 'We took turns') + how('alone', nm + ' read it') + '</div></div></div>' +
+    '<div class="actions"><button class="btn btn-gold" data-act="bookQuickSave">Save' + (hasBuddy(l) ? ' · +' + BOOK_STARS + ' stars' : '') + '</button><button class="btn btn-glass" data-act="closeOverlay">Cancel</button></div>' +
+    '<p class="help">Logged by mistake? Parents → Reading → Books lists this week’s books with an × to take one back.</p></div></div>';
+}
+function bookQuickSave() {
+  const o = S.overlay;
+  if (!o || o.type !== 'bookLog') return;
+  const l = Store.learner(o.kid);
+  if (!l) { S.overlay = null; render(); return; }
+  const el = document.getElementById('bq-title'), title = String((el ? el.value : o.title) || '').trim().slice(0, 80);
+  Store.appendSession(l.id, { id: Store.newId(), subject: 'books', kind: 'book', at: new Date().toISOString(), book: '', title: title || 'A book', author: '', how: o.how || 'to', quick: true, stars: hasBuddy(l) ? BOOK_STARS : 0 });
+  let msg = (title ? title : 'A book') + ' logged';
+  if (hasBuddy(l)) {
+    const cr = Buddy.credit(Buddy.of(l), BOOK_STARS, { noSheet: true, streak: bestStreak(l) });
+    Store.saveLearner(Object.assign({}, l, { buddy: cr.buddy }));
+    msg += ' · +' + BOOK_STARS + ' stars for ' + l.name;
+  }
+  S.overlay = null; Sfx.coin(); render(); toast(msg);
 }
 
 /* ---------- actions ---------- */
@@ -8794,6 +9032,9 @@ document.addEventListener('click', (e) => {
     case 'bookAdd': bookAdd(); break;
     case 'bookDel': bookDel(t.getAttribute('data-id')); break;
     case 'bookShelf': S.bookShelf = t.getAttribute('data-shelf'); Sfx.tap(); render(); break;
+    case 'bookQuick': bookQuick(t.getAttribute('data-kid')); break;
+    case 'bookQuickHow': if (S.overlay && S.overlay.type === 'bookLog') { const el = document.getElementById('bq-title'); if (el) S.overlay.title = el.value; S.overlay.how = t.getAttribute('data-how'); Sfx.tap(); render(); } break;
+    case 'bookQuickSave': bookQuickSave(); break;
     default: break;
   }
 });
@@ -8843,7 +9084,7 @@ function kidCard(l) {
   return '<article class="kid glass" style="' + kidStyle(l.color) + '"><div class="kid-in"><div class="kid-top">' + ped +
     '<div class="kid-meta"><div class="kid-name">' + esc(l.name) + '</div><div class="kid-buddy">' + line + '</div>' +
     '<div class="kid-row"><span class="star-chip">' + ICON.star + b.stars + '</span>' +
-    (has ? shopButton(l, '') : '<button class="btn btn-gold btn-small" data-act="pickBuddy" data-kid="' + esc(l.id) + '">Pick a buddy</button>') + '</div>' +
+    (has ? shopButton(l, '') : '<button class="btn btn-gold btn-small" data-act="pickBuddy" data-kid="' + esc(l.id) + '">Pick a buddy</button>') + bookQuickButton(l) + '</div>' +
     (has && Buddy.goalOf(b) ? goalHTML(b, l.id) : '') + '</div></div>' +
     '<div class="subjects">' + SUBJECTS.map((s) => subjectTile(l, s)).join('') + '</div></div></article>';
 }
@@ -9040,6 +9281,7 @@ function overlayHTML() {
       '<div class="actions center"><button class="btn btn-gold" data-act="buyYes">Buy it!</button><button class="btn btn-glass" data-act="closeOverlay">Not now</button></div></div></div>';
   }
   if (o.type === 'sheet') return sheetInfoHTML(o.kid, o.id);
+  if (o.type === 'bookLog') return bookQuickHTML(o);
   if (o.type === 'confirm') {
     return '<div class="overlay" role="dialog" aria-modal="true" aria-labelledby="cfTitle"><div class="dialog glass"><h2 id="cfTitle">' + esc(o.title) + '</h2><p>' + esc(o.body) + '</p>' +
       '<div class="actions"><button class="btn ' + (o.danger ? 'btn-danger' : 'btn-gold') + '" data-act="confirmYes">' + esc(o.yes) + '</button><button class="btn btn-glass" data-act="closeOverlay">Cancel</button></div></div></div>';
