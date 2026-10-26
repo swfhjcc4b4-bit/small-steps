@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261026205613";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261026212607";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -9086,13 +9086,15 @@ function troubleHTML(E, t, sessions) {
 function historyHTML(E, sessions, kidId) {
   if (!sessions.length) return '<section class="glass panel"><h3>Sheets</h3><p class="sub">Finished sheets show up here with score, time, fixes and stars.</p></section>';
   const subj = E.C.key;
+  /* rushing is worked out from the sheets themselves (as on the dashboard), so older sheets show it too */
+  const rushedIds = new Set(Metrics.markRushed(sessions.filter((x) => !x.voided && (x.kind === 'sheet' || x.kind === 'test') && x.n > 0)).filter((x) => x.rushed).map((x) => x.id));
   const rows = sessions.slice(0, 30).map((s) => {
     const lv = E.BY[s.levelId];
     if (s.kind === 'placement') return '<tr><td>' + esc(fmtWhen(s.at)) + '</td><td colspan="4">Placement check → ' + esc(lv ? lv.name : '') + '</td></tr>';
     const isTest = s.kind === 'test';
     const res = s.voided ? '<span class="chip chip-void">Voided</span>' : s.pass ? '<span class="chip chip-ok">' + (isTest ? 'Test passed' : s.boost ? 'Passed ×2' : 'Passed') + ' ✓</span>' : '<span class="chip">' + (isTest ? 'Test not passed' : 'Repeat') + '</span>';
     const change = s.voided ? '' : (s.change === 'up' ? ' <span class="chip chip-ok">Level up</span>' : s.change === 'back' ? ' <span class="chip chip-warn">Review</span>' : s.change === 'return' ? ' <span class="chip chip-ok">Back up</span>' : s.change === 'test' ? ' <span class="chip chip-warn">Test next</span>' : '') +
-      (s.undoneAt ? ' <span class="chip">Move undone</span>' : '') + (s.rushed ? ' <span class="chip chip-warn">Rushed</span>' : '');
+      (s.undoneAt ? ' <span class="chip">Move undone</span>' : '') + (rushedIds.has(s.id) ? ' <span class="chip chip-warn">Rushed</span>' : '');
     const fix = s.wrong ? (s.fixed ? 'Fixed in ' + E.fmtTime(s.fixSecs || 0) : 'Not fixed') : '—';
     const missed = s.missed && s.missed.length ? '<div class="muted">' + esc(s.missed.slice(0, 4).join(' · ')) + (s.missed.length > 4 ? ' …' : '') + '</div>' : '';
     const levelCell = isTest ? 'Level test · ' + esc(groupGradeLabel(subj, s.group || '', true)) : esc(lv ? lv.short : s.levelId);
