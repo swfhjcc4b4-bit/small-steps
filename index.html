@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261027015056";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261027032654";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1164,7 +1164,6 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .bl-b { display: grid; place-items: center; justify-self: center; width: 100%; max-width: 46px; min-width: 0; padding: 4px 1px; border-radius: 9px; border: 2px solid transparent; }
 .bl-b .belt { width: 100%; max-width: 32px; }
 .bl-b.later { opacity: 0.32; }
-.bl-b.next { border: 2px dashed rgba(255, 255, 255, 0.6); }
 .bl-b.now { border-color: var(--gold); background: rgba(255, 197, 49, 0.18); box-shadow: 0 0 10px rgba(255, 197, 49, 0.45); }
 /* trophies: six, three to a row */
 .trophies { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
@@ -1173,17 +1172,13 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .trophy b { font-family: var(--font-display); font-weight: 400; font-size: 17px; line-height: 1.1; color: #fff; }
 .trophy.none b { color: var(--ink-soft); }
 .trophy small { font-size: 11px; color: var(--ink-faint); font-weight: 700; }
-.t-art { position: relative; width: 66px; height: 72px; }
-.t-art .cup { width: 100%; height: 100%; filter: drop-shadow(0 4px 6px rgba(5, 2, 30, 0.45)); }
-.t-ico { position: absolute; left: 0; right: 0; top: 8px; text-align: center; font-family: var(--font-emoji); font-size: 26px; line-height: 1; }
-.trophy.none .t-ico { opacity: 0.6; filter: grayscale(0.5); }
 .t-stars { color: var(--gold-hi); font-size: 15px; line-height: 1; letter-spacing: 1px; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3); }
 .t-stars.none { color: var(--ink-faint); }
 .t-bar { width: 84%; height: 7px; border-radius: 999px; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
 .t-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #FFC531, #FF8A3D); }
 .shelf-help { margin: 0; font-size: 13px; line-height: 1.45; font-weight: 700; color: var(--ink-soft); }
 @media (max-width: 460px) {
-  .trophies { gap: 8px; } .t-art { width: 54px; height: 60px; } .t-ico { font-size: 22px; top: 7px; } .trophy b { font-size: 15px; }
+  .trophies { gap: 8px; } .trophy b { font-size: 15px; }
   .bladder { padding: 6px 7px 7px; } .bl-belts { gap: 2px; } .bl-b { padding: 3px 0; border-radius: 7px; }
 }
 
@@ -1225,6 +1220,86 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .story.long { white-space: pre-line; }
 .ra-para { display: block; height: 0.55em; }
 .ex-job.j-telling b { background: #B9F5D2; } .ex-job.j-telling small { color: var(--mint-deep); }
+/* ---------- ceremonies: a new belt, the day's medals (ui-cere.js) ---------- */
+.cere { position: fixed; inset: 0; z-index: 80; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; background: radial-gradient(120% 80% at 50% 30%, #35217E, #0A0628 70%); color: #fff; animation: cereIn 0.35s ease-out; outline: none; overflow: hidden; }
+.cere.out { animation: cereOut 0.26s ease-in forwards; }
+@keyframes cereIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cereOut { to { opacity: 0; } }
+.cere-stage { position: absolute; inset: 0; }
+.cere-cv { display: block; width: 100%; height: 100%; }
+.cere-top { position: relative; z-index: 1; grid-row: 1; display: grid; gap: 4px; justify-items: center; text-align: center; padding: max(20px, env(safe-area-inset-top)) 16px 0; pointer-events: none; }
+.cere-kicker { font-size: 14px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-hi); text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6); }
+.cere-title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(38px, 7.5vw, 68px); line-height: 1.04; color: #fff; text-shadow: 0 3px 0 rgba(10, 4, 40, 0.55), 0 0 32px rgba(255, 197, 49, 0.4); }
+.cere-title.pop { animation: cerePop 0.55s cubic-bezier(0.3, 1.6, 0.5, 1); }
+@keyframes cerePop { 0% { transform: scale(0.4); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.cere-bottom { position: relative; z-index: 1; grid-row: 3; display: grid; gap: 12px; justify-items: center; padding: 0 16px max(18px, env(safe-area-inset-bottom)); }
+.cere-sub { margin: 0; min-height: 1.4em; max-width: 40ch; text-align: center; font-size: 18px; font-weight: 800; line-height: 1.35; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7); }
+.cere-go { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.cere.ready .cere-go { opacity: 1; pointer-events: auto; }
+/* the belt ladder under a new belt: the gold ring slides from the old belt to the new one */
+.cere-ladder { --g: 4px; position: relative; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: var(--g); width: min(100%, 680px); padding: 10px 8px; border-radius: 18px; background: rgba(10, 6, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.16); }
+.cl-b { display: grid; place-items: center; padding: 4px 0; opacity: 0.3; transition: opacity 0.4s, transform 0.4s; }
+.cl-b.got { opacity: 1; }
+.cl-b.new { transform: scale(1.18); }
+.cl-b .belt { width: 100%; max-width: 44px; }
+.cl-ring { position: absolute; top: 6px; bottom: 6px; left: calc(8px + var(--i) * ((100% - 16px - (var(--n) - 1) * var(--g)) / var(--n) + var(--g)) - 2px); width: calc((100% - 16px - (var(--n) - 1) * var(--g)) / var(--n) + 4px); border: 3px solid var(--gold); border-radius: 10px; box-shadow: 0 0 16px rgba(255, 197, 49, 0.65); transition: left 0.75s cubic-bezier(0.5, 0, 0.3, 1.25); }
+/* the day's medals, one chip per subject, each landing when its medal does */
+.cere-chips { display: grid; grid-template-columns: repeat(3, minmax(0, 132px)); gap: 10px; width: 100%; justify-content: center; }
+.cchip { display: grid; justify-items: center; gap: 2px; padding: 8px 6px 10px; border-radius: 18px; background: rgba(10, 6, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.16); }
+.cchip .medal { width: 48px; height: auto; opacity: 0; transform: translateY(-34px) scale(0.6); transition: opacity 0.35s, transform 0.5s cubic-bezier(0.3, 1.5, 0.5, 1); }
+.cchip.on .medal { opacity: 1; transform: none; }
+.cchip b { font-size: 15px; font-weight: 900; }
+.cchip small { font-size: 13px; font-weight: 800; color: var(--ink-faint); opacity: 0; transition: opacity 0.3s 0.2s; }
+.cchip.on small { opacity: 1; }
+.cchip.on.k-gold small { color: #FFD65A; } .cchip.on.k-silver small { color: #E2E7EF; } .cchip.on.k-bronze small { color: #F0A46A; } .cchip.on.k-ribbon small, .cchip.on.k-none small { color: #A9B0C2; }
+.cchip.on.k-gold { border-color: rgba(255, 214, 90, 0.7); box-shadow: 0 0 18px rgba(255, 197, 49, 0.35); }
+/* the flat version (no 3D) */
+.cf { position: absolute; inset: 0; display: grid; place-items: center; }
+.cf-rays { position: absolute; width: 140vmax; height: 140vmax; left: 50%; top: 46%; transform: translate(-50%, -50%); background: repeating-conic-gradient(from 0deg, rgba(255, 228, 160, 0.16) 0deg 8deg, transparent 8deg 20deg); -webkit-mask: radial-gradient(circle, #000 0%, transparent 55%); mask: radial-gradient(circle, #000 0%, transparent 55%); opacity: 0; transition: opacity 0.6s; }
+.tied .cf-rays, .cere-medals .cf-rays { opacity: 1; }
+.cf-buddy { position: relative; z-index: 2; width: min(44vw, 34vh, 300px); margin-top: -2vh; }
+.cf-buddy .buddy-svg { width: 100%; height: auto; display: block; }
+.cf-podium { position: absolute; z-index: 1; top: calc(50% + min(16vw, 13vh, 110px)); width: min(62vw, 46vh, 380px); height: min(9vw, 6vh, 46px); border-radius: 50%; background: linear-gradient(180deg, #5240B8, #2A1F6E); box-shadow: inset 0 0 0 3px #FFC531, 0 18px 40px rgba(0, 0, 0, 0.5); }
+.cf-belt { position: absolute; z-index: 3; width: min(26vw, 20vh, 170px); top: 49%; animation: cfDrop 2.62s cubic-bezier(0.5, 0, 0.3, 1) both; }
+.cf-belt .belt { width: 100%; }
+.tied .cf-belt { animation: cfTie 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) both; }
+.skipped .cf-belt, .skipped .cf-buddy { animation: none; }
+@keyframes cfDrop { 0% { transform: translateY(-70vh) rotate(-30deg) scale(1.6); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(0) rotate(0) scale(1.3); opacity: 1; } }
+@keyframes cfTie { from { transform: scale(1.3); } to { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .cere, .cere-title.pop, .cf-belt, .tied .cf-belt { animation: none; } .cl-ring, .cchip .medal { transition: none; } }
+@media (max-width: 460px) { .cere-ladder { --g: 2px; padding: 8px 6px; } .cere-chips { gap: 6px; } .cchip { padding: 6px 2px 8px; } .cchip .medal { width: 40px; } .cere-sub { font-size: 16px; } }
+
+/* ---------- medals around the app ---------- */
+.medal { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 3px 4px rgba(5, 2, 30, 0.45)); }
+.medal.m-none { filter: none; }
+.subj-medal { position: absolute; right: -16px; top: -12px; width: 28px; z-index: 2; pointer-events: none; animation: medalIn 0.5s cubic-bezier(0.3, 1.6, 0.5, 1); }
+@container kid (min-width: 640px) { .subj-medal { width: 34px; right: -18px; top: -14px; } }
+@keyframes medalIn { from { transform: translateY(-14px) scale(0.5); opacity: 0; } to { transform: none; opacity: 1; } }
+.shelf-medals { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 8px 12px; border-radius: 16px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); }
+.sm-label { font-size: 12px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+.sm-today { display: flex; gap: 6px; }
+.sm { width: 38px; padding: 0; background: none; border: 0; }
+.sm:active { transform: scale(0.94); }
+.sm-week { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.smw { display: inline-flex; align-items: center; gap: 3px; font-family: var(--font-display); font-size: 18px; color: #fff; }
+.medal.tiny { width: 18px; }
+.medal-day { display: grid; justify-items: center; gap: 6px; }
+.medal-day .medal-big { width: 96px; animation: medalIn 0.6s cubic-bezier(0.3, 1.6, 0.5, 1) 0.15s both; }
+.medal-day b { font-family: var(--font-display); font-weight: 400; font-size: 24px; text-align: center; max-width: 26ch; }
+.medal-day.sad b { font-family: inherit; font-weight: 800; font-size: 17px; color: var(--ink-soft); line-height: 1.35; }
+.medal-sofar { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14); font-weight: 800; }
+.medal-sofar .medal { width: 26px; }
+/* the new belt's place on the ladder, on the level-up screen */
+.belt-new-row { width: min(100%, 460px); }
+.belt-new-row .bl-belts { width: 100%; }
+
+/* ---------- drawn trophies ---------- */
+.t-art { width: 64px; height: 72px; }
+.t-art .tart { width: 100%; height: 100%; display: block; filter: drop-shadow(0 4px 6px rgba(5, 2, 30, 0.45)); }
+.t-art .tart.tart-none { filter: none; }
+.news-art { display: inline-block; width: 30px; height: 34px; }
+.news-art .tart { width: 100%; height: 100%; display: block; }
+@media (max-width: 460px) { .t-art { width: 52px; height: 58px; } .sm-week { margin-left: 0; } }
 </style>
 <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div><canvas id="fx" aria-hidden="true"></canvas><div id="app"></div>
 <script>
@@ -5010,6 +5085,7 @@ const Buddy3D = (() => {
   const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
   let ready = false, failed = !T, renderer = null, scene = null, camera = null, glCanvas = null;
   let bufW = 0, bufH = 0, rafId = 0, io = null, ro = null;
+  let CE = null, cereEnv = null;    /* the running ceremony, and its stage's reflections */
   const views = new Map();
   let lastKeys = [];
   const ASPECT = 200 / 220;
@@ -7459,7 +7535,7 @@ const Buddy3D = (() => {
   let tick = 0;
   function frame(now) {
     rafId = 0;
-    if (!ready || document.hidden) return;
+    if (!ready || document.hidden || CE) return;
     let again = false, live = 0;
     views.forEach((v) => { if (v.live && v.visible && v.slot && v.slot.isConnected) live++; });
     const skip = live > 2 && (tick++ % 2 === 1);
@@ -7470,7 +7546,7 @@ const Buddy3D = (() => {
     });
     if (again) rafId = requestAnimationFrame(frame);
   }
-  function kick() { if (!rafId && ready) rafId = requestAnimationFrame(frame); }
+  function kick() { if (!rafId && ready && !CE) rafId = requestAnimationFrame(frame); }
   if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => { if (!document.hidden) { views.forEach((v) => { v.dirty = true; }); kick(); } });
 
   function observe(v) {
@@ -7599,6 +7675,370 @@ const Buddy3D = (() => {
     kick();
   }
 
+  /* ---------- ceremonies: a new belt, the day's medals ---------- */
+  /* A full-screen scene of its own, drawn with the shared renderer into its own canvas: the child's
+     buddy on a podium under a spotlight. 'belt': the new belt comes down glowing and spinning and
+     ties on round its middle (flash, rays, confetti). 'medals': the day's medals come down one at a
+     time and hang round its neck. The words, ladder, sounds and buttons belong to the page, which
+     hears each beat through opts.on(name, data): 'tie' (belt), 'medal' ({ i, kind }), 'done'.
+     While a ceremony runs the buddies behind it stop drawing. */
+  const BELT_FIT = {
+    ladybug: { at: [0, 0.6, 0], rx: 0.79, rz: 0.65, n: 2, tilt: 0 },
+    dragon: { at: [0, 0.52, 0.03], rx: 0.66, rz: 0.62, n: 2, tilt: 0 },
+    robot: { at: [0, 0.5, 0], rx: 0.54, rz: 0.4, n: 4, tilt: 0 },
+    slug: { at: [0.37, 0.72, 0.07], rx: 0.5, rz: 0.5, n: 2, tilt: -0.65 }
+  };
+  const MEDAL_FIT = {
+    ladybug: { cx: 0, y: 1.0, z: [0.6, 0.68, 0.6], dx: 0.33, neck: [0, 1.33, 0.32] },
+    dragon: { cx: 0, y: 0.97, z: [0.5, 0.6, 0.5], dx: 0.31, neck: [0, 1.25, 0.32] },
+    robot: { cx: 0, y: 1.03, z: [0.48, 0.49, 0.48], dx: 0.33, neck: [0, 1.31, 0.27] },
+    slug: { cx: 0.47, y: 0.97, z: [0.5, 0.58, 0.5], dx: 0.28, neck: [0.5, 1.22, 0.34] }
+  };
+  const SUBJ_HUE = { math: '#FFB020', reading: '#FF5FC8', clock: '#3FD2F0' };
+  const MEDAL_C = { gold: '#FFC23A', silver: '#E2E7EF', bronze: '#C9783C' };
+  const ease3 = (q) => (q < 0.5 ? 4 * q * q * q : 1 - Math.pow(-2 * q + 2, 3) / 2);
+  const outBack = (q) => 1 + 2.70158 * Math.pow(q - 1, 3) + 1.70158 * Math.pow(q - 1, 2);
+  const c01 = (q) => Math.max(0, Math.min(1, q));
+  const BELT_T = { show: 0.5, drop0: 0.9, drop1: 2.3, tie: 2.62, done: 3.5 };
+  const MEDAL_T = { first: 1.3, step: 1.2, fly: 0.62, after: 0.8 };
+
+  const raysTex = () => canvasTex('rays', 512, 512, (x, w) => {
+    const c = w / 2;
+    for (let i = 0; i < 18; i++) {
+      const a0 = (i / 18) * Math.PI * 2, a1 = a0 + Math.PI / 30, g = x.createRadialGradient(c, c, 0, c, c, c);
+      g.addColorStop(0, 'rgba(255,244,214,0.95)'); g.addColorStop(0.55, 'rgba(255,214,140,0.28)'); g.addColorStop(1, 'rgba(255,214,140,0)');
+      x.fillStyle = g; x.beginPath(); x.moveTo(c, c); x.arc(c, c, c, a0, a1); x.closePath(); x.fill();
+    }
+  });
+  /* The face of a medal: the subject's sign pressed into the metal (the map darkens it, the bump sinks it). */
+  function medalFace(kind, subj) {
+    return canvasTex('medalface:' + (kind === 'ribbon' ? 'ribbon' : subj), 256, 256, (x, w) => {
+      const c = w / 2;
+      x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, w, w);
+      x.strokeStyle = '#B4B4B4'; x.lineWidth = 9; x.beginPath(); x.arc(c, c, c - 16, 0, Math.PI * 2); x.stroke();
+      x.strokeStyle = '#7E7E7E'; x.fillStyle = '#7E7E7E'; x.lineCap = 'round'; x.lineJoin = 'round';
+      if (kind === 'ribbon') {
+        x.lineWidth = 20; x.beginPath(); x.arc(c, c + 4, 58, -Math.PI * 0.95, Math.PI * 0.5); x.stroke();
+        const a = Math.PI * 0.5, ax = c + 58 * Math.cos(a), ay = c + 4 + 58 * Math.sin(a);
+        x.beginPath(); x.moveTo(ax - 4, ay - 30); x.lineTo(ax - 4, ay + 30); x.lineTo(ax - 44, ay); x.closePath(); x.fill();
+        return;
+      }
+      if (subj === 'math') { x.lineWidth = 26; x.beginPath(); x.moveTo(c - 60, c); x.lineTo(c + 60, c); x.moveTo(c, c - 60); x.lineTo(c, c + 60); x.stroke(); }
+      else if (subj === 'reading') {
+        x.lineWidth = 13; x.beginPath(); x.moveTo(c, c - 38);
+        x.quadraticCurveTo(c - 40, c - 62, c - 80, c - 48); x.lineTo(c - 80, c + 50); x.quadraticCurveTo(c - 40, c + 36, c, c + 60);
+        x.quadraticCurveTo(c + 40, c + 36, c + 80, c + 50); x.lineTo(c + 80, c - 48); x.quadraticCurveTo(c + 40, c - 62, c, c - 38); x.closePath(); x.stroke();
+        x.beginPath(); x.moveTo(c, c - 38); x.lineTo(c, c + 60); x.stroke();
+        x.lineWidth = 8; [-1, 1].forEach((s) => [-14, 6, 26].forEach((y) => { x.beginPath(); x.moveTo(c + s * 18, c + y); x.lineTo(c + s * 62, c + y - 8); x.stroke(); }));
+      } else {
+        x.lineWidth = 13; x.beginPath(); x.arc(c, c, 72, 0, Math.PI * 2); x.stroke();
+        for (let i = 0; i < 12; i++) { const a = (i * Math.PI) / 6; x.lineWidth = i % 3 ? 6 : 10; x.beginPath(); x.moveTo(c + Math.cos(a) * 54, c + Math.sin(a) * 54); x.lineTo(c + Math.cos(a) * 64, c + Math.sin(a) * 64); x.stroke(); }
+        x.lineWidth = 16; x.beginPath(); x.moveTo(c, c); x.lineTo(c, c - 44); x.moveTo(c, c); x.lineTo(c + 32, c + 16); x.stroke();
+      }
+    });
+  }
+  /* A medal (or the plain try-again ribbon) facing +z, its loop at the top (0, 0.19, 0). */
+  function medalMesh(kind, subj) {
+    const g = new T.Group(), tex = medalFace(kind, subj);
+    if (kind === 'ribbon') {
+      const cloth = new T.MeshStandardMaterial({ color: lin('#9AA3B8'), roughness: 0.92, metalness: 0 });
+      const sh = new T.Shape();
+      for (let i = 0; i <= 96; i++) { const a = (i / 96) * Math.PI * 2, r = 0.165 + 0.013 * Math.cos(a * 16), px = Math.cos(a) * r, py = Math.sin(a) * r; if (i) sh.lineTo(px, py); else sh.moveTo(px, py); }
+      g.add(M(new T.ExtrudeGeometry(sh, { depth: 0.02, bevelEnabled: false, curveSegments: 4 }), cloth, [0, 0, -0.01]));
+      g.add(M(new T.CircleGeometry(0.104, 40), new T.MeshStandardMaterial({ color: lin('#C2C8D4'), roughness: 0.9, map: tex }), [0, 0, 0.0115]));
+      [-1, 1].forEach((sx) => g.add(M(new T.BoxGeometry(0.07, 0.2, 0.012), cloth, [sx * 0.06, -0.2, -0.006], [0, 0, sx * 0.25])));
+      g.add(M(new T.TorusGeometry(0.028, 0.009, 8, 20), cloth, [0, 0.175, 0]));
+      return g;
+    }
+    const metal = kind === 'gold' ? goldMat() : new T.MeshPhysicalMaterial({ color: lin(MEDAL_C[kind]), metalness: 1, roughness: kind === 'silver' ? 0.2 : 0.3, clearcoat: 0.7, clearcoatRoughness: 0.1, envMapIntensity: 1.3 });
+    const face = metal.clone(); face.map = tex; face.bumpMap = tex; face.bumpScale = 0.012;
+    g.add(M(new T.CylinderGeometry(0.16, 0.16, 0.032, 64), metal, null, [Math.PI / 2, 0, 0]));
+    g.add(M(new T.TorusGeometry(0.153, 0.017, 12, 64), metal));
+    g.add(M(new T.CircleGeometry(0.139, 64), face, [0, 0, 0.0165]));
+    g.add(M(new T.CircleGeometry(0.139, 64), face, [0, 0, -0.0165], [0, Math.PI, 0]));
+    g.add(M(new T.TorusGeometry(0.03, 0.01, 8, 20), metal, [0, 0.176, 0]));
+    return g;
+  }
+  /* A belt round the buddy's middle: the band (two stitch lines), the knot in front and two tails
+     (stripes on the right tail; a gold bar on a plain black belt). */
+  function beltMesh(b, fit) {
+    const g = new T.Group();
+    g.rotation.order = 'ZYX';
+    const cloth = new T.MeshStandardMaterial({ color: lin(b.c), roughness: 0.74, metalness: 0, emissive: lin(b.c), emissiveIntensity: 0 });
+    const seam = new T.MeshStandardMaterial({ color: lin(b.d), roughness: 0.8, metalness: 0 });
+    const ring = (dy, out) => {
+      const pts = [], e = 2 / fit.n;
+      for (let k = 0; k < 96; k++) {
+        const a = (k / 96) * Math.PI * 2, c = Math.cos(a), s = Math.sin(a);
+        pts.push(V((fit.rx + out) * Math.sign(c) * Math.pow(Math.abs(c), e), dy, (fit.rz + out) * Math.sign(s) * Math.pow(Math.abs(s), e)));
+      }
+      return new T.CatmullRomCurve3(pts, true);
+    };
+    const band = new T.Mesh(new T.TubeGeometry(ring(0, 0), 192, 0.034, 10, true), cloth);
+    band.scale.y = 2.4; g.add(band);
+    [-0.045, 0.045].forEach((dy) => g.add(new T.Mesh(new T.TubeGeometry(ring(dy, 0.03), 192, 0.0055, 5, true), seam)));
+    const front = fit.rz + 0.035;
+    const knot = G([0, 0, front], null, null, M(rbox(0.25, 0.17, 0.085, 0.045, 10), cloth), M(new T.BoxGeometry(0.2, 0.012, 0.09), seam, [0, 0.03, 0]), M(new T.BoxGeometry(0.2, 0.012, 0.09), seam, [0, -0.03, 0]));
+    g.add(knot);
+    const stripeM = new T.MeshStandardMaterial({ color: lin(b.i === 0 ? '#2A2A33' : b.i === 8 ? '#FFC531' : '#FFFFFF'), roughness: 0.6, metalness: b.i === 8 ? 0.6 : 0 });
+    const tails = [-1, 1].map((sx) => {
+      const pivot = G([sx * 0.05, -0.035, front + 0.03], [0, 0, sx * 0.3]);
+      pivot.add(M(rbox(0.085, 0.42, 0.028, 0.014, 8), cloth, [0, -0.21, 0]));
+      const n = sx > 0 ? Math.min(3, b.stripes || 0) : 0;
+      for (let k = 0; k < n; k++) pivot.add(M(new T.BoxGeometry(0.093, 0.028, 0.032), stripeM, [0, -0.36 + k * 0.052, 0]));
+      if (sx > 0 && b.i === 8 && !b.stripes) pivot.add(M(new T.BoxGeometry(0.093, 0.05, 0.032), stripeM, [0, -0.35, 0]));
+      pivot.userData.base = pivot.rotation.z;
+      g.add(pivot);
+      return pivot;
+    });
+    const sparks = [];
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2, sp = new T.Sprite(new T.SpriteMaterial({ map: sparkTex(), transparent: true, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false }));
+      sp.position.set(Math.cos(a) * (fit.rx + 0.08), 0.02, Math.sin(a) * (fit.rz + 0.08)); sp.scale.setScalar(0.12); g.add(sp); sparks.push(sp);
+    }
+    g.position.set(fit.at[0], fit.at[1], fit.at[2]); g.rotation.z = fit.tilt;
+    return { g, cloth, knot, tails, sparks, at: fit.at };
+  }
+  /* The stage: a night sky, a glossy floor, a podium with gold trim, a spotlight beam and a pool of
+     light, soft lights in the distance, rays behind the buddy, a flash, and confetti. */
+  function cereStage() {
+    const s = new T.Scene();
+    if (!cereEnv) cereEnv = makeEnv();
+    s.environment = cereEnv;
+    const geo = new T.SphereGeometry(40, 48, 24), p = geo.attributes.position, cols = [];
+    const top = lin('#0A0628'), hor = lin('#35217E'), bot = lin('#05031A'), glow = lin('#7B3FD0');
+    for (let i = 0; i < p.count; i++) {
+      const y = p.getY(i) / 40, z = p.getZ(i) / 40;
+      const k = y > 0 ? hor.clone().lerp(top, Math.pow(y, 0.6)) : hor.clone().lerp(bot, Math.pow(-y, 0.4));
+      if (z < 0) k.lerp(glow, 0.28 * -z * (1 - Math.abs(y)));
+      cols.push(k.r, k.g, k.b);
+    }
+    geo.setAttribute('color', new T.Float32BufferAttribute(cols, 3));
+    s.add(new T.Mesh(geo, new T.MeshBasicMaterial({ vertexColors: true, side: T.BackSide, depthWrite: false, toneMapped: false })));
+    s.add(M(new T.CircleGeometry(16, 72), new T.MeshStandardMaterial({ color: lin('#140D38'), roughness: 0.55, metalness: 0, envMapIntensity: 0.18 }), [0, 0, 0], [-Math.PI / 2, 0, 0]));
+    const add = (h, op) => new T.MeshBasicMaterial({ map: glowDot(), color: lin(h), transparent: true, opacity: op, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false });
+    s.add(M(new T.PlaneGeometry(10, 10), add('#9B6BFF', 0.42), [0, 0.006, 0], [-Math.PI / 2, 0, 0]));
+    const trim = goldMat();
+    s.add(M(new T.CylinderGeometry(1.5, 1.58, 0.16, 72), mat.vinyl('#211858', { roughness: 0.35 }), [0, 0.08, 0]));
+    s.add(M(new T.CylinderGeometry(1.24, 1.3, 0.3, 72), mat.vinyl('#3A2B8C', { roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.12 }), [0, 0.31, 0]));
+    s.add(M(new T.TorusGeometry(1.24, 0.03, 10, 96), trim, [0, 0.46, 0], [Math.PI / 2, 0, 0]));
+    s.add(M(new T.TorusGeometry(1.52, 0.022, 8, 96), trim, [0, 0.16, 0], [Math.PI / 2, 0, 0]));
+    s.add(M(extrude(starShape(0.13, 0.058, 5), 0.03, 0.012), trim, [0, 0.31, 1.3]));
+    const pool = M(new T.PlaneGeometry(2.6, 2.6), add('#FFE9C4', 0), [0, 0.466, 0], [-Math.PI / 2, 0, 0]);
+    s.add(pool);
+    const beam = M(new T.ConeGeometry(1.8, 7.2, 48, 1, true), new T.ShaderMaterial({
+      uniforms: { color: { value: new T.Color('#FFF0D2') }, opacity: { value: 0 } },
+      vertexShader: 'varying vec3 vN; varying vec3 vV; varying float vY; void main() { vN = normalize(normalMatrix * normal); vec4 mv = modelViewMatrix * vec4(position, 1.0); vV = normalize(-mv.xyz); vY = position.y / 7.2 + 0.5; gl_Position = projectionMatrix * mv; }',
+      fragmentShader: 'uniform vec3 color; uniform float opacity; varying vec3 vN; varying vec3 vV; varying float vY; void main() { float f = pow(abs(dot(normalize(vN), normalize(vV))), 2.4); float h = (0.3 + 0.7 * vY) * smoothstep(0.0, 0.06, vY) * (1.0 - smoothstep(0.9, 1.0, vY)); gl_FragColor = vec4(color, f * h * opacity); }',
+      transparent: true, blending: T.AdditiveBlending, depthWrite: false
+    }), [0, 0.46 + 3.6, 0]);
+    s.add(beam);
+    const hues = ['#FF5FC8', '#4FE3FF', '#FFC531', '#8B5CF6', '#FF8A3D', '#7FE7FF'], bokeh = [];
+    const rnd = seeded(7);
+    for (let i = 0; i < 34; i++) {
+      const sp = new T.Sprite(new T.SpriteMaterial({ map: glowDot(), color: lin(hues[i % hues.length]), transparent: true, opacity: 0.3, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false }));
+      sp.position.set((rnd() - 0.5) * 24, 0.6 + rnd() * 8.5, -6 - rnd() * 12); sp.scale.setScalar(0.5 + rnd() * 1.4);
+      sp.userData = { o: 0.12 + rnd() * 0.26, ph: rnd() * 6, sp: 0.4 + rnd() * 0.8 }; s.add(sp); bokeh.push(sp);
+    }
+    const rays = new T.Sprite(new T.SpriteMaterial({ map: raysTex(), color: lin('#FFE3A8'), transparent: true, opacity: 0, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false }));
+    rays.position.set(0, 1.75, -1.6); rays.scale.setScalar(8.5); s.add(rays);
+    const flash = new T.Sprite(new T.SpriteMaterial({ map: glowDot(), color: lin('#FFF6D8'), transparent: true, opacity: 0, depthWrite: false, depthTest: false, blending: T.AdditiveBlending, toneMapped: false }));
+    s.add(flash);
+    s.add(new T.HemisphereLight(lin('#D9D2FF'), lin('#1A1240'), 0.5));
+    const spot = new T.SpotLight(lin('#FFF3DC'), 2.3, 40, 0.42, 0.6, 1); spot.position.set(0, 9.5, 3.2); spot.target.position.set(0, 1.0, 0); s.add(spot, spot.target);
+    const key = new T.DirectionalLight(0xffffff, 0.7); key.position.set(-3.5, 5, 7); s.add(key);
+    const rimC = new T.DirectionalLight(lin('#8FF3FF'), 1.0); rimC.position.set(4.5, 3, -4); s.add(rimC);
+    const rimP = new T.DirectionalLight(lin('#FF9AD8'), 0.85); rimP.position.set(-4.5, 2.5, -4); s.add(rimP);
+    /* confetti: one instanced mesh, pieces dropped in from above at a burst */
+    const n = 240, im = new T.InstancedMesh(new T.PlaneGeometry(0.075, 0.13), new T.MeshBasicMaterial({ side: T.DoubleSide, toneMapped: false }), n);
+    im.frustumCulled = false;
+    const cc = ['#FFC531', '#FF5FC8', '#4FE3FF', '#34D27B', '#8B5CF6', '#FF8A3D', '#FFFFFF'], bits = [];
+    for (let i = 0; i < n; i++) { im.setColorAt(i, lin(cc[i % cc.length])); bits.push({ p: V(0, -9, 0), v: V(0, 0, 0), ax: V(rnd() - 0.5, rnd() - 0.5, rnd() - 0.5).normalize(), a: rnd() * 6, w: 4 + rnd() * 6, ph: rnd() * 6, on: false }); }
+    if (im.instanceColor) im.instanceColor.needsUpdate = true;
+    s.add(im);
+    return { scene: s, pool, beam, bokeh, rays, flash, conf: { im, bits, d: new T.Object3D() } };
+  }
+  function confettiGo(cf) {
+    cf.bits.forEach((b) => { b.on = true; b.p.set((Math.random() - 0.5) * 8, 4.2 + Math.random() * 4, -1.8 + Math.random() * 4.4); b.v.set((Math.random() - 0.5) * 1.2, -0.3 - Math.random() * 0.9, (Math.random() - 0.5) * 0.6); });
+  }
+  function confettiStep(cf, dt, t) {
+    cf.bits.forEach((b, i) => {
+      if (b.on) {
+        b.v.y = Math.max(-1.45, b.v.y - 1.9 * dt); b.v.x *= 1 - 0.8 * dt; b.v.z *= 1 - 0.8 * dt;
+        b.p.addScaledVector(b.v, dt); b.p.x += Math.sin(t * 2.6 + b.ph) * 0.35 * dt; b.a += b.w * dt;
+        if (b.p.y < 0.02) b.on = false;
+      }
+      cf.d.position.copy(b.p); cf.d.quaternion.setFromAxisAngle(b.ax, b.a); cf.d.scale.setScalar(b.on ? 1 : 0.0001);
+      cf.d.updateMatrix(); cf.im.setMatrixAt(i, cf.d.matrix);
+    });
+    cf.im.instanceMatrix.needsUpdate = true;
+  }
+  /* look: as on the page (data-b3d). opts: { kind: 'belt' | 'medals', belt: { c, d, i, stripes },
+     medals: [{ subj, kind: 'gold' | 'silver' | 'bronze' | 'ribbon' | '' }] x3, on(name, data) }. */
+  function ceremony(host, look, opts) {
+    if (!host || !init()) return null;
+    stopCeremony();
+    let st;
+    try { st = cereStage(); } catch (e) { return null; }
+    const lk = Object.assign({}, look, { bg: '', m: 'idle' });
+    lk.w = Object.assign({}, look.w || {});
+    if (opts.kind === 'medals') lk.w.neck = '';
+    const b = build(lk), type = b.type;
+    b.root.position.y = 0.46;
+    st.scene.add(b.root);
+    const v = { look: lk, root: b.root, P: b.P, type, t0: performance.now(), blink: 1.3, spin: 0, spinVel: 0, lastTouch: 0, boing: 0, mood: 'idle', live: true, visible: true };
+    const canvas = document.createElement('canvas');
+    canvas.className = 'cere-cv'; canvas.setAttribute('aria-hidden', 'true');
+    host.appendChild(canvas);
+    const ce = { host, canvas, ctx: canvas.getContext('2d'), st, v, opts, kind: opts.kind, cam: new T.PerspectiveCamera(30, 1, 0.1, 120), t0: performance.now(), last: 0, fired: {}, raf: 0 };
+    if (opts.kind === 'belt') {
+      ce.belt = beltMesh(opts.belt, BELT_FIT[type] || BELT_FIT.ladybug);
+      ce.belt.g.visible = false; b.P.body.add(ce.belt.g);
+    } else {
+      const F = MEDAL_FIT[type] || MEDAL_FIT.ladybug;
+      ce.medals = (opts.medals || []).map((m, i) => {
+        if (!m.kind) return { kind: '' };
+        const g = medalMesh(m.kind, m.subj), to = V(F.cx + (i - 1) * F.dx * 1.08, F.y - (i === 1 ? 0.06 : 0), F.z[i] + 0.035);
+        g.scale.setScalar(1.15);
+        const strapGeo = new T.BoxGeometry(0.062, 1, 0.012); strapGeo.translate(0, -0.5, 0);
+        const strap = new T.Mesh(strapGeo, new T.MeshStandardMaterial({ color: lin(m.kind === 'ribbon' ? '#8C93A6' : SUBJ_HUE[m.subj] || '#FFC531'), roughness: 0.62 }));
+        strap.visible = false; g.visible = false;
+        b.P.body.add(g, strap);
+        return { kind: m.kind, g, strap, to, from: to.clone().add(V(0, 2.3, 1.1)), neck: V(F.neck[0] + (i - 1) * 0.14, F.neck[1], F.neck[2]), sparks: [] };
+      });
+    }
+    try { renderer.compile(st.scene, ce.cam); } catch (e) { /* the first frame compiles instead */ }
+    CE = ce;
+    ce.raf = requestAnimationFrame(cereFrame);
+    return { skip: () => { if (CE === ce) { ce.t0 = Math.min(ce.t0, performance.now() - endOf(ce) * 1000 - 20); ce.skipped = true; } }, stop: () => { if (CE === ce) stopCeremony(); } };
+  }
+  const endOf = (ce) => (ce.kind === 'belt' ? BELT_T.done : MEDAL_T.first + 2 * MEDAL_T.step + MEDAL_T.fly + MEDAL_T.after) + 0.01;
+  function fire(ce, name, data) {
+    if (ce.fired[name]) return;
+    ce.fired[name] = true;
+    try { if (ce.opts.on) ce.opts.on(name, data || {}); } catch (e) { /* the page's handler */ }
+  }
+  function cereFrame(now) {
+    const ce = CE;
+    if (!ce) return;
+    ce.raf = requestAnimationFrame(cereFrame);
+    if (!ce.host.isConnected) { stopCeremony(); return; }
+    if (!ce.started) { ce.started = true; if (reduced) { ce.t0 = now - endOf(ce) * 1000 - 50; ce.skipped = true; } else if (!ce.skipped) ce.t0 = now; }
+    const fixed = typeof window.__cereT === 'number' ? window.__cereT : null;
+    const t = fixed != null ? fixed : (now - ce.t0) / 1000, dt = fixed != null ? 0 : ce.last ? Math.min(0.05, (now - ce.last) / 1000) : 0.016;
+    ce.last = now;
+    try { cereStep(ce, t, dt, now); cereDraw(ce); } catch (e) { try { console.warn('ceremony stopped', e); } catch (er) { /* ignore */ } stopCeremony(); fire(ce, 'done'); }
+  }
+  function cereStep(ce, t, dt, now) {
+    const st = ce.st, cam = ce.cam, host = ce.host;
+    /* camera: in from high and wide, then a slow sway */
+    const aspect = Math.max(0.3, (host.clientWidth || 1) / (host.clientHeight || 1)), tan = Math.tan((15 * Math.PI) / 180);
+    const near = ce.kind === 'medals' ? 0.82 : 1, dist = near * Math.max(5.6 / (2 * tan), 4.3 / (2 * tan * aspect));
+    const k = ease3(c01(t / 2.0)), yaw = -0.42 * (1 - k) + 0.1 * Math.sin(t * 0.35) * k;
+    const d = dist * (1.38 - 0.38 * k), h = 1.95 + 1.9 * (1 - k);
+    cam.position.set(Math.sin(yaw) * d, h, Math.cos(yaw) * d); cam.lookAt(0, ce.kind === 'medals' ? 1.4 : 1.32, 0);
+    const lit = c01(t / 0.8);
+    st.beam.material.uniforms.opacity.value = 0.5 * lit; st.pool.material.opacity = 0.55 * lit;
+    st.bokeh.forEach((s) => { s.material.opacity = s.userData.o * (0.6 + 0.4 * Math.sin(t * s.userData.sp + s.userData.ph)) * (0.3 + 0.7 * lit); });
+    if (ce.raysOn != null) { const u = t - ce.raysOn; st.rays.material.opacity = 0.55 * c01(u / 0.6); st.rays.material.rotation = u * 0.12; }
+    if (ce.flashAt != null) {
+      const u = (t - ce.flashAt) / 0.45;
+      st.flash.material.opacity = u >= 0 && u < 1 ? 1 - u : 0; st.flash.scale.setScalar(0.3 + 5.5 * c01(u));
+    }
+    if (ce.kind === 'belt') beltStep(ce, t);
+    else medalStep(ce, t);
+    pose(ce.v, now);
+    confettiStep(st.conf, dt, t);
+  }
+  function beltStep(ce, t) {
+    const B = ce.belt, T0 = BELT_T.show, D0 = BELT_T.drop0, D1 = BELT_T.drop1, S1 = BELT_T.tie;
+    B.g.visible = t >= T0;
+    if (t < S1) {
+      const drop = 2.9 * (1 - ease3(c01((t - D0) / (D1 - D0)))), sc = t < D1 ? 1.95 : 1.95 - 0.95 * Math.pow(c01((t - D1) / (S1 - D1)), 2);
+      const q = c01((t - T0) / (S1 - T0));
+      B.g.position.y = B.at[1] + drop; B.g.scale.set(sc, 1, sc);
+      B.g.rotation.y = Math.PI * 4 * (1 - Math.pow(1 - q, 3));
+      B.cloth.emissiveIntensity = 0.55 * c01((t - T0) / 0.3);
+      B.knot.scale.setScalar(0.0001); B.tails.forEach((x) => x.scale.setScalar(0.0001));
+      B.sparks.forEach((s, i) => { s.visible = true; const w = 0.5 + 0.5 * Math.sin(t * 9 + i * 1.7); s.scale.setScalar(0.08 + 0.12 * w); s.material.opacity = 0.4 + 0.6 * w; });
+      return;
+    }
+    const u = t - S1, pop = u < 0.25 ? outBack(c01(u / 0.25)) : 1;
+    B.g.position.y = B.at[1]; B.g.scale.set(1, 1, 1); B.g.rotation.y = 0;
+    B.cloth.emissiveIntensity = 0.55 * Math.max(0, 1 - u / 0.8);
+    B.knot.scale.setScalar(Math.max(0.0001, pop));
+    B.tails.forEach((x, i) => { x.scale.setScalar(Math.max(0.0001, pop)); x.rotation.z = x.userData.base + (i ? -1 : 1) * 0.45 * Math.exp(-3.5 * u) * Math.sin(13 * u); });
+    B.sparks.forEach((s) => { s.visible = false; });
+    if (!ce.fired.tie) {
+      const at = V(0, 0, 0); B.knot.getWorldPosition(at);
+      ce.st.flash.position.copy(at); ce.flashAt = t; ce.raysOn = t;
+      if (!ce.skipped && !reduced) confettiGo(ce.st.conf);
+      ce.v.mood = 'cheer';
+      fire(ce, 'tie');
+    }
+    if (t >= BELT_T.done) fire(ce, 'done');
+  }
+  function medalStep(ce, t) {
+    const up = V(0, 0.19, 0), top = V(0, 0, 0), dir = V(0, 0, 0), down = V(0, -1, 0);
+    let last = 0, any = false, gold = false;
+    ce.medals.forEach((m, i) => {
+      const t0 = MEDAL_T.first + i * MEDAL_T.step, land = t0 + MEDAL_T.fly;
+      last = land;
+      if (!m.kind) { if (t >= land) fire(ce, 'medal' + i, { i, kind: '' }); return; }
+      if (m.kind !== 'ribbon') any = true;
+      if (m.kind === 'gold') gold = true;
+      m.g.visible = t >= t0;
+      if (t < t0) return;
+      if (t < land) {
+        const q = c01((t - t0) / MEDAL_T.fly);
+        m.g.position.lerpVectors(m.from, m.to, outBack(q));
+        m.g.rotation.set(-0.5 * (1 - q), Math.PI * 3 * (1 - ease3(q)), 0);
+        m.strap.visible = false;
+        return;
+      }
+      const u = t - land, damp = m.kind === 'ribbon' ? 0.4 : 1;
+      m.g.position.copy(m.to);
+      m.g.rotation.set(0.14 * damp * Math.exp(-3 * u) * Math.sin(8 * u), 0, 0.28 * damp * Math.exp(-3.2 * u) * Math.sin(11 * u));
+      top.copy(up).multiplyScalar(m.g.scale.y).applyEuler(m.g.rotation).add(m.g.position);
+      dir.copy(top).sub(m.neck);
+      const len = dir.length();
+      m.strap.visible = true; m.strap.position.copy(m.neck);
+      m.strap.quaternion.setFromUnitVectors(down, dir.normalize());
+      m.strap.scale.set(1, Math.max(0.001, len * c01(u / 0.15)), 1);
+      if (!ce.fired['medal' + i]) {
+        if (m.kind !== 'ribbon' && !ce.skipped) { const p = V(0, 0, 0); m.g.getWorldPosition(p); ce.st.flash.position.copy(p); ce.flashAt = t; }
+        fire(ce, 'medal' + i, { i, kind: m.kind });
+      }
+    });
+    if (t >= last + MEDAL_T.after && !ce.fired.done) {
+      ce.v.mood = any ? 'cheer' : 'think';
+      if (gold) { ce.raysOn = t; if (!ce.skipped && !reduced) confettiGo(ce.st.conf); }
+      fire(ce, 'done', { any, gold });
+    }
+  }
+  function cereDraw(ce) {
+    const cw = ce.host.clientWidth, ch = ce.host.clientHeight;
+    if (!cw || !ch) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5), w = Math.round(cw * dpr), h = Math.round(ch * dpr);
+    setBuffer(w, h);
+    if (ce.canvas.width !== w || ce.canvas.height !== h) { ce.canvas.width = w; ce.canvas.height = h; }
+    ce.cam.aspect = w / h; ce.cam.updateProjectionMatrix();
+    renderer.setViewport(0, 0, w, h); renderer.setScissor(0, 0, w, h); renderer.setScissorTest(true);
+    renderer.render(ce.st.scene, ce.cam);
+    ce.ctx.clearRect(0, 0, w, h);
+    ce.ctx.drawImage(glCanvas, 0, bufH - h, w, h, 0, 0, w, h);
+  }
+  function stopCeremony() {
+    const ce = CE;
+    if (!ce) return;
+    CE = null;
+    if (ce.raf) cancelAnimationFrame(ce.raf);
+    try { dispose(ce.st.scene); } catch (e) { /* ignore */ }
+    if (ce.canvas.parentNode) ce.canvas.parentNode.removeChild(ce.canvas);
+    views.forEach((v) => { v.dirty = true; });
+    kick();
+  }
+
   /* Do the slow one-time work (renderer, lighting, shader compile) before a buddy is needed. */
   function warm() {
     if (!init()) return;
@@ -7607,14 +8047,15 @@ const Buddy3D = (() => {
       scene.add(b.root); renderer.compile(scene, camera); scene.remove(b.root); dispose(b.root);
     } catch (e) { /* first real draw will compile instead */ }
   }
-  return { mount, warm, feed, get active() { return ready && !failed; }, _build: build, _views: views, _gl: () => glCanvas, _buf: () => [bufW, bufH], _pose: pose, _draw: draw, TRICK_MS };
+  return { mount, warm, feed, ceremony, stopCeremony, get active() { return ready && !failed; }, get inCeremony() { return !!CE; }, _build: build, _views: views, _gl: () => glCanvas, _buf: () => [bufW, bufH], _pose: pose, _draw: draw, TRICK_MS };
 })();
-/* Small Steps: belts and trophies. No DOM; the app and the tests share it.
-   Belts: one per subject. Passing a Kumon group (moving past its last level, after its level test)
-   earns the next belt, and the last group in a subject earns black, so black means the whole subject
-   is done. A step back keeps the belt: it counts from the higher of the current level and the level
-   stepped back from. Trophies: ten series of goals counted from the logs (voided sheets and reads are
-   already left out of the logs the app reads), so nothing extra is saved and nothing can be bought. */
+/* Small Steps: belts, trophies and the day's medals. No DOM; the app and the tests share it.
+   Belts: the same nine in every subject, in karate order, white to black. Each subject's levels are
+   split into eight equal shares; finishing a share earns the next belt (rounded, so the first comes
+   after half a share), and black means every level in the subject is done. A step back keeps the
+   belt: it counts from the higher of the current level and the level stepped back from. Trophies:
+   six series of goals counted from the logs (voided sheets and reads are already left out of the
+   logs the app reads), so nothing extra is saved and nothing can be bought. */
 const Awards = (() => {
   'use strict';
   const BELTS = [
@@ -7624,41 +8065,34 @@ const Awards = (() => {
     { id: 'red', name: 'Red', c: '#E8453C', d: '#A8231C' }, { id: 'brown', name: 'Brown', c: '#9A6234', d: '#5E3A1C' },
     { id: 'black', name: 'Black', c: '#24242C', d: '#000000' }
   ];
-  /* The belt each group earns, in ladder order: [belt, stripes]. Reading has more groups than colors,
-     so some groups add a stripe instead of a new color. */
-  const PLAN = {
-    math: { '6A': [1], '5A': [2], '3A': [3], '2A': [4], A: [5], B: [7], C: [8] },
-    reading: { '7A': [0, 1], '6A': [1], '5A': [2], '4A': [3], '3A': [4], '2A': [5], AI: [5, 1], AII: [6], BI: [6, 1], BII: [7], CI: [7, 1], CII: [8] },
-    clock: { PK: [1], G1: [3], G2: [5], G3: [8] }
-  };
-  /* How many of a subject's groups the child has passed. */
-  function groupsPassed(E, t) {
+  const TOP = BELTS.length - 1;
+  /* How many of a subject's levels the child has passed: all of them once the top level is done. */
+  function levelsPassed(E, t) {
     t = t || {};
     const here = E.levelIndex(t.levelId), back = t.backFrom ? E.levelIndex(t.backFrom) : -1, idx = Math.max(here, back);
     if (idx < 0) return 0;
-    if (t.top && idx === E.LEVELS.length - 1 && !t.testFor) return E.GROUPS.length;
-    return Math.max(0, E.GROUPS.indexOf(E.LEVELS[idx].group));
+    if (t.top && idx === E.LEVELS.length - 1 && !t.testFor) return E.LEVELS.length;
+    return idx;
   }
-  /* The belt for n groups passed. */
+  /* The belt for a number of levels passed, and the levels a belt needs. */
+  const beltN = (E, passed) => (passed >= E.LEVELS.length ? TOP : Math.min(TOP - 1, Math.round((TOP * passed) / E.LEVELS.length)));
+  const beltNeeds = (E, n) => (n <= 0 ? 0 : n >= TOP ? E.LEVELS.length : Math.ceil(((n - 0.5) * E.LEVELS.length) / TOP));
   function beltAt(subj, E, n) {
-    let i = 0, stripes = 0;
-    if (n > 0) {
-      const plan = PLAN[subj] || {}, g = E.GROUPS[n - 1];
-      if (plan[g]) { i = plan[g][0]; stripes = plan[g][1] || 0; }
-      else { i = 8; stripes = n - E.GROUPS.filter((x) => plan[x]).length; }
-    }
-    const B = BELTS[i];
-    return { n, of: E.GROUPS.length, i, stripes, id: B.id, c: B.c, d: B.d, name: B.name + ' belt' + (stripes ? (stripes > 1 ? ' with ' + stripes + ' stripes' : ' with a stripe') : '') };
+    const B = BELTS[n];
+    return { n, of: TOP, i: n, stripes: 0, id: B.id, c: B.c, d: B.d, name: B.name + ' belt' };
   }
-  const beltOf = (subj, E, t) => beltAt(subj, E, groupsPassed(E, t));
-  /* Every belt in a subject, white first, each with the group that earns it and that group's last level. */
+  const beltOf = (subj, E, t) => beltAt(subj, E, beltN(E, levelsPassed(E, t)));
+  /* Every belt, white first: the levels each needs and the level to pass for it. */
   function beltLadder(subj, E) {
-    const out = [beltAt(subj, E, 0)];
-    E.GROUPS.forEach((g, k) => {
-      const lv = E.groupLevels(g), last = lv.length ? E.BY[lv[lv.length - 1]] || null : null;
-      out.push(Object.assign(beltAt(subj, E, k + 1), { group: g, last: last ? last.name : '' }));
+    return BELTS.map((B, n) => {
+      const need = beltNeeds(E, n), lv = need > 0 ? E.LEVELS[need - 1] : null;
+      return Object.assign(beltAt(subj, E, n), { need, last: lv ? lv.name : '' });
     });
-    return out;
+  }
+  /* Levels still to pass for the next belt (null at black). */
+  function toNextBelt(E, t) {
+    const p = levelsPassed(E, t), n = beltN(E, p);
+    return n >= TOP ? null : { belt: n + 1, left: beltNeeds(E, n + 1) - p };
   }
   const sameBelt = (a, b) => !!a && !!b && a.i === b.i && a.stripes === b.stripes;
 
@@ -7739,7 +8173,66 @@ const Awards = (() => {
     });
     return out;
   }
-  return { BELTS, PLAN, groupsPassed, beltAt, beltOf, beltLadder, sameBelt, FORM_NAME, TIERS, SERIES, counts, trophies, newOnes, localDay };
+  /* ---------- daily medals ---------- */
+  /* One medal a day in each subject, from the day's planned sheets (extra sheets after the plan don't
+     count): passing a third of them earns bronze, two thirds silver, all of them gold, so 1, 2 and 3
+     of the usual 3. Finishing the plan with no passes earns a try-again ribbon: a consolation, shown
+     plain and gray, never counted with the medals. */
+  const MEDALS = {
+    gold: { id: 'gold', name: 'Gold', rank: 4, c: '#FFC23A', d: '#A86F00' },
+    silver: { id: 'silver', name: 'Silver', rank: 3, c: '#DCE2EC', d: '#7F889C' },
+    bronze: { id: 'bronze', name: 'Bronze', rank: 2, c: '#D9894A', d: '#86461A' },
+    /* a consolation, not a medal: plain gray, no shine, not counted with the medals */
+    ribbon: { id: 'ribbon', name: 'Try-again ribbon', rank: 1, c: '#9AA3B8', d: '#5C6478' }
+  };
+  const opts = { ribbon: true };
+  function medalOf(passed, done, plan) {
+    plan = Math.max(1, plan || 3);
+    if (passed >= plan) return 'gold';
+    if (passed >= Math.ceil((2 * plan) / 3)) return 'silver';
+    if (passed >= Math.ceil(plan / 3)) return 'bronze';
+    if (opts.ribbon && done >= plan) return 'ribbon';
+    return '';
+  }
+  /* The day's planned sheets of one subject: { plan, done, passed, medal }. */
+  function dayResult(list) {
+    const sheets = list.filter((s) => s && (s.kind === 'sheet' || s.kind === 'test')).sort((a, b) => String(a.at).localeCompare(String(b.at)));
+    const plans = sheets.map((s) => s.plan).filter((n) => typeof n === 'number' && n > 0);
+    const plan = plans.length ? Math.min.apply(null, plans) : 3;
+    const planned = sheets.every((s) => typeof s.day === 'number') ? sheets.filter((s) => s.day <= plan) : sheets.slice(0, plan);
+    const passed = planned.filter((s) => s.pass).length, done = planned.length;
+    return { plan, done, passed, medal: medalOf(passed, done, plan) };
+  }
+  /* logs: { math, reading, clock: sessions }. day: 'YYYY-MM-DD' (local). */
+  function medalsOn(logs, day) {
+    const out = {};
+    SUBJ.forEach((sj) => { out[sj] = dayResult((logs[sj] || []).filter((s) => s && localDay(s.at) === day)); });
+    return out;
+  }
+  /* Medals won, by kind: every day, or from one day on (from: 'YYYY-MM-DD'). */
+  function medalTally(logs, from) {
+    const T = { gold: 0, silver: 0, bronze: 0, ribbon: 0 };
+    SUBJ.forEach((sj) => {
+      const by = {};
+      (logs[sj] || []).forEach((s) => { if (s && (s.kind === 'sheet' || s.kind === 'test')) { const d = localDay(s.at); if (d && (!from || d >= from)) (by[d] = by[d] || []).push(s); } });
+      Object.keys(by).forEach((d) => { const m = dayResult(by[d]).medal; if (m) T[m]++; });
+    });
+    return T;
+  }
+  /* Monday of the week a day falls in, 'YYYY-MM-DD'. */
+  function weekStart(day) {
+    const p = day.split('-').map(Number), d = new Date(p[0], p[1] - 1, p[2], 12);
+    d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    return localDay(d.toISOString());
+  }
+  /* What the next pass would earn, for "Silver so far: pass one more for gold". */
+  function nextMedal(r) {
+    if (!r || r.medal === 'gold' || r.done >= r.plan) return null;
+    const left = r.plan - r.done, best = medalOf(r.passed + left, r.plan, r.plan), next = medalOf(r.passed + 1, r.done + 1, r.plan);
+    return { next: next && next !== r.medal ? next : '', best, left };
+  }
+  return { BELTS, levelsPassed, beltN, beltNeeds, beltAt, beltOf, beltLadder, toNextBelt, sameBelt, FORM_NAME, TIERS, SERIES, counts, trophies, newOnes, localDay,
+    MEDALS, medalOf, dayResult, medalsOn, medalTally, weekStart, nextMedal, opts };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = Awards;
 /* Small Steps: merging two copies of a record that both changed since they last matched.
@@ -8462,6 +8955,23 @@ const Sfx = (() => {
       osc.start(now); lfo.start(now); osc.stop(now + dur + 0.05); lfo.stop(now + dur + 0.05);
     } catch (e) { /* audio unavailable */ }
   }
+  /* Filtered noise: snare hits, claps, cymbals, whooshes. */
+  let noiseBuf = null;
+  function noise(t0, dur, o) {
+    if (muted) return;
+    const c = ac(); if (!c) return;
+    o = o || {};
+    try {
+      if (!noiseBuf) { noiseBuf = c.createBuffer(1, c.sampleRate, c.sampleRate); const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+      const now = c.currentTime + (t0 || 0), src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+      src.buffer = noiseBuf; src.loop = true;
+      f.type = o.type || 'bandpass'; f.frequency.setValueAtTime(o.freq || 1800, now); f.Q.value = o.q || 0.8;
+      if (o.to) f.frequency.exponentialRampToValueAtTime(o.to, now + dur);
+      g.gain.setValueAtTime(0.0001, now); g.gain.exponentialRampToValueAtTime(o.vol || 0.08, now + (o.attack || 0.004)); g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+      src.connect(f); f.connect(g); g.connect(master);
+      src.start(now, Math.random() * 0.5); src.stop(now + dur + 0.05);
+    } catch (e) { /* audio unavailable */ }
+  }
   /* A drum thump; big ones are the booms. */
   function drum(t0, big) {
     note(big ? 98 : 160, t0, big ? 0.5 : 0.13, { type: 'sine', vol: big ? 0.32 : 0.16, to: big ? 36 : 70 });
@@ -8485,6 +8995,28 @@ const Sfx = (() => {
     fanfare() { [523, 659, 784, 1047].forEach((f, i) => note(f, i * 0.11, 0.22, { type: 'triangle', vol: 0.15 })); [523, 659, 784].forEach((f) => note(f * 2, 0.5, 0.6, { type: 'sine', vol: 0.07 })); },
     complete() { [784, 988, 1175, 1568].forEach((f, i) => note(f, i * 0.08, 0.2, { type: 'triangle', vol: 0.13 })); },
     page() { note(520, 0, 0.08, { type: 'sine', vol: 0.06, to: 780 }); },
+    /* a snare roll that speeds up and swells (the belt coming down), ending on a cymbal */
+    roll(d, dur) {
+      d = d || 0; dur = dur || 2;
+      let t = 0;
+      while (t < dur) { const k = t / dur; noise(d + t, 0.07, { freq: 2400, q: 0.9, vol: 0.03 + 0.09 * k }); t += 0.085 - 0.05 * k; }
+      noise(d + dur, 1.4, { type: 'highpass', freq: 5200, vol: 0.13, attack: 0.002 });
+      note(98, d + dur, 0.45, { type: 'sine', vol: 0.22, to: 45 });
+    },
+    /* a crowd clapping: many short claps, swelling and fading */
+    applause(d, dur) {
+      d = d || 0; dur = dur || 2;
+      const n = Math.round(dur * 70);
+      for (let i = 0; i < n; i++) { const t = Math.random() * dur, env = Math.sin(Math.PI * Math.min(1, t / dur)) * 0.8 + 0.2; noise(d + t, 0.025 + Math.random() * 0.02, { freq: 900 + Math.random() * 1700, q: 1.3, vol: (0.025 + Math.random() * 0.035) * env, attack: 0.002 }); }
+    },
+    /* a medal landing: a bright metal ring */
+    clink(d) { d = d || 0; note(2093, d, 0.55, { type: 'sine', vol: 0.1 }); note(3136, d + 0.008, 0.38, { type: 'sine', vol: 0.06 }); note(4699, d, 0.18, { type: 'sine', vol: 0.035 }); },
+    sparkle(d) { d = d || 0; [1568, 2093, 2637, 3136, 4186].forEach((f, i) => note(f, d + i * 0.045, 0.22, { type: 'sine', vol: 0.045 })); },
+    /* a try-again ribbon: a soft cloth flop and a gentle falling "aww" */
+    thud(d) { d = d || 0; noise(d, 0.12, { type: 'lowpass', freq: 600, vol: 0.09 }); },
+    aww(d) { d = d || 0; note(392, d, 0.38, { type: 'triangle', vol: 0.08, to: 349 }); note(330, d + 0.32, 0.55, { type: 'triangle', vol: 0.07, to: 262 }); },
+    /* the big moment: the fanfare with a held chord */
+    ta(d) { d = d || 0; [523, 659, 784].forEach((f, i) => note(f, d + i * 0.09, 0.18, { type: 'triangle', vol: 0.15 })); [523, 659, 784, 1047].forEach((f) => note(f, d + 0.3, 1.1, { type: 'triangle', vol: 0.09 })); note(1568, d + 0.3, 0.9, { type: 'sine', vol: 0.05 }); },
     chomp() { [1.04, 1.33, 1.62].forEach((d) => { note(210, d, 0.07, { type: 'square', vol: 0.05, to: 120 }); note(150, d + 0.03, 0.06, { type: 'triangle', vol: 0.06 }); }); note(880, 1.95, 0.12, { type: 'sine', vol: 0.12, to: 1320 }); note(1320, 2.08, 0.18, { type: 'sine', vol: 0.1 }); }
   };
   return api;
@@ -9312,10 +9844,16 @@ function viewFixed() {
 
 /* ---------- celebrations and what comes next ---------- */
 function afterSheet() {
-  const ev = S.result && S.result.ev;
-  if (ev && ev.levelUp) { S.view = 'levelup'; render(); Sfx.fanfare(); after(150, () => Confetti.party()); if (S.result.sh && S.result.sh.speak) Speech.say('Level up!'); return; }
-  if (ev && (ev.stepBack || ev.returned || ev.top || ev.testReady || ev.testFailed)) { S.view = 'change'; render(); if (ev.top) { Sfx.fanfare(); Confetti.party(); } else Sfx.pick(); return; }
+  const R = S.result, ev = R && R.ev;
+  if (ev && ev.levelUp) { S.view = 'levelup'; render(); if (!beltCeremony(R)) { Sfx.fanfare(); after(150, () => Confetti.party()); if (R.sh && R.sh.speak) Speech.say('Level up!'); } return; }
+  if (ev && (ev.stepBack || ev.returned || ev.top || ev.testReady || ev.testFailed)) { S.view = 'change'; render(); if (ev.top && beltCeremony(R)) return; if (ev.top) { Sfx.fanfare(); Confetti.party(); } else Sfx.pick(); return; }
   goBetween();
+}
+/* A new belt plays its ceremony over the level-up screen. True when one started. */
+function beltCeremony(R) {
+  if (!R || !R.awardsBefore || typeof Cere === 'undefined') return false;
+  const l = Store.learner(R.sh.kid), a = R.awardsBefore.belts[R.sh.subj], b = l && kidBelt(l, R.sh.subj);
+  return !!(a && b && b.n > a.n && Cere.belt(l, R.sh.subj, a, b, R.sh.speak));
 }
 function goBetween() {
   S.view = 'between'; render(); window.scrollTo(0, 0);
@@ -9323,7 +9861,15 @@ function goBetween() {
   if (R && !R.celebrated) {
     R.celebrated = true;
     const l = Store.learner(R.sh.kid), plan = ENG[R.sh.subj].todayPlan(trackOf(l, R.sh.subj));
-    if (plan.left === 0 && R.dayGoal) { Sfx.complete(); after(120, () => Confetti.party()); }
+    if (plan.left === 0 && R.dayGoal) {
+      /* the last sheet of the day in every subject: the medal ceremony; otherwise this subject's medal */
+      const all = SUBJECTS.every((s) => ENG[s.key].todayPlan(trackOf(l, s.key)).left === 0);
+      if (all && typeof Cere !== 'undefined' && Cere.medals(l, kidMedals(l), R.sh.speak)) return;
+      const m = kidMedals(l)[R.sh.subj].medal;
+      if (m === 'gold') { Sfx.complete(); Sfx.sparkle(0.3); after(120, () => Confetti.party()); }
+      else if (m === 'silver' || m === 'bronze') { Sfx.complete(); after(120, () => Confetti.fromEl(document.querySelector('.medal-big'), 50)); }
+      else Sfx.aww();
+    }
     else if ((R.credit && (R.credit.grew || R.credit.unlocked.length || (R.credit.steps || []).length)) || awardNews(R.awardsBefore, l).length) { Sfx.fanfare(); after(120, () => Confetti.fromEl(document.querySelector('.stage-buddy'), 70)); }
   }
 }
@@ -9338,7 +9884,7 @@ function viewLevelUp() {
 /* Passing a group earns a new belt: shown big on the level-up screen. */
 function levelUpBelt(R, l) {
   const a = R.awardsBefore && R.awardsBefore.belts[R.sh.subj], b = kidBelt(l, R.sh.subj);
-  return a && b.n > a.n ? '<div class="belt-new">' + beltSVG(b, 'belt-big') + '<b>' + esc(b.name) + '!</b></div>' : '';
+  return a && b.n > a.n ? '<div class="belt-new">' + beltSVG(b, 'belt-big') + '<b>' + esc(b.name) + '!</b><span class="belt-new-row">' + ladderRow(l, R.sh.subj) + '</span></div>' : '';
 }
 function viewChange() {
   const R = S.result, ev = R.ev, E = ENG[R.sh.subj], l = Store.learner(R.sh.kid) || {};
@@ -9360,10 +9906,13 @@ function viewBetween() {
   const extras = newsHTML(l, credit && credit.steps, R && awardNews(R.awardsBefore, l)) +
     (credit && credit.unlocked.length ? '<div class="chips">' + credit.unlocked.map((id) => '<span class="chip chip-warn">New: ' + esc(Buddy.ITEM[id].name) + '</span>').join('') + '</div>' : '');
   const ring = '<div class="ring-big">' + ringSVG(plan.done, plan.total, 70) + '<b>' + plan.done + '/' + plan.total + '</b></div>';
+  const mr = l.id ? kidMedals(l)[subj] : null, mline = mr ? medalLine(mr, SUBJ[subj].name) : '';
+  const medal = mr && mr.done >= mr.plan ? '<div class="medal-day' + (mr.medal === 'ribbon' || !mr.medal ? ' sad' : '') + '">' + medalSVG(mr.medal, subj, 'medal-big') + '<b>' + esc(mline) + '</b></div>'
+    : mline ? '<div class="medal-sofar">' + (mr.medal ? medalSVG(mr.medal, subj) : '') + '<span>' + esc(mline) + '</span></div>' : '';
   if (plan.left > 0) {
     return '<div class="screen grow"><div class="topbar"><span class="sub-chip" style="--acc:' + SUBJ[subj].acc + '">' + SUBJ[subj].name + '</span><span class="spacer"></span>' + starTotalChip(l, Buddy.of(l).stars) + '</div>' +
       '<section class="glass cele" style="--acc:' + SUBJ[subj].acc + '">' + extras + (hasBuddy(l) ? '<div class="stage-buddy">' + Buddy.svg(Buddy.of(l), { mood: credit && (credit.grew || (credit.steps || []).length) ? 'cheer' : 'idle' }) + '</div>' : '') + ring +
-      '<h2 style="font-size:32px">' + plan.done + ' of ' + plan.total + ' sheets done today</h2>' +
+      '<h2 style="font-size:32px">' + plan.done + ' of ' + plan.total + ' sheets done today</h2>' + medal +
       '<p class="cele-sub">' + (testNext ? 'Next up: the level test!' : 'Next sheet now, or take a break and come back later.') + '</p>' +
       (hasBuddy(l) ? goalHTML(Buddy.of(l), kid) : '') +
       '<div class="actions center"><button class="btn btn-gold btn-big" data-act="start" data-kid="' + esc(kid) + '" data-subj="' + subj + '">' + (testNext ? 'Start the level test' : 'Next sheet') + '</button>' +
@@ -9372,7 +9921,7 @@ function viewBetween() {
   }
   return '<div class="screen grow"><div class="topbar"><span class="sub-chip" style="--acc:' + SUBJ[subj].acc + '">' + SUBJ[subj].name + '</span><span class="spacer"></span>' + starTotalChip(l, Buddy.of(l).stars) + '</div>' +
     '<section class="glass cele"><div class="rays"></div><h2 class="cele-title" style="font-size:clamp(44px,9vw,84px)">Day complete!</h2>' + extras +
-    (hasBuddy(l) ? '<div class="stage-buddy">' + Buddy.svg(Buddy.of(l), { mood: 'cheer' }) + '</div>' : '') + ring +
+    (hasBuddy(l) ? '<div class="stage-buddy">' + Buddy.svg(Buddy.of(l), { mood: mr && mr.medal && mr.medal !== 'ribbon' ? 'cheer' : 'think' }) + '</div>' : '') + ring + medal +
     '<p class="cele-sub">All ' + plan.total + ' ' + SUBJ[subj].name.toLowerCase() + ' sheets are done for today. See you tomorrow!</p>' +
     (hasBuddy(l) ? goalHTML(Buddy.of(l), kid) : '') +
     '<div class="actions center"><button class="btn btn-gold btn-big" data-act="home">Done</button>' + (hasBuddy(l) ? shopButton(l, 'between') : '') +
@@ -10506,7 +11055,7 @@ document.addEventListener('click', (e) => {
 
 /* ---------- belts ---------- */
 function beltSVG(b, cls) {
-  const C = b.c, D = b.d, stripe = b.i === 8 ? '#FFC531' : '#FFFFFF';
+  const C = b.c, D = b.d, stripe = b.i === 8 ? '#FFC531' : b.i === 0 ? '#2A2A33' : '#FFFFFF';
   let s = '<svg class="belt' + (cls ? ' ' + cls : '') + '" viewBox="0 0 60 34" aria-hidden="true">' +
     '<path d="M2 9 h56 v8 h-56 z" fill="' + C + '" stroke="' + D + '" stroke-width="1.6"/>' +
     '<path d="M27 15 L19 32 L26 32 L31 19 Z" fill="' + C + '" stroke="' + D + '" stroke-width="1.6" stroke-linejoin="round"/>' +
@@ -10523,12 +11072,16 @@ const kidBelt = (l, subj) => Awards.beltOf(subj, ENG[subj], trackOf(l, subj));
 const kidBelts = (l) => Object.fromEntries(SUBJECTS.map((s) => [s.key, kidBelt(l, s.key)]));
 
 /* ---------- trophies ---------- */
-function kidCounts(l) {
+function kidLogs(l) {
   const logs = {};
   SUBJECTS.forEach((s) => { logs[s.key] = Store.sessionsFor(l.id, s.key); });
   logs.reads = Store.sessionsFor(l.id, 'readaloud');
   logs.books = Store.sessionsFor(l.id, 'books');
-  const belts = SUBJECTS.reduce((n, s) => n + Awards.groupsPassed(ENG[s.key], trackOf(l, s.key)), 0);
+  return logs;
+}
+function kidCounts(l) {
+  const logs = kidLogs(l);
+  const belts = SUBJECTS.reduce((n, s) => n + kidBelt(l, s.key).n, 0);
   return Awards.counts(logs, belts, hasBuddy(l) ? Buddy.growthOf(Buddy.of(l)) : 0);
 }
 const kidTrophies = (l) => Awards.trophies(kidCounts(l));
@@ -10545,39 +11098,146 @@ function awardNews(before, l) {
   Awards.newOnes(before.trophies, now.trophies).forEach((t) => out.push({ kind: 'trophy', t, text: 'New trophy: ' + t.kid + '! ' + t.label }));
   return out;
 }
-function cupSVG(color, empty) {
-  const f = empty ? 'none' : color, st = empty ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.22)';
-  return '<svg class="cup" viewBox="0 0 48 52" aria-hidden="true">' +
-    '<path d="M12 9 H6 C6 17 9 20 14 21 M36 9 H42 C42 17 39 20 34 21" fill="none" stroke="' + (empty ? st : color) + '" stroke-width="3.2" stroke-linecap="round"' + (empty ? ' stroke-dasharray="3 3"' : '') + '/>' +
-    '<path d="M12 5 H36 V15 C36 25 31 31 24 32 C17 31 12 25 12 15 Z" fill="' + f + '" stroke="' + st + '" stroke-width="1.6"' + (empty ? ' stroke-dasharray="3 3"' : '') + '/>' +
-    '<path d="M21 32 H27 V39 H21 Z" fill="' + f + '" stroke="' + st + '" stroke-width="1.4"/>' +
-    '<rect x="13" y="39" width="22" height="8" rx="2.5" fill="' + (empty ? 'none' : 'color-mix(in srgb, ' + color + ' 70%, #3A2A00)') + '" stroke="' + st + '" stroke-width="1.4"' + (empty ? ' stroke-dasharray="3 3"' : '') + '/>' +
-    (empty ? '' : '<path d="M16.5 8 V15 C16.5 21 18.5 25 21.5 27.5" fill="none" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="2.4" stroke-linecap="round"/>') + '</svg>';
+/* ---------- trophies, drawn ---------- */
+/* Each trophy has a shape of its own (a star, a flame, a rocket, a microphone, a book, a shield) on
+   the same two-step base, in the metal of the best one won so far: bronze, silver, gold, then green,
+   blue, purple, red, ice and white. Not won yet: a dashed outline of the same shape. */
+const hexMix = (a, b, p) => {
+  const A = parseInt(a.slice(1), 16), B = parseInt(b.slice(1), 16), m = (s) => Math.round(((A >> s) & 255) * (1 - p) + ((B >> s) & 255) * p);
+  return '#' + ((1 << 24) + (m(16) << 16) + (m(8) << 8) + m(0)).toString(16).slice(1);
+};
+const ART_BASE = '<rect x="20" y="54" width="24" height="6" rx="2"/>';
+const ART = {
+  sheets: {
+    body: '<path d="M32 4 L37.3 17.7 L52 18.5 L40.6 27.8 L44.3 42 L32 34 L19.7 42 L23.4 27.8 L12 18.5 L26.7 17.7 Z"/><path d="M29.5 34 H34.5 V55 H29.5 Z"/>',
+    light: '<path d="M32 4 L26.7 17.7 L12 18.5 L23.4 27.8 L32 25 Z" opacity=".38"/>'
+  },
+  streak: {
+    body: '<path d="M32 3 C39 11 47 18 46 31 C45 42 39 48 32 48 C25 48 18 42 18 33 C18 25 23 21 25 14 C29 20 29 24 33 26 C34 18 30 11 32 3 Z"/><path d="M29.5 46 H34.5 V55 H29.5 Z"/>',
+    light: '<path d="M32 21 C36 27 40 30 39 37 C38 43 35 45 32 45 C28 45 25 42 25 37 C25 33 28 31 29 27 C31 30 32 32 34 33 C34 29 31 25 32 21 Z"/>'
+  },
+  levels: {
+    body: '<path d="M23 28 L14 41 L23 39 Z"/><path d="M41 28 L50 41 L41 39 Z"/><path d="M32 3 C40 10 42 21 41 37 H23 C22 21 24 10 32 3 Z"/><path d="M26 37 H38 V41 H26 Z"/>',
+    light: '<path d="M32 3 C27 9 25 18 25.5 30 L28 30 C28 19 29.5 10 32 3 Z" opacity=".45"/>',
+    extra: (c, ln) => '<path d="M27 41 C28 47 30 51 32 54.5 C34 51 36 47 37 41 Z" fill="#FFB020" stroke="#C26A00" stroke-width="1"/><path d="M29.5 41 C30 45 31 48 32 50 C33 48 34 45 34.5 41 Z" fill="#FFF1B8"/>' +
+      '<circle cx="32" cy="20" r="4.6" fill="#1D1A3A" stroke="' + ln + '" stroke-width="1.3"/><circle cx="30.6" cy="18.6" r="1.4" fill="#FFFFFF" opacity=".8"/>'
+  },
+  reads: {
+    body: '<rect x="22" y="3" width="20" height="27" rx="10"/><rect x="21" y="29" width="22" height="4" rx="2"/><path d="M25 33 H39 L36 51 H28 Z"/><path d="M29.5 50 H34.5 V55 H29.5 Z"/>',
+    dark: '<path d="M24 10 H40 M23 16 H41 M23 22 H41 M28 4 V29 M32 3 V30 M36 4 V29"/>',
+    extra: (c) => '<g fill="none" stroke="' + c + '" stroke-width="2.6" stroke-linecap="round"><path d="M15 11 Q10 17 15 23"/><path d="M10 7 Q3 17 10 27"/><path d="M49 11 Q54 17 49 23"/><path d="M54 7 Q61 17 54 27"/></g>'
+  },
+  books: {
+    body: '<path d="M32 17 C25 12 16 12 8 15 V39 C16 36 25 36 32 41 Z"/><path d="M32 17 C39 12 48 12 56 15 V39 C48 36 39 36 32 41 Z"/><path d="M29.5 40 H34.5 V55 H29.5 Z"/>',
+    dark: '<path d="M12 21 C18 19 24 19 29 22 M12 27 C18 25 24 25 29 28 M12 33 C18 31 24 31 29 34 M52 21 C46 19 40 19 35 22 M52 27 C46 25 40 25 35 28 M52 33 C46 31 40 31 35 34 M32 17 V41"/>',
+    extra: (c, ln, lt) => '<path d="M40 15 C40 9 45 6 48.5 8.5" fill="none" stroke="' + lt + '" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="9" r="3.6" fill="' + lt + '" stroke="' + ln + '" stroke-width="1"/><circle cx="51" cy="8.3" r="0.9" fill="#1D1A3A"/>'
+  },
+  buddy: {
+    body: '<path d="M32 5 L50 11 V27 C50 39 42 47 32 51 C22 47 14 39 14 27 V11 Z"/><path d="M29.5 50 H34.5 V55 H29.5 Z"/>',
+    light: '<path d="M35 13 L25 30 H31 L28 44 L40 25 H33 L36 13 Z"/>',
+    extra: (c, ln, lt) => '<path d="M32 9 L46 14 V27 C46 37 40 43 32 47 C24 43 18 37 18 27 V14 Z" fill="none" stroke="' + lt + '" stroke-opacity=".55" stroke-width="1.5"/>'
+  }
+};
+let artN = 0;
+function trophyArt(id, color, empty) {
+  const A = ART[id] || ART.sheets;
+  if (empty || !color) return '<svg class="tart tart-none" viewBox="0 0 64 72" aria-hidden="true"><g fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.55)" stroke-width="1.6" stroke-dasharray="3 2.5" stroke-linejoin="round">' + A.body + ART_BASE + '<rect x="15" y="59" width="34" height="10" rx="2.5"/></g></svg>';
+  const g = 'ta' + (++artN), hi = hexMix(color, '#FFFFFF', 0.55), lo = hexMix(color, '#000000', 0.38), ln = hexMix(color, '#000000', 0.5), lt = hexMix(color, '#FFFFFF', 0.7);
+  return '<svg class="tart" viewBox="0 0 64 72" aria-hidden="true"><defs>' +
+    '<linearGradient id="' + g + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + hi + '"/><stop offset=".45" stop-color="' + color + '"/><stop offset="1" stop-color="' + lo + '"/></linearGradient>' +
+    '<linearGradient id="' + g + 'd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + hexMix(color, '#000000', 0.22) + '"/><stop offset="1" stop-color="' + hexMix(color, '#000000', 0.56) + '"/></linearGradient></defs>' +
+    '<g fill="url(#' + g + ')" stroke="' + ln + '" stroke-width="1.3" stroke-linejoin="round">' + A.body + ART_BASE + '</g>' +
+    '<rect x="15" y="59" width="34" height="10" rx="2.5" fill="url(#' + g + 'd)" stroke="' + ln + '" stroke-width="1.3"/>' +
+    (A.light ? '<g fill="' + lt + '">' + A.light + '</g>' : '') +
+    (A.dark ? '<g fill="none" stroke="' + ln + '" stroke-opacity=".45" stroke-width="1.4" stroke-linecap="round">' + A.dark + '</g>' : '') +
+    (A.extra ? A.extra(color, ln, lt) : '') + '<path d="M18.5 61.6 H45.5" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="1.2" stroke-linecap="round"/></svg>';
 }
-/* The buddy trophy shows the child's own buddy. */
-const BUDDY_PIC = { dragon: '🐉', robot: '🤖', ladybug: '🐞', slug: '🐌' };
-const trophyPic = (l, s) => (s.id === 'buddy' && hasBuddy(l) ? BUDDY_PIC[Buddy.of(l).type] || s.icon : s.icon);
-/* One trophy for a 4- or 5-year-old: a big picture on the cup, its name, a star for each one won, a bar
-   that fills toward the next one, and one short line for the grown-up. Tapping it reads it aloud. */
+
+/* ---------- the day's medals ---------- */
+const MEDAL_WORD = { gold: 'Gold', silver: 'Silver', bronze: 'Bronze', ribbon: 'Try-again ribbon' };
+const MEDAL_HUE = { math: '#FFB020', reading: '#FF5FC8', clock: '#3FD2F0' };
+const MEDAL_ICON = {
+  math: '<path d="M-9 0 H9 M0 -9 V9" fill="none" stroke-width="4.6" stroke-linecap="round"/>',
+  reading: '<path d="M0 -5.5 C-3 -8 -7.5 -8.5 -11 -7.5 V7 C-7.5 6 -3 6.5 0 9 C3 6.5 7.5 6 11 7 V-7.5 C7.5 -8.5 3 -8 0 -5.5 Z M0 -5.5 V9" fill="none" stroke-width="2.4" stroke-linejoin="round"/>',
+  clock: '<circle r="10" fill="none" stroke-width="2.6"/><path d="M0 0 V-6.5 M0 0 L5 2.6" fill="none" stroke-width="2.6" stroke-linecap="round"/>'
+};
+let medalN = 0;
+/* A flat medal: a ribbon V in the subject's color and a metal disc with the subject's sign. The
+   try-again ribbon is a plain gray rosette with a round arrow: no metal, no shine. '' is an empty spot. */
+function medalSVG(kind, subj, cls) {
+  const icon = MEDAL_ICON[subj] || '';
+  const s = '<svg class="medal' + (cls ? ' ' + cls : '') + ' m-' + (kind || 'none') + '" viewBox="0 0 64 84" aria-hidden="true">';
+  if (!kind) return s + '<circle cx="32" cy="54" r="22" fill="none" stroke="rgba(255,255,255,0.38)" stroke-width="2.5" stroke-dasharray="5 5"/><g transform="translate(32 54)" stroke="rgba(255,255,255,0.38)">' + icon + '</g></svg>';
+  if (kind === 'ribbon') {
+    let d = '';
+    for (let i = 0; i <= 64; i++) { const a = (i / 64) * Math.PI * 2, r = 22 + 2.4 * Math.cos(a * 16); d += (i ? 'L' : 'M') + (32 + Math.cos(a) * r).toFixed(1) + ' ' + (50 + Math.sin(a) * r).toFixed(1); }
+    return s + '<path d="M22 62 L16 82 L24 78 L28 66 Z M42 62 L48 82 L40 78 L36 66 Z" fill="#7F879B"/><path d="' + d + 'Z" fill="#9AA3B8" stroke="#6E768A" stroke-width="1.5"/>' +
+      '<circle cx="32" cy="50" r="13" fill="#C2C8D4" stroke="#8D95A8" stroke-width="1.5"/><path d="M26 46.5 A7.5 7.5 0 1 0 38 45" fill="none" stroke="#6E768A" stroke-width="2.8" stroke-linecap="round"/><path d="M33.5 40.5 L40.5 44.5 L34.5 48.5 Z" fill="#6E768A"/></svg>';
+  }
+  const M = Awards.MEDALS[kind], id = 'md' + (++medalN), hue = MEDAL_HUE[subj] || '#FFC531';
+  return s + '<defs><radialGradient id="' + id + '" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".95"/><stop offset=".24" stop-color="' + M.c + '"/><stop offset=".86" stop-color="' + M.d + '"/></radialGradient></defs>' +
+    '<path d="M14 0 H28 L38 34 L28 38 Z" fill="' + hue + '"/><path d="M50 0 H36 L26 34 L36 38 Z" fill="' + hue + '"/><path d="M14 0 H28 L38 34 L28 38 Z" fill="#000000" opacity=".18"/>' +
+    '<circle cx="32" cy="54" r="23" fill="url(#' + id + ')" stroke="' + M.d + '" stroke-width="2"/><circle cx="32" cy="54" r="17" fill="none" stroke="#FFFFFF" stroke-opacity=".45" stroke-width="1.6"/>' +
+    (icon ? '<g transform="translate(32 54)" stroke="' + M.d + '">' + icon + '</g>' : '') +
+    '<path d="M19 45 A16 16 0 0 1 30 36" fill="none" stroke="#FFFFFF" stroke-opacity=".7" stroke-width="2.4" stroke-linecap="round"/></svg>';
+}
+const todayDay = () => Awards.localDay(new Date().toISOString());
+const kidMedals = (l) => Awards.medalsOn(kidLogs(l), todayDay());
+const kidWeek = (l) => Awards.medalTally(kidLogs(l), Awards.weekStart(todayDay()));
+/* What the day's sheets have won so far and what the next pass earns. */
+function medalLine(r, subjName) {
+  if (!r) return '';
+  if (r.done >= r.plan) {
+    if (r.medal === 'ribbon') return 'No medal today. All ' + r.plan + ' sheets done, none passed. Try-again ribbon. Pass one tomorrow for bronze.';
+    if (!r.medal) return 'No medal today. Pass a sheet tomorrow for bronze.';
+    return MEDAL_WORD[r.medal] + ' medal in ' + subjName.toLowerCase() + '!';
+  }
+  const n = Awards.nextMedal(r);
+  if (r.medal) return MEDAL_WORD[r.medal] + ' so far.' + (n && n.next ? ' Pass the next sheet for ' + n.next + '!' : '');
+  return n && n.next ? 'Pass the next sheet for ' + n.next + '!' : 'No medal today in ' + subjName.toLowerCase() + '.';
+}
+/* the medal won today, in the corner of a subject's button */
+function tileMedal(l, subj) {
+  const r = kidMedals(l)[subj];
+  return r && r.medal ? '<span class="subj-medal" title="' + esc(MEDAL_WORD[r.medal] + ' today') + '">' + medalSVG(r.medal, subj) + '</span>' : '';
+}
+/* the shelf's medal row: today's three, then this week's medals (try-again ribbons left out) */
+function medalRowHTML(l) {
+  const m = kidMedals(l), wk = kidWeek(l);
+  const today = SUBJECTS.map((s) => '<button class="sm" data-act="medalInfo" data-kid="' + esc(l.id) + '" data-subj="' + s.key + '" aria-label="' + esc(s.name + ' today: ' + (MEDAL_WORD[m[s.key].medal] || 'no medal yet')) + '">' + medalSVG(m[s.key].medal, s.key) + '</button>').join('');
+  const week = ['gold', 'silver', 'bronze'].map((k) => '<span class="smw" aria-label="' + wk[k] + ' ' + k + '">' + medalSVG(k, '', 'tiny') + '<b>' + wk[k] + '</b></span>').join('');
+  return '<div class="shelf-medals"><span class="sm-label">Today</span><span class="sm-today">' + today + '</span><span class="sm-week"><span class="sm-label">This week</span>' + week + '</span></div>';
+}
+function medalInfo(kidId, subj) {
+  const l = Store.learner(kidId); if (!l) return;
+  const r = kidMedals(l)[subj], name = SUBJ[subj].name;
+  const msg = name + ' today: ' + (r.done ? r.passed + ' of ' + r.done + ' sheets passed. ' : 'no sheets yet. ') + medalLine(r, name);
+  Sfx.pick(); toast(msg); Speech.say(msg);
+}
+
+/* One trophy for a 4- or 5-year-old: its own drawn shape in the metal won, its name, a star for each
+   one won, a bar that fills toward the next one, and one short line for the grown-up. Tapping it reads
+   it aloud. */
 function trophyTile(l, s) {
   const got = s.best, nx = s.next;
   const stars = s.earned ? '<span class="t-stars" aria-label="' + s.earned + ' won">' + (s.earned <= 5 ? '★'.repeat(s.earned) : '★ ×' + s.earned) + '</span>' : '<span class="t-stars none" aria-hidden="true">☆</span>';
   return '<button class="trophy' + (got ? '' : ' none') + '" data-act="trophy" data-kid="' + esc(l.id) + '" data-s="' + s.id + '" aria-label="' + esc(s.kid + ': ' + (got ? got.label : 'none yet')) + '">' +
-    '<span class="t-art">' + cupSVG(got ? got.color : '', !got) + '<span class="t-ico" aria-hidden="true">' + trophyPic(l, s) + '</span></span>' +
+    '<span class="t-art">' + trophyArt(s.id, got ? got.color : '', !got) + '</span>' +
     '<b>' + esc(s.kid) + '</b>' + stars + (nx ? '<span class="t-bar"><i style="width:' + Math.round(nx.pct * 100) + '%"></i></span>' : '') +
     '<small>' + esc(got ? got.label : nx ? 'Next: ' + nx.label : '') + '</small></button>';
 }
 /* Each subject's belts in one row, white to black: the ones earned in full color, the one now ringed in
    gold, the next one in a dashed box, the rest faded, so the colors read as a ladder. */
+/* One subject's nine belts, left to right: earned in full color, the one now in a gold ring, the rest faded. */
+function ladderRow(l, subj) {
+  const L = Awards.beltLadder(subj, ENG[subj]), now = kidBelt(l, subj).n;
+  return '<span class="bl-belts" style="--n:' + L.length + '">' + L.map((b) => '<span class="bl-b ' + (b.n < now ? 'got' : b.n === now ? 'now' : 'later') + '">' + beltSVG(b) + '</span>').join('') + '</span>';
+}
 function beltLadderHTML(l) {
   return '<div class="bladders">' + SUBJECTS.map((s) => {
-    const L = Awards.beltLadder(s.key, ENG[s.key]), now = kidBelt(l, s.key).n;
-    return '<button class="bladder" data-act="beltInfo" data-kid="' + esc(l.id) + '" data-subj="' + s.key + '" aria-label="' + esc(s.name + ': ' + L[now].name) + '">' +
-      '<span class="bl-top"><b>' + s.name + '</b><small>' + esc(L[now].name) + '</small></span>' +
-      '<span class="bl-belts" style="--n:' + L.length + '">' + L.map((b) => {
-        const st = b.n < now ? 'got' : b.n === now ? 'now' : b.n === now + 1 ? 'next' : 'later';
-        return '<span class="bl-b ' + st + '">' + beltSVG(b) + '</span>';
-      }).join('') + '</span></button>';
+    const b = kidBelt(l, s.key);
+    return '<button class="bladder" data-act="beltInfo" data-kid="' + esc(l.id) + '" data-subj="' + s.key + '" aria-label="' + esc(s.name + ': ' + b.name) + '">' +
+      '<span class="bl-top"><b>' + s.name + '</b><small>' + esc(b.name) + '</small></span>' + ladderRow(l, s.key) + '</button>';
   }).join('') + '</div>';
 }
 function shelfHTML(kids) {
@@ -10586,21 +11246,21 @@ function shelfHTML(kids) {
     const T = kidTrophies(l);
     return '<div class="shelf-kid" style="' + kidStyle(l.color) + '"><div class="shelf-head"><b>' + esc(l.name) + '</b>' +
       '<span class="shelf-count" aria-label="' + T.total + ' trophies">🏆 ' + T.total + '</span></div>' +
-      beltLadderHTML(l) + '<div class="trophies">' + T.series.map((s) => trophyTile(l, s)).join('') + '</div></div>';
+      medalRowHTML(l) + beltLadderHTML(l) + '<div class="trophies">' + T.series.map((s) => trophyTile(l, s)).join('') + '</div></div>';
   }).join('');
   return '<section class="glass shelf"><h2 class="shelf-title">Trophy shelf</h2><div class="shelf-kids">' + cols + '</div>' +
-    '<p class="shelf-help">Belts go left to right, white to black. A new belt for each group of levels passed; gold ring: the belt now; dashed box: the next one. Black belt means every level in that subject. Stars: one for each trophy won. Tap a belt row or a trophy to hear it.</p></section>';
+    '<p class="shelf-help">Medals each day in each subject: bronze for 1 sheet passed, silver for 2, gold for all 3. A gray try-again ribbon means all 3 done but none passed; ribbons are not counted with the medals. Belts: the same nine in every subject, left to right, white to black. Each subject’s levels are split into eight equal shares, and each share finished earns the next belt; the gold ring is the belt now; black means every level in that subject is done. Stars: one for each trophy won. Tap a medal, a belt row or a trophy to hear it.</p></section>';
 }
 function trophyInfo(kidId, sid) {
   const l = Store.learner(kidId); if (!l) return;
   const s = kidTrophies(l).series.find((x) => x.id === sid); if (!s) return;
-  const msg = s.kid + '! ' + (s.id === 'buddy' && hasBuddy(l) ? (s.best ? Buddy.of(l).name + ' is a ' + s.best.label.toLowerCase() + '. ' : '') + s.say.replace('Your buddy', Buddy.of(l).name) : s.say);
+  const msg = s.kid + '! ' + (s.id === 'buddy' && hasBuddy(l) ? (s.best ? buddyName(l) + ' is a ' + s.best.label.toLowerCase() + '. ' : '') + s.say.replace('Your buddy', buddyName(l)) : s.say);
   Sfx.pick(); toast(msg); Speech.say(msg);
 }
 function beltInfo(kidId, subj) {
   const l = Store.learner(kidId); if (!l) return;
-  const L = Awards.beltLadder(subj, ENG[subj]), b = kidBelt(l, subj), name = SUBJECTS.find((s) => s.key === subj).name.toLowerCase(), nx = L[b.n + 1];
-  const msg = l.name + ' has the ' + b.name.toLowerCase() + ' in ' + name + '. ' + (nx ? 'Next is the ' + nx.name.toLowerCase() + (nx.last ? ': pass ' + nx.last + (/[.?!]$/.test(nx.last) ? '' : '.') : '.') : 'That is the top belt!');
+  const b = kidBelt(l, subj), name = SUBJ[subj].name.toLowerCase(), nx = Awards.toNextBelt(ENG[subj], trackOf(l, subj));
+  const msg = l.name + ' has the ' + b.name.toLowerCase() + ' in ' + name + '. ' + (nx ? 'Next is the ' + Awards.BELTS[nx.belt].name.toLowerCase() + ' belt: ' + nx.left + ' more level' + (nx.left === 1 ? '' : 's') + '.' : 'That is the top belt!');
   Sfx.pick(); toast(msg); Speech.say(msg);
 }
 
@@ -10650,7 +11310,7 @@ function stepLine(name, s) {
 function newsHTML(l, steps, news) {
   const name = buddyName(l), lines = [];
   (steps || []).slice(-2).forEach((s) => lines.push('<div class="news' + (s.kind === 'form' ? ' big' : '') + '"><i aria-hidden="true">' + s.icon + '</i><b>' + esc(stepLine(name, s)) + '</b></div>'));
-  (news || []).forEach((n) => lines.push('<div class="news' + (n.kind === 'belt' ? ' belt-news' : '') + '">' + (n.kind === 'belt' ? beltSVG(n.belt) : '<i aria-hidden="true">🏆' + trophyPic(l, { id: n.t.series, icon: n.t.icon }) + '</i>') + '<b>' + esc(n.text) + '</b></div>'));
+  (news || []).forEach((n) => lines.push('<div class="news' + (n.kind === 'belt' ? ' belt-news' : '') + '">' + (n.kind === 'belt' ? beltSVG(n.belt) : '<span class="news-art">' + trophyArt(n.t.series, n.t.color, false) + '</span>') + '<b>' + esc(n.text) + '</b></div>'));
   return lines.length ? '<div class="news-list">' + lines.slice(0, 4).join('') + '</div>' : '';
 }
 /* One line for a toast after a read, a book or food. */
@@ -10658,6 +11318,147 @@ function newsText(l, steps, news) {
   const name = buddyName(l), parts = (steps || []).slice(-1).map((s) => stepLine(name, s)).concat((news || []).slice(0, 1).map((n) => n.text));
   return parts.join(' ');
 }
+/* Small Steps: the belt and medal ceremonies. A full-screen layer over the app, outside #app so a
+   render underneath leaves it alone: the 3D stage from buddy3d.js (the child's buddy on a podium),
+   with the words, the belt ladder or the day's medal row, sounds, speech and Continue. Without
+   WebGL a flat version plays the same beats on the same timing. Tapping before the end skips to it. */
+const Cere = (() => {
+  let cur = null;
+  const reduced = () => { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
+  /* the buddy's 3D look, as the page gives it to buddy3d */
+  function lookOf(l) {
+    const m = Buddy.svg(Buddy.of(l), { mood: 'idle' }).match(/data-b3d="([^"]*)"/);
+    if (!m) return null;
+    try { return JSON.parse(m[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&')); } catch (e) { return null; }
+  }
+  const joinWords = (a) => (a.length > 1 ? a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1] : a[0] || '');
+  function open(cls, inner, onEvent, flatBeats, look, opts3d) {
+    if (cur) return null;
+    const el = document.createElement('div');
+    el.className = 'cere ' + cls;
+    el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true');
+    el.innerHTML = inner;
+    document.body.appendChild(el);
+    const c = { el, ctrl: null, timers: [], done: false, onClose: null };
+    cur = c;
+    const stage = el.querySelector('.cere-stage');
+    const on = (name, data) => { if (cur !== c) return; if (name === 'done') { c.done = true; el.classList.add('ready'); const go = el.querySelector('.cere-go'); if (go) try { go.focus({ preventScroll: true }); } catch (e) { /* ignore */ } } onEvent(name, data || {}); };
+    if (look && typeof Buddy3D !== 'undefined') c.ctrl = Buddy3D.ceremony(stage, look, Object.assign({ on }, opts3d));
+    if (!c.ctrl) {
+      /* the flat version: the same beats on timers */
+      el.classList.add('flat');
+      stage.innerHTML = flatBeats.html;
+      const run = (b, skipped) => { if (b.ran) return; b.ran = true; if (b.cls) stage.classList.add(b.cls); if (b.fn) b.fn(skipped); on(b.name, b.data); };
+      c.skip = () => { c.timers.forEach(clearTimeout); c.timers = []; stage.classList.add('skipped'); flatBeats.beats.forEach((b) => run(b, true)); };
+      if (reduced()) setTimeout(c.skip, 0);
+      else flatBeats.beats.forEach((b) => { c.timers.push(setTimeout(() => run(b, false), b.at * 1000)); });
+    } else c.skip = () => c.ctrl.skip();
+    el.addEventListener('click', (e) => {
+      if (e.target.closest('.cere-go')) { close(); return; }
+      if (!c.done) c.skip(); else if (!e.target.closest('.cere-bottom')) close();
+    });
+    el.addEventListener('keydown', (e) => { if (e.key === 'Escape' || (e.key === 'Enter' && c.done)) { e.preventDefault(); close(); } else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); c.skip(); } });
+    el.tabIndex = -1;
+    try { el.focus({ preventScroll: true }); } catch (e) { /* ignore */ }
+    return c;
+  }
+  function close() {
+    const c = cur;
+    if (!c) return;
+    cur = null;
+    c.timers.forEach(clearTimeout);
+    if (c.ctrl) c.ctrl.stop();
+    c.el.classList.add('out');
+    setTimeout(() => { if (c.el.parentNode) c.el.parentNode.removeChild(c.el); }, 260);
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) { /* ignore */ }
+    if (c.onClose) c.onClose();
+  }
+  const flatBuddy = (l, mood) => '<div class="cf-buddy">' + (hasBuddy(l) ? Buddy.svg(Buddy.of(l), { mood }) : '') + '</div>';
+
+  /* A new belt. a, b: the belts before and after; speak: the child's speech setting. */
+  function belt(l, subj, a, b, speak) {
+    if (cur || !l || !b) return false;
+    const L = Awards.beltLadder(subj, ENG[subj]), sname = SUBJ[subj].name, nx = Awards.toNextBelt(ENG[subj], trackOf(l, subj));
+    const cells = L.map((x) => '<span class="cl-b' + (x.n <= a.n ? ' got' : '') + '" data-n="' + x.n + '">' + beltSVG(x) + '</span>').join('');
+    const sub = nx ? 'Next: ' + Awards.BELTS[nx.belt].name.toLowerCase() + ' belt, ' + nx.left + ' more level' + (nx.left === 1 ? '' : 's') + '.' : 'That is the top belt in ' + sname.toLowerCase() + '!';
+    const inner = '<div class="cere-stage"></div>' +
+      '<div class="cere-top"><span class="cere-kicker">' + esc(l.name) + ' · ' + esc(sname) + '</span><h2 class="cere-title">A new belt…</h2></div>' +
+      '<div class="cere-bottom"><div class="cere-ladder" style="--n:' + L.length + '"><span class="cl-ring" style="--i:' + a.n + '"></span>' + cells + '</div>' +
+      '<p class="cere-sub">' + esc(sub) + '</p><button class="btn btn-gold btn-big cere-go">Continue</button></div>';
+    let el = null;
+    const tie = () => {
+      if (!el) return;
+      const h = el.querySelector('.cere-title'), ring = el.querySelector('.cl-ring'), cell = el.querySelector('.cl-b[data-n="' + b.n + '"]');
+      h.textContent = b.name + '!'; h.classList.remove('pop'); void h.offsetWidth; h.classList.add('pop');
+      setTimeout(() => { if (ring) ring.style.setProperty('--i', b.n); if (cell) cell.classList.add('got', 'new'); }, 450);
+      Sfx.ta(); Sfx.applause(0.15, 2.2); Sfx.sparkle(0.05);
+      if (speak !== false) setTimeout(() => Speech.say(l.name + ' earned the ' + b.name.toLowerCase() + ' in ' + sname.toLowerCase() + '!'), 700);
+    };
+    const flat = {
+      html: '<div class="cf"><div class="cf-rays"></div>' + flatBuddy(l, 'idle') + '<div class="cf-podium"></div><div class="cf-belt">' + beltSVG(b) + '</div></div>',
+      beats: [
+        { at: 2.62, name: 'tie', cls: 'tied', fn: (skipped) => { const bd = el && el.querySelector('.cf-buddy'); if (bd) bd.innerHTML = hasBuddy(l) ? Buddy.svg(Buddy.of(l), { mood: 'cheer' }) : ''; if (!skipped && !reduced()) Confetti.party(); } },
+        { at: 3.5, name: 'done' }
+      ]
+    };
+    const c = open('cere-belt', inner, (name) => { if (name === 'tie') tie(); }, flat, lookOf(l), { kind: 'belt', belt: b });
+    if (!c) return false;
+    el = c.el;
+    if (!reduced()) Sfx.roll(0.5, 2.12);
+    return true;
+  }
+
+  /* The day's medals, after the last sheet of the day. m: { math, reading, clock } (Awards.dayResult). */
+  function medals(l, m, speak) {
+    if (cur || !l || !m) return false;
+    const list = SUBJECTS.map((s) => ({ subj: s.key, kind: (m[s.key] && m[s.key].medal) || '' }));
+    const chips = list.map((x, i) => '<div class="cchip k-' + (x.kind || 'none') + '" data-i="' + i + '"><span class="cchip-art">' + medalSVG(x.kind, x.subj) + '</span><b>' + SUBJ[x.subj].name + '</b><small>' + esc(MEDAL_WORD[x.kind] || 'No medal') + '</small></div>').join('');
+    const day = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+    const inner = '<div class="cere-stage"></div>' +
+      '<div class="cere-top"><span class="cere-kicker">' + esc(l.name) + ' · ' + esc(day) + '</span><h2 class="cere-title">Today’s medals</h2></div>' +
+      '<div class="cere-bottom"><div class="cere-chips">' + chips + '</div><p class="cere-sub"></p><button class="btn btn-gold btn-big cere-go">Continue</button></div>';
+    const sum = medalSummary(l.name, list);
+    let el = null;
+    const reveal = (i) => {
+      const ch = el && el.querySelector('.cchip[data-i="' + i + '"]'), k = list[i].kind;
+      if (ch) ch.classList.add('on');
+      if (k === 'gold') { Sfx.clink(); Sfx.sparkle(0.08); } else if (k === 'silver' || k === 'bronze') Sfx.clink(); else if (k === 'ribbon') { Sfx.thud(); Sfx.aww(0.15); }
+    };
+    const finish = () => {
+      if (!el) return;
+      el.querySelector('.cere-sub').textContent = sum.show;
+      const gold = list.some((x) => x.kind === 'gold'), any = list.some((x) => MEDAL_WORD[x.kind] && x.kind !== 'ribbon');
+      if (gold) { Sfx.ta(); Sfx.applause(0.2, 2); } else if (any) Sfx.complete(); else Sfx.aww();
+      if (speak !== false) setTimeout(() => Speech.say(sum.say), 500);
+    };
+    const T = [1.92, 3.12, 4.32];
+    const flat = {
+      html: '<div class="cf"><div class="cf-rays"></div>' + flatBuddy(l, 'idle') + '<div class="cf-podium"></div></div>',
+      beats: T.map((at, i) => ({ at, name: 'medal' + i, data: { i, kind: list[i].kind } })).concat([{ at: 5.13, name: 'done', fn: (skipped) => {
+        const bd = el && el.querySelector('.cf-buddy'), any = list.some((x) => x.kind && x.kind !== 'ribbon');
+        if (bd && hasBuddy(l)) bd.innerHTML = Buddy.svg(Buddy.of(l), { mood: any ? 'cheer' : 'think' });
+        if (!skipped && !reduced() && list.some((x) => x.kind === 'gold')) Confetti.party();
+      } }])
+    };
+    const c = open('cere-medals', inner, (name, data) => { if (name.indexOf('medal') === 0) reveal(data.i); else if (name === 'done') finish(); }, flat, lookOf(l), { kind: 'medals', medals: list });
+    if (!c) return false;
+    el = c.el;
+    if (!reduced()) Sfx.roll(0.3, 1.1);
+    return true;
+  }
+  /* "2 gold and 1 silver today!" and, for a no-pass subject, that it was a try-again ribbon. */
+  function medalSummary(name, list) {
+    const n = { gold: 0, silver: 0, bronze: 0 }, rib = [];
+    list.forEach((x) => { if (n[x.kind] != null) n[x.kind]++; else if (x.kind === 'ribbon') rib.push(SUBJ[x.subj].name.toLowerCase()); });
+    const won = joinWords(['gold', 'silver', 'bronze'].filter((k) => n[k]).map((k) => n[k] + ' ' + k));
+    const ribTxt = rib.length ? 'Try-again ribbon in ' + joinWords(rib) + ': no sheets passed.' : '';
+    return {
+      show: (won ? won.charAt(0).toUpperCase() + won.slice(1) + ' today!' : 'No medals today.') + (ribTxt ? ' ' + ribTxt : ''),
+      say: (won ? name + ' won ' + won + ' today!' : name + ' won no medals today.') + (ribTxt ? ' ' + ribTxt : '')
+    };
+  }
+  return { belt, medals, close, medalSummary, get isOpen() { return !!cur; } };
+})();
 /* Small Steps: home, buddy picker, shop, parent area, overlays, events and startup. */
 
 /* ---------- home ---------- */
@@ -10679,7 +11480,7 @@ function subjectTile(l, subj) {
   if (ra) plan = { done: plan.done + (raDone ? 1 : 0), total: plan.total + 1, left: plan.left + (raDone ? 0 : 1) };
   const go = testNext ? '<span class="subj-go test">Level test!</span>' : raNext ? '<span class="subj-go read">Read to me</span>' : plan.left === 0 ? '<span class="subj-go done">Done ✓</span>' : '<span class="subj-go">' + (plan.done === 0 ? 'Play' : plan.done + ' of ' + plan.total) + '</span>';
   return '<button class="subj ' + subj.cls + '" data-act="start" data-kid="' + esc(l.id) + '" data-subj="' + subj.key + '" aria-label="' + subj.name + ', ' + esc(lv.name) + '">' +
-    '<span class="subj-ring">' + ringSVG(plan.done, plan.total, 26) + '<span class="subj-icon">' + ICON[subj.key] + '</span></span>' +
+    '<span class="subj-ring">' + ringSVG(plan.done, plan.total, 26) + '<span class="subj-icon">' + ICON[subj.key] + '</span>' + tileMedal(l, subj.key) + '</span>' +
     '<span><span class="subj-name">' + subj.name + '</span><br><span class="subj-level">' + esc(lv.short) + '</span></span>' + go +
     '<span class="subj-belt" title="' + esc(kidBelt(l, subj.key).name) + '">' + beltSVG(kidBelt(l, subj.key)) + '</span></button>';
 }
@@ -11345,6 +12146,7 @@ document.addEventListener('click', (e) => {
     case 'buildBack': buildBack(parseInt(t.getAttribute('data-pos'), 10)); break;
     case 'trophy': trophyInfo(t.getAttribute('data-kid'), t.getAttribute('data-s')); break;
     case 'beltInfo': beltInfo(t.getAttribute('data-kid'), t.getAttribute('data-subj')); break;
+    case 'medalInfo': medalInfo(t.getAttribute('data-kid'), t.getAttribute('data-subj')); break;
     case 'pathStep': pathStepInfo(parseInt(t.getAttribute('data-at'), 10)); break;
     case 'ptab': S.parentKid = t.getAttribute('data-kid'); render(); break;
     case 'psub': S.parentSubj = t.getAttribute('data-subj'); render(); break;
@@ -11395,6 +12197,7 @@ document.addEventListener('focusout', () => {
 });
 document.addEventListener('keydown', (e) => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (typeof Cere !== 'undefined' && Cere.isOpen) return;
   const tag = e.target && e.target.tagName;
   if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
   /* SVG buttons (clock numbers) answer Enter and Space like real buttons */
