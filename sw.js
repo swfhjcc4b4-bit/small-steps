@@ -1,6 +1,6 @@
 /* Small Steps offline support: the page and its icons are kept on the device; the page is
    fetched fresh whenever there is a connection. Progress goes straight to GitHub, never cached. */
-const CACHE = 'small-steps-20261027035439';
+const CACHE = 'small-steps-20261027043637';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
