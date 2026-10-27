@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261027032654";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261027035439";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1251,7 +1251,7 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .cchip b { font-size: 15px; font-weight: 900; }
 .cchip small { font-size: 13px; font-weight: 800; color: var(--ink-faint); opacity: 0; transition: opacity 0.3s 0.2s; }
 .cchip.on small { opacity: 1; }
-.cchip.on.k-gold small { color: #FFD65A; } .cchip.on.k-silver small { color: #E2E7EF; } .cchip.on.k-bronze small { color: #F0A46A; } .cchip.on.k-ribbon small, .cchip.on.k-none small { color: #A9B0C2; }
+.cchip.on.k-gold small { color: #FFD65A; } .cchip.on.k-silver small { color: #E2E7EF; } .cchip.on.k-bronze small { color: #F0A46A; } .cchip.on.k-ribbon small { color: #8FBBFF; } .cchip.on.k-none small { color: #A9B0C2; }
 .cchip.on.k-gold { border-color: rgba(255, 214, 90, 0.7); box-shadow: 0 0 18px rgba(255, 197, 49, 0.35); }
 /* the flat version (no 3D) */
 .cf { position: absolute; inset: 0; display: grid; place-items: center; }
@@ -1297,6 +1297,8 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .t-art { width: 64px; height: 72px; }
 .t-art .tart { width: 100%; height: 100%; display: block; filter: drop-shadow(0 4px 6px rgba(5, 2, 30, 0.45)); }
 .t-art .tart.tart-none { filter: none; }
+.t-count { font-family: var(--font-display); font-size: 15px; line-height: 1; color: var(--gold-hi); }
+.t-count.none { color: var(--ink-faint); font-family: inherit; font-weight: 800; font-size: 12px; }
 .news-art { display: inline-block; width: 30px; height: 34px; }
 .news-art .tart { width: 100%; height: 100%; display: block; }
 @media (max-width: 460px) { .t-art { width: 52px; height: 58px; } .sm-week { margin-left: 0; } }
@@ -7695,7 +7697,7 @@ const Buddy3D = (() => {
     slug: { cx: 0.47, y: 0.97, z: [0.5, 0.58, 0.5], dx: 0.28, neck: [0.5, 1.22, 0.34] }
   };
   const SUBJ_HUE = { math: '#FFB020', reading: '#FF5FC8', clock: '#3FD2F0' };
-  const MEDAL_C = { gold: '#FFC23A', silver: '#E2E7EF', bronze: '#C9783C' };
+  const MEDAL_C = { gold: '#FFC64E', silver: '#F2F4F7', bronze: '#D0885A' };
   const ease3 = (q) => (q < 0.5 ? 4 * q * q * q : 1 - Math.pow(-2 * q + 2, 3) / 2);
   const outBack = (q) => 1 + 2.70158 * Math.pow(q - 1, 3) + 1.70158 * Math.pow(q - 1, 2);
   const c01 = (q) => Math.max(0, Math.min(1, q));
@@ -7710,53 +7712,94 @@ const Buddy3D = (() => {
       x.fillStyle = g; x.beginPath(); x.moveTo(c, c); x.arc(c, c, c, a0, a1); x.closePath(); x.fill();
     }
   });
-  /* The face of a medal: the subject's sign pressed into the metal (the map darkens it, the bump sinks it). */
-  function medalFace(kind, subj) {
-    return canvasTex('medalface:' + (kind === 'ribbon' ? 'ribbon' : subj), 256, 256, (x, w) => {
-      const c = w / 2;
-      x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, w, w);
-      x.strokeStyle = '#B4B4B4'; x.lineWidth = 9; x.beginPath(); x.arc(c, c, c - 16, 0, Math.PI * 2); x.stroke();
-      x.strokeStyle = '#7E7E7E'; x.fillStyle = '#7E7E7E'; x.lineCap = 'round'; x.lineJoin = 'round';
-      if (kind === 'ribbon') {
-        x.lineWidth = 20; x.beginPath(); x.arc(c, c + 4, 58, -Math.PI * 0.95, Math.PI * 0.5); x.stroke();
-        const a = Math.PI * 0.5, ax = c + 58 * Math.cos(a), ay = c + 4 + 58 * Math.sin(a);
-        x.beginPath(); x.moveTo(ax - 4, ay - 30); x.lineTo(ax - 4, ay + 30); x.lineTo(ax - 44, ay); x.closePath(); x.fill();
-        return;
-      }
-      if (subj === 'math') { x.lineWidth = 26; x.beginPath(); x.moveTo(c - 60, c); x.lineTo(c + 60, c); x.moveTo(c, c - 60); x.lineTo(c, c + 60); x.stroke(); }
-      else if (subj === 'reading') {
-        x.lineWidth = 13; x.beginPath(); x.moveTo(c, c - 38);
-        x.quadraticCurveTo(c - 40, c - 62, c - 80, c - 48); x.lineTo(c - 80, c + 50); x.quadraticCurveTo(c - 40, c + 36, c, c + 60);
-        x.quadraticCurveTo(c + 40, c + 36, c + 80, c + 50); x.lineTo(c + 80, c - 48); x.quadraticCurveTo(c + 40, c - 62, c, c - 38); x.closePath(); x.stroke();
-        x.beginPath(); x.moveTo(c, c - 38); x.lineTo(c, c + 60); x.stroke();
-        x.lineWidth = 8; [-1, 1].forEach((s) => [-14, 6, 26].forEach((y) => { x.beginPath(); x.moveTo(c + s * 18, c + y); x.lineTo(c + s * 62, c + y - 8); x.stroke(); }));
-      } else {
-        x.lineWidth = 13; x.beginPath(); x.arc(c, c, 72, 0, Math.PI * 2); x.stroke();
-        for (let i = 0; i < 12; i++) { const a = (i * Math.PI) / 6; x.lineWidth = i % 3 ? 6 : 10; x.beginPath(); x.moveTo(c + Math.cos(a) * 54, c + Math.sin(a) * 54); x.lineTo(c + Math.cos(a) * 64, c + Math.sin(a) * 64); x.stroke(); }
-        x.lineWidth = 16; x.beginPath(); x.moveTo(c, c); x.lineTo(c, c - 44); x.moveTo(c, c); x.lineTo(c + 32, c + 16); x.stroke();
-      }
+  /* The subject's sign, drawn at the center of a 256 canvas in one color. */
+  function drawSign(x, subj, color, k) {
+    const c = 128;
+    k = k || 1;
+    x.save(); x.translate(c, c); x.scale(k, k); x.translate(-c, -c);
+    x.strokeStyle = color; x.fillStyle = color; x.lineCap = 'round'; x.lineJoin = 'round';
+    if (subj === 'math') { x.lineWidth = 26; x.beginPath(); x.moveTo(c - 56, c); x.lineTo(c + 56, c); x.moveTo(c, c - 56); x.lineTo(c, c + 56); x.stroke(); }
+    else if (subj === 'reading') {
+      x.lineWidth = 13; x.beginPath(); x.moveTo(c, c - 36);
+      x.quadraticCurveTo(c - 38, c - 58, c - 76, c - 46); x.lineTo(c - 76, c + 46); x.quadraticCurveTo(c - 38, c + 34, c, c + 56);
+      x.quadraticCurveTo(c + 38, c + 34, c + 76, c + 46); x.lineTo(c + 76, c - 46); x.quadraticCurveTo(c + 38, c - 58, c, c - 36); x.closePath(); x.stroke();
+      x.beginPath(); x.moveTo(c, c - 36); x.lineTo(c, c + 56); x.stroke();
+      x.lineWidth = 7; [-1, 1].forEach((sx) => [-12, 6, 24].forEach((y) => { x.beginPath(); x.moveTo(c + sx * 18, c + y); x.lineTo(c + sx * 58, c + y - 8); x.stroke(); }));
+    } else {
+      x.lineWidth = 13; x.beginPath(); x.arc(c, c, 68, 0, Math.PI * 2); x.stroke();
+      for (let i = 0; i < 12; i++) { const a = (i * Math.PI) / 6; x.lineWidth = i % 3 ? 6 : 10; x.beginPath(); x.moveTo(c + Math.cos(a) * 50, c + Math.sin(a) * 50); x.lineTo(c + Math.cos(a) * 60, c + Math.sin(a) * 60); x.stroke(); }
+      x.lineWidth = 15; x.beginPath(); x.moveTo(c, c); x.lineTo(c, c - 42); x.moveTo(c, c); x.lineTo(c + 30, c + 15); x.stroke();
+    }
+    x.restore();
+  }
+  /* A struck medal's face as two maps: relief (the bump: raised rim ring, beads and sign) and finish
+     (the roughness: a mirror field with a frosted relief, the look of a proof coin). */
+  function medalFace(subj, part) {
+    return canvasTex('medal' + part + ':' + subj, 256, 256, (x, w) => {
+      const c = w / 2, hi = part === 'relief' ? '#FFFFFF' : '#9E9E9E', lo = part === 'relief' ? '#000000' : '#262626';
+      x.fillStyle = lo; x.fillRect(0, 0, w, w);
+      x.strokeStyle = hi; x.fillStyle = hi;
+      x.lineWidth = 10; x.beginPath(); x.arc(c, c, 112, 0, Math.PI * 2); x.stroke();
+      for (let i = 0; i < 40; i++) { const a = (i / 40) * Math.PI * 2; x.beginPath(); x.arc(c + Math.cos(a) * 98, c + Math.sin(a) * 98, 3.4, 0, Math.PI * 2); x.fill(); }
+      drawSign(x, subj, hi, 0.92);
     });
   }
-  /* A medal (or the plain try-again ribbon) facing +z, its loop at the top (0, 0.19, 0). */
+  /* the blue ribbon's center: satin blue with the subject's sign in white */
+  const ribbonFace = (subj) => canvasTex('ribbonface:' + subj, 256, 256, (x, w) => {
+    const c = w / 2, g = x.createRadialGradient(c * 0.8, c * 0.7, 6, c, c, c);
+    g.addColorStop(0, '#9CC4FF'); g.addColorStop(0.45, '#2F6FE4'); g.addColorStop(1, '#163C94');
+    x.fillStyle = g; x.fillRect(0, 0, w, w);
+    x.save(); x.translate(4, 6); drawSign(x, subj, 'rgba(10,30,90,0.55)', 0.8); x.restore();
+    drawSign(x, subj, '#FFFFFF', 0.8);
+  });
+  /* A neutral photo studio for silver and bronze: dark, with a few bright soft boxes, so the metal shows
+     bright highlights against deep reflections the way real polished metal does. */
+  let studioTex = null;
+  function studioEnv() {
+    if (studioTex || !renderer) return studioTex;
+    const s = new T.Scene(), geo = new T.SphereGeometry(20, 48, 24), p = geo.attributes.position, cols = [];
+    const top = lin('#5A6273'), mid = lin('#1C2029'), low = lin('#08090D');
+    for (let i = 0; i < p.count; i++) { const y = p.getY(i) / 20; const k = y > 0 ? mid.clone().lerp(top, Math.pow(y, 1.4)) : mid.clone().lerp(low, Math.pow(-y, 0.6)); cols.push(k.r, k.g, k.b); }
+    geo.setAttribute('color', new T.Float32BufferAttribute(cols, 3));
+    s.add(new T.Mesh(geo, new T.MeshBasicMaterial({ vertexColors: true, side: T.BackSide })));
+    [[12, 7, [-9, 9, 12], 9], [6, 11, [13, 5, 7], 5], [22, 2.2, [0, -1.5, 16], 3], [5, 14, [-15, 2, -4], 4], [9, 4, [3, 16, -6], 7]].forEach((q) => {
+      const m = new T.Mesh(new T.PlaneGeometry(q[0], q[1]), new T.MeshBasicMaterial({ color: new T.Color(q[3], q[3], q[3] * 1.02), side: T.DoubleSide }));
+      m.position.set(q[2][0], q[2][1], q[2][2]); m.lookAt(0, 0, 0); s.add(m);
+    });
+    const pm = new T.PMREMGenerator(renderer); studioTex = pm.fromScene(s, 0.02).texture; pm.dispose(); geo.dispose();
+    return studioTex;
+  }
+  /* A medal facing +z, its loop at the top (0, 0.19, 0): polished metal with a frosted raised design.
+     The try-again ribbon is a blue satin rosette with the subject's sign and two notched tails. */
   function medalMesh(kind, subj) {
-    const g = new T.Group(), tex = medalFace(kind, subj);
+    const g = new T.Group();
     if (kind === 'ribbon') {
-      const cloth = new T.MeshStandardMaterial({ color: lin('#9AA3B8'), roughness: 0.92, metalness: 0 });
-      const sh = new T.Shape();
-      for (let i = 0; i <= 96; i++) { const a = (i / 96) * Math.PI * 2, r = 0.165 + 0.013 * Math.cos(a * 16), px = Math.cos(a) * r, py = Math.sin(a) * r; if (i) sh.lineTo(px, py); else sh.moveTo(px, py); }
-      g.add(M(new T.ExtrudeGeometry(sh, { depth: 0.02, bevelEnabled: false, curveSegments: 4 }), cloth, [0, 0, -0.01]));
-      g.add(M(new T.CircleGeometry(0.104, 40), new T.MeshStandardMaterial({ color: lin('#C2C8D4'), roughness: 0.9, map: tex }), [0, 0, 0.0115]));
-      [-1, 1].forEach((sx) => g.add(M(new T.BoxGeometry(0.07, 0.2, 0.012), cloth, [sx * 0.06, -0.2, -0.006], [0, 0, sx * 0.25])));
-      g.add(M(new T.TorusGeometry(0.028, 0.009, 8, 20), cloth, [0, 0.175, 0]));
+      const ring = new T.RingGeometry(0.1, 0.2, 120, 3), p = ring.attributes.position, v = V(0, 0, 0);
+      for (let i = 0; i < p.count; i++) {
+        v.fromBufferAttribute(p, i);
+        const r = v.length(), a = Math.atan2(v.y, v.x), u = (r - 0.1) / 0.1, f = Math.cos(a * 20);
+        const k = 1 + 0.07 * f * u;
+        p.setXYZ(i, v.x * k, v.y * k, 0.014 * Math.sin(a * 20) * u - 0.008 * u);
+      }
+      ring.computeVertexNormals();
+      const satin = new T.MeshPhysicalMaterial({ color: lin('#2263DE'), roughness: 0.42, metalness: 0, clearcoat: 0.2, side: T.DoubleSide });
+      try { satin.sheen = lin('#9CC4FF'); } catch (e) { /* older three.js */ }
+      g.add(new T.Mesh(ring, satin));
+      g.add(M(new T.CircleGeometry(0.104, 48), new T.MeshStandardMaterial({ color: 0xffffff, roughness: 0.45, metalness: 0, map: ribbonFace(subj) }), [0, 0, 0.006]));
+      g.add(M(new T.TorusGeometry(0.105, 0.008, 10, 64), goldMat(), [0, 0, 0.006]));
+      const tail = () => { const sh = new T.Shape(); sh.moveTo(-0.034, 0); sh.lineTo(0.034, 0); sh.lineTo(0.034, -0.24); sh.lineTo(0, -0.205); sh.lineTo(-0.034, -0.24); sh.closePath(); return new T.ShapeGeometry(sh); };
+      [-1, 1].forEach((sx) => g.add(M(tail(), satin, [sx * 0.05, -0.1, -0.012], [0, 0, sx * 0.28])));
+      g.add(M(new T.TorusGeometry(0.026, 0.008, 8, 20), satin, [0, 0.19, 0]));
       return g;
     }
-    const metal = kind === 'gold' ? goldMat() : new T.MeshPhysicalMaterial({ color: lin(MEDAL_C[kind]), metalness: 1, roughness: kind === 'silver' ? 0.2 : 0.3, clearcoat: 0.7, clearcoatRoughness: 0.1, envMapIntensity: 1.3 });
-    const face = metal.clone(); face.map = tex; face.bumpMap = tex; face.bumpScale = 0.012;
-    g.add(M(new T.CylinderGeometry(0.16, 0.16, 0.032, 64), metal, null, [Math.PI / 2, 0, 0]));
-    g.add(M(new T.TorusGeometry(0.153, 0.017, 12, 64), metal));
-    g.add(M(new T.CircleGeometry(0.139, 64), face, [0, 0, 0.0165]));
-    g.add(M(new T.CircleGeometry(0.139, 64), face, [0, 0, -0.0165], [0, Math.PI, 0]));
-    g.add(M(new T.TorusGeometry(0.03, 0.01, 8, 20), metal, [0, 0.176, 0]));
+    const env = kind === 'gold' ? goldEnv() : studioEnv();
+    const metal = new T.MeshPhysicalMaterial({ color: lin(MEDAL_C[kind]), metalness: 1, roughness: 0.16, clearcoat: 0.4, clearcoatRoughness: 0.08, envMap: env, envMapIntensity: kind === 'gold' ? 1.6 : 1.45 });
+    const face = new T.MeshPhysicalMaterial({ color: lin(MEDAL_C[kind]), metalness: 1, roughness: 1, roughnessMap: medalFace(subj, 'finish'), bumpMap: medalFace(subj, 'relief'), bumpScale: 0.018, envMap: env, envMapIntensity: kind === 'gold' ? 1.6 : 1.45 });
+    g.add(M(new T.CylinderGeometry(0.162, 0.162, 0.03, 72), metal, null, [Math.PI / 2, 0, 0]));
+    g.add(M(new T.TorusGeometry(0.152, 0.02, 14, 72), metal));
+    g.add(M(new T.CircleGeometry(0.14, 72), face, [0, 0, 0.0155]));
+    g.add(M(new T.CircleGeometry(0.14, 72), face, [0, 0, -0.0155], [0, Math.PI, 0]));
+    g.add(M(new T.TorusGeometry(0.03, 0.01, 10, 24), metal, [0, 0.178, 0]));
     return g;
   }
   /* A belt round the buddy's middle: the band (two stitch lines), the knot in front and two tails
@@ -7901,7 +7944,7 @@ const Buddy3D = (() => {
         const g = medalMesh(m.kind, m.subj), to = V(F.cx + (i - 1) * F.dx * 1.08, F.y - (i === 1 ? 0.06 : 0), F.z[i] + 0.035);
         g.scale.setScalar(1.15);
         const strapGeo = new T.BoxGeometry(0.062, 1, 0.012); strapGeo.translate(0, -0.5, 0);
-        const strap = new T.Mesh(strapGeo, new T.MeshStandardMaterial({ color: lin(m.kind === 'ribbon' ? '#8C93A6' : SUBJ_HUE[m.subj] || '#FFC531'), roughness: 0.62 }));
+        const strap = new T.Mesh(strapGeo, new T.MeshStandardMaterial({ color: lin(m.kind === 'ribbon' ? '#2263DE' : SUBJ_HUE[m.subj] || '#FFC531'), roughness: 0.62 }));
         strap.visible = false; g.visible = false;
         b.P.body.add(g, strap);
         return { kind: m.kind, g, strap, to, from: to.clone().add(V(0, 2.3, 1.1)), neck: V(F.neck[0] + (i - 1) * 0.14, F.neck[1], F.neck[2]), sparks: [] };
@@ -8176,14 +8219,14 @@ const Awards = (() => {
   /* ---------- daily medals ---------- */
   /* One medal a day in each subject, from the day's planned sheets (extra sheets after the plan don't
      count): passing a third of them earns bronze, two thirds silver, all of them gold, so 1, 2 and 3
-     of the usual 3. Finishing the plan with no passes earns a try-again ribbon: a consolation, shown
-     plain and gray, never counted with the medals. */
+     of the usual 3. Finishing the plan with no passes earns a try-again ribbon: a consolation (a blue
+     rosette with no fanfare), never counted with the medals. */
   const MEDALS = {
     gold: { id: 'gold', name: 'Gold', rank: 4, c: '#FFC23A', d: '#A86F00' },
     silver: { id: 'silver', name: 'Silver', rank: 3, c: '#DCE2EC', d: '#7F889C' },
     bronze: { id: 'bronze', name: 'Bronze', rank: 2, c: '#D9894A', d: '#86461A' },
-    /* a consolation, not a medal: plain gray, no shine, not counted with the medals */
-    ribbon: { id: 'ribbon', name: 'Try-again ribbon', rank: 1, c: '#9AA3B8', d: '#5C6478' }
+    /* a consolation, not a medal: a blue rosette, no fanfare, not counted with the medals */
+    ribbon: { id: 'ribbon', name: 'Try-again ribbon', rank: 1, c: '#2F6FE4', d: '#163C94' }
   };
   const opts = { ribbon: true };
   function medalOf(passed, done, plan) {
@@ -11101,7 +11144,8 @@ function awardNews(before, l) {
 /* ---------- trophies, drawn ---------- */
 /* Each trophy has a shape of its own (a star, a flame, a rocket, a microphone, a book, a shield) on
    the same two-step base, in the metal of the best one won so far: bronze, silver, gold, then green,
-   blue, purple, red, ice and white. Not won yet: a dashed outline of the same shape. */
+   blue, purple, red, ice and white (On Fire is a torch: the cup is metal, the fire is fire). Not won
+   yet: a dashed outline of the same shape. */
 const hexMix = (a, b, p) => {
   const A = parseInt(a.slice(1), 16), B = parseInt(b.slice(1), 16), m = (s) => Math.round(((A >> s) & 255) * (1 - p) + ((B >> s) & 255) * p);
   return '#' + ((1 << 24) + (m(16) << 16) + (m(8) << 8) + m(0)).toString(16).slice(1);
@@ -11112,9 +11156,18 @@ const ART = {
     body: '<path d="M32 4 L37.3 17.7 L52 18.5 L40.6 27.8 L44.3 42 L32 34 L19.7 42 L23.4 27.8 L12 18.5 L26.7 17.7 Z"/><path d="M29.5 34 H34.5 V55 H29.5 Z"/>',
     light: '<path d="M32 4 L26.7 17.7 L12 18.5 L23.4 27.8 L32 25 Z" opacity=".38"/>'
   },
+  /* a torch: a metal cup in the trophy's metal with real fire rising out of it */
   streak: {
-    body: '<path d="M32 3 C39 11 47 18 46 31 C45 42 39 48 32 48 C25 48 18 42 18 33 C18 25 23 21 25 14 C29 20 29 24 33 26 C34 18 30 11 32 3 Z"/><path d="M29.5 46 H34.5 V55 H29.5 Z"/>',
-    light: '<path d="M32 21 C36 27 40 30 39 37 C38 43 35 45 32 45 C28 45 25 42 25 37 C25 33 28 31 29 27 C31 30 32 32 34 33 C34 29 31 25 32 21 Z"/>'
+    body: '<path d="M20 31 H44 L39.5 44 H24.5 Z"/><path d="M29.5 44 H34.5 V55 H29.5 Z"/>',
+    ghost: '<path d="M20 29 C16.5 21.5 21.5 16.5 21.8 10 C24.8 14 26 17 27 19.5 C27 12.5 30 7.5 33 2 C34.2 8 38.3 12 38.2 18.5 C40 15.5 41 13 41 9 C45.5 15 47.5 22 44 29 Z"/><path d="M18.5 27.5 H45.5 L44.6 31 H19.4 Z"/>',
+    extra: (c, ln, lt, g) => '<defs><linearGradient id="' + g + 'f1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#D9260A"/><stop offset=".55" stop-color="#FF5A14"/><stop offset="1" stop-color="#FF9A2E"/></linearGradient>' +
+      '<linearGradient id="' + g + 'f2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FF7A00"/><stop offset="1" stop-color="#FFC21A"/></linearGradient>' +
+      '<linearGradient id="' + g + 'f3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFE15A"/><stop offset="1" stop-color="#FFFBE0"/></linearGradient></defs>' +
+      '<path d="M20 29 C16.5 21.5 21.5 16.5 21.8 10 C24.8 14 26 17 27 19.5 C27 12.5 30 7.5 33 2 C34.2 8 38.3 12 38.2 18.5 C40 15.5 41 13 41 9 C45.5 15 47.5 22 44 29 Z" fill="url(#' + g + 'f1)"/>' +
+      '<path d="M22.8 29 C20.8 24 23.6 20.5 24.6 16.8 C26.6 19.8 27.6 21.6 28.6 23.6 C28.6 18 30.6 13.8 32.8 9 C33.8 14.6 36.9 17.8 36.2 22.8 C37.8 20.8 38.8 18.8 39 16.6 C42 21.6 42.2 26 41 29 Z" fill="url(#' + g + 'f2)"/>' +
+      '<path d="M26.8 29 C25.8 26.2 27.8 23.8 28.8 21.8 C29.8 23.6 30.8 24.8 31.8 25.8 C31.8 22.8 32.8 20 33.8 17.6 C35 21.8 37.2 24.8 36.2 29 Z" fill="url(#' + g + 'f3)"/>' +
+      '<path d="M18.5 27.5 H45.5 L44.6 31 H19.4 Z" fill="url(#' + g + ')" stroke="' + ln + '" stroke-width="1.2" stroke-linejoin="round"/>' +
+      '<path d="M21 29.2 H43" stroke="' + lt + '" stroke-opacity=".7" stroke-width="1" stroke-linecap="round"/>'
   },
   levels: {
     body: '<path d="M23 28 L14 41 L23 39 Z"/><path d="M41 28 L50 41 L41 39 Z"/><path d="M32 3 C40 10 42 21 41 37 H23 C22 21 24 10 32 3 Z"/><path d="M26 37 H38 V41 H26 Z"/>',
@@ -11141,7 +11194,7 @@ const ART = {
 let artN = 0;
 function trophyArt(id, color, empty) {
   const A = ART[id] || ART.sheets;
-  if (empty || !color) return '<svg class="tart tart-none" viewBox="0 0 64 72" aria-hidden="true"><g fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.55)" stroke-width="1.6" stroke-dasharray="3 2.5" stroke-linejoin="round">' + A.body + ART_BASE + '<rect x="15" y="59" width="34" height="10" rx="2.5"/></g></svg>';
+  if (empty || !color) return '<svg class="tart tart-none" viewBox="0 0 64 72" aria-hidden="true"><g fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.55)" stroke-width="1.6" stroke-dasharray="3 2.5" stroke-linejoin="round">' + (A.ghost || '') + A.body + ART_BASE + '<rect x="15" y="59" width="34" height="10" rx="2.5"/></g></svg>';
   const g = 'ta' + (++artN), hi = hexMix(color, '#FFFFFF', 0.55), lo = hexMix(color, '#000000', 0.38), ln = hexMix(color, '#000000', 0.5), lt = hexMix(color, '#FFFFFF', 0.7);
   return '<svg class="tart" viewBox="0 0 64 72" aria-hidden="true"><defs>' +
     '<linearGradient id="' + g + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + hi + '"/><stop offset=".45" stop-color="' + color + '"/><stop offset="1" stop-color="' + lo + '"/></linearGradient>' +
@@ -11150,7 +11203,7 @@ function trophyArt(id, color, empty) {
     '<rect x="15" y="59" width="34" height="10" rx="2.5" fill="url(#' + g + 'd)" stroke="' + ln + '" stroke-width="1.3"/>' +
     (A.light ? '<g fill="' + lt + '">' + A.light + '</g>' : '') +
     (A.dark ? '<g fill="none" stroke="' + ln + '" stroke-opacity=".45" stroke-width="1.4" stroke-linecap="round">' + A.dark + '</g>' : '') +
-    (A.extra ? A.extra(color, ln, lt) : '') + '<path d="M18.5 61.6 H45.5" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="1.2" stroke-linecap="round"/></svg>';
+    (A.extra ? A.extra(color, ln, lt, g) : '') + '<path d="M18.5 61.6 H45.5" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="1.2" stroke-linecap="round"/></svg>';
 }
 
 /* ---------- the day's medals ---------- */
@@ -11162,24 +11215,49 @@ const MEDAL_ICON = {
   clock: '<circle r="10" fill="none" stroke-width="2.6"/><path d="M0 0 V-6.5 M0 0 L5 2.6" fill="none" stroke-width="2.6" stroke-linecap="round"/>'
 };
 let medalN = 0;
-/* A flat medal: a ribbon V in the subject's color and a metal disc with the subject's sign. The
-   try-again ribbon is a plain gray rosette with a round arrow: no metal, no shine. '' is an empty spot. */
+/* Struck-metal colors: highlight, light, base, shade, dark. */
+const METAL = {
+  gold: { hi: '#FFF7CF', lt: '#FFE27A', base: '#EEBB2C', mid: '#C38E10', dk: '#6F4600' },
+  silver: { hi: '#FFFFFF', lt: '#F2F4F8', base: '#CBD1DA', mid: '#959EAC', dk: '#4A525E' },
+  bronze: { hi: '#FFE3C8', lt: '#EFAE72', base: '#C47838', mid: '#955424', dk: '#4A2408' }
+};
+/* A flat medal, drawn like a struck one: a striped ribbon V in the subject's color, a beveled rim with
+   a beaded ring, a recessed polished field and the subject's sign raised (lit from the top left), with
+   a sheen and a glint. The try-again ribbon is a blue rosette with the same sign. '' is an empty spot. */
 function medalSVG(kind, subj, cls) {
-  const icon = MEDAL_ICON[subj] || '';
+  const icon = MEDAL_ICON[subj] || '', id = 'md' + (++medalN);
   const s = '<svg class="medal' + (cls ? ' ' + cls : '') + ' m-' + (kind || 'none') + '" viewBox="0 0 64 84" aria-hidden="true">';
-  if (!kind) return s + '<circle cx="32" cy="54" r="22" fill="none" stroke="rgba(255,255,255,0.38)" stroke-width="2.5" stroke-dasharray="5 5"/><g transform="translate(32 54)" stroke="rgba(255,255,255,0.38)">' + icon + '</g></svg>';
+  if (!kind) return s + '<circle cx="32" cy="56" r="22" fill="none" stroke="rgba(255,255,255,0.38)" stroke-width="2.5" stroke-dasharray="5 5"/><g transform="translate(32 56)" stroke="rgba(255,255,255,0.38)">' + icon + '</g></svg>';
   if (kind === 'ribbon') {
-    let d = '';
-    for (let i = 0; i <= 64; i++) { const a = (i / 64) * Math.PI * 2, r = 22 + 2.4 * Math.cos(a * 16); d += (i ? 'L' : 'M') + (32 + Math.cos(a) * r).toFixed(1) + ' ' + (50 + Math.sin(a) * r).toFixed(1); }
-    return s + '<path d="M22 62 L16 82 L24 78 L28 66 Z M42 62 L48 82 L40 78 L36 66 Z" fill="#7F879B"/><path d="' + d + 'Z" fill="#9AA3B8" stroke="#6E768A" stroke-width="1.5"/>' +
-      '<circle cx="32" cy="50" r="13" fill="#C2C8D4" stroke="#8D95A8" stroke-width="1.5"/><path d="M26 46.5 A7.5 7.5 0 1 0 38 45" fill="none" stroke="#6E768A" stroke-width="2.8" stroke-linecap="round"/><path d="M33.5 40.5 L40.5 44.5 L34.5 48.5 Z" fill="#6E768A"/></svg>';
+    let star = '', folds = '';
+    for (let i = 0; i < 40; i++) { const a = (i / 40) * Math.PI * 2 - Math.PI / 2, r = i % 2 ? 20.2 : 23.6; star += (i ? 'L' : 'M') + (32 + Math.cos(a) * r).toFixed(2) + ' ' + (47 + Math.sin(a) * r).toFixed(2); }
+    for (let i = 1; i < 40; i += 2) { const a = (i / 40) * Math.PI * 2 - Math.PI / 2; folds += 'M' + (32 + Math.cos(a) * 14.5).toFixed(2) + ' ' + (47 + Math.sin(a) * 14.5).toFixed(2) + 'L' + (32 + Math.cos(a) * 20.2).toFixed(2) + ' ' + (47 + Math.sin(a) * 20.2).toFixed(2); }
+    return s + '<defs><radialGradient id="' + id + '" cx="38%" cy="32%" r="70%"><stop offset="0" stop-color="#8FBBFF"/><stop offset=".45" stop-color="#2F6FE4"/><stop offset="1" stop-color="#173F9C"/></radialGradient>' +
+      '<linearGradient id="' + id + 'g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF4B8"/><stop offset=".5" stop-color="#E8B523"/><stop offset="1" stop-color="#8A5C00"/></linearGradient></defs>' +
+      '<path d="M23.5 58 L17 83 L21.6 79.4 L25.6 84 L31 61 Z" fill="#1D4FB5"/><path d="M40.5 58 L47 83 L42.4 79.4 L38.4 84 L33 61 Z" fill="#2B66D8"/>' +
+      '<path d="M23.5 58 L17 83 L21.6 79.4 L22.6 80.6 L28 60 Z" fill="#FFFFFF" opacity=".16"/>' +
+      '<path d="' + star + 'Z" fill="#2A66DA" stroke="#163C94" stroke-width=".8" stroke-linejoin="round"/>' +
+      '<path d="' + folds + '" stroke="#163C94" stroke-opacity=".55" stroke-width=".9"/>' +
+      '<circle cx="32" cy="47" r="14.6" fill="#163C94"/><circle cx="32" cy="47" r="13.2" fill="none" stroke="url(#' + id + 'g)" stroke-width="1.8"/>' +
+      '<circle cx="32" cy="47" r="11.8" fill="url(#' + id + ')"/>' +
+      (icon ? '<g transform="translate(32.5 47.6) scale(.82)" stroke="#0E2A6B" stroke-opacity=".6">' + icon + '</g><g transform="translate(32 47) scale(.82)" stroke="#FFFFFF">' + icon + '</g>' : '') +
+      '<ellipse cx="27" cy="41.5" rx="6" ry="3" transform="rotate(-30 27 41.5)" fill="#FFFFFF" opacity=".28"/></svg>';
   }
-  const M = Awards.MEDALS[kind], id = 'md' + (++medalN), hue = MEDAL_HUE[subj] || '#FFC531';
-  return s + '<defs><radialGradient id="' + id + '" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".95"/><stop offset=".24" stop-color="' + M.c + '"/><stop offset=".86" stop-color="' + M.d + '"/></radialGradient></defs>' +
-    '<path d="M14 0 H28 L38 34 L28 38 Z" fill="' + hue + '"/><path d="M50 0 H36 L26 34 L36 38 Z" fill="' + hue + '"/><path d="M14 0 H28 L38 34 L28 38 Z" fill="#000000" opacity=".18"/>' +
-    '<circle cx="32" cy="54" r="23" fill="url(#' + id + ')" stroke="' + M.d + '" stroke-width="2"/><circle cx="32" cy="54" r="17" fill="none" stroke="#FFFFFF" stroke-opacity=".45" stroke-width="1.6"/>' +
-    (icon ? '<g transform="translate(32 54)" stroke="' + M.d + '">' + icon + '</g>' : '') +
-    '<path d="M19 45 A16 16 0 0 1 30 36" fill="none" stroke="#FFFFFF" stroke-opacity=".7" stroke-width="2.4" stroke-linecap="round"/></svg>';
+  const C = METAL[kind] || METAL.gold, hue = MEDAL_HUE[subj] || '#FFC531';
+  return s + '<defs>' +
+    '<linearGradient id="' + id + 'r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + C.hi + '"/><stop offset=".2" stop-color="' + C.lt + '"/><stop offset=".45" stop-color="' + C.base + '"/><stop offset=".6" stop-color="' + C.mid + '"/><stop offset=".76" stop-color="' + C.lt + '"/><stop offset="1" stop-color="' + C.dk + '"/></linearGradient>' +
+    '<linearGradient id="' + id + 'f" x1="1" y1="1" x2="0" y2="0"><stop offset="0" stop-color="' + C.lt + '"/><stop offset=".5" stop-color="' + C.base + '"/><stop offset="1" stop-color="' + C.mid + '"/></linearGradient>' +
+    '<radialGradient id="' + id + 's" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".85"/><stop offset=".55" stop-color="#FFFFFF" stop-opacity=".18"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></radialGradient></defs>' +
+    '<path d="M15 0 H29 L37.5 33 L29.5 36 Z" fill="' + hue + '"/><path d="M20.4 0 H23.6 L33.4 34.6 L31.2 35.4 Z" fill="#FFFFFF" opacity=".6"/><path d="M15 0 H29 L37.5 33 L29.5 36 Z" fill="#000000" opacity=".16"/>' +
+    '<path d="M49 0 H35 L26.5 33 L34.5 36 Z" fill="' + hue + '"/><path d="M43.6 0 H40.4 L30.6 34.6 L32.8 35.4 Z" fill="#FFFFFF" opacity=".6"/>' +
+    '<circle cx="32" cy="32.6" r="3.2" fill="none" stroke="url(#' + id + 'r)" stroke-width="2.4"/>' +
+    '<circle cx="32" cy="56" r="24" fill="url(#' + id + 'r)" stroke="' + C.dk + '" stroke-width=".9"/>' +
+    '<circle cx="32" cy="56" r="21.4" fill="none" stroke="' + C.hi + '" stroke-opacity=".85" stroke-width="1.4" stroke-dasharray=".01 2.7" stroke-linecap="round"/>' +
+    '<circle cx="32" cy="56" r="18.6" fill="url(#' + id + 'f)"/><circle cx="32" cy="56" r="18.6" fill="none" stroke="' + C.dk + '" stroke-opacity=".55" stroke-width="1.2"/>' +
+    '<path d="M18.6 61 A14.5 14.5 0 0 0 41 67" fill="none" stroke="' + C.hi + '" stroke-opacity=".35" stroke-width="1.2"/>' +
+    (icon ? '<g transform="translate(32.8 56.9)" stroke="' + C.dk + '" stroke-opacity=".6">' + icon + '</g><g transform="translate(31.5 55.4)" stroke="' + C.hi + '">' + icon + '</g><g transform="translate(32 56)" stroke="' + C.base + '">' + icon + '</g>' : '') +
+    '<ellipse cx="24" cy="46.5" rx="12" ry="6.5" transform="rotate(-35 24 46.5)" fill="url(#' + id + 's)"/>' +
+    '<path d="M45 41.5 l1 2.6 2.6 1 -2.6 1 -1 2.6 -1 -2.6 -2.6 -1 2.6 -1 Z" fill="#FFFFFF" opacity=".9"/></svg>';
 }
 const todayDay = () => Awards.localDay(new Date().toISOString());
 const kidMedals = (l) => Awards.medalsOn(kidLogs(l), todayDay());
@@ -11215,12 +11293,12 @@ function medalInfo(kidId, subj) {
   Sfx.pick(); toast(msg); Speech.say(msg);
 }
 
-/* One trophy for a 4- or 5-year-old: its own drawn shape in the metal won, its name, a star for each
-   one won, a bar that fills toward the next one, and one short line for the grown-up. Tapping it reads
-   it aloud. */
+/* One trophy for a 4- or 5-year-old: its own drawn shape in the metal won, its name, how many of it are
+   won, a bar that fills toward the next one, and one short line for the grown-up. Tapping it reads it
+   aloud. */
 function trophyTile(l, s) {
   const got = s.best, nx = s.next;
-  const stars = s.earned ? '<span class="t-stars" aria-label="' + s.earned + ' won">' + (s.earned <= 5 ? '★'.repeat(s.earned) : '★ ×' + s.earned) + '</span>' : '<span class="t-stars none" aria-hidden="true">☆</span>';
+  const stars = '<span class="t-count' + (s.earned ? '' : ' none') + '">' + s.earned + (s.earned === 1 ? ' trophy' : ' trophies') + '</span>';
   return '<button class="trophy' + (got ? '' : ' none') + '" data-act="trophy" data-kid="' + esc(l.id) + '" data-s="' + s.id + '" aria-label="' + esc(s.kid + ': ' + (got ? got.label : 'none yet')) + '">' +
     '<span class="t-art">' + trophyArt(s.id, got ? got.color : '', !got) + '</span>' +
     '<b>' + esc(s.kid) + '</b>' + stars + (nx ? '<span class="t-bar"><i style="width:' + Math.round(nx.pct * 100) + '%"></i></span>' : '') +
@@ -11249,7 +11327,7 @@ function shelfHTML(kids) {
       medalRowHTML(l) + beltLadderHTML(l) + '<div class="trophies">' + T.series.map((s) => trophyTile(l, s)).join('') + '</div></div>';
   }).join('');
   return '<section class="glass shelf"><h2 class="shelf-title">Trophy shelf</h2><div class="shelf-kids">' + cols + '</div>' +
-    '<p class="shelf-help">Medals each day in each subject: bronze for 1 sheet passed, silver for 2, gold for all 3. A gray try-again ribbon means all 3 done but none passed; ribbons are not counted with the medals. Belts: the same nine in every subject, left to right, white to black. Each subject’s levels are split into eight equal shares, and each share finished earns the next belt; the gold ring is the belt now; black means every level in that subject is done. Stars: one for each trophy won. Tap a medal, a belt row or a trophy to hear it.</p></section>';
+    '<p class="shelf-help">Medals each day in each subject: bronze for 1 sheet passed, silver for 2, gold for all 3. A blue try-again ribbon means all 3 done but none passed; ribbons are not counted with the medals. Belts: the same nine in every subject, left to right, white to black. Each subject’s levels are split into eight equal shares, and each share finished earns the next belt; the gold ring is the belt now; black means every level in that subject is done. The number under each trophy is how many of that trophy are won. Tap a medal, a belt row or a trophy to hear it.</p></section>';
 }
 function trophyInfo(kidId, sid) {
   const l = Store.learner(kidId); if (!l) return;
