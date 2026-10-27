@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261027010825";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261027015056";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1153,24 +1153,39 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .shelf-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
 .shelf-head > b { font-family: var(--font-display); font-weight: 400; font-size: 30px; color: #fff; }
 .shelf-count { font-family: var(--font-display); font-size: 24px; color: var(--gold-hi); background: rgba(255, 197, 49, 0.14); border: 1px solid rgba(255, 197, 49, 0.45); border-radius: 999px; padding: 2px 14px; }
-.shelf-belts { display: flex; gap: 6px; margin-left: auto; }
-.belt-btn { display: grid; justify-items: center; gap: 1px; width: 58px; padding: 4px 2px 3px; border-radius: 14px; background: rgba(255, 255, 255, 0.07); }
-.belt-btn .belt { width: 44px; }
-.belt-btn small { font-size: 11px; font-weight: 800; color: var(--ink-soft); }
-.trophies { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
+/* belt ladders: one row per subject, white to black */
+.bladders { display: grid; gap: 6px; }
+.bladder { display: grid; gap: 4px; padding: 7px 10px 8px; border-radius: 16px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); text-align: left; min-width: 0; }
+.bladder:active { transform: scale(0.98); }
+.bl-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+.bl-top b { font-size: 15px; font-weight: 900; color: #fff; }
+.bl-top small { font-size: 12px; font-weight: 800; color: var(--ink-soft); }
+.bl-belts { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 3px; align-items: center; }
+.bl-b { display: grid; place-items: center; justify-self: center; width: 100%; max-width: 46px; min-width: 0; padding: 4px 1px; border-radius: 9px; border: 2px solid transparent; }
+.bl-b .belt { width: 100%; max-width: 32px; }
+.bl-b.later { opacity: 0.32; }
+.bl-b.next { border: 2px dashed rgba(255, 255, 255, 0.6); }
+.bl-b.now { border-color: var(--gold); background: rgba(255, 197, 49, 0.18); box-shadow: 0 0 10px rgba(255, 197, 49, 0.45); }
+/* trophies: six, three to a row */
+.trophies { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .trophy { display: grid; justify-items: center; align-content: start; gap: 4px; padding: 10px 6px 8px; border-radius: 18px; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.12); text-align: center; min-width: 0; }
 .trophy:active { transform: scale(0.96); }
-.trophy b { font-size: 13px; line-height: 1.15; color: #fff; font-weight: 800; }
-.trophy.none b { color: var(--ink-soft); font-weight: 700; }
+.trophy b { font-family: var(--font-display); font-weight: 400; font-size: 17px; line-height: 1.1; color: #fff; }
+.trophy.none b { color: var(--ink-soft); }
 .trophy small { font-size: 11px; color: var(--ink-faint); font-weight: 700; }
-.t-art { position: relative; width: 56px; height: 60px; }
+.t-art { position: relative; width: 66px; height: 72px; }
 .t-art .cup { width: 100%; height: 100%; filter: drop-shadow(0 4px 6px rgba(5, 2, 30, 0.45)); }
-.t-ico { position: absolute; left: 0; right: 0; top: 9px; text-align: center; font-family: var(--font-emoji); font-size: 19px; line-height: 1; }
-.trophy.none .t-ico { opacity: 0.55; filter: grayscale(0.6); }
-.t-n { position: absolute; right: -8px; top: -4px; min-width: 24px; height: 22px; padding: 0 5px; border-radius: 999px; background: var(--gold); color: var(--gold-ink); font-family: var(--font-display); font-size: 13px; line-height: 22px; box-shadow: 0 2px 0 var(--gold-deep); }
-.t-bar { width: 84%; height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
+.t-ico { position: absolute; left: 0; right: 0; top: 8px; text-align: center; font-family: var(--font-emoji); font-size: 26px; line-height: 1; }
+.trophy.none .t-ico { opacity: 0.6; filter: grayscale(0.5); }
+.t-stars { color: var(--gold-hi); font-size: 15px; line-height: 1; letter-spacing: 1px; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3); }
+.t-stars.none { color: var(--ink-faint); }
+.t-bar { width: 84%; height: 7px; border-radius: 999px; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
 .t-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #FFC531, #FF8A3D); }
-@media (max-width: 460px) { .trophies { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .t-art { width: 48px; height: 52px; } .shelf-belts { margin-left: 0; } }
+.shelf-help { margin: 0; font-size: 13px; line-height: 1.45; font-weight: 700; color: var(--ink-soft); }
+@media (max-width: 460px) {
+  .trophies { gap: 8px; } .t-art { width: 54px; height: 60px; } .t-ico { font-size: 22px; top: 7px; } .trophy b { font-size: 15px; }
+  .bladder { padding: 6px 7px 7px; } .bl-belts { gap: 2px; } .bl-b { padding: 3px 0; border-radius: 7px; }
+}
 
 /* ---------- the buddy's path (closet) ---------- */
 .bpath { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
@@ -7624,8 +7639,8 @@ const Awards = (() => {
     if (t.top && idx === E.LEVELS.length - 1 && !t.testFor) return E.GROUPS.length;
     return Math.max(0, E.GROUPS.indexOf(E.LEVELS[idx].group));
   }
-  function beltOf(subj, E, t) {
-    const n = groupsPassed(E, t);
+  /* The belt for n groups passed. */
+  function beltAt(subj, E, n) {
     let i = 0, stripes = 0;
     if (n > 0) {
       const plan = PLAN[subj] || {}, g = E.GROUPS[n - 1];
@@ -7635,22 +7650,40 @@ const Awards = (() => {
     const B = BELTS[i];
     return { n, of: E.GROUPS.length, i, stripes, id: B.id, c: B.c, d: B.d, name: B.name + ' belt' + (stripes ? (stripes > 1 ? ' with ' + stripes + ' stripes' : ' with a stripe') : '') };
   }
+  const beltOf = (subj, E, t) => beltAt(subj, E, groupsPassed(E, t));
+  /* Every belt in a subject, white first, each with the group that earns it and that group's last level. */
+  function beltLadder(subj, E) {
+    const out = [beltAt(subj, E, 0)];
+    E.GROUPS.forEach((g, k) => {
+      const lv = E.groupLevels(g), last = lv.length ? E.BY[lv[lv.length - 1]] || null : null;
+      out.push(Object.assign(beltAt(subj, E, k + 1), { group: g, last: last ? last.name : '' }));
+    });
+    return out;
+  }
   const sameBelt = (a, b) => !!a && !!b && a.i === b.i && a.stripes === b.stripes;
 
   /* ---------- trophies ---------- */
   const TIERS = ['#CD7F32', '#C9D1DC', '#FFC531', '#34D27B', '#3D7BEA', '#8B5CF6', '#E8453C', '#7FE7FF', '#FFFFFF'];
   const FORM_NAME = { 400: 'Hero', 1000: 'Superhero', 2000: 'Space hero', 4000: 'Galaxy hero' };
+  /* Six trophies, each about something different: sheets (work), days in a row (habit), new levels
+     (progress), Read to me, books, and the buddy's forms. Each has a kid name and picture for the shelf,
+     a short label for the goal, and what is read aloud when it is tapped (value so far, next goal).
+     Practice days and super days are not trophies (days in a row covers them), nor are level tests and
+     belts (new levels and the belt ladders cover them); counts() still works them out. */
+  const more = (v, nx, one, many) => (nx ? ' ' + (nx.at - v) + ' more ' + (nx.at - v === 1 ? one : many) + ' for the next one!' : ' You won them all!');
   const SERIES = [
-    { id: 'sheets', name: 'Sheets', icon: '📝', steps: [10, 25, 50, 100, 200, 300, 500, 750, 1000], label: (n) => n + ' sheets' },
-    { id: 'streak', name: 'Days in a row', icon: '🔥', steps: [3, 7, 14, 21, 30, 50, 75, 100], label: (n) => n + ' days in a row' },
-    { id: 'days', name: 'Practice days', icon: '📅', steps: [5, 10, 25, 50, 100, 150, 200, 300], label: (n) => n + ' practice days' },
-    { id: 'levels', name: 'New levels', icon: '🪜', steps: [1, 5, 10, 20, 30, 40, 50, 60], label: (n) => (n === 1 ? 'First new level' : n + ' new levels') },
-    { id: 'tests', name: 'Level tests', icon: '🎓', steps: [1, 3, 5, 10, 15, 20], label: (n) => (n === 1 ? 'First level test' : n + ' level tests') },
-    { id: 'full', name: 'Full days', icon: '🌟', steps: [1, 5, 10, 25, 50, 100, 200], label: (n) => (n === 1 ? 'First full day' : n + ' full days') },
-    { id: 'reads', name: 'Read to me', icon: '🗣️', steps: [5, 10, 25, 50, 100, 200], label: (n) => n + ' reads' },
-    { id: 'books', name: 'Books', icon: '📚', steps: [1, 5, 10, 25, 50, 100, 200], label: (n) => (n === 1 ? 'First book' : n + ' books') },
-    { id: 'belts', name: 'Belts', icon: '🥋', steps: [1, 3, 5, 8, 12, 16, 20, 23], label: (n) => (n === 1 ? 'First belt earned' : n + ' belts earned') },
-    { id: 'buddy', name: 'Buddy', icon: '🦸', steps: [400, 1000, 2000, 4000], label: (n) => FORM_NAME[n] || n + ' growth' }
+    { id: 'sheets', name: 'Sheets', kid: 'Sheet Star', icon: '✏️', steps: [10, 25, 50, 100, 200, 300, 500, 750, 1000], label: (n) => n + ' sheets',
+      say: (v, nx) => (v ? 'You finished ' + v + (v === 1 ? ' sheet.' : ' sheets.') + more(v, nx, 'sheet', 'sheets') : 'Finish ' + nx.at + ' sheets to win this one!') },
+    { id: 'streak', name: 'Days in a row', kid: 'On Fire', icon: '🔥', steps: [3, 7, 14, 21, 30, 50, 75, 100], label: (n) => n + ' days in a row',
+      say: (v, nx) => (v ? 'Your best is ' + v + (v === 1 ? ' day' : ' days') + ' in a row.' + (nx ? ' Get to ' + nx.at + ' days in a row for the next one!' : ' You won them all!') : 'Practice ' + nx.at + ' days in a row to win this one!') },
+    { id: 'levels', name: 'New levels', kid: 'Level Up', icon: '🚀', steps: [1, 5, 10, 20, 30, 40, 50, 60], label: (n) => (n === 1 ? 'First new level' : n + ' new levels'),
+      say: (v, nx) => (v ? 'You moved up ' + v + (v === 1 ? ' level.' : ' levels.') + more(v, nx, 'level', 'levels') : 'Move up a level to win this one!') },
+    { id: 'reads', name: 'Read to me', kid: 'Read Aloud', icon: '🗣️', steps: [5, 10, 25, 50, 100, 200], label: (n) => n + ' read-alouds',
+      say: (v, nx) => (v ? 'You read to a grown-up ' + v + (v === 1 ? ' time.' : ' times.') + more(v, nx, 'time', 'times') : 'Read to a grown-up ' + nx.at + ' times to win this one!') },
+    { id: 'books', name: 'Books', kid: 'Bookworm', icon: '📚', steps: [1, 5, 10, 25, 50, 100, 200], label: (n) => (n === 1 ? 'First book' : n + ' books'),
+      say: (v, nx) => (v ? 'You read ' + v + (v === 1 ? ' book.' : ' books.') + more(v, nx, 'book', 'books') : 'Read a book with a grown-up to win this one!') },
+    { id: 'buddy', name: 'Buddy', kid: 'Buddy Power', icon: '🦸', steps: [400, 1000, 2000, 4000], label: (n) => FORM_NAME[n] || n + ' growth',
+      say: (v, nx) => (nx ? (nx.at - v) + ' more to grow into a ' + FORM_NAME[nx.at].toLowerCase() + '!' : 'Your buddy is a galaxy hero!') }
   ];
   const SUBJ = ['math', 'reading', 'clock'];
   const localDay = (iso) => { const d = new Date(iso); return isNaN(d) ? '' : d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
@@ -7689,9 +7722,10 @@ const Awards = (() => {
       total += got.length;
       const prevAt = got.length ? got[got.length - 1] : 0;
       return {
-        id: S.id, name: S.name, icon: S.icon, value, earned: got.length, of: S.steps.length,
+        id: S.id, name: S.name, kid: S.kid, icon: S.icon, value, earned: got.length, of: S.steps.length,
         best: got.length ? { at: prevAt, label: S.label(prevAt), color: TIERS[Math.min(TIERS.length - 1, got.length - 1)] } : null,
-        next: next != null ? { at: next, label: S.label(next), left: next - value, pct: Math.max(0, Math.min(1, (value - prevAt) / (next - prevAt))) } : null
+        next: next != null ? { at: next, label: S.label(next), left: next - value, pct: Math.max(0, Math.min(1, (value - prevAt) / (next - prevAt))) } : null,
+        say: S.say(value, next != null ? { at: next } : null)
       };
     });
     return { total, series };
@@ -7701,11 +7735,11 @@ const Awards = (() => {
     const out = [];
     after.series.forEach((s, i) => {
       const b = before.series[i], S = SERIES[i];
-      S.steps.forEach((n, k) => { if (k >= b.earned && k < s.earned) out.push({ series: s.id, icon: s.icon, label: S.label(n), color: TIERS[Math.min(TIERS.length - 1, k)] }); });
+      S.steps.forEach((n, k) => { if (k >= b.earned && k < s.earned) out.push({ series: s.id, icon: s.icon, kid: S.kid, label: S.label(n), color: TIERS[Math.min(TIERS.length - 1, k)] }); });
     });
     return out;
   }
-  return { BELTS, PLAN, groupsPassed, beltOf, sameBelt, TIERS, SERIES, counts, trophies, newOnes, localDay };
+  return { BELTS, PLAN, groupsPassed, beltAt, beltOf, beltLadder, sameBelt, FORM_NAME, TIERS, SERIES, counts, trophies, newOnes, localDay };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = Awards;
 /* Small Steps: merging two copies of a record that both changed since they last matched.
@@ -7720,7 +7754,14 @@ if (typeof module !== 'undefined' && module.exports) module.exports = Awards;
 const Merge = (() => {
   'use strict';
   const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
-  const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  /* Same content, whatever the order of the keys: the master copy hands records back with their keys
+     sorted, so a plain JSON.stringify comparison saw every record as changed. Array order still counts. */
+  const canon = (v) => {
+    if (Array.isArray(v)) return '[' + v.map((x) => (x === undefined ? 'null' : canon(x))).join(',') + ']';
+    if (isObj(v)) return '{' + Object.keys(v).filter((k) => v[k] !== undefined).sort().map((k) => JSON.stringify(k) + ':' + canon(v[k])).join(',') + '}';
+    return JSON.stringify(v);
+  };
+  const eq = (a, b) => a === b || canon(a) === canon(b);
   const stamp = (d) => String((d && (d.updatedAt || d.lastAt)) || '');
   /* b's copy of a shared item wins field by field */
   function unionById(a, b) {
@@ -10501,7 +10542,7 @@ function awardNews(before, l) {
     const a = before.belts[s.key], b = now.belts[s.key];
     if (b.n > a.n) out.push({ kind: 'belt', subj: s.key, belt: b, text: 'New belt in ' + s.name.toLowerCase() + ': ' + b.name + '!' });
   });
-  Awards.newOnes(before.trophies, now.trophies).forEach((t) => out.push({ kind: 'trophy', t, text: 'New trophy: ' + t.label + '!' }));
+  Awards.newOnes(before.trophies, now.trophies).forEach((t) => out.push({ kind: 'trophy', t, text: 'New trophy: ' + t.kid + '! ' + t.label }));
   return out;
 }
 function cupSVG(color, empty) {
@@ -10513,34 +10554,53 @@ function cupSVG(color, empty) {
     '<rect x="13" y="39" width="22" height="8" rx="2.5" fill="' + (empty ? 'none' : 'color-mix(in srgb, ' + color + ' 70%, #3A2A00)') + '" stroke="' + st + '" stroke-width="1.4"' + (empty ? ' stroke-dasharray="3 3"' : '') + '/>' +
     (empty ? '' : '<path d="M16.5 8 V15 C16.5 21 18.5 25 21.5 27.5" fill="none" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="2.4" stroke-linecap="round"/>') + '</svg>';
 }
+/* The buddy trophy shows the child's own buddy. */
+const BUDDY_PIC = { dragon: '🐉', robot: '🤖', ladybug: '🐞', slug: '🐌' };
+const trophyPic = (l, s) => (s.id === 'buddy' && hasBuddy(l) ? BUDDY_PIC[Buddy.of(l).type] || s.icon : s.icon);
+/* One trophy for a 4- or 5-year-old: a big picture on the cup, its name, a star for each one won, a bar
+   that fills toward the next one, and one short line for the grown-up. Tapping it reads it aloud. */
 function trophyTile(l, s) {
   const got = s.best, nx = s.next;
-  const sub = nx ? '<span class="t-bar"><i style="width:' + Math.round(nx.pct * 100) + '%"></i></span><small>' + (s.id === 'buddy' ? nx.left + ' to ' + esc(nx.label) : s.value + ' of ' + nx.at) + '</small>' : '<small>All done!</small>';
-  return '<button class="trophy' + (got ? '' : ' none') + '" data-act="trophy" data-kid="' + esc(l.id) + '" data-s="' + s.id + '" aria-label="' + esc(s.name + ': ' + (got ? got.label : 'none yet')) + '">' +
-    '<span class="t-art">' + cupSVG(got ? got.color : '', !got) + '<span class="t-ico" aria-hidden="true">' + s.icon + '</span>' + (s.earned > 1 ? '<span class="t-n">×' + s.earned + '</span>' : '') + '</span>' +
-    '<b>' + esc(got ? got.label : 'Next: ' + (nx ? nx.label : '')) + '</b>' + sub + '</button>';
+  const stars = s.earned ? '<span class="t-stars" aria-label="' + s.earned + ' won">' + (s.earned <= 5 ? '★'.repeat(s.earned) : '★ ×' + s.earned) + '</span>' : '<span class="t-stars none" aria-hidden="true">☆</span>';
+  return '<button class="trophy' + (got ? '' : ' none') + '" data-act="trophy" data-kid="' + esc(l.id) + '" data-s="' + s.id + '" aria-label="' + esc(s.kid + ': ' + (got ? got.label : 'none yet')) + '">' +
+    '<span class="t-art">' + cupSVG(got ? got.color : '', !got) + '<span class="t-ico" aria-hidden="true">' + trophyPic(l, s) + '</span></span>' +
+    '<b>' + esc(s.kid) + '</b>' + stars + (nx ? '<span class="t-bar"><i style="width:' + Math.round(nx.pct * 100) + '%"></i></span>' : '') +
+    '<small>' + esc(got ? got.label : nx ? 'Next: ' + nx.label : '') + '</small></button>';
+}
+/* Each subject's belts in one row, white to black: the ones earned in full color, the one now ringed in
+   gold, the next one in a dashed box, the rest faded, so the colors read as a ladder. */
+function beltLadderHTML(l) {
+  return '<div class="bladders">' + SUBJECTS.map((s) => {
+    const L = Awards.beltLadder(s.key, ENG[s.key]), now = kidBelt(l, s.key).n;
+    return '<button class="bladder" data-act="beltInfo" data-kid="' + esc(l.id) + '" data-subj="' + s.key + '" aria-label="' + esc(s.name + ': ' + L[now].name) + '">' +
+      '<span class="bl-top"><b>' + s.name + '</b><small>' + esc(L[now].name) + '</small></span>' +
+      '<span class="bl-belts" style="--n:' + L.length + '">' + L.map((b) => {
+        const st = b.n < now ? 'got' : b.n === now ? 'now' : b.n === now + 1 ? 'next' : 'later';
+        return '<span class="bl-b ' + st + '">' + beltSVG(b) + '</span>';
+      }).join('') + '</span></button>';
+  }).join('') + '</div>';
 }
 function shelfHTML(kids) {
   if (!kids.length) return '';
   const cols = kids.map((l) => {
-    const T = kidTrophies(l), B = kidBelts(l);
+    const T = kidTrophies(l);
     return '<div class="shelf-kid" style="' + kidStyle(l.color) + '"><div class="shelf-head"><b>' + esc(l.name) + '</b>' +
-      '<span class="shelf-count" aria-label="' + T.total + ' trophies">🏆 ' + T.total + '</span>' +
-      '<span class="shelf-belts">' + SUBJECTS.map((s) => '<button class="belt-btn" data-act="beltInfo" data-kid="' + esc(l.id) + '" data-subj="' + s.key + '" aria-label="' + esc(s.name + ': ' + B[s.key].name) + '">' + beltSVG(B[s.key]) + '<small>' + s.name + '</small></button>').join('') + '</span></div>' +
-      '<div class="trophies">' + T.series.map((s) => trophyTile(l, s)).join('') + '</div></div>';
+      '<span class="shelf-count" aria-label="' + T.total + ' trophies">🏆 ' + T.total + '</span></div>' +
+      beltLadderHTML(l) + '<div class="trophies">' + T.series.map((s) => trophyTile(l, s)).join('') + '</div></div>';
   }).join('');
-  return '<section class="glass shelf"><h2 class="shelf-title">Trophy shelf</h2><div class="shelf-kids">' + cols + '</div></section>';
+  return '<section class="glass shelf"><h2 class="shelf-title">Trophy shelf</h2><div class="shelf-kids">' + cols + '</div>' +
+    '<p class="shelf-help">Belts go left to right, white to black. A new belt for each group of levels passed; gold ring: the belt now; dashed box: the next one. Black belt means every level in that subject. Stars: one for each trophy won. Tap a belt row or a trophy to hear it.</p></section>';
 }
 function trophyInfo(kidId, sid) {
   const l = Store.learner(kidId); if (!l) return;
   const s = kidTrophies(l).series.find((x) => x.id === sid); if (!s) return;
-  const msg = l.name + ': ' + (s.best ? s.best.label + '. ' : '') + (s.next ? (s.id === 'buddy' ? s.next.left + ' more to grow for ' + s.next.label : 'Next trophy at ' + s.next.label + ', ' + s.next.left + ' to go.') : 'Every ' + s.name.toLowerCase() + ' trophy won!');
+  const msg = s.kid + '! ' + (s.id === 'buddy' && hasBuddy(l) ? (s.best ? Buddy.of(l).name + ' is a ' + s.best.label.toLowerCase() + '. ' : '') + s.say.replace('Your buddy', Buddy.of(l).name) : s.say);
   Sfx.pick(); toast(msg); Speech.say(msg);
 }
 function beltInfo(kidId, subj) {
   const l = Store.learner(kidId); if (!l) return;
-  const b = kidBelt(l, subj), name = SUBJECTS.find((s) => s.key === subj).name;
-  const msg = l.name + ' has the ' + b.name.toLowerCase() + ' in ' + name.toLowerCase() + (b.n < b.of ? '. Pass the next group of levels for the next belt.' : '. Every group is passed!');
+  const L = Awards.beltLadder(subj, ENG[subj]), b = kidBelt(l, subj), name = SUBJECTS.find((s) => s.key === subj).name.toLowerCase(), nx = L[b.n + 1];
+  const msg = l.name + ' has the ' + b.name.toLowerCase() + ' in ' + name + '. ' + (nx ? 'Next is the ' + nx.name.toLowerCase() + (nx.last ? ': pass ' + nx.last + (/[.?!]$/.test(nx.last) ? '' : '.') : '.') : 'That is the top belt!');
   Sfx.pick(); toast(msg); Speech.say(msg);
 }
 
@@ -10590,7 +10650,7 @@ function stepLine(name, s) {
 function newsHTML(l, steps, news) {
   const name = buddyName(l), lines = [];
   (steps || []).slice(-2).forEach((s) => lines.push('<div class="news' + (s.kind === 'form' ? ' big' : '') + '"><i aria-hidden="true">' + s.icon + '</i><b>' + esc(stepLine(name, s)) + '</b></div>'));
-  (news || []).forEach((n) => lines.push('<div class="news' + (n.kind === 'belt' ? ' belt-news' : '') + '">' + (n.kind === 'belt' ? beltSVG(n.belt) : '<i aria-hidden="true">🏆</i>') + '<b>' + esc(n.text) + '</b></div>'));
+  (news || []).forEach((n) => lines.push('<div class="news' + (n.kind === 'belt' ? ' belt-news' : '') + '">' + (n.kind === 'belt' ? beltSVG(n.belt) : '<i aria-hidden="true">🏆' + trophyPic(l, { id: n.t.series, icon: n.t.icon }) + '</i>') + '<b>' + esc(n.text) + '</b></div>'));
   return lines.length ? '<div class="news-list">' + lines.slice(0, 4).join('') + '</div>' : '';
 }
 /* One line for a toast after a read, a book or food. */
