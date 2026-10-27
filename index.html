@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261027043637";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261027052020";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1275,16 +1275,17 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .subj-medal { position: absolute; right: -16px; top: -12px; width: 28px; z-index: 2; pointer-events: none; animation: medalIn 0.5s cubic-bezier(0.3, 1.6, 0.5, 1); }
 @container kid (min-width: 640px) { .subj-medal { width: 34px; right: -18px; top: -14px; } }
 @keyframes medalIn { from { transform: translateY(-14px) scale(0.5); opacity: 0; } to { transform: none; opacity: 1; } }
-.shelf-medals { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 8px 12px; border-radius: 16px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); }
-.sm-label { font-size: 12px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
-.sm-today { display: flex; gap: 6px; }
-.sm { width: 38px; padding: 0; background: none; border: 0; }
+/* the shelf's medal block: a column per subject (its lanyard), today's medal on top and this week's
+   gold, silver and bronze under it; none yet is a faded medal and 0 */
+.shelf-medals { display: grid; grid-template-columns: auto repeat(3, minmax(54px, 78px)); justify-content: start; justify-items: center; align-items: center; column-gap: 14px; row-gap: 3px; padding: 10px 14px; border-radius: 16px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); }
+.sm-label { justify-self: start; font-size: 12px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+.sm-wl { grid-row: span 3; align-self: start; margin-top: 8px; }
+.sm { width: 38px; padding: 0; margin-bottom: 4px; background: none; border: 0; }
 .sm:active { transform: scale(0.94); }
-.sm-week { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-left: auto; }
-.smw-g { display: inline-flex; align-items: center; gap: 7px; }
-.smw { display: inline-flex; align-items: center; gap: 2px; font-family: var(--font-display); font-size: 18px; color: #fff; }
-.smw-none { font-size: 13px; font-weight: 800; color: var(--ink-faint); }
-.medal.tiny { width: 21px; }
+.smw { display: inline-flex; align-items: center; gap: 3px; min-width: 40px; font-family: var(--font-display); font-size: 17px; line-height: 1; color: #fff; }
+.smw.zero .medal { opacity: 0.42; }
+.smw.zero b { color: var(--ink-faint); }
+.medal.tiny { width: 20px; }
 .medal-day { display: grid; justify-items: center; gap: 6px; }
 .medal-day .medal-big { width: 96px; animation: medalIn 0.6s cubic-bezier(0.3, 1.6, 0.5, 1) 0.15s both; }
 .medal-day b { font-family: var(--font-display); font-weight: 400; font-size: 24px; text-align: center; max-width: 26ch; }
@@ -1303,7 +1304,10 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .t-count.none { color: var(--ink-faint); font-family: inherit; font-weight: 800; font-size: 12px; }
 .news-art { display: inline-block; width: 30px; height: 34px; }
 .news-art .tart { width: 100%; height: 100%; display: block; }
-@media (max-width: 460px) { .t-art { width: 52px; height: 58px; } .sm-week { margin-left: 0; } }
+.t-next { font-size: 12px; font-weight: 800; line-height: 1.25; color: var(--ink-soft); }
+.t-next i { font-style: normal; font-weight: 900; }
+.t-next .tw0 { color: #F0A46A; } .t-next .tw1 { color: #E4E9F2; } .t-next .tw2 { color: #FFD65A; } .t-next .tw3 { color: #F4F7FF; text-shadow: 0 0 6px rgba(200, 215, 255, 0.7); } .t-next .tw4 { color: #9EDCFF; text-shadow: 0 0 6px rgba(140, 210, 255, 0.8); }
+@media (max-width: 460px) { .t-art { width: 52px; height: 58px; } .shelf-medals { grid-template-columns: auto repeat(3, 46px); column-gap: 8px; padding: 8px 10px; } .smw { min-width: 34px; font-size: 15px; } }
 </style>
 <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div><canvas id="fx" aria-hidden="true"></canvas><div id="app"></div>
 <script>
@@ -8156,7 +8160,8 @@ const Awards = (() => {
      the daily medals), then platinum and diamond. */
   const TIERS = ['#CD7F32', '#C9D1DC', '#FFC531', '#E6ECF6', '#8FD8FF'];
   const TIER_NAME = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
-  const FORM_NAME = { 100: 'Big buddy', 400: 'Hero', 1000: 'Superhero', 2000: 'Space hero', 4000: 'Galaxy hero' };
+  const FORM_NAME = { 100: 'Big buddy', 400: 'Hero', 1000: 'Superhero', 2000: 'Space hero', 4000: 'Galaxy hero', 6000: '5 crown stars' };
+  const BUDDY_GOAL = { 100: 'grow big', 1000: 'grow into a superhero', 2000: 'grow into a space hero', 4000: 'grow into a galaxy hero', 6000: 'earn 5 crown stars' };
   /* Six trophies, each about something different: sheets (work), days in a row (habit), new levels
      (progress), Read to me, books, and the buddy's forms. Each has a kid name and picture for the shelf,
      a short label for each tier's number, and what is read aloud when it is tapped (value so far, what
@@ -8164,18 +8169,18 @@ const Awards = (() => {
      are level tests and belts (new levels and the belt ladders cover them); counts() still works them out. */
   const more = (v, nx, one, many) => (nx ? ' ' + (nx.at - v) + ' more ' + (nx.at - v === 1 ? one : many) + ' for ' + nx.tier.toLowerCase() + '!' : ' You won diamond!');
   const SERIES = [
-    { id: 'sheets', name: 'Sheets', kid: 'Sheet Star', icon: '✏️', steps: [10, 50, 200, 500, 1000], label: (n) => n + ' sheets',
+    { id: 'sheets', name: 'Sheets', kid: 'Sheet Star', icon: '✏️', steps: [10, 150, 300, 600, 1000], unit: ['sheet', 'sheets'], label: (n) => n + ' sheets',
       say: (v, nx) => (v ? 'You finished ' + v + (v === 1 ? ' sheet.' : ' sheets.') + more(v, nx, 'sheet', 'sheets') : 'Finish ' + nx.at + ' sheets to win bronze!') },
-    { id: 'streak', name: 'Days in a row', kid: 'On Fire', icon: '🔥', steps: [3, 7, 14, 30, 60], label: (n) => n + ' days in a row',
+    { id: 'streak', name: 'Days in a row', kid: 'On Fire', icon: '🔥', steps: [3, 14, 30, 60, 100], unit: ['day', 'days'], label: (n) => n + ' days in a row',
       say: (v, nx) => (v ? 'Your best is ' + v + (v === 1 ? ' day' : ' days') + ' in a row.' + (nx ? ' Get to ' + nx.at + ' days in a row for ' + nx.tier.toLowerCase() + '!' : ' You won diamond!') : 'Practice ' + nx.at + ' days in a row to win bronze!') },
-    { id: 'levels', name: 'New levels', kid: 'Level Up', icon: '🚀', steps: [1, 5, 15, 30, 60], label: (n) => (n === 1 ? 'First new level' : n + ' new levels'),
+    { id: 'levels', name: 'New levels', kid: 'Level Up', icon: '🚀', steps: [1, 15, 30, 45, 60], unit: ['level', 'levels'], label: (n) => (n === 1 ? 'First new level' : n + ' new levels'),
       say: (v, nx) => (v ? 'You moved up ' + v + (v === 1 ? ' level.' : ' levels.') + more(v, nx, 'level', 'levels') : 'Move up a level to win bronze!') },
-    { id: 'reads', name: 'Read to me', kid: 'Read Aloud', icon: '🗣️', steps: [5, 10, 25, 50, 100], label: (n) => n + ' read-alouds',
-      say: (v, nx) => (v ? 'You read to a grown-up ' + v + (v === 1 ? ' time.' : ' times.') + more(v, nx, 'time', 'times') : 'Read to a grown-up ' + nx.at + ' times to win bronze!') },
-    { id: 'books', name: 'Books', kid: 'Bookworm', icon: '📚', steps: [1, 5, 10, 25, 50], label: (n) => (n === 1 ? 'First book' : n + ' books'),
+    { id: 'reads', name: 'Read to me', kid: 'Read Aloud', icon: '🗣️', steps: [1, 10, 25, 50, 100], unit: ['read-aloud', 'read-alouds'], label: (n) => (n === 1 ? 'First read-aloud' : n + ' read-alouds'),
+      say: (v, nx) => (v ? 'You read to a grown-up ' + v + (v === 1 ? ' time.' : ' times.') + more(v, nx, 'time', 'times') : 'Read to a grown-up ' + (nx.at === 1 ? 'once' : nx.at + ' times') + ' to win bronze!') },
+    { id: 'books', name: 'Books', kid: 'Bookworm', icon: '📚', steps: [1, 5, 10, 25, 50], unit: ['book', 'books'], label: (n) => (n === 1 ? 'First book' : n + ' books'),
       say: (v, nx) => (v ? 'You read ' + v + (v === 1 ? ' book.' : ' books.') + more(v, nx, 'book', 'books') : 'Read a book with a grown-up to win bronze!') },
-    { id: 'buddy', name: 'Buddy', kid: 'Buddy Power', icon: '🦸', steps: [100, 400, 1000, 2000, 4000], label: (n) => FORM_NAME[n] || n + ' growth',
-      say: (v, nx) => (nx ? (nx.at - v) + ' more to ' + (nx.at === 100 ? 'grow big' : 'grow into a ' + FORM_NAME[nx.at].toLowerCase()) + ' and win ' + nx.tier.toLowerCase() + '!' : 'Your buddy is a galaxy hero! That is diamond!') }
+    { id: 'buddy', name: 'Buddy', kid: 'Buddy Power', icon: '🦸', steps: [100, 1000, 2000, 4000, 6000], unit: ['', ''], label: (n) => FORM_NAME[n] || n + ' growth',
+      say: (v, nx) => (nx ? (nx.at - v) + ' more to ' + BUDDY_GOAL[nx.at] + ' and win ' + nx.tier.toLowerCase() + '!' : 'Your buddy is a galaxy hero with 5 crown stars! That is diamond!') }
   ];
   const SUBJ = ['math', 'reading', 'clock'];
   const localDay = (iso) => { const d = new Date(iso); return isNaN(d) ? '' : d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
@@ -8214,7 +8219,7 @@ const Awards = (() => {
       total += k;
       const prevAt = k ? got[k - 1] : 0;
       return {
-        id: S.id, name: S.name, kid: S.kid, icon: S.icon, value, earned: k, of: S.steps.length,
+        id: S.id, name: S.name, kid: S.kid, icon: S.icon, unit: S.unit, value, earned: k, of: S.steps.length,
         best: k ? { at: prevAt, label: S.label(prevAt), tier: k - 1, tierName: TIER_NAME[k - 1], color: TIERS[k - 1] } : null,
         next: next != null ? { at: next, label: S.label(next), tier: k, tierName: TIER_NAME[k], left: next - value, pct: Math.max(0, Math.min(1, (value - prevAt) / (next - prevAt))) } : null,
         say: S.say(value, next != null ? { at: next, tier: TIER_NAME[k] } : null)
@@ -11158,9 +11163,9 @@ function awardNews(before, l) {
 }
 /* ---------- trophies, drawn ---------- */
 /* Each trophy has a shape of its own (a star bursting out of a worksheet, a torch, a rocket, a
-   microphone, a book, a shield) on the same two-step base, in the tier won so far: bronze, silver, gold,
-   platinum (pearly white, with a glint) and diamond (icy, with sparkles). The worksheet, the pencil and the torch's
-   fire keep their own colors. Not won yet: a dashed outline of the same shape. */
+   microphone, a book, a shield) on the same base, in the tier won so far: bronze, silver, gold, platinum
+   and diamond (trophyArt draws the metal). The worksheet, the pencil and the torch's fire keep their own
+   colors. Not won yet: a dashed outline of the same shape. */
 const hexMix = (a, b, p) => {
   const A = parseInt(a.slice(1), 16), B = parseInt(b.slice(1), 16), m = (s) => Math.round(((A >> s) & 255) * (1 - p) + ((B >> s) & 255) * p);
   return '#' + ((1 << 24) + (m(16) << 16) + (m(8) << 8) + m(0)).toString(16).slice(1);
@@ -11194,8 +11199,8 @@ const ART = {
     extra: (c, ln, lt, g) => '<path d="' + SHEET_PAPER + '" fill="#F5F7FC" stroke="' + ln + '" stroke-width="1.3" stroke-linejoin="round"/>' +
       '<path d="M41 22 V28 H47" fill="#DCE3F0" stroke="' + ln + '" stroke-width="1.1" stroke-linejoin="round"/>' +
       '<path d="M21 35.5 H43 M21 41 H43 M21 46.5 H33" stroke="#9DB0D6" stroke-width="1.7" stroke-linecap="round"/>' +
-      '<path d="' + SHEET_STAR + '" fill="url(#' + g + ')" stroke="' + ln + '" stroke-width="1.3" stroke-linejoin="round"/>' +
-      '<path d="' + SHEET_STAR_LIT + '" fill="' + lt + '" opacity=".38"/>' + pencilSVG(22.5, 48.5, -30, 30, 5.4)
+      '<path d="' + SHEET_STAR + '" fill="url(#' + g + ')" stroke="' + ln + '" stroke-width="1.2" stroke-linejoin="round" filter="url(#' + g + 'b)"/>' +
+      '<path d="' + SHEET_STAR_LIT + '" fill="#FFFFFF" opacity=".3"/>' + pencilSVG(22.5, 48.5, -30, 30, 5.4)
   },
   /* a torch: a metal cup in the trophy's metal with real fire rising out of it */
   streak: {
@@ -11234,26 +11239,45 @@ const ART = {
 };
 let artN = 0;
 /* a four-point glint at (x, y) */
-const glint = (x, y, s) => { const q = s * 0.26; return '<path d="M' + x + ' ' + (y - s) + ' L' + (x + q) + ' ' + (y - q) + ' L' + (x + s) + ' ' + y + ' L' + (x + q) + ' ' + (y + q) + ' L' + x + ' ' + (y + s) + ' L' + (x - q) + ' ' + (y + q) + ' L' + (x - s) + ' ' + y + ' L' + (x - q) + ' ' + (y - q) + ' Z"/>'; };
-/* tier: 0 bronze … 4 diamond (platinum: pearly white with a glint; diamond: an icy rainbow sheen and sparkles) */
+const glint = (x, y, s) => { const q = s * 0.24; return '<path d="M' + x + ' ' + (y - s) + ' L' + (x + q) + ' ' + (y - q) + ' L' + (x + s) + ' ' + y + ' L' + (x + q) + ' ' + (y + q) + ' L' + x + ' ' + (y + s) + ' L' + (x - q) + ' ' + (y + q) + ' L' + (x - s) + ' ' + y + ' L' + (x - q) + ' ' + (y - q) + ' Z"/>'; };
+/* Each tier's metal as polished metal looks: highlight, light, base, shade, dark and outline. Diamond is
+   crystal (icy blue with a violet fire). */
+const TROPHY_METAL = [
+  { hi: '#FFE6CC', lt: '#F2B27C', base: '#C97A3A', mid: '#8F4C1A', dk: '#4A2208', ln: '#3A1A05' },
+  { hi: '#FFFFFF', lt: '#EEF2F7', base: '#BCC4D0', mid: '#7A8494', dk: '#3B424E', ln: '#2A3038' },
+  { hi: '#FFFADF', lt: '#FFE27C', base: '#ECB22A', mid: '#B07608', dk: '#5A3700', ln: '#452A00' },
+  { hi: '#FFFFFF', lt: '#F7F9FE', base: '#D9E0EE', mid: '#97A3BD', dk: '#4C5670', ln: '#363E56' },
+  { hi: '#FFFFFF', lt: '#D8F7FF', base: '#8FD6FF', mid: '#7E8CF0', dk: '#2F5DB0', ln: '#244A8E' }
+];
+/* A trophy as a real one looks: the figure in polished metal (bands of reflection, beveled edges lit from
+   the top left, a sheen and a glint), on a metal step and a black lacquer plinth with a metal plate.
+   tier: 0 bronze … 4 diamond (platinum gets a second glint, diamond three sparkles). */
 function trophyArt(id, color, empty, tier) {
   const A = ART[id] || ART.sheets;
   if (empty || !color) return '<svg class="tart tart-none" viewBox="0 0 64 72" aria-hidden="true"><g fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.55)" stroke-width="1.6" stroke-dasharray="3 2.5" stroke-linejoin="round">' + (A.ghost || '') + A.body + ART_BASE + '<rect x="15" y="59" width="34" height="10" rx="2.5"/></g></svg>';
-  const g = 'ta' + (++artN), dia = tier === 4, plat = tier === 3, hi = hexMix(color, '#FFFFFF', 0.55), lo = hexMix(color, '#000000', 0.38), lt = hexMix(color, '#FFFFFF', 0.7);
-  const ln = dia ? '#2D5B9E' : plat ? '#4F5A78' : hexMix(color, '#000000', 0.5);
-  const stops = dia ? '<stop offset="0" stop-color="#FFFFFF"/><stop offset=".28" stop-color="#C9F4FF"/><stop offset=".52" stop-color="#86D3FF"/><stop offset=".76" stop-color="#B9A9FF"/><stop offset="1" stop-color="#4D84D8"/>'
-    : plat ? '<stop offset="0" stop-color="#FFFFFF"/><stop offset=".32" stop-color="#F1F5FB"/><stop offset=".56" stop-color="#C9D5EA"/><stop offset=".78" stop-color="#DCD2F6"/><stop offset="1" stop-color="#7D88A6"/>'
-    : '<stop offset="0" stop-color="' + hi + '"/><stop offset=".45" stop-color="' + color + '"/><stop offset="1" stop-color="' + lo + '"/>';
-  const glints = plat ? glint(51, 10, 4.4) : dia ? glint(12.5, 10.5, 4.8) + glint(52, 8, 3.8) + glint(50.5, 41, 3.2) : '';
-  return '<svg class="tart" viewBox="0 0 64 72" aria-hidden="true"><defs>' +
-    '<linearGradient id="' + g + '" x1="0" y1="0" x2="1" y2="1">' + stops + '</linearGradient>' +
-    '<linearGradient id="' + g + 'd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + hexMix(color, '#000000', 0.22) + '"/><stop offset="1" stop-color="' + hexMix(color, '#000000', 0.56) + '"/></linearGradient></defs>' +
-    '<g fill="url(#' + g + ')" stroke="' + ln + '" stroke-width="1.3" stroke-linejoin="round">' + A.body + ART_BASE + '</g>' +
-    '<rect x="15" y="59" width="34" height="10" rx="2.5" fill="url(#' + g + 'd)" stroke="' + ln + '" stroke-width="1.3"/>' +
-    (A.light ? '<g fill="' + lt + '">' + A.light + '</g>' : '') +
-    (A.dark ? '<g fill="none" stroke="' + ln + '" stroke-opacity=".45" stroke-width="1.4" stroke-linecap="round">' + A.dark + '</g>' : '') +
-    (A.extra ? A.extra(color, ln, lt, g) : '') + '<path d="M18.5 61.6 H45.5" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="1.2" stroke-linecap="round"/>' +
-    (glints ? '<g fill="#FFFFFF">' + glints + '</g>' : '') + '</svg>';
+  const t = tier >= 0 && tier < TROPHY_METAL.length ? tier : Math.max(0, Awards.TIERS.indexOf(color)), P = TROPHY_METAL[t], g = 'ta' + (++artN), dia = t === 4;
+  const band = dia
+    ? '<stop offset="0" stop-color="#FFFFFF"/><stop offset=".2" stop-color="#D8F7FF"/><stop offset=".38" stop-color="#86D3FF"/><stop offset=".5" stop-color="#EAFBFF"/><stop offset=".62" stop-color="#9AA8FF"/><stop offset=".8" stop-color="#C9F1FF"/><stop offset="1" stop-color="#4F84D6"/>'
+    : '<stop offset="0" stop-color="' + P.hi + '"/><stop offset=".2" stop-color="' + P.lt + '"/><stop offset=".42" stop-color="' + P.base + '"/><stop offset=".52" stop-color="' + P.dk + '"/><stop offset=".6" stop-color="' + P.mid + '"/><stop offset=".76" stop-color="' + P.lt + '"/><stop offset="1" stop-color="' + P.mid + '"/>';
+  const defs = '<defs><linearGradient id="' + g + '" x1=".15" y1="0" x2=".85" y2="1">' + band + '</linearGradient>' +
+    '<linearGradient id="' + g + 'h" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="' + P.mid + '"/><stop offset=".3" stop-color="' + P.hi + '"/><stop offset=".55" stop-color="' + P.base + '"/><stop offset="1" stop-color="' + P.dk + '"/></linearGradient>' +
+    '<linearGradient id="' + g + 'p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3C4152"/><stop offset=".45" stop-color="#1D2029"/><stop offset="1" stop-color="#0E1016"/></linearGradient>' +
+    '<radialGradient id="' + g + 's" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".9"/><stop offset=".5" stop-color="#FFFFFF" stop-opacity=".25"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></radialGradient>' +
+    '<clipPath id="' + g + 'c">' + A.body + '</clipPath>' +
+    '<filter id="' + g + 'b" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceAlpha" stdDeviation="0.8" result="b"/>' +
+    '<feSpecularLighting in="b" surfaceScale="2.4" specularConstant="1" specularExponent="20" lighting-color="#FFFFFF" result="s"><feDistantLight azimuth="225" elevation="40"/></feSpecularLighting>' +
+    '<feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/><feComposite in="SourceGraphic" in2="s2" operator="arithmetic" k1="0" k2="1" k3="' + (dia ? 0.9 : 0.7) + '" k4="0"/></filter></defs>';
+  const sparkle = dia ? glint(12.5, 10.5, 4.8) + glint(52, 8, 3.8) + glint(50.5, 41, 3.2) : t === 3 ? glint(51, 10, 4.4) + glint(14, 30, 2.6) : glint(46, 9, 3.2);
+  return '<svg class="tart" viewBox="0 0 64 72" aria-hidden="true">' + defs +
+    '<rect x="15" y="59" width="34" height="10" rx="2.2" fill="url(#' + g + 'p)" stroke="#0A0B10" stroke-width="1"/>' +
+    '<path d="M17 60.2 H47" stroke="#FFFFFF" stroke-opacity=".28" stroke-width=".9" stroke-linecap="round"/>' +
+    '<rect x="24" y="62" width="16" height="4.6" rx="1" fill="url(#' + g + 'h)" stroke="' + P.ln + '" stroke-width=".6"/>' +
+    '<g filter="url(#' + g + 'b)"><rect x="20" y="54" width="24" height="6" rx="2" fill="url(#' + g + 'h)" stroke="' + P.ln + '" stroke-width="1"/>' +
+    '<g fill="url(#' + g + ')" stroke="' + P.ln + '" stroke-width="1.1" stroke-linejoin="round">' + A.body + '</g></g>' +
+    (A.light ? '<g fill="#FFFFFF" opacity=".5">' + A.light + '</g>' : '') +
+    (A.dark ? '<g fill="none" stroke="' + P.dk + '" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round">' + A.dark + '</g>' : '') +
+    '<g clip-path="url(#' + g + 'c)"><ellipse cx="25" cy="14" rx="9" ry="5" transform="rotate(-35 25 14)" fill="url(#' + g + 's)"/></g>' +
+    (A.extra ? A.extra(color, P.ln, P.lt, g) : '') + '<g fill="#FFFFFF">' + sparkle + '</g></svg>';
 }
 
 /* ---------- the day's medals ---------- */
@@ -11328,17 +11352,17 @@ function tileMedal(l, subj) {
   const r = kidMedals(l)[subj];
   return r && r.medal ? '<span class="subj-medal" title="' + esc(MEDAL_WORD[r.medal] + ' today') + '">' + medalSVG(r.medal, subj) + '</span>' : '';
 }
-/* the shelf's medal row: today's three, then this week's medals subject by subject, each on its
-   subject's lanyard with its sign, the same as today's (try-again ribbons left out) */
+/* the shelf's medal block: a column for each subject (its lanyard and sign), today's medal on top and
+   this week's gold, silver and bronze in that subject under it, none yet a faded medal and 0 (try-again
+   ribbons are not counted) */
 function medalRowHTML(l) {
   const m = kidMedals(l), wk = kidWeek(l);
   const today = SUBJECTS.map((s) => '<button class="sm" data-act="medalInfo" data-kid="' + esc(l.id) + '" data-subj="' + s.key + '" aria-label="' + esc(s.name + ' today: ' + (MEDAL_WORD[m[s.key].medal] || 'no medal yet')) + '">' + medalSVG(m[s.key].medal, s.key) + '</button>').join('');
-  const week = SUBJECTS.map((s) => {
-    const by = (wk.by && wk.by[s.key]) || {};
-    const items = ['gold', 'silver', 'bronze'].filter((k) => by[k]).map((k) => '<span class="smw" aria-label="' + esc(s.name + ': ' + by[k] + ' ' + k) + '">' + medalSVG(k, s.key, 'tiny') + '<b>' + by[k] + '</b></span>').join('');
-    return items ? '<span class="smw-g">' + items + '</span>' : '';
-  }).join('');
-  return '<div class="shelf-medals"><span class="sm-label">Today</span><span class="sm-today">' + today + '</span><span class="sm-week"><span class="sm-label">This week</span>' + (week || '<span class="smw-none">None yet</span>') + '</span></div>';
+  const week = ['gold', 'silver', 'bronze'].map((k) => SUBJECTS.map((s) => {
+    const n = (wk.by && wk.by[s.key] && wk.by[s.key][k]) || 0;
+    return '<span class="smw' + (n ? '' : ' zero') + '" aria-label="' + esc(s.name + ' this week: ' + n + ' ' + k) + '">' + medalSVG(k, s.key, 'tiny') + '<b>' + n + '</b></span>';
+  }).join('')).join('');
+  return '<div class="shelf-medals"><span class="sm-label">Today</span>' + today + '<span class="sm-label sm-wl">This week</span>' + week + '</div>';
 }
 function medalInfo(kidId, subj) {
   const l = Store.learner(kidId); if (!l) return;
@@ -11348,15 +11372,17 @@ function medalInfo(kidId, subj) {
 }
 
 /* One trophy for a 4- or 5-year-old: its own drawn shape in the tier won, its name, how many of its five
-   tiers are won, a bar that fills toward the next tier, and one short line for the grown-up. Tapping it
-   reads it aloud. */
+   tiers are won, a bar that fills toward the next tier and how many more that needs ("49 more sheets to
+   silver", the tier in its color). Tapping it reads it aloud. */
 function trophyTile(l, s) {
   const got = s.best, nx = s.next;
   const stars = '<span class="t-count' + (s.earned ? '' : ' none') + '">' + s.earned + (s.earned === 1 ? ' trophy' : ' trophies') + '</span>';
-  return '<button class="trophy' + (got ? '' : ' none') + '" data-act="trophy" data-kid="' + esc(l.id) + '" data-s="' + s.id + '" aria-label="' + esc(s.kid + ': ' + (got ? got.tierName + ', ' + got.label : 'none yet')) + '">' +
+  const unit = nx ? (nx.left === 1 ? s.unit[0] : s.unit[1]) : '';
+  const next = nx ? esc(nx.left + (s.value ? ' more' : '') + (unit ? ' ' + unit : '') + ' to ') + '<i class="tw' + nx.tier + '">' + esc(nx.tierName.toLowerCase()) + '</i>' : '<i class="tw4">All five won!</i>';
+  return '<button class="trophy' + (got ? '' : ' none') + '" data-act="trophy" data-kid="' + esc(l.id) + '" data-s="' + s.id + '" aria-label="' + esc(s.kid + ': ' + (got ? got.tierName + ', ' + got.label : 'none yet') + (nx ? '. ' + nx.left + ' more to ' + nx.tierName.toLowerCase() : '')) + '">' +
     '<span class="t-art">' + trophyArt(s.id, got ? got.color : '', !got, got ? got.tier : -1) + '</span>' +
     '<b>' + esc(s.kid) + '</b>' + stars + (nx ? '<span class="t-bar"><i style="width:' + Math.round(nx.pct * 100) + '%"></i></span>' : '') +
-    '<small>' + esc(got ? got.tierName + ': ' + got.label : nx ? 'Next: ' + nx.label : '') + '</small></button>';
+    '<small class="t-next">' + next + '</small></button>';
 }
 /* Each subject's belts in one row, white to black: the ones earned in full color, the one now ringed in
    gold, the next one in a dashed box, the rest faded, so the colors read as a ladder. */
@@ -11381,12 +11407,13 @@ function shelfHTML(kids) {
       medalRowHTML(l) + beltLadderHTML(l) + '<div class="trophies">' + T.series.map((s) => trophyTile(l, s)).join('') + '</div></div>';
   }).join('');
   return '<section class="glass shelf"><h2 class="shelf-title">Trophy shelf</h2><div class="shelf-kids">' + cols + '</div>' +
-    '<p class="shelf-help">Medals each day in each subject: bronze for 1 sheet passed, silver for 2, gold for all 3. A gray try-again ribbon means all 3 done but none passed; ribbons are not counted with the medals. A medal’s lanyard shows its subject: yellow math, pink reading, blue clock. Belts: the same nine in every subject, left to right, white to black. Each subject’s levels are split into eight equal shares, and each share finished earns the next belt; the gold ring is the belt now; black means every level in that subject is done. Trophies: each has five tiers, bronze, silver, gold, platinum and diamond, at its own numbers; the number under a trophy is how many of its five are won. Tap a medal, a belt row or a trophy to hear it.</p></section>';
+    '<p class="shelf-help">Medals each day in each subject: bronze for 1 sheet passed, silver for 2, gold for all 3. A gray try-again ribbon means all 3 done but none passed; ribbons are not counted with the medals. A medal’s lanyard shows its subject: yellow math, pink reading, blue clock. Belts: the same nine in every subject, left to right, white to black. Each subject’s levels are split into eight equal shares, and each share finished earns the next belt; the gold ring is the belt now; black means every level in that subject is done. Trophies: each has five tiers, bronze, silver, gold, platinum and diamond, at its own numbers; under each, how many of its five are won and how many more the next one needs. Tap a medal, a belt row or a trophy to hear it.</p></section>';
 }
 function trophyInfo(kidId, sid) {
   const l = Store.learner(kidId); if (!l) return;
   const s = kidTrophies(l).series.find((x) => x.id === sid); if (!s) return;
-  const msg = s.kid + (s.best ? ', ' + s.best.tierName.toLowerCase() : '') + '! ' + (s.id === 'buddy' && hasBuddy(l) ? (s.best ? buddyName(l) + ' is a ' + s.best.label.toLowerCase() + '. ' : '') + s.say.replace('Your buddy', buddyName(l)) : s.say);
+  const form = s.best ? (/stars$/.test(s.best.label) ? ' has ' : ' is a ') + s.best.label.toLowerCase() + '. ' : '';
+  const msg = s.kid + (s.best ? ', ' + s.best.tierName.toLowerCase() : '') + '! ' + (s.id === 'buddy' && hasBuddy(l) ? (form ? buddyName(l) + form : '') + s.say.replace('Your buddy', buddyName(l)) : s.say);
   Sfx.pick(); toast(msg); Speech.say(msg);
 }
 function beltInfo(kidId, subj) {
