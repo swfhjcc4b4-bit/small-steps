@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261027052020";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261027061950";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1300,14 +1300,15 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .t-art { width: 64px; height: 72px; }
 .t-art .tart { width: 100%; height: 100%; display: block; filter: drop-shadow(0 4px 6px rgba(5, 2, 30, 0.45)); }
 .t-art .tart.tart-none { filter: none; }
-.t-count { font-family: var(--font-display); font-size: 15px; line-height: 1; color: var(--gold-hi); }
-.t-count.none { color: var(--ink-faint); font-family: inherit; font-weight: 800; font-size: 12px; }
+.t-tier { font-family: var(--font-display); font-size: 15px; line-height: 1.05; }
+.t-tier.none { color: var(--ink-faint); font-family: inherit; font-weight: 800; font-size: 12px; }
+.t-val { font-size: 12px; font-weight: 800; line-height: 1.2; color: #fff; }
 .news-art { display: inline-block; width: 30px; height: 34px; }
 .news-art .tart { width: 100%; height: 100%; display: block; }
 .t-next { font-size: 12px; font-weight: 800; line-height: 1.25; color: var(--ink-soft); }
 .t-next i { font-style: normal; font-weight: 900; }
-.t-next .tw0 { color: #F0A46A; } .t-next .tw1 { color: #E4E9F2; } .t-next .tw2 { color: #FFD65A; } .t-next .tw3 { color: #F4F7FF; text-shadow: 0 0 6px rgba(200, 215, 255, 0.7); } .t-next .tw4 { color: #9EDCFF; text-shadow: 0 0 6px rgba(140, 210, 255, 0.8); }
-@media (max-width: 460px) { .t-art { width: 52px; height: 58px; } .shelf-medals { grid-template-columns: auto repeat(3, 46px); column-gap: 8px; padding: 8px 10px; } .smw { min-width: 34px; font-size: 15px; } }
+.trophy .tw0 { color: #F0A46A; } .trophy .tw1 { color: #B9C1CD; } .trophy .tw2 { color: #FFD65A; } .trophy .tw3 { color: #FFFFFF; text-shadow: 0 0 6px rgba(200, 215, 255, 0.9); } .trophy .tw4 { color: #9EDCFF; text-shadow: 0 0 6px rgba(140, 210, 255, 0.8); }
+@media (max-width: 460px) { .t-art { width: 52px; height: 58px; } .t-word { display: none; } .shelf-medals { grid-template-columns: auto repeat(3, 46px); column-gap: 8px; padding: 8px 10px; } .smw { min-width: 34px; font-size: 15px; } }
 </style>
 <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div><canvas id="fx" aria-hidden="true"></canvas><div id="app"></div>
 <script>
@@ -8157,30 +8158,35 @@ const Awards = (() => {
 
   /* ---------- trophies ---------- */
   /* Every trophy has the same five tiers, each at the trophy's own number: bronze, silver and gold (as
-     the daily medals), then platinum and diamond. */
-  const TIERS = ['#CD7F32', '#C9D1DC', '#FFC531', '#E6ECF6', '#8FD8FF'];
+     the daily medals), then platinum and diamond. The numbers are close together so a new tier comes
+     every week or two, and diamond within a couple of months of steady practice. */
+  const TIERS = ['#CD7F32', '#A8B1BE', '#FFC531', '#E6ECF6', '#8FD8FF'];
   const TIER_NAME = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
-  const FORM_NAME = { 100: 'Big buddy', 400: 'Hero', 1000: 'Superhero', 2000: 'Space hero', 4000: 'Galaxy hero', 6000: '5 crown stars' };
-  const BUDDY_GOAL = { 100: 'grow big', 1000: 'grow into a superhero', 2000: 'grow into a space hero', 4000: 'grow into a galaxy hero', 6000: 'earn 5 crown stars' };
+  /* Buddy Power's tiers are steps the buddy takes: forms and power-ups (buddy.js) */
+  const FORM_NAME = { 100: 'Big buddy', 500: 'Hero badge', 1000: 'Superhero', 1600: 'Super glow', 2000: 'Space hero' };
+  const BUDDY_GOAL = { 100: 'grow big', 500: 'earn the hero badge', 1000: 'grow into a superhero', 1600: 'get the super glow', 2000: 'grow into a space hero' };
+  const BUDDY_IS = { 100: 'is a big buddy', 500: 'has the hero badge', 1000: 'is a superhero', 1600: 'has the super glow', 2000: 'is a space hero' };
+  const plural = (v, one, many) => v + ' ' + (v === 1 ? one : many);
   /* Six trophies, each about something different: sheets (work), days in a row (habit), new levels
-     (progress), Read to me, books, and the buddy's forms. Each has a kid name and picture for the shelf,
-     a short label for each tier's number, and what is read aloud when it is tapped (value so far, what
-     the next tier needs). Practice days and super days are not trophies (days in a row covers them), nor
-     are level tests and belts (new levels and the belt ladders cover them); counts() still works them out. */
+     (progress), Read to me, books, and the buddy's growth. Each has a kid name and picture for the shelf,
+     the count so far in words, a short label for each tier's number, and what is read aloud when it is
+     tapped (value so far, what the next tier needs). Practice days and super days are not trophies (days
+     in a row covers them), nor are level tests and belts (new levels and the belt ladders cover them);
+     counts() still works them out. */
   const more = (v, nx, one, many) => (nx ? ' ' + (nx.at - v) + ' more ' + (nx.at - v === 1 ? one : many) + ' for ' + nx.tier.toLowerCase() + '!' : ' You won diamond!');
   const SERIES = [
-    { id: 'sheets', name: 'Sheets', kid: 'Sheet Star', icon: '✏️', steps: [10, 150, 300, 600, 1000], unit: ['sheet', 'sheets'], label: (n) => n + ' sheets',
+    { id: 'sheets', name: 'Sheets', kid: 'Sheet Star', icon: '✏️', steps: [10, 125, 200, 300, 400], unit: ['sheet', 'sheets'], label: (n) => n + ' sheets', count: (v) => plural(v, 'sheet', 'sheets'),
       say: (v, nx) => (v ? 'You finished ' + v + (v === 1 ? ' sheet.' : ' sheets.') + more(v, nx, 'sheet', 'sheets') : 'Finish ' + nx.at + ' sheets to win bronze!') },
-    { id: 'streak', name: 'Days in a row', kid: 'On Fire', icon: '🔥', steps: [3, 14, 30, 60, 100], unit: ['day', 'days'], label: (n) => n + ' days in a row',
+    { id: 'streak', name: 'Days in a row', kid: 'On Fire', icon: '🔥', steps: [3, 14, 21, 30, 45], unit: ['day', 'days'], label: (n) => n + ' days in a row', count: (v) => plural(v, 'day', 'days') + ' in a row',
       say: (v, nx) => (v ? 'Your best is ' + v + (v === 1 ? ' day' : ' days') + ' in a row.' + (nx ? ' Get to ' + nx.at + ' days in a row for ' + nx.tier.toLowerCase() + '!' : ' You won diamond!') : 'Practice ' + nx.at + ' days in a row to win bronze!') },
-    { id: 'levels', name: 'New levels', kid: 'Level Up', icon: '🚀', steps: [1, 15, 30, 45, 60], unit: ['level', 'levels'], label: (n) => (n === 1 ? 'First new level' : n + ' new levels'),
+    { id: 'levels', name: 'New levels', kid: 'Level Up', icon: '🚀', steps: [1, 15, 22, 30, 40], unit: ['level', 'levels'], label: (n) => (n === 1 ? 'First new level' : n + ' new levels'), count: (v) => plural(v, 'new level', 'new levels'),
       say: (v, nx) => (v ? 'You moved up ' + v + (v === 1 ? ' level.' : ' levels.') + more(v, nx, 'level', 'levels') : 'Move up a level to win bronze!') },
-    { id: 'reads', name: 'Read to me', kid: 'Read Aloud', icon: '🗣️', steps: [1, 10, 25, 50, 100], unit: ['read-aloud', 'read-alouds'], label: (n) => (n === 1 ? 'First read-aloud' : n + ' read-alouds'),
+    { id: 'reads', name: 'Read to me', kid: 'Read Aloud', icon: '🗣️', steps: [1, 8, 12, 20, 30], unit: ['read-aloud', 'read-alouds'], label: (n) => (n === 1 ? 'First read-aloud' : n + ' read-alouds'), count: (v) => plural(v, 'read-aloud', 'read-alouds'),
       say: (v, nx) => (v ? 'You read to a grown-up ' + v + (v === 1 ? ' time.' : ' times.') + more(v, nx, 'time', 'times') : 'Read to a grown-up ' + (nx.at === 1 ? 'once' : nx.at + ' times') + ' to win bronze!') },
-    { id: 'books', name: 'Books', kid: 'Bookworm', icon: '📚', steps: [1, 5, 10, 25, 50], unit: ['book', 'books'], label: (n) => (n === 1 ? 'First book' : n + ' books'),
+    { id: 'books', name: 'Books', kid: 'Bookworm', icon: '📚', steps: [1, 3, 6, 10, 15], unit: ['book', 'books'], label: (n) => (n === 1 ? 'First book' : n + ' books'), count: (v) => plural(v, 'book', 'books'),
       say: (v, nx) => (v ? 'You read ' + v + (v === 1 ? ' book.' : ' books.') + more(v, nx, 'book', 'books') : 'Read a book with a grown-up to win bronze!') },
-    { id: 'buddy', name: 'Buddy', kid: 'Buddy Power', icon: '🦸', steps: [100, 1000, 2000, 4000, 6000], unit: ['', ''], label: (n) => FORM_NAME[n] || n + ' growth',
-      say: (v, nx) => (nx ? (nx.at - v) + ' more to ' + BUDDY_GOAL[nx.at] + ' and win ' + nx.tier.toLowerCase() + '!' : 'Your buddy is a galaxy hero with 5 crown stars! That is diamond!') }
+    { id: 'buddy', name: 'Buddy', kid: 'Buddy Power', icon: '🦸', steps: [100, 500, 1000, 1600, 2000], unit: ['', ''], label: (n) => FORM_NAME[n] || n + ' grow points', count: (v) => plural(v, 'grow point', 'grow points'), status: (n) => BUDDY_IS[n] || '',
+      say: (v, nx) => (nx ? (nx.at - v) + ' more to ' + BUDDY_GOAL[nx.at] + ' and win ' + nx.tier.toLowerCase() + '!' : 'Your buddy is a space hero! That is diamond!') }
   ];
   const SUBJ = ['math', 'reading', 'clock'];
   const localDay = (iso) => { const d = new Date(iso); return isNaN(d) ? '' : d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
@@ -8212,20 +8218,21 @@ const Awards = (() => {
       full, reads: reads.length, books: books.length, belts: belts || 0, buddy: growth || 0
     };
   }
+  /* total: tiers won in all; won: trophies on the shelf (any tier) */
   function trophies(c) {
-    let total = 0;
+    let total = 0, won = 0;
     const series = SERIES.map((S) => {
       const value = c[S.id] || 0, got = S.steps.filter((n) => value >= n), next = S.steps.find((n) => value < n), k = got.length;
-      total += k;
+      total += k; if (k) won++;
       const prevAt = k ? got[k - 1] : 0;
       return {
-        id: S.id, name: S.name, kid: S.kid, icon: S.icon, unit: S.unit, value, earned: k, of: S.steps.length,
-        best: k ? { at: prevAt, label: S.label(prevAt), tier: k - 1, tierName: TIER_NAME[k - 1], color: TIERS[k - 1] } : null,
+        id: S.id, name: S.name, kid: S.kid, icon: S.icon, unit: S.unit, value, countText: S.count(value), earned: k, of: S.steps.length,
+        best: k ? { at: prevAt, label: S.label(prevAt), tier: k - 1, tierName: TIER_NAME[k - 1], color: TIERS[k - 1], status: S.status ? S.status(prevAt) : '' } : null,
         next: next != null ? { at: next, label: S.label(next), tier: k, tierName: TIER_NAME[k], left: next - value, pct: Math.max(0, Math.min(1, (value - prevAt) / (next - prevAt))) } : null,
         say: S.say(value, next != null ? { at: next, tier: TIER_NAME[k] } : null)
       };
     });
-    return { total, series };
+    return { total, won, series };
   }
   /* Trophies earned between two snapshots, oldest goal first. */
   function newOnes(before, after) {
@@ -11244,9 +11251,9 @@ const glint = (x, y, s) => { const q = s * 0.24; return '<path d="M' + x + ' ' +
    crystal (icy blue with a violet fire). */
 const TROPHY_METAL = [
   { hi: '#FFE6CC', lt: '#F2B27C', base: '#C97A3A', mid: '#8F4C1A', dk: '#4A2208', ln: '#3A1A05' },
-  { hi: '#FFFFFF', lt: '#EEF2F7', base: '#BCC4D0', mid: '#7A8494', dk: '#3B424E', ln: '#2A3038' },
+  { hi: '#EEF1F5', lt: '#C4CBD5', base: '#949DAB', mid: '#5C6574', dk: '#2C323B', ln: '#22272E' },
   { hi: '#FFFADF', lt: '#FFE27C', base: '#ECB22A', mid: '#B07608', dk: '#5A3700', ln: '#452A00' },
-  { hi: '#FFFFFF', lt: '#F7F9FE', base: '#D9E0EE', mid: '#97A3BD', dk: '#4C5670', ln: '#363E56' },
+  { hi: '#FFFFFF', lt: '#FAFCFF', base: '#E4EAF7', mid: '#AEB9D6', dk: '#5D6888', ln: '#3D4766' },
   { hi: '#FFFFFF', lt: '#D8F7FF', base: '#8FD6FF', mid: '#7E8CF0', dk: '#2F5DB0', ln: '#244A8E' }
 ];
 /* A trophy as a real one looks: the figure in polished metal (bands of reflection, beveled edges lit from
@@ -11292,7 +11299,7 @@ let medalN = 0;
 /* Struck-metal colors: highlight, light, base, shade, dark. */
 const METAL = {
   gold: { hi: '#FFF7CF', lt: '#FFE27A', base: '#EEBB2C', mid: '#C38E10', dk: '#6F4600' },
-  silver: { hi: '#FFFFFF', lt: '#F2F4F8', base: '#CBD1DA', mid: '#959EAC', dk: '#4A525E' },
+  silver: { hi: '#F8FAFC', lt: '#D6DCE4', base: '#AAB3C0', mid: '#717A8A', dk: '#363D48' },
   bronze: { hi: '#FFE3C8', lt: '#EFAE72', base: '#C47838', mid: '#955424', dk: '#4A2408' }
 };
 /* A flat medal, drawn like a struck one: a striped ribbon V in the subject's color, a beveled rim with
@@ -11371,17 +11378,18 @@ function medalInfo(kidId, subj) {
   Sfx.pick(); toast(msg); Speech.say(msg);
 }
 
-/* One trophy for a 4- or 5-year-old: its own drawn shape in the tier won, its name, how many of its five
-   tiers are won, a bar that fills toward the next tier and how many more that needs ("49 more sheets to
-   silver", the tier in its color). Tapping it reads it aloud. */
+/* One trophy for a 4- or 5-year-old: its own drawn shape in the tier won, its name, which trophy it is
+   ("Bronze trophy", in the tier's color), the count so far ("101 sheets"), a bar that fills toward the
+   next tier and how many more that needs ("24 more sheets to silver"). Tapping it reads it aloud. */
 function trophyTile(l, s) {
   const got = s.best, nx = s.next;
-  const stars = '<span class="t-count' + (s.earned ? '' : ' none') + '">' + s.earned + (s.earned === 1 ? ' trophy' : ' trophies') + '</span>';
+  const tier = got ? '<span class="t-tier tw' + got.tier + '">' + esc(got.tierName) + '<span class="t-word"> trophy</span></span>' : '<span class="t-tier none">No trophy yet</span>';
   const unit = nx ? (nx.left === 1 ? s.unit[0] : s.unit[1]) : '';
-  const next = nx ? esc(nx.left + (s.value ? ' more' : '') + (unit ? ' ' + unit : '') + ' to ') + '<i class="tw' + nx.tier + '">' + esc(nx.tierName.toLowerCase()) + '</i>' : '<i class="tw4">All five won!</i>';
-  return '<button class="trophy' + (got ? '' : ' none') + '" data-act="trophy" data-kid="' + esc(l.id) + '" data-s="' + s.id + '" aria-label="' + esc(s.kid + ': ' + (got ? got.tierName + ', ' + got.label : 'none yet') + (nx ? '. ' + nx.left + ' more to ' + nx.tierName.toLowerCase() : '')) + '">' +
+  const next = nx ? esc(nx.left + (s.value ? ' more' : '') + (unit ? ' ' + unit : '') + ' to ') + '<i class="tw' + nx.tier + '">' + esc(nx.tierName.toLowerCase()) + '</i>' : '<i class="tw4">Top trophy!</i>';
+  return '<button class="trophy' + (got ? '' : ' none') + '" data-act="trophy" data-kid="' + esc(l.id) + '" data-s="' + s.id + '" aria-label="' + esc(s.kid + ': ' + (got ? got.tierName + ' trophy' : 'no trophy yet') + ', ' + s.countText + (nx ? '. ' + nx.left + ' more to ' + nx.tierName.toLowerCase() : '')) + '">' +
     '<span class="t-art">' + trophyArt(s.id, got ? got.color : '', !got, got ? got.tier : -1) + '</span>' +
-    '<b>' + esc(s.kid) + '</b>' + stars + (nx ? '<span class="t-bar"><i style="width:' + Math.round(nx.pct * 100) + '%"></i></span>' : '') +
+    '<b>' + esc(s.kid) + '</b>' + tier + '<span class="t-val">' + esc(s.countText) + '</span>' +
+    (nx ? '<span class="t-bar"><i style="width:' + Math.round(nx.pct * 100) + '%"></i></span>' : '') +
     '<small class="t-next">' + next + '</small></button>';
 }
 /* Each subject's belts in one row, white to black: the ones earned in full color, the one now ringed in
@@ -11403,17 +11411,17 @@ function shelfHTML(kids) {
   const cols = kids.map((l) => {
     const T = kidTrophies(l);
     return '<div class="shelf-kid" style="' + kidStyle(l.color) + '"><div class="shelf-head"><b>' + esc(l.name) + '</b>' +
-      '<span class="shelf-count" aria-label="' + T.total + ' trophies">🏆 ' + T.total + '</span></div>' +
+      '<span class="shelf-count" aria-label="' + T.won + ' trophies on the shelf">🏆 ' + T.won + '</span></div>' +
       medalRowHTML(l) + beltLadderHTML(l) + '<div class="trophies">' + T.series.map((s) => trophyTile(l, s)).join('') + '</div></div>';
   }).join('');
   return '<section class="glass shelf"><h2 class="shelf-title">Trophy shelf</h2><div class="shelf-kids">' + cols + '</div>' +
-    '<p class="shelf-help">Medals each day in each subject: bronze for 1 sheet passed, silver for 2, gold for all 3. A gray try-again ribbon means all 3 done but none passed; ribbons are not counted with the medals. A medal’s lanyard shows its subject: yellow math, pink reading, blue clock. Belts: the same nine in every subject, left to right, white to black. Each subject’s levels are split into eight equal shares, and each share finished earns the next belt; the gold ring is the belt now; black means every level in that subject is done. Trophies: each has five tiers, bronze, silver, gold, platinum and diamond, at its own numbers; under each, how many of its five are won and how many more the next one needs. Tap a medal, a belt row or a trophy to hear it.</p></section>';
+    '<p class="shelf-help">Medals each day in each subject: bronze for 1 sheet passed, silver for 2, gold for all 3. A gray try-again ribbon means all 3 done but none passed; ribbons are not counted with the medals. A medal’s lanyard shows its subject: yellow math, pink reading, blue clock. Belts: the same nine in every subject, left to right, white to black. Each subject’s levels are split into eight equal shares, and each share finished earns the next belt; the gold ring is the belt now; black means every level in that subject is done. Trophies: each goes bronze, silver, gold, platinum and diamond at its own numbers; under each, the trophy it is now, the count so far and how many more the next one needs. The number by each name is how many trophies are on the shelf. Tap a medal, a belt row or a trophy to hear it.</p></section>';
 }
 function trophyInfo(kidId, sid) {
   const l = Store.learner(kidId); if (!l) return;
   const s = kidTrophies(l).series.find((x) => x.id === sid); if (!s) return;
-  const form = s.best ? (/stars$/.test(s.best.label) ? ' has ' : ' is a ') + s.best.label.toLowerCase() + '. ' : '';
-  const msg = s.kid + (s.best ? ', ' + s.best.tierName.toLowerCase() : '') + '! ' + (s.id === 'buddy' && hasBuddy(l) ? (form ? buddyName(l) + form : '') + s.say.replace('Your buddy', buddyName(l)) : s.say);
+  const form = s.best && s.best.status ? buddyName(l) + ' ' + s.best.status + '. ' : '';
+  const msg = s.kid + (s.best ? ', ' + s.best.tierName.toLowerCase() : '') + '! ' + (s.id === 'buddy' && hasBuddy(l) ? form + s.say.replace('Your buddy', buddyName(l)) : s.say);
   Sfx.pick(); toast(msg); Speech.say(msg);
 }
 function beltInfo(kidId, subj) {
