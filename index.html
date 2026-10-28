@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261028211447";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261028215616";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1569,8 +1569,8 @@ function makeEngine(C) {
   /* ---------- Mastery: pass, repeat, level up, step back, level tests ----------
      A sheet passes with no more than the allowed misses and, where the level is timed, within
      the target time. Moving up takes `toAdvance` passes in a row spread over at least two days
-     (Kumon reads trends over several days), unless the last two sheets were both perfect in
-     half the target time. The last level of each group is followed by a level test. */
+     (Kumon reads trends over several days). Every pass counts once, however fast: no shortcuts
+     (JB, Oct 28, 2026). The last level of each group is followed by a level test. */
   const MIN_DAYS = 2;
   function applyResult(learner, r, now) {
     now = now || new Date();
@@ -1620,12 +1620,11 @@ function makeEngine(C) {
         } else if (learner.testFor) {
           L2.testWait = false; ev.testReady = true;
         } else {
-          L2.passes = (learner.passes || 0) + (boost ? 2 : 1);
+          L2.passes = (learner.passes || 0) + 1;
           L2.runDays = (learner.runDays || []).filter((x) => x !== tk).concat([tk]).slice(-3);
-          const fast = boost && !!learner.lastBoost;
           L2.lastBoost = boost;
           if (L2.passes >= s.toAdvance) {
-            if (L2.runDays.length >= MIN_DAYS || fast) {
+            if (L2.runDays.length >= MIN_DAYS) {
               const next = LEVELS[i + 1];
               const g = LEVELS[i].group;
               if ((!next || next.group !== g) && groupLevels(g).length >= MIN_TEST_LEVELS) {
@@ -11959,7 +11958,7 @@ function settingsHTML(l, E, t, subj) {
       (subj === 'reading' ? '<p class="help">The story levels (Kumon AI and AII) stop at 6 problems a sheet, because each one comes with a story to read.</p>' : '') + '</div>' +
     '<div class="field"><label for="f-allowed">Misses allowed to pass</label><select id="f-allowed" data-set="allowed">' + [0, 1, 2, 3].map((v) => opt(v, (v === 0 ? 'None' : String(v)) + ' (' + Math.round(100 * (s.sheetLen - v) / s.sheetLen) + '% to pass)', s.allowed)).join('') + '</select></div>' +
     '<div class="field"><label for="f-adv">Passed sheets to move up</label><select id="f-adv" data-set="toAdvance">' + [1, 2, 3, 4, 5].map((v) => opt(v, String(v), s.toAdvance)).join('') + '</select>' +
-      '<p class="help">Passes must come from at least two different days. A perfect sheet in half the target time counts as two, and two of those in a row move up the same day.</p></div>' +
+      '<p class="help">Passes must be in a row and come from at least two different days. Every pass counts once, however fast.</p></div>' +
     '<div class="field"><label for="f-pace">Target time</label><select id="f-pace" data-set="pace">' + opt('relaxed', 'Relaxed (1.5× standard)', s.pace) + opt('standard', 'Standard', s.pace) + opt('brisk', 'Brisk (0.8× standard)', s.pace) + '</select>' +
       '<p class="help">' + (subj === 'clock' ? 'Pre-K and grade 1 clock levels are untimed.' : subj === 'reading' ? 'Reading is untimed until Kumon 2A, the first level Kumon times.' : 'The earliest levels are untimed, as in Kumon.') + '</p></div>' +
     '<div class="field"><label for="f-timer">Show the timer</label><select id="f-timer" data-set="showTimer">' + opt('1', 'On', s.showTimer ? '1' : '0') + opt('0', 'Off', s.showTimer ? '1' : '0') + '</select>' +
