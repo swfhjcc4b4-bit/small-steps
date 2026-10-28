@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261027061950";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261028211447";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -9709,7 +9709,13 @@ function finishSheet() {
   stopTick(); releaseScreen();
   const g = E.grade(sh.problems, sh.answers);
   const l = Store.learner(sh.kid), t = trackOf(l, sh.subj), now = new Date(), awardsBefore = awardSnap(l);
-  const items = sh.problems.map((p, i) => [E.problemText(p), givenText(sh.subj, p, g.res[i]), g.res[i].ok ? 1 : 0, Math.round(((sh.qSecs && sh.qSecs[i]) || 0) * 10) / 10]);
+  /* each answer: the problem, what the child gave, right first time, seconds; a wrong one also keeps the
+     right answer (for the parents' dashboard) */
+  const items = sh.problems.map((p, i) => {
+    const it = [E.problemText(p), givenText(sh.subj, p, g.res[i]), g.res[i].ok ? 1 : 0, Math.round(((sh.qSecs && sh.qSecs[i]) || 0) * 10) / 10];
+    if (!g.res[i].ok) it.push(answerText(sh.subj, p));
+    return it;
+  });
   /* Much faster than usual at this level and 70% right or less: rushing. It doesn't count toward a
      step back, and the buddy asks for slowing down. (The same rule marks it on the dashboard.) */
   const prior = Store.sessionsFor(sh.kid, sh.subj).filter((x) => (x.kind === 'sheet' || x.kind === 'test') && x.n > 0 && x.levelId === sh.levelId).reverse();
@@ -9762,6 +9768,12 @@ function givenText(subj, p, r) {
   if (r.given == null) return 'No answer';
   const shown = p.mode === 'clockset' || p.view === 'time' || p.view === 'clock' || (subj === 'clock' && p.input === 'time') ? fmtTime(r.given) : p.view === 'pic' ? ReadingCurriculum.spoken(r.given) : String(r.given);
   return (p.mode === 'choice' ? 'Picked ' : p.mode === 'clockset' ? 'Showed ' : p.mode === 'numtap' ? 'Tapped ' : p.mode === 'build' ? 'Built ' : 'Wrote ') + shown;
+}
+/* the right answer, written the way givenText writes the child's, without the verb */
+function answerText(subj, p) {
+  const a = p.answer;
+  if (a == null) return '';
+  return p.mode === 'clockset' || p.view === 'time' || p.view === 'clock' || (subj === 'clock' && p.input === 'time') ? fmtTime(a) : p.view === 'pic' ? ReadingCurriculum.spoken(a) : String(a);
 }
 function tileHTML(subj, p, r) {
   const given = r.given == null ? '—' : (p.view === 'time' || p.view === 'clock' || (subj === 'clock' && p.input === 'time') ? fmtTime(r.given) : p.view === 'pic' ? ReadingCurriculum.spoken(r.given) : r.given);
