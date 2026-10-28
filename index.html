@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261028215616";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261028221733";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1570,7 +1570,11 @@ function makeEngine(C) {
      A sheet passes with no more than the allowed misses and, where the level is timed, within
      the target time. Moving up takes `toAdvance` passes in a row spread over at least two days
      (Kumon reads trends over several days). Every pass counts once, however fast: no shortcuts
-     (JB, Oct 28, 2026). The last level of each group is followed by a level test. */
+     (JB, Oct 28, 2026). The last level of each group is followed by a level test.
+     Two sheets in a row under 70% step back one level for review, but the first day on a new level
+     is for learning it: a sheet under 70% that day doesn't count toward a step back, and it brings
+     the worked example back before the next sheet (JB, Oct 28, 2026). `levelSince` is the day the
+     child arrived on the level. */
   const MIN_DAYS = 2;
   function applyResult(learner, r, now) {
     now = now || new Date();
@@ -1593,6 +1597,7 @@ function makeEngine(C) {
       from: learner.levelId, to: learner.levelId, group: groupOf(learner.levelId)
     };
     if (pass) L2.passed = (learner.passed || 0) + 1;
+    const firstDay = !!learner.levelSince && learner.levelSince === tk;
     const i = levelIndex(learner.levelId);
     const resetRun = () => { L2.passes = 0; L2.runDays = []; L2.lastBoost = false; };
     const advance = () => {
@@ -1637,7 +1642,9 @@ function makeEngine(C) {
         resetRun();
         /* a rushed sheet (much faster than usual and 70% or less) says nothing about the level,
            so it neither counts toward a step back nor clears the count */
-        L2.lowRun = r.rushed ? (learner.lowRun || 0) : acc < 0.7 ? (learner.lowRun || 0) + 1 : 0;
+        const low = acc < 0.7;
+        L2.lowRun = r.rushed ? (learner.lowRun || 0) : low ? (learner.lowRun || 0) + (firstDay ? 0 : 1) : 0;
+        if (low && firstDay && !r.rushed) ev.exampleAgain = true;
         if (s.autoBack && L2.lowRun >= 2 && i > 0 && !learner.backFrom) {
           L2.backFrom = learner.levelId; L2.levelId = LEVELS[i - 1].id; L2.lowRun = 0;
           ev.stepBack = true; ev.to = L2.levelId;
@@ -1651,6 +1658,7 @@ function makeEngine(C) {
     L2.dayCount = d === 0 ? (learner.dayCount || 0) + 1 : 1;
     L2.lastDay = tk;
     L2.lastAt = now.toISOString();
+    if (L2.levelId !== learner.levelId) L2.levelSince = tk;
     return { learner: L2, ev };
   }
 
@@ -9475,7 +9483,7 @@ function bestStreak(l) { return Math.max.apply(null, SUBJECTS.map((s) => ENG[s.k
 /* Undo: each sheet or read saves how its subject stood before it (level, passes, the day's count, and
    the review-deck entries it changed), so a parent can void the newest one and have it done again.
    The last few are kept; a level a parent sets by hand clears them. */
-const LV_FIELDS = ['levelId', 'top', 'passes', 'runDays', 'lastBoost', 'lowRun', 'backFrom', 'testFor', 'testWait', 'sheets', 'passed', 'dayStreak', 'planDay', 'planSheets', 'dayCount', 'lastDay', 'lastAt', 'raGate', 'raDay', 'raCount'];
+const LV_FIELDS = ['levelId', 'levelSince', 'top', 'passes', 'runDays', 'lastBoost', 'lowRun', 'backFrom', 'testFor', 'testWait', 'sheets', 'passed', 'dayStreak', 'planDay', 'planSheets', 'dayCount', 'lastDay', 'lastAt', 'raGate', 'raDay', 'raCount'];
 const UNDO_KEEP = 5;
 function snapOf(t) { const o = {}; LV_FIELDS.forEach((k) => { o[k] = t[k] === undefined ? null : t[k]; }); return JSON.parse(JSON.stringify(o)); }
 function revDiff(before, after) {
@@ -9721,6 +9729,11 @@ function finishSheet() {
   const rush = Metrics.rushOf({ n: sh.problems.length, wrong: g.wrong, items }, prior), rushed = !!(rush && rush.rushed);
   let out = E.applyResult(t, { kind: sh.kind, timed: sh.timed, levelId: sh.levelId, n: sh.problems.length, wrong: g.wrong, secs, target: sh.target, problems: sh.problems, res: g.res, rushed }, now);
   if (sh.subj === 'reading' && sh.kind !== 'test') out = readGate(sh.kid, t, out);
+  /* a sheet under 70% on the first day of a new level brings its worked example back before the next sheet */
+  if (out.ev.exampleAgain && out.learner.exSeen) {
+    const ex = Object.assign({}, out.learner.exSeen); delete ex[sh.levelId]; delete ex[E.canon(sh.levelId)];
+    out = Object.assign({}, out, { learner: Object.assign({}, out.learner, { exSeen: ex }) });
+  }
   const ev = out.ev;
   const dayGoal = out.learner.dayCount === out.learner.planSheets;
   const award = Buddy.award(ev, { wrong: g.wrong, dayGoal });
@@ -10051,7 +10064,7 @@ function finishCheck() {
   releaseScreen();
   if (!l) return goHome();
   const E = ENG[P.subj], rec = E.LEVELS[P.st.result];
-  const t = Object.assign({}, trackOf(l, P.subj), { levelId: rec.id, top: false, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', placeNext: false, placedAt: new Date().toISOString(), undo: [] });
+  const t = Object.assign({}, trackOf(l, P.subj), { levelId: rec.id, top: false, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', placeNext: false, placedAt: new Date().toISOString(), undo: [], levelSince: E.todayKey() });
   let l2 = putTrack(l, P.subj, t);
   const before = Buddy.of(l2).stars;
   let credit = null;
@@ -10138,7 +10151,7 @@ function usePlacement() {
   const P = S.place, l = Store.learner(P.kid);
   if (!l) return;
   const E = ENG[P.subj], rec = E.LEVELS[P.st.result];
-  const t = Object.assign({}, trackOf(l, P.subj), { levelId: rec.id, top: false, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', placeNext: false, placedAt: new Date().toISOString(), undo: [] });
+  const t = Object.assign({}, trackOf(l, P.subj), { levelId: rec.id, top: false, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', placeNext: false, placedAt: new Date().toISOString(), undo: [], levelSince: E.todayKey() });
   Store.saveLearner(putTrack(l, P.subj, t));
   Store.appendSession(l.id, { id: Store.newId(), at: new Date().toISOString(), subject: P.subj, kind: 'placement', levelId: rec.id, n: P.st.probes, from: P.fromLevel });
   S.parentKid = l.id; S.parentSubj = P.subj; S.place = null; S.view = 'parent'; render(); toast(l.name + ' now starts ' + SUBJ[P.subj].name.toLowerCase() + ' at ' + rec.short);
@@ -11964,7 +11977,7 @@ function settingsHTML(l, E, t, subj) {
     '<div class="field"><label for="f-timer">Show the timer</label><select id="f-timer" data-set="showTimer">' + opt('1', 'On', s.showTimer ? '1' : '0') + opt('0', 'Off', s.showTimer ? '1' : '0') + '</select>' +
       '<p class="help">Off hides the timer bar from the child. Time is still measured and still counts toward passing.</p></div>' + speakRow +
     '<div class="field"><label for="f-back">Step back after two weak sheets</label><select id="f-back" data-set="autoBack">' + opt('1', 'On', s.autoBack ? '1' : '0') + opt('0', 'Off', s.autoBack ? '1' : '0') + '</select>' +
-      '<p class="help">Below 70% on two sheets in a row moves to the level before for review. Passes there on two different days move back up. A rushed sheet (much faster than usual and 70% or less) doesn’t count toward a step back.</p></div>' +
+      '<p class="help">Below 70% on two sheets in a row moves to the level before for review. Passes there on two different days move back up. The first day on a new level is for learning it: a sheet under 70% that day doesn’t count, and the worked example comes back before the next sheet. A rushed sheet (much faster than usual and 70% or less) doesn’t count toward a step back either.</p></div>' +
     '</div></section>';
 }
 function buddyPanelHTML(l) {
@@ -12044,7 +12057,7 @@ function setLearnerField(key, raw) {
   else {
     const subj = S.parentSubj, E = ENG[subj], t = trackOf(l, subj), s = E.settingsOf(t);
     const nt = Object.assign({}, t, { settings: Object.assign({}, s) });
-    if (key === 'levelId') { if (!E.BY[raw]) return; Object.assign(nt, { levelId: raw, top: false, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', raGate: null, undo: [] }); }
+    if (key === 'levelId') { if (!E.BY[raw]) return; Object.assign(nt, { levelId: raw, levelSince: E.todayKey(), top: false, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', raGate: null, undo: [] }); }
     else if (key === 'sheetLen') {
       /* a new sheet length keeps the same pass bar: 100% stays 100%, 90% stays about 90% */
       const n = parseInt(raw, 10), share = s.sheetLen ? (s.allowed || 0) / s.sheetLen : 0;
@@ -12178,7 +12191,7 @@ function doUndoChange(kidId, kind, sid) {
   if (!l) return;
   const c = levelChanges(l).find((x) => x.s.id === sid && x.kind === kind);
   if (!c || !c.canUndo) { render(); return; }
-  const t = trackOf(l, c.subj), run = { passes: 0, runDays: [], lastBoost: false, lowRun: 0, undo: [] };
+  const t = trackOf(l, c.subj), run = { passes: 0, runDays: [], lastBoost: false, lowRun: 0, undo: [], levelSince: '' };
   let nt;
   if (c.change === 'up') nt = Object.assign({}, t, run, { levelId: c.from, top: false, testFor: '', testWait: false, backFrom: '', raGate: null });
   else if (c.change === 'back') nt = Object.assign({}, t, run, { levelId: c.from, backFrom: '' });
@@ -12351,7 +12364,7 @@ document.addEventListener('click', (e) => {
       const l = Store.learner(S.parentKid), subj = S.parentSubj, E = ENG[subj];
       if (l) confirmBox('Reset ' + l.name + '’s ' + SUBJ[subj].name.toLowerCase() + '?', 'The level goes back to the start of its stage; passes and the review deck clear. History, stars and buddy stay.', 'Reset', () => {
         const t2 = trackOf(l, subj), first = E.LEVELS.find((x) => x.stage === (E.BY[t2.levelId] || E.LEVELS[0]).stage);
-        Store.saveLearner(putTrack(l, subj, Object.assign({}, t2, { levelId: first.id, top: false, passes: 0, lowRun: 0, backFrom: '', review: {}, testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', raGate: null, undo: [] }))); render(); toast('Progress reset');
+        Store.saveLearner(putTrack(l, subj, Object.assign({}, t2, { levelId: first.id, levelSince: E.todayKey(), top: false, passes: 0, lowRun: 0, backFrom: '', review: {}, testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', raGate: null, undo: [] }))); render(); toast('Progress reset');
       }, true);
       break;
     }
