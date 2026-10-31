@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261031133422";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261031150721";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -963,6 +963,19 @@ details.more[open] > summary h3::after { content: " −"; }
 /* ants go marching, flat: march in place, then three big stomps */
 .buddy-svg.do-ants .buddy-anim { animation: trAnts 4s linear; transform-origin: 100px 206px; }
 @keyframes trAnts { 0%, 100% { transform: none; } 4%, 19%, 34%, 49%, 64% { transform: rotate(-5deg) translateY(-6px); } 11%, 26%, 41%, 56%, 71% { transform: rotate(5deg) translateY(-6px); } 74% { transform: none; } 77%, 84%, 91% { transform: translateY(-22px) scale(0.97, 1.05); } 79%, 86%, 93% { transform: scale(1.1, 0.86); } 81%, 88%, 95% { transform: none; } }
+/* Andi's October 31 tricks, flat (every keyframe lists the same transform functions so the turns interpolate) */
+.buddy-svg.do-handjump .buddy-anim { animation: trHandJump 2.8s ease-in-out; transform-origin: 100px 130px; }
+@keyframes trHandJump { 0% { transform: translateY(0) rotate(0) scale(1, 1); } 18% { transform: translateY(-36px) rotate(180deg) scale(1, 1); } 28% { transform: translateY(-60px) rotate(180deg) scale(0.97, 1.04); } 37% { transform: translateY(-36px) rotate(180deg) scale(1.06, 0.92); } 49% { transform: translateY(-64px) rotate(180deg) scale(0.97, 1.04); } 58% { transform: translateY(-36px) rotate(180deg) scale(1.06, 0.92); } 70% { transform: translateY(-68px) rotate(180deg) scale(0.97, 1.04); } 80% { transform: translateY(-36px) rotate(180deg) scale(1, 1); } 100% { transform: translateY(0) rotate(360deg) scale(1, 1); } }
+.buddy-svg.do-tumble .buddy-anim { animation: trTumble 2.4s ease-in-out; transform-origin: 100px 150px; }
+@keyframes trTumble { 0% { transform: translate(0, 0) rotate(0) scale(1, 1); } 8% { transform: translate(0, 0) rotate(0) scale(1.06, 0.9); } 46% { transform: translate(34px, 0) rotate(360deg) scale(0.92, 0.92); } 50% { transform: translate(34px, -8px) rotate(360deg) scale(1, 1); } 54% { transform: translate(34px, 0) rotate(360deg) scale(1.06, 0.9); } 92% { transform: translate(0, 0) rotate(0) scale(0.92, 0.92); } 96% { transform: translate(0, -6px) rotate(0) scale(1, 1); } 100% { transform: translate(0, 0) rotate(0) scale(1, 1); } }
+.buddy-svg.do-treepose .buddy-anim { animation: trTreePose 3.6s ease-in-out; transform-origin: 100px 130px; }
+@keyframes trTreePose { 0% { transform: translateY(0) rotate(0) scale(1, 1); } 8% { transform: translateY(-4px) rotate(0) scale(0.97, 1.05); } 14% { transform: translateY(0) rotate(0) scale(1, 1); } 30% { transform: translateY(-10px) rotate(180deg) scale(1, 1); } 44% { transform: translateY(-10px) rotate(176deg) scale(1, 1); } 58% { transform: translateY(-10px) rotate(184deg) scale(1, 1); } 72% { transform: translateY(-10px) rotate(177deg) scale(1, 1); } 82% { transform: translateY(-10px) rotate(180deg) scale(1, 1); } 100% { transform: translateY(0) rotate(360deg) scale(1, 1); } }
+.b-tree { opacity: 0; transform-origin: 100px 206px; transform: scale(0); }
+.buddy-svg.do-treepose .b-tree { animation: trTree 3.6s ease-in-out; }
+@keyframes trTree { 0%, 32% { opacity: 0; transform: scale(0); } 42%, 78% { opacity: 1; transform: scale(1); } 86%, 100% { opacity: 0; transform: scale(0); } }
+/* be invisible, flat: fades to a pale see-through ghost, sneaks left and right, then pops back */
+.buddy-svg.do-invisible .buddy-anim { animation: trInvisible 3.4s ease-in-out; transform-origin: 100px 206px; }
+@keyframes trInvisible { 0%, 100% { opacity: 1; filter: brightness(1) saturate(1); transform: translateX(0) scale(1); } 8% { opacity: 1; filter: brightness(1.4) saturate(1); transform: translateX(0) scale(1.04); } 26%, 74% { opacity: 0.2; filter: brightness(1.7) saturate(0.35); transform: translateX(0) scale(1); } 40% { opacity: 0.2; filter: brightness(1.7) saturate(0.35); transform: translateX(-16px) scale(1); } 58% { opacity: 0.2; filter: brightness(1.7) saturate(0.35); transform: translateX(16px) scale(1); } 90% { opacity: 1; filter: brightness(1.3) saturate(1); transform: translateX(0) scale(1.08); } }
 /* light-up glasses, flat: the frames change color */
 .i-neon { animation: neonCycle 2.6s linear infinite; }
 .i-neon-glow { animation: neonCycle 2.6s linear infinite; }
@@ -4588,6 +4601,12 @@ const Buddy = (() => {
     { id: 'cowboy', slot: 'head', name: 'Cowboy hat', price: 12 },
     { id: 'viking', slot: 'head', name: 'Viking helmet', price: 18 },
     { id: 'wizard', slot: 'head', name: 'Wizard hat', price: 25 },
+    /* Andi's October 31 hats: a hat made of flames, a firefighter's helmet, a mouse face (ears, nose
+       and whiskers) and an astronaut's glass helmet */
+    { id: 'flamehat', slot: 'head', name: 'Fire hat', price: 12 },
+    { id: 'firefighter', slot: 'head', name: 'Firefighter helmet', price: 10 },
+    { id: 'mouse', slot: 'head', name: 'Mouse face', price: 8 },
+    { id: 'astronaut', slot: 'head', name: 'Astronaut helmet', price: 15 },
     { id: 'crown', slot: 'head', name: 'Crown', unlock: 'firstTest' },
     { id: 'round', slot: 'eyes', name: 'Round glasses', price: 2 },
     { id: 'hearts', slot: 'eyes', name: 'Heart glasses', price: 3 },
@@ -4652,6 +4671,8 @@ const Buddy = (() => {
     { id: 'rpdots', slot: 'paint', name: 'Red with purple dots', price: 5 },
     { id: 'blackpaint', slot: 'paint', name: 'Black paint', price: 3 },
     { id: 'whitegold', slot: 'paint', name: 'White with a gold belly', price: 8 },
+    { id: 'ogdots', slot: 'paint', name: 'Orange with green spots', price: 5 },
+    { id: 'firepaint', slot: 'paint', name: 'Fire with a blue belly', price: 12 },
     { id: 'bounce', slot: 'trick', name: 'Bounce', price: 3 },
     { id: 'twirl', slot: 'trick', name: 'Twirl', price: 4 },
     { id: 'wiggle', slot: 'trick', name: 'Wiggle dance', price: 6 },
@@ -4663,6 +4684,10 @@ const Buddy = (() => {
     { id: 'handstand', slot: 'trick', name: 'Handstand', price: 12 },
     { id: 'ants', slot: 'trick', name: 'Ants go marching', price: 12 },
     { id: 'tornado', slot: 'trick', name: 'Tornado spin', price: 15 },
+    { id: 'tumble', slot: 'trick', name: 'Tumble tumble', price: 9 },
+    { id: 'handjump', slot: 'trick', name: 'Handstand jump', price: 13 },
+    { id: 'treepose', slot: 'trick', name: 'Yoga tree handstand', price: 14 },
+    { id: 'invisible', slot: 'trick', name: 'Be invisible', price: 15 },
     /* Treats are eaten, so they can be bought again and again. Each one helps the buddy grow
        (grow points count toward Big and Hero like stars); fruit helps twice as much. */
     { id: 'apple', slot: 'treat', name: 'Apple', price: 1, use: true, grow: 2, fruit: true },
@@ -4678,7 +4703,8 @@ const Buddy = (() => {
     { id: 'icecream', slot: 'treat', name: 'Ice cream', price: 2, use: true, grow: 2 },
     { id: 'cupcake', slot: 'treat', name: 'Cupcake', price: 2, use: true, grow: 2 },
     { id: 'pizza', slot: 'treat', name: 'Pizza', price: 3, use: true, grow: 3 },
-    { id: 'cake', slot: 'treat', name: 'Birthday cake', price: 5, use: true, grow: 5 }
+    { id: 'cake', slot: 'treat', name: 'Birthday cake', price: 5, use: true, grow: 5 },
+    { id: 'cheesepuffs', slot: 'treat', name: 'Cheese puffs', price: 2, use: true, grow: 2 }
   ];
   const ITEM = Object.fromEntries(ITEMS.map((i) => [i.id, i]));
 
@@ -4844,8 +4870,34 @@ const Buddy = (() => {
     chef: '<rect class="i-white" x="-22" y="-12" width="44" height="16" rx="3"/><circle class="i-white" cx="-14" cy="-22" r="13"/><circle class="i-white" cx="0" cy="-30" r="15"/><circle class="i-white" cx="14" cy="-22" r="13"/><path class="i-line" d="M-22 -9 L22 -9"/>',
     pirate: '<path class="i-dark" d="M-46 4 C-30 -10 -16 -40 0 -40 C16 -40 30 -10 46 4 C20 -6 -20 -6 -46 4 Z"/><path class="i-gold-line" d="M-42 0 C-20 -9 20 -9 42 0"/><path class="i-white" d="M0 -29 l3 6 6.5 1 -5 4.5 1.2 6.5 -5.7 -3.2 -5.7 3.2 1.2 -6.5 -5 -4.5 6.5 -1 Z"/>',
     tophat: '<rect class="i-dark" x="-38" y="-4" width="76" height="8" rx="4"/><rect class="i-dark" x="-23" y="-46" width="46" height="44" rx="3"/><rect class="i-red" x="-23" y="-15" width="46" height="9"/>',
-    viking: '<path class="i-ivory" d="M-26 -8 C-46 -12 -54 -32 -46 -48 C-41 -33 -34 -24 -22 -19 Z M26 -8 C46 -12 54 -32 46 -48 C41 -33 34 -24 22 -19 Z"/><path class="i-grey" d="M-31 4 C-31 -32 31 -32 31 4 Z"/><rect class="i-gold" x="-33" y="-3" width="66" height="9" rx="4.5"/>'
+    viking: '<path class="i-ivory" d="M-26 -8 C-46 -12 -54 -32 -46 -48 C-41 -33 -34 -24 -22 -19 Z M26 -8 C46 -12 54 -32 46 -48 C41 -33 34 -24 22 -19 Z"/><path class="i-grey" d="M-31 4 C-31 -32 31 -32 31 4 Z"/><rect class="i-gold" x="-33" y="-3" width="66" height="9" rx="4.5"/>',
+    /* a hat made of flames: a tall flame in the middle and a smaller one each side, red outside, then orange, then yellow */
+    flamehat: (() => {
+      const fl = '<path d="M0 6 C-20 6 -26 -12 -16 -28 C-14 -18 -8 -16 -8 -22 C-10 -36 -2 -48 8 -58 C6 -44 22 -36 20 -16 C19 -2 10 6 0 6 Z" fill="#FF4A1C"/>' +
+        '<path d="M0 6 C-12 6 -16 -6 -10 -16 C-8 -10 -5 -9 -5 -13 C-6 -22 -1 -30 5 -36 C4 -27 13 -22 12 -10 C11 0 6 6 0 6 Z" fill="#FF9A1F"/>' +
+        '<path d="M0 6 C-6 6 -8 -1 -5 -7 C-4 -4 -2 -4 -2 -6 C-3 -11 0 -15 3 -18 C2 -13 7 -10 6 -4 C5 2 3 6 0 6 Z" fill="#FFE14F"/>';
+      return '<ellipse cx="0" cy="-18" rx="40" ry="32" fill="#FF8A1F" opacity=".22"/><g transform="translate(-21 3) scale(-.7 .7)">' + fl + '</g><g transform="translate(21 3) scale(.7)">' + fl + '</g>' + fl;
+    })(),
+    /* a firefighter's helmet from the front: red dome with a center ridge, wide brim, white front shield with a red 1 */
+    firefighter: '<ellipse cx="0" cy="4" rx="46" ry="8" fill="#B91F1F"/><path d="M-30 4 C-30 -32 30 -32 30 4 Z" fill="#D62828"/><rect x="-3.5" y="-27" width="7" height="30" rx="3.5" fill="#B01E1E"/>' +
+      '<ellipse cx="-15" cy="-15" rx="7" ry="4" fill="#fff" opacity=".32" transform="rotate(-35 -15 -15)"/><path d="M-12 -19 H12 Q13 -6 0 5 Q-13 -6 -12 -19 Z" fill="#FFFFFF" stroke="#1F1B2E" stroke-width="2"/>' +
+      '<path d="M-1.6 -15 H2.6 V1.5 H-1.6 V-10 L-4.8 -8.4 V-12 Z" fill="#D62828"/>',
+    /* mouse ears (the nose and whiskers go on the face: mouseNose) */
+    mouse: [-1, 1].map((sx) => '<circle cx="' + (sx * 30) + '" cy="-8" r="17" fill="#A9AFC0"/><circle cx="' + (sx * 30) + '" cy="-8" r="10.5" fill="#FFB3C7"/>').join(''),
+    /* the shop picture of the astronaut helmet; on a buddy it is drawn round the head (astroFlat) */
+    astronaut: ''
   };
+  /* Where a mouse nose sits on each flat buddy, and the nose with its whiskers (light whiskers on a dark face). */
+  const FLAT_NOSE = { ladybug: [100, 86], slug: [150, 107], dragon: [100, 95], robot: [100, 80] };
+  const mouseNose = (wc) => '<g stroke="' + wc + '" stroke-width="1.7" stroke-linecap="round" fill="none"><path d="M-7 0 L-30 -5 M-7 2.5 L-31 3 M-7 5 L-28 11 M7 0 L30 -5 M7 2.5 L31 3 M7 5 L28 11"/></g>' +
+    '<ellipse cx="0" cy="2" rx="7" ry="5.5" fill="#FF7FA8"/><ellipse cx="-2.2" cy="0" rx="2.4" ry="1.5" fill="#fff" opacity=".65"/>';
+  /* A glass helmet round the head (center c, radius r) on a padded white collar. */
+  const astroFlat = (c, r) => '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="' + r + '" fill="#DDF6FF" fill-opacity=".18" stroke="#E8FBFF" stroke-opacity=".85" stroke-width="2.5"/>' +
+    '<path d="M' + (c[0] - r * 0.62) + ' ' + (c[1] - r * 0.42) + ' A' + (r * 0.78) + ' ' + (r * 0.78) + ' 0 0 1 ' + (c[0] - r * 0.12) + ' ' + (c[1] - r * 0.76) + '" fill="none" stroke="#FFFFFF" stroke-opacity=".75" stroke-width="3.5" stroke-linecap="round"/>' +
+    '<ellipse cx="' + c[0] + '" cy="' + (c[1] + r * 0.74) + '" rx="' + (r * 0.72) + '" ry="' + (r * 0.17) + '" fill="#F4F6FB" stroke="#B8C0D4" stroke-width="2"/>' +
+    '<circle cx="' + (c[0] - r * 0.42) + '" cy="' + (c[1] + r * 0.76) + '" r="3" fill="#FF4D4D"/><circle cx="' + (c[0] + r * 0.42) + '" cy="' + (c[1] + r * 0.76) + '" r="3" fill="#34D27B"/>';
+  /* The little tree that grows from the feet in the yoga tree handstand (hidden until the trick plays). */
+  const TREE_FLAT = '<g class="b-tree"><path d="M100 204 V222" stroke="#8B5A3C" stroke-width="7" stroke-linecap="round"/><circle cx="100" cy="236" r="15" fill="#2FB574"/><circle cx="87" cy="228" r="10" fill="#34D27B"/><circle cx="113" cy="228" r="10" fill="#34D27B"/><circle cx="100" cy="246" r="9" fill="#3FCB6B"/><circle cx="94" cy="232" r="3" fill="#FF8FB1"/><circle cx="108" cy="240" r="3" fill="#FF8FB1"/></g>';
   const EYES = {
     round: (s) => '<circle class="i-lens" cx="' + (-s / 2) + '" cy="0" r="14"/><circle class="i-lens" cx="' + (s / 2) + '" cy="0" r="14"/><path class="i-frame" d="M' + (-s / 2 + 14) + ' 0 L' + (s / 2 - 14) + ' 0"/>',
     shades: (s) => '<rect class="i-dark" x="' + (-s / 2 - 16) + '" y="-11" width="32" height="22" rx="8"/><rect class="i-dark" x="' + (s / 2 - 16) + '" y="-11" width="32" height="22" rx="8"/><path class="i-frame" d="M' + (-s / 2 + 16) + ' -4 L' + (s / 2 - 16) + ' -4"/><path class="i-shine" d="M' + (-s / 2 - 8) + ' -5 l6 -3 M' + (s / 2 - 8) + ' -5 l6 -3"/>',
@@ -4914,7 +4966,7 @@ const Buddy = (() => {
     boston: '<rect width="200" height="220" fill="#A9D4F5"/><g fill="#8FA9C8"><rect x="62" y="70" width="18" height="66"/><rect x="84" y="56" width="16" height="80"/><rect x="104" y="80" width="16" height="56"/></g><path d="M84 56 L92 44 L100 56 Z" fill="#7C96B8"/><rect x="18" y="108" width="40" height="28" fill="#C0603E"/><rect x="30" y="100" width="16" height="8" fill="#fff"/><path d="M28 100 A10 10 0 0 1 48 100 Z" fill="#FFC531"/><rect y="134" width="200" height="30" fill="#3C7FC4"/><path d="M0 142 q12 -4 24 0 t24 0 t24 0 t24 0 t24 0 t24 0 t24 0 t24 0 t24 0" stroke="#CFE6FA" stroke-width="2" fill="none"/><g stroke="#fff" stroke-width="3" fill="none"><path d="M140 136 L150 86 L160 136 M178 136 L188 86 L198 136"/><path d="M130 128 L200 128"/></g><g stroke="#fff" stroke-width="1" opacity=".8"><path d="M150 90 L132 128 M150 90 L142 128 M150 90 L160 128 M150 90 L170 128 M188 90 L176 128 M188 90 L196 128"/></g><rect y="162" width="200" height="58" fill="#79B95A"/><g><rect x="4" y="110" width="30" height="62" fill="#B5462E"/><rect x="34" y="104" width="30" height="68" fill="#A63F2A"/><path d="M10 120 h6 v8 h-6 Z M22 120 h6 v8 h-6 Z M10 136 h6 v8 h-6 Z M22 136 h6 v8 h-6 Z M40 116 h6 v8 h-6 Z M52 116 h6 v8 h-6 Z M40 132 h6 v8 h-6 Z M52 132 h6 v8 h-6 Z" fill="#2B2F45"/><rect x="15" y="156" width="8" height="16" fill="#1F3D2B"/><rect x="45" y="156" width="8" height="16" fill="#1F3D2B"/><rect x="2" y="106" width="64" height="4" fill="#fff"/></g><g transform="translate(110 172)"><rect x="-3" y="-30" width="6" height="30" fill="#8B5A3C"/><circle cx="0" cy="-40" r="16" fill="#E8752A"/><circle cx="-12" cy="-32" r="10" fill="#D9452B"/><circle cx="12" cy="-32" r="10" fill="#F2B33D"/></g><g fill="#E8752A"><circle cx="140" cy="190" r="2.5"/><circle cx="170" cy="200" r="2.5"/><circle cx="60" cy="196" r="2.5"/></g>'
   };
   /* Paint jobs: patterns for the flat buddy, and the color its shading is based on. */
-  const PAINT_BC = { rainbow: '#3D7BEA', galaxy: '#23408F', gold: '#E9B30C', redpaint: '#E03131', mustard: '#AD8200', pdots: '#7B4FD6', rpdots: '#E03131', blackpaint: '#2A2B31', whitegold: '#EEF0F5' };
+  const PAINT_BC = { rainbow: '#3D7BEA', galaxy: '#23408F', gold: '#E9B30C', redpaint: '#E03131', mustard: '#AD8200', pdots: '#7B4FD6', rpdots: '#E03131', blackpaint: '#2A2B31', whitegold: '#EEF0F5', ogdots: '#F28C28', firepaint: '#E0461E' };
   /* Paints that also set the buddy's other parts, as CSS variables on the drawing (11-buddy.css):
      shade, belly, the dragon's snout, foot and mantle, the ladybug's spots and middle line (spot, mark)
      and the slug's mouth. 'G' is the paint's own gradient: white with a gold belly draws its belly (the
@@ -4923,7 +4975,10 @@ const Buddy = (() => {
   const PAINT_VARS = {
     rpdots: { belly: '#F3EEEA', foot: '#F3EEEA' },
     blackpaint: { shade: '#464854', belly: '#B4B8C4', foot: '#8E92A0', mantle: '#1C1D22', spot: '#E9ECF2', mark: '#E9ECF2', slugMouth: '#E9ECF2' },
-    whitegold: { def: 'gold', shade: '#C4C8D4', mantle: '#D8DBE4', belly: 'G', snout: '#FBF3DD', foot: 'G', spot: 'G' }
+    whitegold: { def: 'gold', shade: '#C4C8D4', mantle: '#D8DBE4', belly: 'G', snout: '#FBF3DD', foot: 'G', spot: 'G' },
+    ogdots: { belly: '#FFF1DC', foot: '#FFF1DC' },
+    /* fire all over and a blue belly (the slug's foot, the robot's chest, the ladybug's spots) */
+    firepaint: { shade: '#9E2A12', mantle: '#7A1F0E', belly: '#2F7BEA', foot: '#2F7BEA', spot: '#2F7BEA' }
   };
   function paintVars(paint, type, pid) {
     const v = PAINT_VARS[paint];
@@ -4931,7 +4986,7 @@ const Buddy = (() => {
     return ['shade', 'belly', 'snout', 'foot', 'mantle', 'spot', 'mark'].filter((k) => v[k]).map((k) => ';--' + k + ':' + (v[k] === 'G' ? 'url(#' + pid + ')' : v[k])).join('') +
       (type === 'slug' && v.slugMouth ? ';--mouth:' + v.slugMouth : '');
   }
-  const RP_DOT = '#6A3BD2';
+  const RP_DOT = '#6A3BD2', OG_DOT = '#1E9E55';
   function paintDefs(id, paint, base) {
     switch (paint) {
       case 'dots': return '<pattern id="' + id + '" width="18" height="18" patternUnits="userSpaceOnUse"><rect width="18" height="18" fill="' + base + '"/><circle cx="5" cy="5" r="3.2" fill="#fff" fill-opacity=".85"/><circle cx="14" cy="14" r="3.2" fill="#fff" fill-opacity=".85"/></pattern>';
@@ -4944,6 +4999,10 @@ const Buddy = (() => {
       case 'rpdots': return '<pattern id="' + id + '" width="18" height="18" patternUnits="userSpaceOnUse"><rect width="18" height="18" fill="' + PAINT_BC.rpdots + '"/><circle cx="5" cy="5" r="3.9" fill="' + RP_DOT + '"/><circle cx="14" cy="14" r="3.9" fill="' + RP_DOT + '"/></pattern>';
       case 'tinydots': return '<pattern id="' + id + '" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="' + base + '"/><circle cx="2" cy="2" r="1.1" fill="#fff" fill-opacity=".92"/><circle cx="5.5" cy="5.5" r="1.1" fill="#fff" fill-opacity=".92"/></pattern>';
       case 'redpaint': case 'mustard': case 'blackpaint': case 'whitegold': return '<pattern id="' + id + '" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="' + PAINT_BC[paint] + '"/></pattern>';
+      case 'ogdots': return '<pattern id="' + id + '" width="18" height="18" patternUnits="userSpaceOnUse"><rect width="18" height="18" fill="' + PAINT_BC.ogdots + '"/><circle cx="5" cy="5" r="3.9" fill="' + OG_DOT + '"/><circle cx="14" cy="14" r="3.9" fill="' + OG_DOT + '"/></pattern>';
+      /* rows of flames pointing up: red-orange, then orange, then a yellow heart */
+      case 'firepaint': return '<pattern id="' + id + '" width="20" height="26" patternUnits="userSpaceOnUse"><rect width="20" height="26" fill="#D8341B"/>' +
+        [[5, 26], [15, 13]].flatMap((q) => [-20, 0, 20].flatMap((dx) => [0, 26].map((dy) => [q[0] + dx, q[1] + dy]))).map((q) => '<g transform="translate(' + q[0] + ' ' + q[1] + ') scale(.42)"><path d="M0 0 C-12 0 -15 -10 -9 -19 C-8 -13 -4 -12 -4 -16 C-5 -25 0 -32 5 -38 C4 -28 13 -22 12 -9 C11 -2 6 0 0 0 Z" fill="#FF8A1F"/><path d="M0 0 C-6 0 -8 -6 -5 -11 C-4 -8 -2 -8 -2 -10 C-2 -15 1 -19 3 -22 C3 -16 7 -12 6 -6 C5 -2 3 0 0 0 Z" fill="#FFD23F"/></g>').join('') + '</pattern>';
       default: return '';
     }
   }
@@ -4959,6 +5018,26 @@ const Buddy = (() => {
     wigglejump: '<path d="M-26 36 L-8 28 L-26 20 L-8 12 L-26 4" fill="none" stroke="#34D27B" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/><path d="M16 32 V-18" stroke="#FFC531" stroke-width="8" stroke-linecap="round"/><path d="M0 -12 L16 -36 L32 -12 Z" fill="#FFC531"/>',
     handstand: '<g stroke="#FF8A3D" stroke-width="6" stroke-linecap="round" fill="none"><path d="M0 12 V-14 M0 8 L-20 34 M0 8 L20 34 M0 -14 L-14 -38 M0 -14 L14 -38"/></g><circle cx="0" cy="25" r="9" fill="#FF8A3D"/><path d="M-36 38 H36" stroke="#9BA4BA" stroke-width="4" stroke-linecap="round"/>',
     boo: '<path d="M-26 32 C-30 4 -30 -36 0 -36 C30 -36 30 4 26 32 Q21 24 16 31 Q11 24 6 31 Q1 24 -4 31 Q-9 24 -14 31 Q-19 24 -26 32 Z" fill="#F4F6FF" stroke="#C9CDEB" stroke-width="2"/><ellipse cx="-9" cy="-12" rx="5" ry="7.5" fill="#221D3E"/><ellipse cx="9" cy="-12" rx="5" ry="7.5" fill="#221D3E"/><ellipse cx="0" cy="8" rx="6" ry="8" fill="#221D3E"/><g transform="translate(31 31)"><ellipse rx="13" ry="10" fill="#FF8A3D"/><path d="M-4.5 -9 Q-7 0 -4.5 9 M4.5 -9 Q7 0 4.5 9" stroke="#E8642A" stroke-width="2" fill="none"/><rect x="-2" y="-15" width="4" height="6" rx="1" fill="#5B8C3A"/></g>',
+    /* upside down on its head, hopping: the handstand figure up off the ground, with bounce marks */
+    handjump: '<g transform="translate(0 -9)"><g stroke="#8B5CF6" stroke-width="6" stroke-linecap="round" fill="none"><path d="M0 12 V-14 M0 8 L-20 32 M0 8 L20 32 M0 -14 L-14 -38 M0 -14 L14 -38"/></g><circle cx="0" cy="23" r="9" fill="#8B5CF6"/></g>' +
+      '<path d="M-36 40 H36" stroke="#9BA4BA" stroke-width="4" stroke-linecap="round"/><path d="M-11 34 L-15 30 M0 33 V28 M11 34 L15 30" stroke="#FFC531" stroke-width="3" stroke-linecap="round"/><path d="M-34 4 h-9 M-32 -8 h-9 M34 4 h9 M32 -8 h9" stroke="#9FC6FF" stroke-width="3" stroke-linecap="round"/>',
+    /* a ball rolling along, then rolling back: two curling arrows */
+    tumble: '<path d="M-42 36 H42" stroke="#9BA4BA" stroke-width="4" stroke-linecap="round"/><circle cx="0" cy="16" r="18" fill="#34D27B"/><path d="M-13 4 A18 18 0 0 1 13 4" stroke="#fff" stroke-opacity=".55" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="-6" cy="12" r="2.6" fill="#221D3E"/><circle cx="6" cy="12" r="2.6" fill="#221D3E"/>' +
+      '<path d="M-30 -10 A30 30 0 0 1 24 -16" stroke="#FFC531" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M18 -26 L32 -14 L15 -8 Z" fill="#FFC531"/><path d="M30 -30 A34 34 0 0 0 -26 -34" stroke="#FF8A3D" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M-20 -44 L-34 -32 L-17 -26 Z" fill="#FF8A3D"/>',
+    /* upside down on its head with a little leafy tree growing from its feet */
+    treepose: '<g stroke="#8B5A3C" stroke-width="6" stroke-linecap="round" fill="none"><path d="M0 12 V-16 M0 8 L-20 34 M0 8 L20 34"/></g><circle cx="0" cy="25" r="9" fill="#FF8A3D"/>' +
+      '<circle cx="0" cy="-26" r="15" fill="#2FB574"/><circle cx="-15" cy="-17" r="11" fill="#34D27B"/><circle cx="15" cy="-17" r="11" fill="#34D27B"/><circle cx="0" cy="-39" r="10" fill="#3FCB6B"/><circle cx="-6" cy="-30" r="3" fill="#FF8FB1"/><circle cx="8" cy="-22" r="3" fill="#FF8FB1"/>' +
+      '<path d="M-36 38 H36" stroke="#9BA4BA" stroke-width="4" stroke-linecap="round"/>',
+    /* a see-through buddy: a dashed outline with faint eyes and sparkles */
+    invisible: '<path d="M-24 34 C-36 10 -32 -24 0 -28 C32 -24 36 10 24 34 Z" fill="#BFF3FF" fill-opacity=".16" stroke="#7FE7FF" stroke-width="3" stroke-dasharray="7 5" stroke-linecap="round"/>' +
+      '<circle cx="-9" cy="-4" r="5" fill="none" stroke="#7FE7FF" stroke-width="2" stroke-opacity=".8"/><circle cx="9" cy="-4" r="5" fill="none" stroke="#7FE7FF" stroke-width="2" stroke-opacity=".8"/>' +
+      '<path d="M32 -34 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3 Z M-34 14 l2.4 5.6 5.6 2.4 -5.6 2.4 -2.4 5.6 -2.4 -5.6 -5.6 -2.4 5.6 -2.4 Z M28 22 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2 Z" fill="#FFE48A"/>',
+    /* an original snack bag of cheese puffs: a blue bag, open at the top, a yellow burst with a cheese wedge, puffs peeking out */
+    cheesepuffs: '<g transform="rotate(-8)">' + [[-12, -36, -22], [0, -40, 4], [12, -35, 24]].map((q) => '<rect x="' + (q[0] - 5) + '" y="' + q[1] + '" width="10" height="22" rx="5" fill="#FF9E2C" stroke="#E8781A" stroke-width="1.4" transform="rotate(' + q[2] + ' ' + q[0] + ' ' + (q[1] + 11) + ')"/>').join('') +
+      '<path d="M-27 -24 Q-14 -30 0 -25 Q14 -30 27 -24 Q33 6 28 36 Q0 42 -28 36 Q-33 6 -27 -24 Z" fill="#2E86DE"/><path d="M-27 -24 Q-14 -30 0 -25 Q14 -30 27 -24 Q14 -20 0 -21 Q-14 -20 -27 -24 Z" fill="#1F5FA8"/>' +
+      '<path d="M-20 -14 Q-24 6 -20 26" stroke="#fff" stroke-opacity=".3" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+      '<path d="M0 -10 L4 -3 L12 -6 L9 2 L17 5 L9 9 L12 17 L4 14 L0 21 L-4 14 L-12 17 L-9 9 L-17 5 L-9 2 L-12 -6 L-4 -3 Z" fill="#FFD43B"/><path d="M-8 9 L9 1 L9 11 Z" fill="#FFB020" stroke="#E08A00" stroke-width="1"/><circle cx="2" cy="7" r="1.6" fill="#E08A00"/><circle cx="6" cy="5" r="1.1" fill="#E08A00"/></g>' +
+      '<rect x="22" y="28" width="9" height="20" rx="4.5" fill="#FF9E2C" stroke="#E8781A" stroke-width="1.4" transform="rotate(64 26.5 38)"/>',
     ants: '<path d="M-46 30 H46" stroke="#9BA4BA" stroke-width="3" stroke-linecap="round"/>' + [-29, 0, 29].map((x, i) => '<g transform="translate(' + x + ' ' + (i === 1 ? 12 : 16) + ')"><path d="M-9 2 L-13 13 M-3 3 L-3 14 M3 2 L7 13" stroke="#3A2418" stroke-width="2" stroke-linecap="round" fill="none"/><ellipse cx="-9" cy="0" rx="7" ry="5.5" fill="#3A2418"/><circle cx="-1" cy="-1" r="3.6" fill="#3A2418"/><circle cx="6" cy="-3.5" r="4.6" fill="#3A2418"/><path d="M8 -7 Q11 -13 15 -13 M6 -8 Q7 -15 11 -17" stroke="#3A2418" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="8" cy="-4.5" r="1.3" fill="#fff"/></g>').join(''),
     apple: '<circle cx="-9" cy="6" r="24" fill="#E8453C"/><circle cx="9" cy="6" r="24" fill="#E8453C"/><ellipse cx="-14" cy="-6" rx="7" ry="4" fill="#fff" opacity=".45"/><path d="M0 -16 C2 -26 6 -30 10 -32" stroke="#6B4423" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M4 -24 C16 -36 28 -26 22 -20 C14 -16 8 -18 4 -24 Z" fill="#34D27B"/>',
     cookie: '<circle r="34" fill="#D9A066"/><circle r="30" fill="#E6B479"/><circle cx="-12" cy="-10" r="5" fill="#5A3A22"/><circle cx="10" cy="-14" r="4.5" fill="#5A3A22"/><circle cx="14" cy="8" r="5" fill="#5A3A22"/><circle cx="-8" cy="12" r="4.5" fill="#5A3A22"/><circle cx="2" cy="-1" r="3.5" fill="#5A3A22"/>',
@@ -5051,9 +5130,12 @@ const Buddy = (() => {
     if (w.back && BACK[w.back] && A.backFront) out += at(A.back, '<g transform="scale(0.72)">' + BACK[w.back] + '</g>');
     if (w.neck && NECK[w.neck]) out += at(A.neck, NECK[w.neck]);
     if (w.eyes && EYES[w.eyes]) out += at(A.eyes, EYES[w.eyes](A.eyes[2]));
-    if (w.head && HATS[w.head]) out += at(A.head, HATS[w.head]);
+    if (w.head === 'astronaut') out += astroFlat([A.eyes[0], A.eyes[1] - 6], type === 'slug' ? 40 : 46);
+    else if (w.head && HATS[w.head]) out += at(A.head, HATS[w.head]);
+    if (w.head === 'mouse') out += at(FLAT_NOSE[type], mouseNose(type === 'ladybug' || type === 'robot' ? '#F4F6FF' : '#3A3550'));
     if (power >= 1) out += at([A.neck[0], A.neck[1] + (type === 'slug' ? -20 : 30)], flatBadge(form));
-    if (form >= 4) out += '<circle cx="' + A.eyes[0] + '" cy="' + (A.eyes[1] - 6) + '" r="' + (type === 'slug' ? 40 : 46) + '" fill="#DDF6FF" fill-opacity=".16" stroke="#E8FBFF" stroke-opacity=".75" stroke-width="2.5"/>';
+    if (form >= 4 && w.head !== 'astronaut') out += '<circle cx="' + A.eyes[0] + '" cy="' + (A.eyes[1] - 6) + '" r="' + (type === 'slug' ? 40 : 46) + '" fill="#DDF6FF" fill-opacity=".16" stroke="#E8FBFF" stroke-opacity=".75" stroke-width="2.5"/>';
+    if (trick === 'treepose') out += TREE_FLAT;
     out += '</g></g>' + flatOrbit(power, form, crown, A, fc);
     friends.forEach((f, i) => {
       if (!SIDE[f]) return;
@@ -5083,11 +5165,14 @@ const Buddy = (() => {
     if (it.slot === 'paint') {
       const pid = 'ip' + (++clipN);
       if (id === 'whitegold') return '<svg class="item-svg" viewBox="-50 -50 100 100" aria-hidden="true"><defs>' + paintDefs(pid, 'gold') + '</defs><circle r="40" fill="' + PAINT_BC.whitegold + '" stroke="#C9CEDA" stroke-width="1.5"/><ellipse cx="0" cy="13" rx="23" ry="24" fill="url(#' + pid + ')"/><ellipse cx="-14" cy="-17" rx="13" ry="7" fill="#fff" opacity=".6" transform="rotate(-30 -14 -17)"/></svg>';
+      if (id === 'firepaint') return '<svg class="item-svg" viewBox="-50 -50 100 100" aria-hidden="true"><defs>' + paintDefs(pid, 'firepaint') + '</defs><circle r="40" fill="url(#' + pid + ')"/><ellipse cx="0" cy="13" rx="23" ry="24" fill="' + PAINT_VARS.firepaint.belly + '"/><ellipse cx="-14" cy="-17" rx="13" ry="7" fill="#fff" opacity=".45" transform="rotate(-30 -14 -17)"/></svg>';
       return '<svg class="item-svg" viewBox="-50 -50 100 100" aria-hidden="true"><defs>' + paintDefs(pid, id, color || '#3D7BEA') + '</defs><circle r="40" fill="url(#' + pid + ')"/><ellipse cx="-14" cy="-17" rx="13" ry="7" fill="#fff" opacity=".45" transform="rotate(-30 -14 -17)"/></svg>';
     }
     if (ICONS[id]) return '<svg class="item-svg" viewBox="-50 -50 100 100" aria-hidden="true">' + ICONS[id] + '</svg>';
     let inner, vb;
-    if (it.slot === 'head') { inner = HATS[id]; vb = '-60 -70 120 90'; }
+    if (id === 'astronaut') { inner = astroFlat([0, -22], 38); vb = '-50 -66 100 100'; }
+    else if (id === 'mouse') { inner = HATS.mouse + at([0, 28], mouseNose('#3A3550')); vb = '-52 -30 104 72'; }
+    else if (it.slot === 'head') { inner = HATS[id]; vb = '-60 -70 120 90'; }
     else if (it.slot === 'eyes') { inner = EYES[id](36); vb = '-50 -25 100 50'; }
     else if (it.slot === 'neck') { inner = NECK[id]; vb = '-40 -20 80 70'; }
     else if (it.slot === 'back') { inner = BACK[id]; vb = '-75 -45 150 115'; }
@@ -5295,18 +5380,28 @@ const Buddy3D = (() => {
     rainbow: { belly: '#FFFFFF', foot: '#FFFFFF' },
     rpdots: { belly: '#F3EEEA', foot: '#F3EEEA' },
     blackpaint: { shade: '#464854', belly: '#B4B8C4', foot: '#8E92A0', mantle: '#1C1D22' },
-    whitegold: { shade: '#C4C8D4', belly: '#F2C14E', foot: '#F2C14E', mantle: '#D8DBE4' }
+    whitegold: { shade: '#C4C8D4', belly: '#F2C14E', foot: '#F2C14E', mantle: '#D8DBE4' },
+    ogdots: { belly: '#FFF1DC', foot: '#FFF1DC' },
+    firepaint: { shade: '#9E2A12', belly: '#2F7BEA', foot: '#2F7BEA', mantle: '#7A1F0E' }
   };
   /* Marks drawn on the body itself (the ladybug's spots and middle line, the slug's mouth) go light on
      black. White with a gold belly makes the belly (the slug's foot, the robot's chest panel, the
      ladybug's spots) Solid gold. */
-  const PAINT_PARTS = { blackpaint: { mark: '#E9ECF2', mouth: '#E9ECF2' }, whitegold: { gold: true, snout: '#FBF3DD' } };
+  const PAINT_PARTS = { blackpaint: { mark: '#E9ECF2', mouth: '#E9ECF2' }, whitegold: { gold: true, snout: '#FBF3DD' }, firepaint: { belly: '#2F7BEA' } };
   function seeded(n) { let x = n; return () => (x = (x * 16807) % 2147483647) / 2147483647; }
   /* Solid paints recolor the buddy itself, so the shading follows the new color. */
   const SOLID_PAINT = { redpaint: '#E03131', mustard: '#AD8200', blackpaint: '#2A2B31', whitegold: '#EEF0F5' };
   /* Patterns with a color of their own: the buddy takes that color, the pattern goes on top. */
-  const PAINT_BASE = { pdots: '#7B4FD6', rpdots: '#E03131' };
-  const RP_DOT = '#6A3BD2';
+  const PAINT_BASE = { pdots: '#7B4FD6', rpdots: '#E03131', ogdots: '#F28C28', firepaint: '#E0461E' };
+  const RP_DOT = '#6A3BD2', OG_DOT = '#1E9E55';
+  /* One flame, base at (bx, by), pointing up, s pixels per unit: the outer tongue, then its yellow heart. */
+  const FLAME_OUT = [[-12, 0, -15, -10, -9, -19], [-8, -13, -4, -12, -4, -16], [-5, -25, 0, -32, 5, -38], [4, -28, 13, -22, 12, -9], [11, -2, 6, 0, 0, 0]];
+  const FLAME_IN = [[-6, 0, -8, -6, -5, -11], [-4, -8, -2, -8, -2, -10], [-2, -15, 1, -19, 3, -22], [3, -16, 7, -12, 6, -6], [5, -2, 3, 0, 0, 0]];
+  function flamePath(x, cs, bx, by, s, color) {
+    x.fillStyle = color; x.beginPath(); x.moveTo(bx, by);
+    cs.forEach((c) => x.bezierCurveTo(bx + c[0] * s, by + c[1] * s, bx + c[2] * s, by + c[3] * s, bx + c[4] * s, by + c[5] * s));
+    x.closePath(); x.fill();
+  }
   function paintTex(paint, base) {
     return canvasTex('paint:' + paint + ':' + base, 256, 256, (x, w, h) => {
       const rnd = seeded(7);
@@ -5319,6 +5414,18 @@ const Buddy3D = (() => {
       } else if (paint === 'rpdots') {
         x.fillStyle = PAINT_BASE.rpdots; x.fillRect(0, 0, w, h); x.fillStyle = RP_DOT;
         for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) [[32, 32], [96, 96]].forEach((q) => { x.beginPath(); x.arc(i * 128 + q[0], j * 128 + q[1], 27, 0, Math.PI * 2); x.fill(); });
+      } else if (paint === 'ogdots') {
+        x.fillStyle = PAINT_BASE.ogdots; x.fillRect(0, 0, w, h); x.fillStyle = OG_DOT;
+        for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) [[32, 32], [96, 96]].forEach((q) => { x.beginPath(); x.arc(i * 128 + q[0], j * 128 + q[1], 27, 0, Math.PI * 2); x.fill(); });
+      } else if (paint === 'firepaint') {
+        /* two staggered rows of flames on deep red-orange; the copies past the edges make it tile seamlessly */
+        x.fillStyle = '#D8341B'; x.fillRect(0, 0, w, h);
+        [[64, 122, 3], [192, 122, 2.8], [0, 250, 2.9], [128, 250, 3.05], [256, 250, 2.9]].forEach((q) => {
+          flamePath(x, FLAME_OUT, q[0], q[1], q[2], '#FF8A1F');
+          flamePath(x, FLAME_IN, q[0], q[1], q[2], '#FFD23F');
+        });
+        x.fillStyle = 'rgba(255,214,90,0.85)';
+        [[30, 40, 3], [160, 30, 2.4], [100, 170, 2.6], [230, 160, 3], [20, 200, 2.2]].forEach((q) => { x.beginPath(); x.arc(q[0], q[1], q[2], 0, Math.PI * 2); x.fill(); });
       } else if (paint === 'tinydots') {
         x.fillStyle = base; x.fillRect(0, 0, w, h); x.fillStyle = 'rgba(255,255,255,0.93)';
         for (let i = 0; i < 8; i++) for (let j = 0; j < 8; j++) [[8, 8], [24, 24]].forEach((q) => { x.beginPath(); x.arc(i * 32 + q[0], j * 32 + q[1], 5.5, 0, Math.PI * 2); x.fill(); });
@@ -5369,6 +5476,8 @@ const Buddy3D = (() => {
       m.emissive = new T.Color(paint === 'galaxy' ? 0xffffff : 0xfff2c0); m.emissiveMap = tiled(glintTex(paint), kind); m.emissiveIntensity = paint === 'galaxy' ? 1.1 : 0.55;
       m.clearcoat = 1; m.clearcoatRoughness = 0.06; m.roughness = Math.min(m.roughness, 0.25); if (paint === 'sparkle') m.metalness = 0.2;
     }
+    /* fire glows a little from inside: the brighter the flame, the more it glows */
+    if (paint === 'firepaint') { m.emissive = new T.Color(0xffffff); m.emissiveMap = map; m.emissiveIntensity = 0.38; }
     return m;
   }
 
@@ -5463,7 +5572,7 @@ const Buddy3D = (() => {
     body.add(M(sph(1, 12, 10), mat.gloss(C.ink), [-0.1, 1.64, 0.7], null, [0.035, 0.026, 0.02]), M(sph(1, 12, 10), mat.gloss(C.ink), [0.1, 1.64, 0.7], null, [0.035, 0.026, 0.02]));
     body.add(smile([0, 1.58, 0.44], 0.27, 0, 1.53, 0.16, 0.045, 0.018, mat.gloss(C.ink)));
     [-1, 1].forEach((sx) => { const e = eye(0.155); e.position.set(sx * 0.22, 1.94, 0.45); e.rotation.y = sx * 0.22; body.add(e); P.eyes.push(e); });
-    [-1, 1].forEach((sx) => body.add(M(new T.ConeGeometry(0.1, 0.4, 24), mat.vinyl(C.ivory, { roughness: 0.5 }), [sx * 0.3, 2.3, -0.04], [0, 0, -sx * 0.42])));
+    P.horns = [-1, 1].map((sx) => { const o = M(new T.ConeGeometry(0.1, 0.4, 24), mat.vinyl(C.ivory, { roughness: 0.5 }), [sx * 0.3, 2.3, -0.04], [0, 0, -sx * 0.42]); body.add(o); return o; });
     [[0, 2.33, -0.14, 0.06, 0.16], [0, 2.18, -0.42, 0.06, 0.15], [0, 1.18, -0.52, 0.07, 0.17], [0, 0.88, -0.6, 0.07, 0.18], [0, 0.56, -0.6, 0.06, 0.15]].forEach((s) => {
       const o = M(new T.ConeGeometry(s[3], s[4], 16), shade, [s[0], s[1], s[2]]);
       o.lookAt(V(s[0], s[1], s[2]).add(V(0, s[1] - 0.9, s[2] - 0.2).normalize().multiplyScalar(-1).add(V(0, 0.4, -0.9)).normalize()));
@@ -5654,7 +5763,103 @@ const Buddy3D = (() => {
         g.add(M(taper(pts, (u) => 0.105 * (1 - u) + 0.008, 32, 18), horn));
       });
       return g;
+    },
+    /* A hat made of flames: a ring of red-orange tongues, orange ones inside, a yellow heart and one tall flame,
+       all glowing, that flicker (pose() moves userData.flames, like the jet pack's). */
+    flamehat: () => {
+      const g = G([0, -0.1, 0]), flames = [], rnd = seeded(23);
+      const tongue = (r, h, lean, color, op) => {
+        const prof = [];
+        for (let i = 0; i <= 18; i++) { const u = i / 18, rr = u < 0.28 ? r * Math.sin(((u / 0.28) * Math.PI) / 2) : r * Math.pow(1 - (u - 0.28) / 0.72, 1.35); prof.push(new T.Vector2(Math.max(0.0005, rr), u * h)); }
+        const geo = new T.LatheGeometry(prof, 24), p = geo.attributes.position;
+        for (let i = 0; i < p.count; i++) { const k = p.getY(i) / h; p.setX(i, p.getX(i) + lean * k * k); }
+        geo.computeVertexNormals();
+        return M(geo, mat.glow(color, op < 1 ? { transparent: true, opacity: op } : {}));
+      };
+      const ring = (n, R, r, h0, dh, lean, color, op, a0) => {
+        for (let i = 0; i < n; i++) {
+          const a = a0 + (i / n) * Math.PI * 2, f = tongue(r, h0 + dh * rnd(), lean, color, op);
+          f.position.set(Math.cos(a) * R, -0.02, Math.sin(a) * R); f.rotation.y = -a; g.add(f); flames.push(f);
+        }
+      };
+      ring(9, 0.28, 0.125, 0.5, 0.26, 0.08, '#FF4A1C', 0.96, 0.2);
+      ring(6, 0.16, 0.125, 0.62, 0.2, 0.05, '#FF9A1F', 1, 0.6);
+      ring(3, 0.06, 0.095, 0.46, 0.1, 0.03, '#FFE14F', 1, 0);
+      /* the tallest flame stops about where the wizard hat's tip does, inside the picture */
+      const top = tongue(0.14, 0.86, -0.07, '#FF6A1F', 1); top.position.set(0, 0, 0.02); g.add(top); flames.push(top);
+      const core = tongue(0.075, 0.62, -0.04, '#FFD23F', 1); core.position.set(0, 0.02, 0.07); g.add(core); flames.push(core);
+      const halo = new T.Sprite(new T.SpriteMaterial({ map: softGlow(), color: lin('#FF8A1F'), transparent: true, opacity: 0.5, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false }));
+      halo.scale.setScalar(1.5); halo.position.set(0, 0.42, 0); g.add(halo);
+      g.userData.flames = flames;
+      return g;
+    },
+    /* A firefighter's helmet: a red dome with a raised comb from front to back, a wide brim that is longer
+       at the back, and a white front shield with a red 1 on it. */
+    firefighter: () => {
+      const g = G([0, -0.13, -0.02], [-0.1, 0, 0]), red = mat.gloss('#D62828', { roughness: 0.28 }), dark = mat.gloss('#B71F1F', { roughness: 0.32 });
+      g.add(M(new T.SphereGeometry(0.43, 48, 20, 0, Math.PI * 2, 0, Math.PI / 2), red, [0, 0, 0], null, [1, 0.88, 1.06]));
+      /* the comb runs from the back over the top and stops short of the front shield */
+      g.add(M(new T.TorusGeometry(0.4, 0.034, 10, 40, Math.PI * 0.6), dark, [0, 0, 0], [0, Math.PI / 2, 0], [1.14, 0.945, 1]));
+      const brim = new T.Shape();
+      /* shape y becomes the front (+z) once the brim is laid flat: short in front, long at the back */
+      for (let i = 0; i <= 64; i++) { const a = (i / 64) * Math.PI * 2, x = Math.cos(a) * 0.6, y = Math.sin(a) * (Math.sin(a) > 0 ? 0.54 : 0.86); if (i) brim.lineTo(x, y); else brim.moveTo(x, y); }
+      const bg = new T.ExtrudeGeometry(brim, { depth: 0.03, bevelEnabled: true, bevelThickness: 0.012, bevelSize: 0.012, bevelSegments: 2, curveSegments: 48 });
+      g.add(M(bg, dark, [0, 0.0, 0], [Math.PI / 2, 0, 0]));
+      const sh = new T.Shape();
+      sh.moveTo(-0.15, 0.14); sh.lineTo(0.15, 0.14); sh.quadraticCurveTo(0.16, -0.03, 0, -0.17); sh.quadraticCurveTo(-0.16, -0.03, -0.15, 0.14);
+      const one = new T.Shape();
+      [[-0.02, 0.1], [0.026, 0.1], [0.026, -0.1], [-0.02, -0.1], [-0.02, 0.045], [-0.056, 0.03], [-0.056, 0.066]].forEach((q, i) => { if (i) one.lineTo(q[0], q[1]); else one.moveTo(q[0], q[1]); });
+      const shield = G([0, 0.13, 0.4], [-0.45, 0, 0]);
+      shield.add(M(extrude(sh, 0.02, 0.012), mat.gloss('#1F1B2E', { roughness: 0.35 }), [0, 0, -0.012], null, [1.12, 1.1, 1]));
+      shield.add(M(extrude(sh, 0.02, 0.01), mat.satin('#FFFFFF', { roughness: 0.45 })));
+      shield.add(M(extrude(one, 0.016, 0.005), mat.gloss('#D62828', { roughness: 0.3 }), [0, -0.01, 0.024]));
+      g.add(shield);
+      return g;
+    },
+    /* A mouse face: round grey ears with pink insides, and a pink nose with whiskers on the face (each
+       buddy's face is in a different place: MOUSE_AT, world coordinates, turned into hat coordinates). */
+    mouse: (type) => {
+      const g = new T.Group(), A = ANCHOR[type] || ANCHOR.ladybug, Q = MOUSE_AT[type] || MOUSE_AT.ladybug;
+      const fur = mat.satin('#A9AFC0', { roughness: 0.75 }), pink = mat.satin('#FFB3C7', { roughness: 0.65 });
+      [-1, 1].forEach((sx) => {
+        const ear = G([sx * Q.ex, Q.ey, Q.ez], [0, -sx * 0.22, -sx * 0.3]);
+        ear.add(M(sph(1, 32, 20), fur, null, null, [0.23, 0.23, 0.065]));
+        ear.add(M(sph(1, 28, 18), pink, [0, 0, 0.036], null, [0.15, 0.15, 0.036]));
+        g.add(ear);
+      });
+      const nose = G([(Q.nose[0] - A.hat[0]) / A.hs, (Q.nose[1] - A.hat[1]) / A.hs, (Q.nose[2] - A.hat[2]) / A.hs]);
+      nose.add(M(sph(1, 24, 18), mat.gloss('#FF7FA8', { roughness: 0.25 }), null, null, [0.075, 0.06, 0.06]));
+      nose.add(M(sph(0.018, 10, 8), mat.glow('#FFFFFF'), [-0.026, 0.024, 0.05]));
+      const wm = mat.satin(type ? Q.wc : '#3A3550', { roughness: 0.6 });
+      [-1, 1].forEach((sx) => [-1, 0, 1].forEach((i) => nose.add(M(tube([[sx * 0.05, i * 0.016, 0], [sx * 0.18, i * 0.04, -0.03], [sx * 0.31, i * 0.075 + 0.01, -0.085]], 0.0075, 10, 5), wm))));
+      g.add(nose);
+      return g;
+    },
+    /* An astronaut's helmet: a glass bubble round the whole head (the Space hero's, FORM_AT) with a shine,
+       on a padded white collar with a metal ring and a red and a green light. */
+    astronaut: (type) => {
+      const g = new T.Group(), A = ANCHOR[type] || ANCHOR.ladybug, F = FORM_AT[type] || FORM_AT.ladybug;
+      const loc = (p) => [(p[0] - A.hat[0]) / A.hs, (p[1] - A.hat[1]) / A.hs, (p[2] - A.hat[2]) / A.hs];
+      const c = loc(F.head), r = F.hr / A.hs;
+      g.add(M(sph(r, 48, 32), mat.glass('#DDF6FF', { opacity: 0.2, clearcoatRoughness: 0.02 }), c));
+      g.add(M(sph(r * 1.002, 48, 32), glassEdge('#9FD8FF'), c));
+      const shine = [];
+      for (let i = 0; i <= 14; i++) { const az = -0.95 + i * 0.045, el = 0.42 + i * 0.012; shine.push([c[0] + r * 1.004 * Math.cos(el) * Math.sin(az), c[1] + r * 1.004 * Math.sin(el), c[2] + r * 1.004 * Math.cos(el) * Math.cos(az)]); }
+      g.add(M(tube(shine, 0.022, 24, 8), mat.glow('#FFFFFF', { transparent: true, opacity: 0.7 })));
+      const cy = loc([0, type === 'slug' ? F.head[1] - F.hr * 0.78 : A.neck[1], 0])[1], dy = c[1] - cy;
+      const rr = Math.sqrt(Math.max(r * r * 0.3, r * r - dy * dy));
+      g.add(M(new T.TorusGeometry(rr, 0.085, 16, 56), mat.satin('#F4F6FB', { roughness: 0.8 }), [c[0], cy, c[2]], [Math.PI / 2, 0, 0]));
+      g.add(M(new T.TorusGeometry(rr * 0.97, 0.03, 10, 56), mat.metal('#B8C0D4', { roughness: 0.3 }), [c[0], cy + 0.09, c[2]], [Math.PI / 2, 0, 0]));
+      [[-0.62, '#FF4D4D'], [0.62, '#34D27B']].forEach((q) => g.add(M(sph(0.035, 14, 10), mat.glow(q[1]), [c[0] + Math.sin(q[0]) * (rr + 0.06), cy, c[2] + Math.cos(q[0]) * (rr + 0.06)])));
+      return g;
     }
+  };
+  /* Where the mouse face goes on each buddy: the nose (world), the ears (hat coordinates), whisker color. */
+  const MOUSE_AT = {
+    ladybug: { nose: [0, 1.81, 0.6], ex: 0.36, ey: 0, ez: -0.02, wc: '#F4F6FF' },
+    slug: { nose: [0.5, 1.45, 0.57], ex: 0.5, ey: -0.22, ez: 0.04, wc: '#3A3550' },
+    dragon: { nose: [0, 1.65, 0.72], ex: 0.38, ey: -0.04, ez: -0.04, wc: '#3A3550' },
+    robot: { nose: [0, 1.87, 0.47], ex: 0.38, ey: 0.04, ez: 0, wc: '#F4F6FF' }
   };
   let frameColor = C.ink;
   function frames(gap) {
@@ -6383,6 +6588,29 @@ const Buddy3D = (() => {
       [-1, 1].forEach((k) => d.add(M(sph(0.022, 14, 10), bone, [0.18, k * 0.016, 0])));
       g.add(d);
       return g;
+    },
+    /* An original snack bag: a soft blue bag, open at the top, crimped at the bottom, a yellow burst with a
+       cheese wedge on the front, and curly orange cheese puffs peeking out (one has fallen out in front). */
+    cheesepuffs: () => {
+      const g = G(null, [0.05, 0, 0.06]);
+      const geo = new T.CylinderGeometry(0.15, 0.15, 0.36, 40, 12, true), p = geo.attributes.position;
+      for (let i = 0; i < p.count; i++) { const y = p.getY(i), k = Math.sin((Math.PI * (y + 0.18)) / 0.36); p.setX(i, p.getX(i) * (0.92 + 0.14 * k)); p.setZ(i, p.getZ(i) * (0.42 + 0.16 * k)); }
+      geo.computeVertexNormals();
+      g.add(M(geo, mat.gloss('#2E86DE', { roughness: 0.22, side: T.DoubleSide })));
+      g.add(M(new T.CircleGeometry(1, 32), mat.satin('#163F73', { side: T.DoubleSide, roughness: 0.8 }), [0, 0.168, 0], [-Math.PI / 2, 0, 0], [0.136, 0.062, 1]));
+      g.add(M(rbox(0.3, 0.04, 0.055, 0.012, 4), mat.gloss('#5AA9F0', { roughness: 0.3 }), [0, -0.19, 0]));
+      g.add(M(extrude(starShape(0.085, 0.062, 12), 0.008, 0.003), mat.gloss('#FFD43B', { roughness: 0.3 }), [0, -0.02, 0.09]));
+      const wedge = new T.Shape(); wedge.moveTo(-0.045, -0.02); wedge.lineTo(0.045, 0.02); wedge.lineTo(0.045, -0.025); wedge.closePath();
+      g.add(M(extrude(wedge, 0.01, 0.004), mat.satin('#FFB020', { roughness: 0.5 }), [0, -0.022, 0.1]));
+      [[0.012, -0.026, 0.008], [0.028, -0.034, 0.006]].forEach((q) => g.add(M(sph(q[2], 10, 8), mat.satin('#D98200'), [q[0], q[1], 0.108], null, [1, 1, 0.4])));
+      const dust = mat.satin('#FFFFFF', { map: rep(speckle('cheesedust', '#FF9E2C', ['#FFB54D', '#E8781A', '#FFC266'], 420, 1, 3), 1, 1), roughness: 0.85 });
+      const puff = (pos, rot, len) => {
+        const pts = [[0, 0, 0], [0.012, len * 0.35, 0.006], [-0.008, len * 0.7, -0.004], [0.006, len, 0]];
+        return M(taper(pts, (u) => 0.026 * Math.sqrt(Math.sin(Math.PI * Math.min(1, Math.max(0, u)))) * (0.92 + 0.08 * Math.sin(u * 19)), 24, 12), dust, pos, rot);
+      };
+      [[[-0.07, 0.1, 0.0], [0, 0, 0.35], 0.15], [[-0.015, 0.11, 0.012], [0.1, 0, 0.05], 0.17], [[0.05, 0.1, -0.008], [-0.05, 0, -0.32], 0.15], [[0.015, 0.09, 0.025], [0.25, 0, -0.12], 0.13]].forEach((q) => g.add(puff(q[0], q[1], q[2])));
+      g.add(puff([0.1, -0.2, 0.09], [0, 0.4, -1.45], 0.14));
+      return g;
     }
   };
   const heartTex = () => canvasTex('heart', 128, 128, (x, w) => {
@@ -6440,10 +6668,30 @@ const Buddy3D = (() => {
     return g;
   }
   /* Make or drop the props for the trick now playing (kind '' drops them). */
+  /* The edge of a glass bubble: a light tint where the glass is seen at a slant (round its outline), clear in
+     the middle, so the bubble shows on a light background as well as a dark one. */
+  function glassEdge(color) {
+    return new T.ShaderMaterial({
+      uniforms: { uColor: { value: new T.Color(color) } },
+      vertexShader: 'varying vec3 vN; varying vec3 vV; void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); vN = normalize(normalMatrix * normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }',
+      fragmentShader: 'uniform vec3 uColor; varying vec3 vN; varying vec3 vV; void main() { float r = 1.0 - abs(dot(normalize(vN), normalize(vV))); gl_FragColor = vec4(uColor, 0.75 * pow(r, 2.6)); }',
+      transparent: true, depthWrite: false
+    });
+  }
+  /* A glowing outline for the invisible trick: bright where a surface turns away from the camera (its edges),
+     clear where it faces the camera, added on top of whatever is behind. */
+  function rimMat() {
+    return new T.ShaderMaterial({
+      uniforms: { uColor: { value: new T.Color('#BFF3FF') }, uOpacity: { value: 0 } },
+      vertexShader: 'varying vec3 vN; varying vec3 vV; void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); vN = normalize(normalMatrix * normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }',
+      fragmentShader: 'uniform vec3 uColor; uniform float uOpacity; varying vec3 vN; varying vec3 vV; void main() { float r = 1.0 - abs(dot(normalize(vN), normalize(vV))); float a = pow(r, 2.4) * uOpacity; gl_FragColor = vec4(uColor * a, a); }',
+      transparent: true, depthWrite: false, blending: T.AdditiveBlending
+    });
+  }
   function trickFx(v, kind) {
     const F = v.fx;
     if (F && F.kind === kind) return F;
-    if (F) { F.objs.forEach((o) => { if (o.parent) o.parent.remove(o); if (!o.isSprite) dispose(o); else o.material.dispose(); }); v.fx = null; }
+    if (F) { if (F.cleanup) F.cleanup(); F.objs.forEach((o) => { if (o.parent) o.parent.remove(o); if (!o.isSprite) dispose(o); else o.material.dispose(); }); v.fx = null; }
     if (!kind) return null;
     const P = v.P, A = ANCHOR[v.type] || ANCHOR.ladybug;
     if (kind === 'boo') {
@@ -6458,6 +6706,54 @@ const Buddy3D = (() => {
       line.position.set(0, 0, Math.max(0.78, A.side[2] + 0.18));
       P.root.add(line);
       v.fx = { kind, line, ants, objs: [line] };
+    } else if (kind === 'treepose') {
+      /* a little tree on the soles of its feet, pointing away from them, so it stands up out of the handstand */
+      const bb = P.box || { min: V(-0.8, 0, -0.7), max: V(0.8, 2.4, 0.7) };
+      const tree = G([(bb.min.x + bb.max.x) / 2, Math.min(0.02, bb.min.y), ((bb.min.z + bb.max.z) / 2) * 0.5], [0, 0, Math.PI]), inner = new T.Group();
+      inner.add(M(new T.CylinderGeometry(0.045, 0.07, 0.3, 14), mat.satin('#8B5A3C', { roughness: 0.8 }), [0, 0.15, 0]));
+      const leaf = ['#2FB574', '#3FCB6B', '#249A5A'].map((h) => mat.vinyl(h, { roughness: 0.55, clearcoat: 0.2 }));
+      [[0, 0.48, 0, 0.26, 0], [-0.21, 0.4, 0.05, 0.18, 1], [0.21, 0.4, 0.04, 0.18, 1], [0, 0.68, 0.02, 0.17, 2], [-0.1, 0.58, 0.16, 0.15, 1], [0.11, 0.56, -0.14, 0.15, 2]].forEach((q) => inner.add(M(sph(q[3], 24, 18), leaf[q[4]], [q[0], q[1], q[2]])));
+      [[-0.09, 0.55, 0.24], [0.14, 0.46, 0.18], [0.02, 0.74, 0.15], [-0.19, 0.43, 0.15]].forEach((q) => inner.add(M(sph(0.032, 12, 10), mat.vinyl('#FF8FB1', { roughness: 0.4 }), q)));
+      inner.scale.setScalar(0.001); tree.add(inner); P.body.add(tree);
+      v.fx = { kind, tree, inner, objs: [tree] };
+    } else if (kind === 'invisible') {
+      /* every material on the buddy fades (remembering how it was, to put back), each part gets a glowing
+         outline twin on the same shape, and sparkles twinkle while it disappears and comes back */
+      const mats = new Map(), ghosts = [], rim = rimMat(), meshes = [];
+      P.body.traverse((o) => {
+        if (!o.isMesh && !o.isSprite) return;
+        [].concat(o.material).forEach((m) => { if (m && !mats.has(m)) mats.set(m, { t: m.transparent, o: m.opacity, d: m.depthWrite }); });
+        if (o.isMesh) meshes.push(o);
+      });
+      meshes.forEach((o) => { const gm = new T.Mesh(o.geometry, rim); gm.renderOrder = 6; o.add(gm); ghosts.push(gm); });
+      const bb = P.box || { min: V(-0.8, 0, -0.7), max: V(0.8, 2.4, 0.7) }, rnd = seeded(31), sparks = [];
+      for (let i = 0; i < 8; i++) {
+        const s = new T.Sprite(new T.SpriteMaterial({ map: sparkTex(), transparent: true, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false }));
+        s.position.set(bb.min.x - 0.15 + rnd() * (bb.max.x - bb.min.x + 0.3), 0.3 + rnd() * Math.max(1, (P.top || 2.4) - 0.2), Math.max(0.3, bb.max.z * 0.9));
+        s.userData.ph = rnd(); s.visible = false; P.root.add(s); sparks.push(s);
+      }
+      let faded = false;
+      v.fx = {
+        kind, objs: [], sparks,
+        fade(g, k) {
+          const on = g > 0.002;
+          mats.forEach((s, m) => {
+            if (on !== faded) { m.transparent = on ? true : s.t; m.needsUpdate = true; }
+            /* still mostly there: parts keep hiding what is behind them; mostly gone: see right through */
+            m.depthWrite = on && g > 0.5 ? false : s.d;
+            m.opacity = s.o * (1 - 0.93 * g);
+          });
+          faded = on; rim.uniforms.uOpacity.value = g;
+          const tw = k < 0.34 ? Math.sin(Math.PI * Math.min(1, Math.max(0, (k - 0.04) / 0.3))) : k > 0.7 && k < 0.98 ? Math.sin((Math.PI * (k - 0.7)) / 0.28) : 0;
+          sparks.forEach((s) => { const w = tw * (0.5 + 0.5 * Math.sin(k * 40 + s.userData.ph * 6.3)); s.visible = w > 0.02; s.scale.setScalar(0.08 + 0.26 * w); s.material.opacity = w; });
+        },
+        cleanup() {
+          ghosts.forEach((gm) => { if (gm.parent) gm.parent.remove(gm); });
+          rim.dispose();
+          mats.forEach((s, m) => { m.transparent = s.t; m.opacity = s.o; m.depthWrite = s.d; m.needsUpdate = true; });
+          sparks.forEach((s) => { if (s.parent) s.parent.remove(s); s.material.dispose(); });
+        }
+      };
     } else return null;
     return v.fx;
   }
@@ -6468,6 +6764,8 @@ const Buddy3D = (() => {
       const d = (delay || 0) / 1000;
       if (trick === 'boo' && Sfx.boo) { Sfx.boo(d); if (typeof Speech !== 'undefined') setTimeout(() => Speech.say('Boo!'), (delay || 0) + 1850); }
       else if (trick === 'ants' && Sfx.march) Sfx.march(d);
+      else if (trick === 'invisible' && Sfx.sparkle) { Sfx.sparkle(d + 0.2); Sfx.sparkle(d + 2.6); }
+      else if (trick === 'treepose' && Sfx.sparkle) Sfx.sparkle(d + 1.1);
     } catch (e) { /* sound is optional */ }
   }
 
@@ -7094,7 +7392,7 @@ const Buddy3D = (() => {
       }
     }
     if (n >= 1) { const bd = badgeMesh(f); bd.position.set(F.chest[0], F.chest[1], F.chest[2]); body.add(bd); }
-    if (f >= 4) {
+    if (f >= 4 && !(look.w && look.w.head === 'astronaut')) {
       const hc = F.head;
       body.add(M(sph(F.hr, 48, 32), mat.glass('#DDF6FF', { opacity: 0.2, clearcoatRoughness: 0.02 }), hc));
     }
@@ -7185,21 +7483,25 @@ const Buddy3D = (() => {
   /* ---------- a whole buddy ---------- */
   function build(look) {
     const type = ANCHOR[look.t] ? look.t : 'ladybug', A = ANCHOR[type], w = look.w || {}, base = SOLID_PAINT[w.paint] || PAINT_BASE[w.paint] || look.c || '#E8453C';
-    const paint = w.paint && ['dots', 'stripes', 'sparkle', 'rainbow', 'galaxy', 'gold', 'pdots', 'tinydots', 'rpdots'].indexOf(w.paint) >= 0 ? w.paint : '';
+    const paint = w.paint && ['dots', 'stripes', 'sparkle', 'rainbow', 'galaxy', 'gold', 'pdots', 'tinydots', 'rpdots', 'ogdots', 'firepaint'].indexOf(w.paint) >= 0 ? w.paint : '';
     const c = Object.assign(tones(base), (w.paint && PAINT_TONE[w.paint]) || {});
     const parts = (w.paint && PAINT_PARTS[w.paint]) || {};
     if (parts.mark) c.mark = parts.mark;
     if (parts.snout) c.snout = parts.snout;
     if (parts.mouth) c.mouth = parts.mouth;
     if (parts.gold) c.bellyMat = goldMat;
+    if (parts.belly) c.bellyMat = () => mat.vinyl(parts.belly, { roughness: 0.42, clearcoat: 0.4 });
     if (paint) c.skin = (kind, fb) => paintMat(paint, base, kind, fb);
     const made = (type === 'slug' ? buildSlug : type === 'dragon' ? buildDragon : type === 'robot' ? buildRobot : buildLadybug)(c);
     const body = made.body, P = made.P;
     P.body = body; P.flames = []; P.beeWings = []; P.flap = []; P.trick = w.trick || '';
     if (w.head && HAT[w.head]) {
-      const h = G(A.hat, null, A.hs, HAT[w.head]());
+      const h = G(A.hat, null, A.hs, HAT[w.head](type));
       body.add(h);
       if (type === 'robot' && w.head !== 'flower') P.antennae.forEach((a) => { a.visible = false; });
+      /* the mouse's ears take the place of the dragon's horns */
+      if (type === 'dragon' && w.head === 'mouse' && P.horns) P.horns.forEach((o) => { o.visible = false; });
+      if (h.children[0] && h.children[0].userData.flames) P.flames.push.apply(P.flames, h.children[0].userData.flames);
     }
     if (w.eyes && EYES[w.eyes]) { frameColor = A.frame || C.ink; const eg = EYES[w.eyes](A.gap); body.add(G(A.eyes, null, type === 'slug' ? 0.9 : 1, eg)); frameColor = C.ink; if (eg.userData.neon) P.neon = eg.userData.neon; }
     if (w.neck && NECK[w.neck]) body.add(G(A.neck, null, null, NECK[w.neck](A.neckR)));
@@ -7363,7 +7665,9 @@ const Buddy3D = (() => {
     v.canvas.addEventListener('pointerup', up);
     v.canvas.addEventListener('pointercancel', () => { down = false; });
   }
-  const TRICK_MS = { bounce: 1000, twirl: 950, wiggle: 1300, jelly: 1000, flip: 950, tornado: 1500, freeze: 2000, wigglejump: 1300, handstand: 2300, boo: 2900, ants: 4000 };
+  const TRICK_MS = { bounce: 1000, twirl: 950, wiggle: 1300, jelly: 1000, flip: 950, tornado: 1500, freeze: 2000, wigglejump: 1300, handstand: 2300, boo: 2900, ants: 4000, tumble: 2400, handjump: 2800, treepose: 3600, invisible: 3400 };
+  /* tricks that bring props of their own (trickFx) */
+  const PROP_TRICKS = ['boo', 'ants', 'treepose', 'invisible'];
   const tmpC = T ? new T.Color() : null;
   const ease2 = (q) => q * q * (3 - 2 * q);
   function pose(v, now) {
@@ -7385,7 +7689,8 @@ const Buddy3D = (() => {
     if (P.trick && mood === 'cheer' && !v.trickT && now - (v.lastAuto || v.t0) > 3000) { v.trickT = now; v.lastAuto = now; }
     let bx = 0, bz = 0, pitch = 0, startle = 0;
     const tk = v.trickT && P.trick ? (now - v.trickT) / (TRICK_MS[P.trick] || 1000) : -1;
-    const FX = trickFx(v, tk > 0 && tk < 1 && (P.trick === 'boo' || P.trick === 'ants') ? P.trick : '');
+    const FX = trickFx(v, tk > 0 && tk < 1 && PROP_TRICKS.indexOf(P.trick) >= 0 ? P.trick : '');
+    let zen = false, ghost = 0;
     if (v.trickT && P.trick) {
       const dur = TRICK_MS[P.trick] || 1000, k = (now - v.trickT) / dur;
       if (k >= 1) { v.trickT = 0; v.lastAuto = now; }
@@ -7444,6 +7749,69 @@ const Buddy3D = (() => {
             b.visible = e > 0 && out < 1; b.scale.set(1.05 * pop, 0.69 * pop, 1); b.material.opacity = 1 - out;
           }
         }
+        /* over onto its head like the handstand, then three hops upside down (each a little higher, with a
+           squash on landing that keeps the head on the ground), and back round onto its feet */
+        else if (P.trick === 'handjump') {
+          const cy = Math.max(1.22, Math.min(1.6, (P.top || 2.5) / 2 + 0.02));
+          let th;
+          if (k < 0.18) th = ease(k / 0.18) * Math.PI;
+          else if (k < 0.82) th = Math.PI;
+          else th = Math.PI + ease((k - 0.82) / 0.18) * Math.PI;
+          roll = th; bx = cy * Math.sin(th); y = cy - cy * Math.cos(th);
+          if (k < 0.18) y += 0.3 * Math.sin((Math.PI * k) / 0.18); else if (k > 0.82) y += 0.3 * Math.sin((Math.PI * (k - 0.82)) / 0.18);
+          if (k >= 0.18 && k <= 0.82) {
+            const q = ((k - 0.18) / 0.64) * 3, n = Math.min(2, Math.floor(q)), f = q - Math.floor(q);
+            const hop = f < 0.72 ? Math.sin((Math.PI * f) / 0.72) : 0, land = f >= 0.72 ? Math.sin((Math.PI * (f - 0.72)) / 0.28) : 0;
+            sy = 1 - 0.11 * land + 0.04 * hop; sx = 1 + 0.07 * land - 0.02 * hop;
+            y += [0.32, 0.4, 0.48][n] * hop - (1 - sy) * 2 * cy;
+            roll += 0.05 * Math.sin(q * Math.PI * 2);
+          }
+        }
+        /* tuck into a ball and roll over once to the side, pop up, roll back, pop up */
+        else if (P.trick === 'tumble') {
+          const cy = Math.max(1.0, Math.min(1.5, (P.top || 2.5) / 2)), D = 0.5;
+          if (k < 0.08) { const e = Math.sin((Math.PI * k) / 0.08); sy = 1 - 0.12 * e; sx = 1 + 0.07 * e; }
+          else if (k < 0.46 || (k >= 0.54 && k < 0.92)) {
+            const first = k < 0.46, q = first ? (k - 0.08) / 0.38 : (k - 0.54) / 0.38, e = ease(q);
+            const s = 1 - 0.16 * Math.sin(Math.PI * q), c = cy * s, th = (first ? -1 : 1) * e * Math.PI * 2, xc = first ? D * e : D * (1 - e);
+            sx = sy = s; roll = th; bx = xc + c * Math.sin(th); y = c - c * Math.cos(th) + 0.12 * Math.sin(Math.PI * q);
+          } else {
+            const f = k < 0.54 ? (k - 0.46) / 0.08 : (k - 0.92) / 0.08, e = Math.sin(Math.PI * f);
+            bx = k < 0.54 ? D : 0; y = 0.22 * e; sy = 1 + 0.05 * e; sx = 1 - 0.03 * e;
+          }
+        }
+        /* yoga tree: a calm breath with eyes closed, over into a handstand, and a little leafy tree grows from its
+           feet and sways in the breeze; then the tree shrinks away and it comes back down */
+        else if (P.trick === 'treepose') {
+          const cy = Math.max(1.22, Math.min(1.6, (P.top || 2.5) / 2 + 0.02));
+          zen = k > 0.05 && k < 0.88;
+          if (k < 0.14) { const b = Math.sin((Math.PI * k) / 0.14); sy = 1 + 0.06 * b; sx = 1 - 0.03 * b; y = 0.05 * b; }
+          else {
+            /* a little smaller while it holds the pose, turning about its own middle, so the tree on its
+               feet still fits in the picture with its head on the ground */
+            const s = 1 - 0.15 * ease(Math.min(1, Math.max(0, (k - 0.26) / 0.08))) * (1 - ease(Math.min(1, Math.max(0, (k - 0.8) / 0.06)))), c = cy * s;
+            let th;
+            if (k < 0.3) th = ease((k - 0.14) / 0.16) * Math.PI;
+            else if (k < 0.84) th = Math.PI + 0.07 * Math.sin(((k - 0.3) / 0.54) * Math.PI * 3);
+            else th = Math.PI + ease((k - 0.84) / 0.16) * Math.PI;
+            sx = sy = s; roll = th; bx = c * Math.sin(th); y = c - c * Math.cos(th);
+            if (k < 0.3) y += 0.3 * Math.sin((Math.PI * (k - 0.14)) / 0.16); else if (k > 0.84) y += 0.3 * Math.sin((Math.PI * (k - 0.84)) / 0.16);
+          }
+          if (FX && FX.inner) {
+            const grow = k < 0.3 ? 0 : k < 0.44 ? ease((k - 0.3) / 0.14) : k < 0.78 ? 1 : k < 0.84 ? 1 - ease((k - 0.78) / 0.06) : 0;
+            FX.inner.scale.setScalar(Math.max(0.001, grow * (1 + 0.05 * Math.sin(Math.PI * Math.min(1, Math.max(0, (k - 0.3) / 0.14)))))); FX.inner.rotation.z = 0.07 * Math.sin(now / 430);
+          }
+        }
+        /* be invisible: shimmer, fade to a see-through outline, sneak left and right on tiptoe, then fade back
+           and pop; FX.fade does the fading (materials and the outline glow) */
+        else if (P.trick === 'invisible') {
+          const out = Math.min(1, Math.max(0, (k - 0.08) / 0.18)), back = Math.min(1, Math.max(0, (k - 0.74) / 0.16));
+          ghost = ease(out) * (1 - ease(back));
+          if (k < 0.08) { const e = Math.sin((Math.PI * k) / 0.08); sy = 1 + 0.05 * e; sx = 1 - 0.03 * e; }
+          if (k > 0.26 && k < 0.74) { const q = (k - 0.26) / 0.48; bx = 0.38 * Math.sin(q * Math.PI * 2); y = 0.05 * Math.abs(Math.sin(q * Math.PI * 6)); roll = 0.05 * Math.sin(q * Math.PI * 6); yaw += 0.35 * Math.cos(q * Math.PI * 2); }
+          if (k > 0.9) { const e = Math.sin((Math.PI * (k - 0.9)) / 0.1); sy = 1 + 0.08 * e; sx = 1 + 0.08 * e; y = 0.12 * e; }
+          if (FX && FX.fade) FX.fade(ghost, k);
+        }
         /* march in place while the ants march in one by one, then boom, boom, boom */
         else if (P.trick === 'ants') {
           const ms = k * 4000, s = Math.sin((Math.PI * ms) / 300);
@@ -7491,7 +7859,7 @@ const Buddy3D = (() => {
     P.body.position.set(bx, y, bz); P.body.scale.set(sx, sy, sx); P.body.rotation.set(pitch + lean, yaw - 0.14, roll);
     if (P.fx) P.fx.forEach((fn) => fn(t, mood === 'still' || !v.live));
     const bt = (t + v.blink) % 4.4, blink = mood === 'still' || !v.live ? 1 : bt < 0.16 ? Math.max(0.08, Math.abs(Math.cos((bt / 0.16) * Math.PI))) : 1;
-    P.eyes.forEach((e) => { e.scale.y = blink; });
+    P.eyes.forEach((e) => { e.scale.y = zen ? 0.12 : blink; });
     if (P.antennae) P.antennae.forEach((a, i) => { a.rotation.z = (i ? -1 : 1) * 0.07 * Math.sin(t * 3.1 + i * 1.3) * (mood === 'still' ? 0 : 1); });
     if (P.wings) P.wings.forEach((w, i) => { w.rotation.y = w.userData.baseY + (i ? -1 : 1) * (mood === 'cheer' ? 0.42 : P.bigWings ? 0.32 : 0.12) * Math.sin(t * (mood === 'cheer' ? 15 : P.bigWings ? 4.2 : 3)) * (mood === 'still' ? 0 : 1); });
     if (P.tail) P.tail.rotation.y = mood === 'still' ? 0 : 0.1 * Math.sin(t * 2.2);
@@ -7516,7 +7884,7 @@ const Buddy3D = (() => {
     P.flap.forEach((w, i) => { w.rotation.y = w.userData.baseY + (i ? -1 : 1) * (mood === 'still' ? 0 : P.buzz ? 0.22 * Math.sin(t * 38 + i) : (mood === 'cheer' ? 0.35 : 0.16) * Math.sin(t * (mood === 'cheer' ? 9 : 3.2))); });
     if (P.cape) P.cape.rotation.x = -0.06 - (mood === 'still' ? 0 : 0.05 * Math.sin(t * 1.9)) - (mood === 'cheer' ? 0.12 * Math.max(0, Math.sin(t * 6.6)) : 0);
     if (P.sparkles) P.sparkles.forEach((s, i) => { const k = 0.5 + 0.5 * Math.sin(t * 2.6 + i * 2.1); s.scale.setScalar(0.1 + 0.2 * k); s.material.opacity = 0.35 + 0.65 * k; });
-    P.shadow.material.opacity = Math.max(0.2, 1 - y * 1.5);
+    P.shadow.material.opacity = Math.max(0.2, 1 - y * 1.5) * (1 - 0.6 * ghost);
     if (!v.dragging && now - v.lastTouch > 1400 && v.spinVel === 0 && v.spin !== 0) {
       const target = Math.round(v.spin / (Math.PI * 2)) * Math.PI * 2;
       v.spin += (target - v.spin) * 0.06; if (Math.abs(target - v.spin) < 0.002) v.spin = 0;
@@ -7599,8 +7967,11 @@ const Buddy3D = (() => {
     if (it.slot === 'paint' && id === 'whitegold') {
       obj = G(null, null, null, M(sph(0.5, 48, 32), mat.vinyl(SOLID_PAINT.whitegold, { roughness: 0.3, clearcoat: 0.8 })), M(sph(1, 40, 30), goldMat(), [0, -0.08, 0.36], null, [0.27, 0.3, 0.18]));
       turn = 0; tilt = 0.12;
+    } else if (it.slot === 'paint' && id === 'firepaint') {
+      obj = G(null, null, null, M(sph(0.5, 48, 32), paintMat(id, PAINT_BASE.firepaint, 'swatch', { roughness: 0.25, clearcoat: 0.8 })), M(sph(1, 40, 30), mat.vinyl('#2F7BEA', { roughness: 0.42, clearcoat: 0.4 }), [0, -0.08, 0.36], null, [0.27, 0.3, 0.18]));
+      turn = 0; tilt = 0.12;
     } else if (it.slot === 'paint') { obj = M(sph(0.5, 48, 32), paintMat(id, color, 'swatch', { roughness: 0.25, clearcoat: 0.8 })); turn = 0.3; tilt = 0.25; }
-    else if (it.slot === 'treat') { obj = TREAT[id](); turn = id === 'melon' || id === 'watermelon' ? 0.25 : 0.5; tilt = id === 'pizza' ? -0.65 : 0.3; }
+    else if (it.slot === 'treat') { obj = TREAT[id](); turn = id === 'melon' || id === 'watermelon' ? 0.25 : id === 'cheesepuffs' ? 0.3 : 0.5; tilt = id === 'pizza' ? -0.65 : id === 'cheesepuffs' ? 0.22 : 0.3; }
     else if (it.slot === 'head') obj = HAT[id]();
     else if (it.slot === 'eyes') obj = EYES[id](0.21);
     else if (it.slot === 'neck') obj = NECK[id](0.28);
@@ -11874,7 +12245,7 @@ function buyNow(id) {
 function playFlatTrick(svgEl, trick) {
   const cls = 'do-' + (trick || 'hop');
   svgEl.classList.remove(cls); void svgEl.getBoundingClientRect(); svgEl.classList.add(cls);
-  setTimeout(() => svgEl.classList.remove(cls), { freeze: 2100, handstand: 2400, boo: 3000, ants: 4100 }[trick] || 1400);
+  setTimeout(() => svgEl.classList.remove(cls), { freeze: 2100, handstand: 2400, boo: 3000, ants: 4100, handjump: 2900, tumble: 2500, treepose: 3700, invisible: 3500 }[trick] || 1400);
 }
 function confirmBuy() {
   const id = S.overlay && S.overlay.id, l = Store.learner(S.shopKid);
