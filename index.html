@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261031150721";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261105192331";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -10551,16 +10551,22 @@ const GRADES = [['p3', 'Preschool (age 3)', -2], ['pk', 'Pre-K (age 4)', -1], ['
 const GRADE_NUM = Object.fromEntries(GRADES.map((g) => [g[0], g[2]]));
 const GRADE_NAME = Object.fromEntries(GRADES.map((g) => [g[0], g[1]]));
 /* The level a child would have finished by the end of each school grade (index into each subject's
-   levels), mapped from the US Common Core standards: math K.CC/K.OA (count to 100, add within 10),
-   1.OA.C.6 (add and subtract within 20), 2.NBT.B.5-7 (within 100 and 1000), 3.OA.C.7 (times and
-   division facts), 4.NBT.B.5-6; reading RF.K.2-3 (rhymes, letter sounds, CVC and sight words),
-   RF.1.3-1.4 (digraphs, magic e, vowel teams, reading with understanding), L.2.1 and L.2.4a (plurals, past
-   tense, pronouns, sentences, context clues), RI.3.2 (main idea) and RL.2.1/RL.3.1; time 1.MD.B.3, 2.MD.C.7,
-   3.MD.A.1. Kumon does not publish a level-to-grade chart, so this is not Kumon's KIS line. */
+   levels), mapped from the US Common Core standards. Math: kindergarten ends at counting to 100
+   (K.CC.1). The timed adding sheets after it drill facts within 10 and 20 to fluency and add to
+   numbers past 10, which is first grade (1.OA.C.6, 1.NBT.C.4; kindergarten asks for fluency within 5
+   only, K.OA.A.5), so first grade runs from Numbers to 120 (1.NBT.A.1) to Taking away review (JB,
+   Nov 5, 2026; until then kindergarten ran to Adding 1 to 5). Then 2.NBT.B.5-7 (within 100 and 1000),
+   3.OA.C.7 (times and division facts), 4.NBT.B.5-6. Reading RF.K.2-3 (rhymes, letter sounds, CVC and
+   sight words), RF.1.3-1.4 (digraphs, magic e, vowel teams, reading with understanding), L.2.1 and
+   L.2.4a (plurals, past tense, pronouns, sentences, context clues), RI.3.2 (main idea) and
+   RL.2.1/RL.3.1. Time: telling time in hours and half hours is first grade (1.MD.B.3), so kindergarten
+   ends at the getting-ready levels (JB, Nov 5, 2026; until then it ran to O'clock: read the clock),
+   then 2.MD.C.7 and 3.MD.A.1. Kumon does not publish a level-to-grade chart, so this is not Kumon's
+   KIS line. */
 const GRADE_END_IDS = {
-  math: { '-3': 'c5', '-2': 'c10', '-1': 'c20', 0: 'a15', 1: 'subRev', 2: 'v33s', 3: 'dfact', 4: 'd2', 5: 'd2' },
+  math: { '-3': 'c5', '-2': 'c10', '-1': 'c20', 0: 'm100', 1: 'subRev', 2: 'v33s', 3: 'dfact', 4: 'd2', 5: 'd2' },
   reading: { '-3': 'rpic', '-2': 'rpic', '-1': 'lmatch', 0: 'sight1', 1: 'seq', 2: 'context', 3: 'why', 4: 'why', 5: 'why' },
-  clock: { '-3': 'cDay', '-2': 'cDay', '-1': 'cNum', 0: 'hRead', 1: 'hhSet', 2: 'ampm', 3: 'interval', 4: 'interval', 5: 'interval' }
+  clock: { '-3': 'cDay', '-2': 'cDay', '-1': 'cNum', 0: 'cHour', 1: 'hhSet', 2: 'ampm', 3: 'interval', 4: 'interval', 5: 'interval' }
 };
 /* Level ids, turned into positions on each subject's ladder once the ladders exist. */
 const GRADE_END = {};
