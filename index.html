@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261105192331";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261106164907";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -976,6 +976,19 @@ details.more[open] > summary h3::after { content: " −"; }
 /* be invisible, flat: fades to a pale see-through ghost, sneaks left and right, then pops back */
 .buddy-svg.do-invisible .buddy-anim { animation: trInvisible 3.4s ease-in-out; transform-origin: 100px 206px; }
 @keyframes trInvisible { 0%, 100% { opacity: 1; filter: brightness(1) saturate(1); transform: translateX(0) scale(1); } 8% { opacity: 1; filter: brightness(1.4) saturate(1); transform: translateX(0) scale(1.04); } 26%, 74% { opacity: 0.2; filter: brightness(1.7) saturate(0.35); transform: translateX(0) scale(1); } 40% { opacity: 0.2; filter: brightness(1.7) saturate(0.35); transform: translateX(-16px) scale(1); } 58% { opacity: 0.2; filter: brightness(1.7) saturate(0.35); transform: translateX(16px) scale(1); } 90% { opacity: 1; filter: brightness(1.3) saturate(1); transform: translateX(0) scale(1.08); } }
+/* Andi's November 6 tricks, flat. Monster grumble: crouch and shiver, then grow big and shake (the roar) */
+.buddy-svg.do-grumble .buddy-anim { animation: trGrumble 3.3s linear; transform-origin: 100px 206px; }
+@keyframes trGrumble { 0%, 100% { transform: translate(0, 0) rotate(0) scale(1, 1); } 4% { transform: translate(0, 0) rotate(0) scale(1.06, 0.9); } 7%, 13%, 25%, 31% { transform: translate(-3px, 0) rotate(-2deg) scale(1.06, 0.9); } 10%, 16%, 28%, 34% { transform: translate(3px, 0) rotate(2deg) scale(1.06, 0.9); } 20%, 44% { transform: translate(0, 0) rotate(0) scale(1.06, 0.9); } 49% { transform: translate(0, -8px) rotate(0) scale(1.2, 1.28); } 53%, 61%, 69%, 77% { transform: translate(-3px, -8px) rotate(-2deg) scale(1.22, 1.28); } 57%, 65%, 73%, 81% { transform: translate(3px, -8px) rotate(2deg) scale(1.2, 1.3); } 86% { transform: translate(0, -4px) rotate(0) scale(1.1, 1.12); } }
+/* horse gallop: bob and rock in a gallop across and back, then rear up and come down with a stomp */
+.buddy-svg.do-gallop .buddy-anim { animation: trGallop 3.6s linear; transform-origin: 100px 206px; }
+@keyframes trGallop { 0%, 100% { transform: translate(0, 0) rotate(0) scale(1, 1); } 6% { transform: translate(8px, -16px) rotate(-6deg) scale(1, 1); } 12% { transform: translate(16px, 0) rotate(5deg) scale(1.05, 0.93); } 19% { transform: translate(22px, -16px) rotate(-6deg) scale(1, 1); } 25% { transform: translate(16px, 0) rotate(5deg) scale(1.05, 0.93); } 31% { transform: translate(6px, -16px) rotate(-6deg) scale(1, 1); } 37% { transform: translate(-8px, 0) rotate(5deg) scale(1.05, 0.93); } 44% { transform: translate(-20px, -16px) rotate(-6deg) scale(1, 1); } 50% { transform: translate(-22px, 0) rotate(5deg) scale(1.05, 0.93); } 56% { transform: translate(-14px, -16px) rotate(-6deg) scale(1, 1); } 62% { transform: translate(-6px, 0) rotate(5deg) scale(1.05, 0.93); } 68% { transform: translate(0, 0) rotate(0) scale(1, 1); } 76%, 88% { transform: translate(-4px, -14px) rotate(-14deg) scale(1, 1.04); } 82% { transform: translate(-4px, -16px) rotate(-17deg) scale(1, 1.04); } 95% { transform: translate(0, 0) rotate(0) scale(1.07, 0.9); } }
+/* What? Airplane: a surprised hop, wings and a tail appear, it takes off and flies out of the picture, comes back
+   in from the other side to land, and the wings go away */
+.buddy-svg.do-airplane .buddy-anim { animation: trAirplane 5.6s ease-in-out; transform-origin: 100px 206px; }
+@keyframes trAirplane { 0%, 100% { transform: translate(0, 0) rotate(0) scale(1, 1); opacity: 1; } 5% { transform: translate(0, -18px) rotate(-10deg) scale(1, 1); opacity: 1; } 9%, 22% { transform: translate(0, 0) rotate(0) scale(1, 1); opacity: 1; } 30% { transform: translate(40px, -24px) rotate(-12deg) scale(0.95, 0.95); opacity: 1; } 44% { transform: translate(260px, -240px) rotate(-18deg) scale(0.6, 0.6); opacity: 1; } 45% { transform: translate(260px, -240px) rotate(-18deg) scale(0.6, 0.6); opacity: 0; } 61% { transform: translate(-280px, -170px) rotate(10deg) scale(0.7, 0.7); opacity: 0; } 62% { transform: translate(-280px, -170px) rotate(10deg) scale(0.7, 0.7); opacity: 1; } 84% { transform: translate(0, -6px) rotate(3deg) scale(1, 1); opacity: 1; } 88% { transform: translate(0, 0) rotate(0) scale(1, 1); opacity: 1; } }
+.b-plane { opacity: 0; transform-origin: 100px 122px; transform: scale(0, 1); }
+.buddy-svg.do-airplane .b-plane { animation: trPlaneParts 5.6s ease-in-out; }
+@keyframes trPlaneParts { 0%, 8% { opacity: 0; transform: scale(0, 1); } 13%, 88% { opacity: 1; transform: scale(1, 1); } 93%, 100% { opacity: 0; transform: scale(0, 1); } }
 /* light-up glasses, flat: the frames change color */
 .i-neon { animation: neonCycle 2.6s linear infinite; }
 .i-neon-glow { animation: neonCycle 2.6s linear infinite; }
@@ -4688,6 +4701,10 @@ const Buddy = (() => {
     { id: 'handjump', slot: 'trick', name: 'Handstand jump', price: 13 },
     { id: 'treepose', slot: 'trick', name: 'Yoga tree handstand', price: 14 },
     { id: 'invisible', slot: 'trick', name: 'Be invisible', price: 15 },
+    /* Andi's November 6 tricks */
+    { id: 'grumble', slot: 'trick', name: 'Monster grumble', price: 12 },
+    { id: 'gallop', slot: 'trick', name: 'Horse gallop', price: 12 },
+    { id: 'airplane', slot: 'trick', name: 'What? Airplane', price: 15 },
     /* Treats are eaten, so they can be bought again and again. Each one helps the buddy grow
        (grow points count toward Big and Hero like stars); fruit helps twice as much. */
     { id: 'apple', slot: 'treat', name: 'Apple', price: 1, use: true, grow: 2, fruit: true },
@@ -4898,6 +4915,12 @@ const Buddy = (() => {
     '<circle cx="' + (c[0] - r * 0.42) + '" cy="' + (c[1] + r * 0.76) + '" r="3" fill="#FF4D4D"/><circle cx="' + (c[0] + r * 0.42) + '" cy="' + (c[1] + r * 0.76) + '" r="3" fill="#34D27B"/>';
   /* The little tree that grows from the feet in the yoga tree handstand (hidden until the trick plays). */
   const TREE_FLAT = '<g class="b-tree"><path d="M100 204 V222" stroke="#8B5A3C" stroke-width="7" stroke-linecap="round"/><circle cx="100" cy="236" r="15" fill="#2FB574"/><circle cx="87" cy="228" r="10" fill="#34D27B"/><circle cx="113" cy="228" r="10" fill="#34D27B"/><circle cx="100" cy="246" r="9" fill="#3FCB6B"/><circle cx="94" cy="232" r="3" fill="#FF8FB1"/><circle cx="108" cy="240" r="3" fill="#FF8FB1"/></g>';
+  /* The wings and tail a flat buddy grows in the What? Airplane trick (hidden until it plays), drawn behind it. */
+  const PLANE_FLAT = '<g class="b-plane"><path d="M100 70 L92 22 Q100 14 108 22 Z" fill="var(--bc)" stroke="#221D3E" stroke-opacity=".3" stroke-width="2"/>' +
+    '<rect x="72" y="58" width="56" height="10" rx="5" fill="var(--bc)" stroke="#221D3E" stroke-opacity=".3" stroke-width="2"/>' +
+    '<rect x="4" y="112" width="192" height="20" rx="10" fill="var(--bc)" stroke="#221D3E" stroke-opacity=".3" stroke-width="2"/>' +
+    '<rect x="12" y="116" width="16" height="12" rx="5" fill="#fff" opacity=".85"/><rect x="172" y="116" width="16" height="12" rx="5" fill="#fff" opacity=".85"/>' +
+    '<circle cx="46" cy="136" r="9" fill="#8A90A6"/><circle cx="154" cy="136" r="9" fill="#8A90A6"/><circle cx="46" cy="136" r="3.5" fill="#FFC531"/><circle cx="154" cy="136" r="3.5" fill="#FFC531"/></g>';
   const EYES = {
     round: (s) => '<circle class="i-lens" cx="' + (-s / 2) + '" cy="0" r="14"/><circle class="i-lens" cx="' + (s / 2) + '" cy="0" r="14"/><path class="i-frame" d="M' + (-s / 2 + 14) + ' 0 L' + (s / 2 - 14) + ' 0"/>',
     shades: (s) => '<rect class="i-dark" x="' + (-s / 2 - 16) + '" y="-11" width="32" height="22" rx="8"/><rect class="i-dark" x="' + (s / 2 - 16) + '" y="-11" width="32" height="22" rx="8"/><path class="i-frame" d="M' + (-s / 2 + 16) + ' -4 L' + (s / 2 - 16) + ' -4"/><path class="i-shine" d="M' + (-s / 2 - 8) + ' -5 l6 -3 M' + (s / 2 - 8) + ' -5 l6 -3"/>',
@@ -5032,6 +5055,28 @@ const Buddy = (() => {
     invisible: '<path d="M-24 34 C-36 10 -32 -24 0 -28 C32 -24 36 10 24 34 Z" fill="#BFF3FF" fill-opacity=".16" stroke="#7FE7FF" stroke-width="3" stroke-dasharray="7 5" stroke-linecap="round"/>' +
       '<circle cx="-9" cy="-4" r="5" fill="none" stroke="#7FE7FF" stroke-width="2" stroke-opacity=".8"/><circle cx="9" cy="-4" r="5" fill="none" stroke="#7FE7FF" stroke-width="2" stroke-opacity=".8"/>' +
       '<path d="M32 -34 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3 Z M-34 14 l2.4 5.6 5.6 2.4 -5.6 2.4 -2.4 5.6 -2.4 -5.6 -5.6 -2.4 5.6 -2.4 Z M28 22 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2 Z" fill="#FFE48A"/>',
+    /* Andi's November 6 tricks: a roaring monster face, a galloping horse's head, a little plane looping away */
+    grumble: '<path d="M-21 -22 L-30 -43 L-11 -28 Z M21 -22 L30 -43 L11 -28 Z" fill="#FFF1D6" stroke="#C9B48A" stroke-width="1.5" stroke-linejoin="round"/>' +
+      '<path d="M-33 -6 C-35 -29 -17 -36 0 -36 C17 -36 35 -29 33 -6 C35 15 22 35 0 35 C-22 35 -35 15 -33 -6 Z" fill="#34D27B"/>' +
+      '<path d="M-23 -21 L-8 -14 M23 -21 L8 -14" stroke="#1E7A48" stroke-width="4.5" stroke-linecap="round"/>' +
+      '<circle cx="-12" cy="-7" r="6.5" fill="#fff"/><circle cx="12" cy="-7" r="6.5" fill="#fff"/><circle cx="-11" cy="-6" r="3.2" fill="#221D3E"/><circle cx="11" cy="-6" r="3.2" fill="#221D3E"/>' +
+      '<path d="M-18 6 Q0 1 18 6 Q17 30 0 30 Q-17 30 -18 6 Z" fill="#7A1F2B"/><ellipse cx="0" cy="24" rx="8.5" ry="4.5" fill="#E8607A"/>' +
+      '<path d="M-15 6.4 L-11 14 L-7 5.2 Z M7 5.2 L11 14 L15 6.4 Z M-7 29.4 L-4 23 L-1 29.9 Z M1 29.9 L4 23 L7 29.4 Z" fill="#fff"/>' +
+      '<path d="M39 -10 Q46 4 39 18 M45 -17 Q55 4 45 25" stroke="#FFC531" stroke-width="3.6" fill="none" stroke-linecap="round"/>',
+    gallop: '<path d="M-47 -12 h10 M-49 0 h12 M-47 12 h10" stroke="#9FC6FF" stroke-width="3" stroke-linecap="round"/>' +
+      '<path d="M-26 40 C-28 12 -22 -12 -6 -26 C2 -33 10 -34 16 -30 C26 -24 36 -12 40 -2 C43 6 38 13 30 12 C22 11 14 6 8 4 C4 14 4 28 6 40 Z" fill="#B87333"/>' +
+      '<path d="M24 -6 C32 -8 40 -4 40 2 C40 8 36 12 30 12 C26 10 22 6 24 -6 Z" fill="#D9A06A"/>' +
+      '<path d="M-6 -26 C-16 -20 -26 -6 -30 10 C-32 22 -30 34 -28 40 L-21 40 C-23 26 -21 12 -15 0 C-11 -8 -5 -16 3 -22 Z" fill="#5A3A22"/>' +
+      '<path d="M1 -29 L5 -44 L12 -31 Z" fill="#B87333" stroke="#8C5523" stroke-width="1.5" stroke-linejoin="round"/>' +
+      '<circle cx="14" cy="-16" r="3.8" fill="#221D3E"/><circle cx="15.2" cy="-17.2" r="1.3" fill="#fff"/><ellipse cx="34" cy="2" rx="2.6" ry="1.9" fill="#5A3A22"/><path d="M27 9 Q32 10.5 37 8" stroke="#5A3A22" stroke-width="1.6" fill="none" stroke-linecap="round"/>',
+    airplane: '<path d="M-44 34 C-26 40 -18 22 -28 14 C-38 6 -48 22 -36 28 C-28 32 -20 26 -14 20" stroke="#C9CDEB" stroke-width="3.2" fill="none" stroke-dasharray="4 4" stroke-linecap="round"/>' +
+      '<g transform="translate(8 -4) rotate(-16)"><path d="M-30 -2 L-35 -24 L-25 -24 L-15 -4 Z" fill="#B42E27"/>' +
+      '<path d="M-33 0 C-33 -9 -20 -11 0 -11 C18 -11 30 -9 35 0 C30 9 18 11 0 11 C-20 11 -33 9 -33 0 Z" fill="#E8453C"/>' +
+      '<path d="M-8 -12 C-4 -21 10 -21 14 -11 Z" fill="#9FE3FF" stroke="#7CC6E8" stroke-width="1.2"/>' +
+      '<path d="M-6 3 L9 3 L-1 25 L-13 25 Z" fill="#B42E27"/><path d="M-31 2 L-21 2 L-27 11 L-33 11 Z" fill="#B42E27"/>' +
+      '<circle cx="22" cy="-3" r="5" fill="#fff"/><circle cx="23.5" cy="-3" r="2.5" fill="#221D3E"/>' +
+      '<ellipse cx="36" cy="0" rx="3.2" ry="4.2" fill="#FFC531"/><rect x="37" y="-16" width="3" height="32" rx="1.5" fill="#8A90A6"/></g>' +
+      '<path d="M34 -36 h9 M36 -27 h11" stroke="#9FC6FF" stroke-width="3" stroke-linecap="round"/>',
     /* an original snack bag of cheese puffs: a blue bag, open at the top, a yellow burst with a cheese wedge, puffs peeking out */
     cheesepuffs: '<g transform="rotate(-8)">' + [[-12, -36, -22], [0, -40, 4], [12, -35, 24]].map((q) => '<rect x="' + (q[0] - 5) + '" y="' + q[1] + '" width="10" height="22" rx="5" fill="#FF9E2C" stroke="#E8781A" stroke-width="1.4" transform="rotate(' + q[2] + ' ' + q[0] + ' ' + (q[1] + 11) + ')"/>').join('') +
       '<path d="M-27 -24 Q-14 -30 0 -25 Q14 -30 27 -24 Q33 6 28 36 Q0 42 -28 36 Q-33 6 -27 -24 Z" fill="#2E86DE"/><path d="M-27 -24 Q-14 -30 0 -25 Q14 -30 27 -24 Q14 -20 0 -21 Q-14 -20 -27 -24 Z" fill="#1F5FA8"/>' +
@@ -5126,6 +5171,7 @@ const Buddy = (() => {
     out += '<g class="buddy-body" style="transform-origin:100px 206px;transform:' + (fly ? 'translateY(-12px) ' : '') + 'scale(' + (fly ? stage.scale * 0.94 : stage.scale) + ')"><g class="buddy-anim">';
     if (fly) out += flatFly(type, fc);
     if (w.back && BACK[w.back] && !A.backFront) out += at(A.back, BACK[w.back]);
+    if (trick === 'airplane') out += PLANE_FLAT;
     out += paint && !(pv && pv.def) ? BODY[type].replace(/class="b-body"/g, 'class="b-body" style="fill:url(#' + pid + ')"') : BODY[type];
     if (w.back && BACK[w.back] && A.backFront) out += at(A.back, '<g transform="scale(0.72)">' + BACK[w.back] + '</g>');
     if (w.neck && NECK[w.neck]) out += at(A.neck, NECK[w.neck]);
@@ -6655,6 +6701,79 @@ const Buddy3D = (() => {
     x.font = '400 92px "Lilita One", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
     x.lineWidth = 10; x.strokeStyle = '#221D3E'; x.strokeText('BOO!', 128, 70); x.fillStyle = '#FF8A3D'; x.fillText('BOO!', 128, 70);
   });
+  /* A comic speech bubble with one word (ROAR!, NEIGH!), the word shrunk to fit; same bubble as BOO!. */
+  const wordTex = (word, fill) => canvasTex('word:' + word + fill, 256, 168, (x) => {
+    x.lineJoin = 'round'; x.fillStyle = '#FFFFFF'; x.strokeStyle = '#221D3E'; x.lineWidth = 8;
+    roundRect(x, 10, 10, 236, 112, 50); x.fill(); x.stroke();
+    x.beginPath(); x.moveTo(58, 118); x.lineTo(34, 160); x.lineTo(98, 120); x.closePath(); x.fill(); x.stroke();
+    x.fillRect(56, 104, 46, 14);
+    const font = (s) => '400 ' + s + 'px "Lilita One", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif';
+    let size = 92; x.font = font(size);
+    while (size > 40 && x.measureText(word).width > 200) { size -= 4; x.font = font(size); }
+    x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.lineWidth = 10; x.strokeStyle = '#221D3E'; x.strokeText(word, 128, 70); x.fillStyle = fill; x.fillText(word, 128, 70);
+  });
+  function wordBubble(word, fill, P) {
+    const b = new T.Sprite(new T.SpriteMaterial({ map: wordTex(word, fill), transparent: true, depthWrite: false, depthTest: false, toneMapped: false }));
+    b.position.set(Math.min(0.78, (P.box ? P.box.max.x : 0.8) * 0.5 + 0.3), Math.max(1.95, (P.top || 2.4) - 0.05), 0.55); b.visible = false; b.renderOrder = 20;
+    return b;
+  }
+  /* the bubble pops in at k0, wobbles, and fades out from k1 */
+  function popBubble(b, k, k0, k1) {
+    const e = k < k0 ? 0 : Math.min(1, (k - k0) / 0.05), out = k > k1 ? (k - k1) / 0.06 : 0;
+    const pop = Math.sin(e * Math.PI * 0.5) * (1 + 0.25 * Math.sin(Math.PI * e));
+    b.visible = e > 0 && out < 1; b.scale.set(1.05 * pop, 0.69 * pop, 1); b.material.opacity = Math.max(0, 1 - out);
+  }
+  /* a roar ring: a bright circle with a dark edge, so it shows on light and dark places */
+  const ringTex = () => canvasTex('roarring', 128, 128, (x, w) => {
+    const c = w / 2;
+    x.lineWidth = 13; x.strokeStyle = 'rgba(34,29,62,0.35)'; x.beginPath(); x.arc(c, c, c - 9, 0, Math.PI * 2); x.stroke();
+    x.lineWidth = 7; x.strokeStyle = 'rgba(255,255,255,0.95)'; x.beginPath(); x.arc(c, c, c - 9, 0, Math.PI * 2); x.stroke();
+  });
+  /* a soft round cloud of a few blobs: the poof, the plane's trail, the dust from galloping */
+  const puffTex = (key, rgb, edge) => canvasTex('puff:' + key, 128, 128, (x, w) => {
+    const c = w / 2;
+    [[0, 0, 0.4], [-0.21, 0.07, 0.28], [0.22, 0.05, 0.28], [0.03, -0.19, 0.28], [-0.1, 0.2, 0.24], [0.15, 0.2, 0.22]].forEach((b) => {
+      const X = c + b[0] * w, Y = c + b[1] * w, g = x.createRadialGradient(X, Y, 0, X, Y, b[2] * w);
+      g.addColorStop(0, 'rgba(' + rgb + ',0.95)'); g.addColorStop(0.72, 'rgba(' + rgb + ',0.8)'); g.addColorStop(1, 'rgba(' + (edge || rgb) + ',0)');
+      x.fillStyle = g; x.fillRect(0, 0, w, w);
+    });
+  });
+  /* The toy plane a buddy turns into, in its own color: eyes on the nose, a glass bubble on top, a spinning
+     propeller, round wings and tail, little wheels. Nose along +x, wheels on the ground (y = 0). */
+  const PLANE_S = 0.86;
+  /* whole-body paints give the plane their main color */
+  const PLANE_TINT = { gold: '#E9B730', galaxy: '#3046A8', whitegold: '#EEF0F5', sparkle: '', rainbow: '' };
+  function toyPlane(base) {
+    const skin = mat.vinyl(base, { roughness: 0.34, clearcoat: 0.8 }), deep = mat.vinyl(mix(base, '#12082e', 0.6), { roughness: 0.4, clearcoat: 0.6 });
+    const white = mat.vinyl('#FFFFFF', { roughness: 0.35, clearcoat: 0.6 }), dark = mat.satin('#2A2540', { roughness: 0.55 }), gold = mat.gloss('#FFC531', { roughness: 0.25 });
+    const air = G([0, 0.52, 0]);
+    const prof = [[0.001, -1.0], [0.08, -0.99], [0.15, -0.9], [0.23, -0.62], [0.32, -0.22], [0.36, 0.15], [0.355, 0.45], [0.3, 0.72], [0.2, 0.9], [0.08, 1.0], [0.001, 1.02]];
+    air.add(M(new T.LatheGeometry(prof.map((q) => new T.Vector2(q[0], q[1])), 48), skin, null, [0, 0, -Math.PI / 2]));
+    air.add(M(sph(1, 40, 24), skin, [0.08, -0.1, 0], null, [0.36, 0.055, 1.32]));
+    air.add(M(sph(1, 32, 20), white, [0.08, -0.08, 1.12], null, [0.2, 0.05, 0.16]));
+    air.add(M(sph(1, 32, 20), white, [0.08, -0.08, -1.12], null, [0.2, 0.05, 0.16]));
+    air.add(M(sph(1, 32, 20), skin, [-0.84, 0.03, 0], null, [0.17, 0.04, 0.5]));
+    air.add(M(sph(1, 32, 20), deep, [-0.8, 0.27, 0], null, [0.22, 0.34, 0.045]));
+    air.add(M(sph(1, 32, 20), mat.glass('#BFE9FF', { opacity: 0.45 }), [0.08, 0.27, 0], null, [0.34, 0.2, 0.2]));
+    [-1, 1].forEach((sz) => {
+      const tilt = G([0.62, 0.24, sz * 0.15], [0, 0, 0.42]), e = eye(0.115);
+      e.rotation.y = Math.PI / 2 - sz * 0.32; tilt.add(e); air.add(tilt);
+      air.add(M(new T.CylinderGeometry(0.022, 0.022, 0.3, 8), dark, [0.28, -0.4, sz * 0.27]));
+      air.add(M(new T.CylinderGeometry(0.13, 0.13, 0.08, 22), dark, [0.28, -0.4, sz * 0.3], [Math.PI / 2, 0, 0]));
+      air.add(M(new T.CylinderGeometry(0.06, 0.06, 0.09, 14), white, [0.28, -0.4, sz * 0.3], [Math.PI / 2, 0, 0]));
+    });
+    air.add(M(sph(0.05, 12, 8), dark, [-0.86, -0.2, 0]));
+    const prop = G([1.03, 0, 0]);
+    prop.add(M(sph(1, 24, 16), gold, [0.03, 0, 0], null, [0.13, 0.1, 0.1]));
+    prop.add(M(new T.BoxGeometry(0.03, 0.88, 0.1), mat.satin('#5B6178', { roughness: 0.45 }), [0.06, 0, 0]));
+    const blur = M(new T.CircleGeometry(0.46, 40), new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthWrite: false, side: T.DoubleSide, toneMapped: false }), [0.07, 0, 0], [0, Math.PI / 2, 0]);
+    prop.add(blur); air.add(prop);
+    const plane = G(null, null, PLANE_S, air);
+    plane.rotation.order = 'YZX';
+    plane.userData = { prop, blur };
+    return plane;
+  }
   function ant() {
     const g = new T.Group(), shell = mat.gloss('#4A2A1C', { roughness: 0.28 }), legM = mat.satin('#2E1A12', { roughness: 0.6 });
     g.add(M(sph(1, 18, 14), shell, [0.078, 0.082, 0], null, [0.048, 0.044, 0.044]));
@@ -6754,6 +6873,72 @@ const Buddy3D = (() => {
           sparks.forEach((s) => { if (s.parent) s.parent.remove(s); s.material.dispose(); });
         }
       };
+    } else if (kind === 'grumble') {
+      /* the ROAR! bubble and three roar rings that spread out from the mouth */
+      const bubble = wordBubble('ROAR!', '#34D27B', P), rings = [];
+      P.root.add(bubble);
+      for (let i = 0; i < 3; i++) { const r = new T.Sprite(new T.SpriteMaterial({ map: ringTex(), transparent: true, depthWrite: false, toneMapped: false })); r.visible = false; r.renderOrder = 19; P.root.add(r); rings.push(r); }
+      v.fx = { kind, bubble, rings, mouth: A.mouth, objs: [bubble].concat(rings) };
+    } else if (kind === 'gallop') {
+      /* the NEIGH! bubble and puffs of dust kicked up at each landing */
+      const bubble = wordBubble('NEIGH!', '#FF9F43', P), dust = [];
+      P.root.add(bubble);
+      for (let i = 0; i < 6; i++) { const d = new T.Sprite(new T.SpriteMaterial({ map: puffTex('dust', '214,190,152', '214,190,152'), transparent: true, depthWrite: false, toneMapped: false })); d.visible = false; d.renderOrder = 4; P.root.add(d); dust.push(d); }
+      v.fx = { kind, bubble, dust, objs: [bubble].concat(dust) };
+    } else if (kind === 'airplane') {
+      /* the toy plane, the two poofs and the trail; the plane's path is worked out in fly() */
+      const plane = toyPlane(PLANE_TINT[P.paint] || P.base || '#E8453C'), puffs = [], trail = [], rnd = seeded(7);
+      plane.visible = false; P.root.add(plane);
+      const cloud = () => new T.Sprite(new T.SpriteMaterial({ map: puffTex('cloud', '252,252,255', '226,230,245'), transparent: true, depthWrite: false, toneMapped: false }));
+      for (let i = 0; i < 10; i++) { const s = cloud(); s.userData.o = [(rnd() - 0.5) * 1.5, 0.2 + rnd() * 1.6, 0.25 + rnd() * 0.5, rnd()]; s.visible = false; s.renderOrder = 18; P.root.add(s); puffs.push(s); }
+      for (let i = 0; i < 16; i++) { const s = cloud(); s.visible = false; s.renderOrder = 5; P.root.add(s); trail.push(s); }
+      const sh = P.shadow, sh0 = { x: sh.position.x, z: sh.position.z, s: sh.scale.clone() }, cl = (q) => Math.max(0, Math.min(1, q)), es = (q) => q * q * (3 - 2 * q);
+      /* the flight, in the buddy's own space: taxi to the right, take off and climb away into the distance; far
+         away the other way; back in from the left, down to land where it started */
+      const out = (q) => [0.55 + 2.1 * q + 4.4 * q * q, 3.8 * Math.pow(q, 2.1), -6.5 * Math.pow(q, 2.5)];
+      const far = (q) => [6.5 - 14 * q, 3.4 + 0.3 * Math.sin(Math.PI * q), -14];
+      const back = (q) => { const r = 1 - q; return [-6.8 + 6.8 * (1 - r * r), 4.4 * Math.pow(r, 2.2), -5.5 * r * r]; };
+      const aim = (path, q) => { const a = path(q), b = path(Math.min(1, q + 0.01)), d = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], h = Math.hypot(d[0], d[2]); return { p: a, yaw: h + Math.abs(d[1]) < 1e-6 ? 0 : Math.atan2(-d[2], d[0]), pitch: Math.atan2(d[1], h || 1e-6) }; };
+      let propA = 0, last = 0;
+      const burst = (k, k0, at) => puffs.forEach((s) => {
+        const a = (k - k0) / 0.085, o = s.userData.o;
+        if (a <= 0 || a >= 1) return;
+        s.visible = true; s.position.set(at[0] + o[0] * (0.55 + 0.6 * a), at[1] + o[1] * 0.8, at[2] + o[2]);
+        s.scale.setScalar((0.5 + 0.75 * a) * (0.9 + 0.2 * o[3])); s.material.opacity = 1 - a * a;
+      });
+      v.fx = {
+        kind, plane, objs: [plane].concat(puffs, trail),
+        /* place everything for this moment of the trick (k from 0 to 1); returns how strong the shadow is */
+        fly(k, now) {
+          puffs.forEach((s) => { s.visible = false; }); trail.forEach((s) => { s.visible = false; });
+          if (k > 0.075 && k < 0.165) burst(k, 0.075, [0, 0, 0]);
+          if (k > 0.885 && k < 0.975) burst(k, 0.885, [0, 0, 0]);
+          let at = [0, 0, 0], yaw = -0.85, pitch = 0, bank = 0, s = 1, rev = 0, shadow = 1;
+          if (k < 0.095 || k > 0.925) { plane.visible = false; sh.position.x = sh0.x; sh.position.z = sh0.z; sh.scale.copy(sh0.s); return 1; }
+          if (k < 0.13) { const e = es(cl((k - 0.095) / 0.035)); s = e * (1 + 0.2 * Math.sin(Math.PI * e)); }
+          else if (k < 0.2) { rev = cl((k - 0.15) / 0.05) * 0.6; at = [0, 0.012 * Math.abs(Math.sin(now / 40)), 0]; }
+          else if (k < 0.3) { const q = (k - 0.2) / 0.1; rev = 0.6 + 0.4 * q; yaw = -0.85 + 0.85 * es(q); at = [0.55 * q * q, 0.01 * Math.abs(Math.sin(now / 35)), 0]; }
+          else if (k < 0.49) { const q = (k - 0.3) / 0.19, f = aim(out, q); rev = 1; at = f.p; yaw = f.yaw; pitch = f.pitch; bank = -0.3 * Math.sin(Math.PI * q); shadow = cl(1 - at[1] * 0.7); }
+          else if (k < 0.5) { plane.visible = false; return 0; }
+          else if (k < 0.615) { const q = (k - 0.5) / 0.115; rev = 1; at = far(q); yaw = Math.PI; bank = 0.25; shadow = 0; }
+          else if (k < 0.62) { plane.visible = false; return 0; }
+          else if (k < 0.84) { const q = (k - 0.62) / 0.22, f = aim(back, q); rev = 1; at = f.p; yaw = f.yaw; pitch = f.pitch * 0.8 + 0.12 * es(cl((q - 0.75) / 0.25)); bank = 0.28 * Math.sin(Math.PI * Math.min(1, q * 1.4)); shadow = cl(1 - at[1] * 0.7); }
+          else if (k < 0.88) { const q = (k - 0.84) / 0.04; rev = 1 - 0.5 * q; at = [0, 0.07 * Math.sin(Math.PI * q), 0]; pitch = 0.06 * Math.sin(Math.PI * q); }
+          else { const q = cl((k - 0.88) / 0.03); rev = 0.5 * (1 - q); yaw = -0.85 * es(q); if (k > 0.905) s = 1 - es(cl((k - 0.905) / 0.02)); }
+          plane.visible = s > 0.002;
+          plane.position.set(at[0], at[1], at[2]); plane.rotation.set(bank, yaw, pitch); plane.scale.setScalar(PLANE_S * Math.max(0.001, s));
+          const dt = last ? Math.min(0.1, (now - last) / 1000) : 0; last = now;
+          propA += rev * 55 * dt; plane.userData.prop.rotation.x = propA; plane.userData.blur.material.opacity = 0.28 * cl((rev - 0.35) / 0.65);
+          /* a trail of little clouds left behind while it climbs away and while it comes back */
+          const trailAt = (path, k0, k1, kk, n) => { for (let i = 0; i < n; i++) { const ki = k0 + ((k1 - k0) * i) / n, a = (kk - ki) / 0.1; if (a <= 0 || a >= 1) continue; const t = trail[i], f = aim(path, (ki - k0) / (k1 - k0)); t.visible = true; t.position.set(f.p[0] - 0.5 * Math.cos(f.yaw), f.p[1] + 0.32, f.p[2] + 0.5 * Math.sin(f.yaw)); t.scale.setScalar(0.14 + 0.3 * a); t.material.opacity = 0.75 * (1 - a); } };
+          if (k > 0.33 && k < 0.6) trailAt(out, 0.33, 0.49, k, 16);
+          if (k > 0.62 && k < 0.84) trailAt(back, 0.62, 0.76, k, 10);
+          /* the shadow follows the plane and fades as it climbs */
+          sh.position.x = at[0]; sh.position.z = at[2]; sh.scale.set(sh0.s.x * 0.8 * Math.max(0.3, 1 - at[1] * 0.25), sh0.s.y * 0.8, sh0.s.z);
+          return shadow;
+        },
+        cleanup() { sh.position.x = sh0.x; sh.position.z = sh0.z; sh.scale.copy(sh0.s); }
+      };
     } else return null;
     return v.fx;
   }
@@ -6766,6 +6951,9 @@ const Buddy3D = (() => {
       else if (trick === 'ants' && Sfx.march) Sfx.march(d);
       else if (trick === 'invisible' && Sfx.sparkle) { Sfx.sparkle(d + 0.2); Sfx.sparkle(d + 2.6); }
       else if (trick === 'treepose' && Sfx.sparkle) Sfx.sparkle(d + 1.1);
+      else if (trick === 'grumble' && Sfx.monster) Sfx.monster(d);
+      else if (trick === 'gallop' && Sfx.gallop) Sfx.gallop(d);
+      else if (trick === 'airplane' && Sfx.plane) { Sfx.plane(d); if (typeof Speech !== 'undefined') setTimeout(() => Speech.say('What? Airplane!'), (delay || 0) + 450); }
     } catch (e) { /* sound is optional */ }
   }
 
@@ -7494,7 +7682,7 @@ const Buddy3D = (() => {
     if (paint) c.skin = (kind, fb) => paintMat(paint, base, kind, fb);
     const made = (type === 'slug' ? buildSlug : type === 'dragon' ? buildDragon : type === 'robot' ? buildRobot : buildLadybug)(c);
     const body = made.body, P = made.P;
-    P.body = body; P.flames = []; P.beeWings = []; P.flap = []; P.trick = w.trick || '';
+    P.body = body; P.flames = []; P.beeWings = []; P.flap = []; P.trick = w.trick || ''; P.base = base; P.paint = w.paint || '';
     if (w.head && HAT[w.head]) {
       const h = G(A.hat, null, A.hs, HAT[w.head](type));
       body.add(h);
@@ -7665,9 +7853,9 @@ const Buddy3D = (() => {
     v.canvas.addEventListener('pointerup', up);
     v.canvas.addEventListener('pointercancel', () => { down = false; });
   }
-  const TRICK_MS = { bounce: 1000, twirl: 950, wiggle: 1300, jelly: 1000, flip: 950, tornado: 1500, freeze: 2000, wigglejump: 1300, handstand: 2300, boo: 2900, ants: 4000, tumble: 2400, handjump: 2800, treepose: 3600, invisible: 3400 };
+  const TRICK_MS = { bounce: 1000, twirl: 950, wiggle: 1300, jelly: 1000, flip: 950, tornado: 1500, freeze: 2000, wigglejump: 1300, handstand: 2300, boo: 2900, ants: 4000, tumble: 2400, handjump: 2800, treepose: 3600, invisible: 3400, grumble: 3300, gallop: 3600, airplane: 5600 };
   /* tricks that bring props of their own (trickFx) */
-  const PROP_TRICKS = ['boo', 'ants', 'treepose', 'invisible'];
+  const PROP_TRICKS = ['boo', 'ants', 'treepose', 'invisible', 'grumble', 'gallop', 'airplane'];
   const tmpC = T ? new T.Color() : null;
   const ease2 = (q) => q * q * (3 - 2 * q);
   function pose(v, now) {
@@ -7690,7 +7878,7 @@ const Buddy3D = (() => {
     let bx = 0, bz = 0, pitch = 0, startle = 0;
     const tk = v.trickT && P.trick ? (now - v.trickT) / (TRICK_MS[P.trick] || 1000) : -1;
     const FX = trickFx(v, tk > 0 && tk < 1 && PROP_TRICKS.indexOf(P.trick) >= 0 ? P.trick : '');
-    let zen = false, ghost = 0;
+    let zen = false, ghost = 0, squint = 1, planeHide = 0, shadowK = 1;
     if (v.trickT && P.trick) {
       const dur = TRICK_MS[P.trick] || 1000, k = (now - v.trickT) / dur;
       if (k >= 1) { v.trickT = 0; v.lastAuto = now; }
@@ -7812,6 +8000,81 @@ const Buddy3D = (() => {
           if (k > 0.9) { const e = Math.sin((Math.PI * (k - 0.9)) / 0.1); sy = 1 + 0.08 * e; sx = 1 + 0.08 * e; y = 0.12 * e; }
           if (FX && FX.fade) FX.fade(ghost, k);
         }
+        /* monster grumble: crouch low with squinty eyes and grumble twice (a shiver with each), rear up big and
+           ROAR, leaning in and shaking, with roar rings from the mouth and a ROAR! bubble (the friends jump);
+           then shrink back and shake it off */
+        else if (P.trick === 'grumble') {
+          const ms = k * TRICK_MS.grumble;
+          if (k < 0.45) {
+            const c = ease(Math.min(1, k / 0.08)), g = (ms > 80 && ms < 630) || (ms > 720 && ms < 1340) ? 1 : 0.2;
+            sy = 1 - 0.1 * c; sx = 1 + 0.06 * c; pitch = 0.1 * c;
+            bx = 0.03 * g * Math.sin(ms / 17); roll = 0.04 * g * Math.sin(ms / 23 + 1); squint = 1 - 0.55 * c;
+          } else if (k < 0.49) {
+            const e = ease((k - 0.45) / 0.04);
+            sy = 0.9 + 0.38 * e; sx = 1.06 + 0.16 * e; pitch = 0.1 - 0.3 * e; y = 0.12 * e; squint = 0.45 + 0.8 * e;
+          } else if (k < 0.85) {
+            const q = (k - 0.49) / 0.36, sh = Math.sin(ms / 14), lunge = ease(Math.min(1, q * 4));
+            sy = 1.28 + 0.03 * sh; sx = 1.22 - 0.02 * sh; pitch = -0.2 + 0.42 * lunge; bz = 0.3 * lunge; y = 0.12;
+            bx = 0.025 * Math.sin(ms / 11); roll = 0.035 * Math.sin(ms / 13); squint = 1.25;
+            startle = Math.sin(Math.PI * Math.min(1, q / 0.55));
+          } else {
+            const e = ease((k - 0.85) / 0.15);
+            sy = 1.28 - 0.28 * e; sx = 1.22 - 0.22 * e; pitch = 0.22 * (1 - e); bz = 0.3 * (1 - e); y = 0.12 * (1 - e);
+            yaw += 0.25 * Math.sin(e * Math.PI * 3) * (1 - e); squint = 1.25 - 0.25 * e;
+          }
+          if (FX && FX.rings) {
+            const m = FX.mouth;
+            FX.rings.forEach((r, i) => {
+              const a = (k - (0.5 + i * 0.075)) / 0.17;
+              r.visible = a > 0 && a < 1;
+              if (r.visible) { r.position.set(m[0] * sx + bx, m[1] * sy + y, m[2] * sx + bz + 0.15); r.scale.setScalar(0.3 + 1.5 * a); r.material.opacity = 0.95 * (1 - a); }
+            });
+            popBubble(FX.bubble, k, 0.5, 0.86);
+            if (FX.bubble.visible && k < 0.85) FX.bubble.position.x += 0.012 * Math.sin(ms / 9) - (FX.bubble.userData.jx || 0), FX.bubble.userData.jx = 0.012 * Math.sin(ms / 9);
+          }
+        }
+        /* horse gallop: gallop across and back, bobbing and rocking like a rocking horse, a clop on each landing
+           with dust; then stop, rear up and NEIGH, and come down with a stomp */
+        else if (P.trick === 'gallop') {
+          const ms = k * TRICK_MS.gallop;
+          if (k < 0.68) {
+            const q = k / 0.68, f = (ms / 450) % 1, run = Math.min(1, k / 0.05);
+            bx = 0.45 * Math.sin(Math.PI * 2 * q); yaw += 0.55 * Math.cos(Math.PI * 2 * q) * run;
+            if (f < 0.68) { const h = Math.sin((Math.PI * f) / 0.68); y = 0.24 * h * run; sy = 1 + 0.05 * h; sx = 1 - 0.03 * h; }
+            else { const l = Math.sin((Math.PI * (f - 0.68)) / 0.32); sy = 1 - 0.1 * l; sx = 1 + 0.06 * l; }
+            pitch = -0.16 * Math.sin(Math.PI * 2 * f) * run;
+          } else if (k < 0.73) {
+            const e = ease((k - 0.68) / 0.05), f = (0.68 * TRICK_MS.gallop / 450) % 1;
+            y = 0.24 * Math.sin((Math.PI * Math.min(f, 0.68)) / 0.68) * (1 - e); yaw += 0.55 * (1 - e) + 0.3 * e; sy = 1 - 0.06 * Math.sin(Math.PI * e);
+          } else if (k < 0.9) {
+            const e = ease(Math.min(1, (k - 0.73) / 0.05));
+            yaw += 0.3; pitch = -0.5 * e; y = 0.26 * e; bz = -0.12 * e; roll = 0.07 * Math.sin(ms / 55) * e; sy = 1 + 0.04 * e;
+          } else {
+            const e = ease((k - 0.9) / 0.1), land = Math.sin(Math.PI * Math.min(1, e * 1.4));
+            yaw += 0.3 * (1 - e); pitch = -0.5 * (1 - e); y = 0.26 * (1 - e) * (1 - e); bz = -0.12 * (1 - e); sy = 1 - 0.1 * land * (e > 0.4 ? 1 : 0); sx = 1 + 0.06 * land * (e > 0.4 ? 1 : 0);
+          }
+          if (FX && FX.dust) {
+            FX.dust.forEach((d, i) => {
+              const n = i, kn = ((n + 0.68) * 450) / TRICK_MS.gallop, a = (k - kn) / 0.1;
+              d.visible = n < 5 && a > 0 && a < 1;
+              if (d.visible) { const qn = kn / 0.68; d.position.set(0.45 * Math.sin(Math.PI * 2 * qn) - 0.25 * Math.cos(Math.PI * 2 * qn) + 0.2 * a * (i % 2 ? 1 : -1), 0.12 + 0.1 * a, 0.45); d.scale.setScalar(0.3 + 0.45 * a); d.material.opacity = 0.7 * (1 - a); }
+            });
+            const last = FX.dust[5], kr = 0.93, ar = (k - kr) / 0.1;
+            last.visible = ar > 0 && ar < 1;
+            if (last.visible) { last.position.set(0, 0.1 + 0.08 * ar, 0.5); last.scale.set(0.6 + 0.9 * ar, 0.4 + 0.5 * ar, 1); last.material.opacity = 0.75 * (1 - ar); }
+            popBubble(FX.bubble, k, 0.73, 0.9);
+          }
+        }
+        /* What? Airplane: a surprised hop and spin, a poof, and the buddy is a toy plane in its own color; the
+           propeller starts, it taxis, takes off and flies away, passes far away, comes back in to land, and turns
+           back into the buddy with another poof (FX.fly moves the plane, the clouds and the shadow) */
+        else if (P.trick === 'airplane') {
+          if (k < 0.075) { const e = Math.sin((Math.PI * k) / 0.075); y = 0.34 * e; yaw += ease(k / 0.075) * Math.PI * 2; sy = 1 + 0.06 * e; sx = 1 - 0.04 * e; }
+          const gone = ease(Math.min(1, Math.max(0, (k - 0.08) / 0.03))), back = ease(Math.min(1, Math.max(0, (k - 0.915) / 0.035)));
+          planeHide = gone * (1 - back);
+          if (k > 0.95) { const e = Math.sin((Math.PI * (k - 0.95)) / 0.05); y = 0.22 * e; sy = 1 + 0.07 * e; sx = 1 - 0.04 * e; }
+          if (FX && FX.fly) shadowK = FX.fly(k, now);
+        }
         /* march in place while the ants march in one by one, then boom, boom, boom */
         else if (P.trick === 'ants') {
           const ms = k * 4000, s = Math.sin((Math.PI * ms) / 300);
@@ -7856,10 +8119,13 @@ const Buddy3D = (() => {
     }
     const lift = P.fly ? P.fly + (mood === 'still' ? 0 : 0.05 * Math.sin(t * 1.9)) : 0;
     y += lift; if (P.aura) P.aura.position.y = lift;
-    P.body.position.set(bx, y, bz); P.body.scale.set(sx, sy, sx); P.body.rotation.set(pitch + lean, yaw - 0.14, roll);
+    /* the airplane trick hides the buddy (and what circles it) while the plane is out */
+    const hs = 1 - 0.999 * planeHide;
+    if (P.aura && (planeHide > 0 || P.aura.userData.hid)) { P.aura.visible = planeHide < 0.5; P.aura.userData.hid = planeHide > 0; }
+    P.body.position.set(bx, y, bz); P.body.scale.set(sx * hs, sy * hs, sx * hs); P.body.rotation.set(pitch + lean, yaw - 0.14, roll);
     if (P.fx) P.fx.forEach((fn) => fn(t, mood === 'still' || !v.live));
     const bt = (t + v.blink) % 4.4, blink = mood === 'still' || !v.live ? 1 : bt < 0.16 ? Math.max(0.08, Math.abs(Math.cos((bt / 0.16) * Math.PI))) : 1;
-    P.eyes.forEach((e) => { e.scale.y = zen ? 0.12 : blink; });
+    P.eyes.forEach((e) => { e.scale.y = zen ? 0.12 : blink * squint; });
     if (P.antennae) P.antennae.forEach((a, i) => { a.rotation.z = (i ? -1 : 1) * 0.07 * Math.sin(t * 3.1 + i * 1.3) * (mood === 'still' ? 0 : 1); });
     if (P.wings) P.wings.forEach((w, i) => { w.rotation.y = w.userData.baseY + (i ? -1 : 1) * (mood === 'cheer' ? 0.42 : P.bigWings ? 0.32 : 0.12) * Math.sin(t * (mood === 'cheer' ? 15 : P.bigWings ? 4.2 : 3)) * (mood === 'still' ? 0 : 1); });
     if (P.tail) P.tail.rotation.y = mood === 'still' ? 0 : 0.1 * Math.sin(t * 2.2);
@@ -7884,7 +8150,7 @@ const Buddy3D = (() => {
     P.flap.forEach((w, i) => { w.rotation.y = w.userData.baseY + (i ? -1 : 1) * (mood === 'still' ? 0 : P.buzz ? 0.22 * Math.sin(t * 38 + i) : (mood === 'cheer' ? 0.35 : 0.16) * Math.sin(t * (mood === 'cheer' ? 9 : 3.2))); });
     if (P.cape) P.cape.rotation.x = -0.06 - (mood === 'still' ? 0 : 0.05 * Math.sin(t * 1.9)) - (mood === 'cheer' ? 0.12 * Math.max(0, Math.sin(t * 6.6)) : 0);
     if (P.sparkles) P.sparkles.forEach((s, i) => { const k = 0.5 + 0.5 * Math.sin(t * 2.6 + i * 2.1); s.scale.setScalar(0.1 + 0.2 * k); s.material.opacity = 0.35 + 0.65 * k; });
-    P.shadow.material.opacity = Math.max(0.2, 1 - y * 1.5) * (1 - 0.6 * ghost);
+    P.shadow.material.opacity = Math.max(0.2, 1 - y * 1.5) * (1 - 0.6 * ghost) * shadowK;
     if (!v.dragging && now - v.lastTouch > 1400 && v.spinVel === 0 && v.spin !== 0) {
       const target = Math.round(v.spin / (Math.PI * 2)) * Math.PI * 2;
       v.spin += (target - v.spin) * 0.06; if (Math.abs(target - v.spin) < 0.002) v.spin = 0;
@@ -9437,12 +9703,107 @@ const Sfx = (() => {
     note(big ? 98 : 160, t0, big ? 0.5 : 0.13, { type: 'sine', vol: big ? 0.32 : 0.16, to: big ? 36 : 70 });
     if (big) note(62, t0 + 0.01, 0.55, { type: 'triangle', vol: 0.18, to: 30 });
   }
+  /* A rough animal voice for grumbles and roars: buzzy low tones through a little distortion and a closing
+     filter, with a fast wobble in loudness (the rattle in a growl). o: f0, f1 (pitch from, to), cut, cutTo
+     (filter from, to), rate (wobble per second), vol, attack, release, drive. */
+  function growl(t0, dur, o) {
+    if (muted) return;
+    const c = ac(); if (!c) return;
+    try {
+      const now = c.currentTime + (t0 || 0), end = now + dur, vol = o.vol || 0.2, att = o.attack || 0.1, rel = Math.min(o.release || 0.3, dur - att - 0.02);
+      const ws = c.createWaveShaper(), f = c.createBiquadFilter(), am = c.createGain(), out = c.createGain(), lfo = c.createOscillator(), depth = c.createGain();
+      const curve = new Float32Array(512), k = o.drive || 2.5;
+      for (let i = 0; i < 512; i++) { const x = (i / 511) * 2 - 1; curve[i] = Math.tanh(x * k); }
+      ws.curve = curve;
+      f.type = 'lowpass'; f.Q.value = o.q || 3; f.frequency.setValueAtTime(o.cut || 1200, now); f.frequency.exponentialRampToValueAtTime(o.cutTo || 400, end);
+      am.gain.value = 0.62; lfo.type = 'triangle'; lfo.frequency.value = o.rate || 30; depth.gain.value = 0.38; lfo.connect(depth); depth.connect(am.gain);
+      out.gain.setValueAtTime(0.0001, now); out.gain.exponentialRampToValueAtTime(vol, now + att); out.gain.setValueAtTime(vol, end - rel); out.gain.exponentialRampToValueAtTime(0.0001, end);
+      [[1, 'sawtooth', 0.5], [1.013, 'sawtooth', 0.45], [0.5, 'square', 0.3]].forEach((q) => {
+        const s = c.createOscillator(), g = c.createGain();
+        s.type = q[1]; s.frequency.setValueAtTime(o.f0 * q[0], now); s.frequency.exponentialRampToValueAtTime(o.f1 * q[0], end);
+        g.gain.value = q[2]; s.connect(g); g.connect(ws); s.start(now); s.stop(end + 0.05);
+      });
+      ws.connect(f); f.connect(am); am.connect(out); out.connect(master);
+      lfo.start(now); lfo.stop(end + 0.05);
+    } catch (e) { /* audio unavailable */ }
+  }
+  /* A horse's whinny: a high voice that leaps up, then shakes its way down (the "hee-hee-hee"), and a snort. */
+  function whinny(t0, vol) {
+    if (muted) return;
+    const c = ac(); if (!c) return;
+    try {
+      const now = c.currentTime + (t0 || 0), dur = 1.3, end = now + dur;
+      const bp = c.createBiquadFilter(), hp = c.createBiquadFilter(), trem = c.createGain(), out = c.createGain(), lfo = c.createOscillator(), depth = c.createGain(), tdepth = c.createGain();
+      bp.type = 'bandpass'; bp.frequency.value = 1350; bp.Q.value = 0.8; hp.type = 'highpass'; hp.frequency.value = 380;
+      lfo.frequency.setValueAtTime(8, now); lfo.frequency.linearRampToValueAtTime(15, end);
+      depth.gain.setValueAtTime(10, now); depth.gain.linearRampToValueAtTime(90, now + 0.55); depth.gain.linearRampToValueAtTime(60, end);
+      trem.gain.value = 0.6; tdepth.gain.setValueAtTime(0.05, now); tdepth.gain.linearRampToValueAtTime(0.4, now + 0.45);
+      lfo.connect(depth); lfo.connect(tdepth); tdepth.connect(trem.gain);
+      out.gain.setValueAtTime(0.0001, now); out.gain.exponentialRampToValueAtTime(vol || 0.2, now + 0.06); out.gain.setValueAtTime(vol || 0.2, now + 0.9); out.gain.exponentialRampToValueAtTime(0.0001, end);
+      [[1, 'sawtooth', 0.5], [1.5, 'triangle', 0.25], [0.5, 'square', 0.12]].forEach((q) => {
+        const s = c.createOscillator(), g = c.createGain(), fq = s.frequency;
+        s.type = q[1];
+        fq.setValueAtTime(470 * q[0], now); fq.exponentialRampToValueAtTime(1280 * q[0], now + 0.17); fq.linearRampToValueAtTime(1160 * q[0], now + 0.34); fq.exponentialRampToValueAtTime(500 * q[0], now + 1.2);
+        const d = c.createGain(); d.gain.value = q[0]; depth.connect(d); d.connect(fq);
+        g.gain.value = q[2]; s.connect(g); g.connect(bp); s.start(now); s.stop(end + 0.05);
+      });
+      bp.connect(hp); hp.connect(trem); trem.connect(out); out.connect(master);
+      lfo.start(now); lfo.stop(end + 0.05);
+    } catch (e) { /* audio unavailable */ }
+    noise((t0 || 0) + 1.32, 0.2, { type: 'lowpass', freq: 1300, vol: 0.1, attack: 0.02 });
+    noise((t0 || 0) + 1.56, 0.16, { type: 'lowpass', freq: 1100, vol: 0.07, attack: 0.02 });
+  }
+  /* A propeller engine: a buzzy hum chopped by the blades. o: f0, f1, vol, attack, release, rate. */
+  function engine(t0, dur, o) {
+    if (muted) return;
+    const c = ac(); if (!c) return;
+    try {
+      const now = c.currentTime + (t0 || 0), end = now + dur, vol = o.vol || 0.08;
+      const s = c.createOscillator(), s2 = c.createOscillator(), f = c.createBiquadFilter(), am = c.createGain(), out = c.createGain(), lfo = c.createOscillator(), depth = c.createGain();
+      s.type = 'sawtooth'; s2.type = 'square';
+      s.frequency.setValueAtTime(o.f0, now); s.frequency.exponentialRampToValueAtTime(o.f1, end);
+      s2.frequency.setValueAtTime(o.f0 * 0.5, now); s2.frequency.exponentialRampToValueAtTime(o.f1 * 0.5, end);
+      f.type = 'lowpass'; f.frequency.value = 900; f.Q.value = 1.2;
+      lfo.frequency.setValueAtTime(o.rate || 22, now); lfo.frequency.exponentialRampToValueAtTime((o.rate || 22) * (o.f1 / o.f0), end);
+      am.gain.value = 0.6; depth.gain.value = 0.4; lfo.connect(depth); depth.connect(am.gain);
+      out.gain.setValueAtTime(0.0001, now); out.gain.exponentialRampToValueAtTime(vol, now + (o.attack || 0.3)); out.gain.setValueAtTime(vol, end - (o.release || 0.4)); out.gain.exponentialRampToValueAtTime(0.0001, end);
+      s.connect(f); s2.connect(f); f.connect(am); am.connect(out); out.connect(master);
+      s.start(now); s2.start(now); lfo.start(now); s.stop(end + 0.05); s2.stop(end + 0.05); lfo.stop(end + 0.05);
+    } catch (e) { /* audio unavailable */ }
+  }
+  /* One hoof on hard ground: a hollow clop. */
+  function clop(t0, loud) { note(loud ? 820 : 980, t0, 0.05, { type: 'triangle', vol: loud ? 0.16 : 0.11, to: loud ? 560 : 700 }); noise(t0, 0.03, { type: 'highpass', freq: 2600, vol: loud ? 0.06 : 0.04, attack: 0.001 }); }
+  /* A puff of smoke: a soft whoosh. */
+  function poof(t0) { noise(t0, 0.5, { freq: 700, to: 2600, q: 0.7, vol: 0.1, attack: 0.03 }); note(300, t0, 0.18, { type: 'sine', vol: 0.06, to: 620 }); }
   const api = {
     unlock() { if (!muted) ac(); },
     /* Halloween boo: ghost wail during the dance, a "bwah" when the sheet flies off */
     boo(d) { d = d || 0; wail(d + 0.45, 1.5, 330, 520, 0.11); wail(d + 0.45, 1.5, 165, 260, 0.05); note(233, d + 2.05, 0.32, { type: 'sawtooth', vol: 0.06, to: 117 }); note(466, d + 2.05, 0.2, { type: 'triangle', vol: 0.08, to: 233 }); },
     /* Ants go marching: a drum step on each march step, then boom, boom, boom */
     march(d) { d = d || 0; for (let i = 0; i < 10; i++) drum(d + i * 0.3, false); [3.12, 3.387, 3.653].forEach((x) => drum(d + x, true)); },
+    /* Monster grumble: two low grumbles while it crouches and shakes, then a big ROAR (timed to the trick) */
+    monster(d) {
+      d = d || 0;
+      growl(d + 0.08, 0.55, { f0: 74, f1: 62, cut: 520, cutTo: 300, q: 2, rate: 17, vol: 0.2, attack: 0.08, release: 0.22, drive: 2 });
+      growl(d + 0.72, 0.62, { f0: 80, f1: 64, cut: 600, cutTo: 320, q: 2, rate: 19, vol: 0.22, attack: 0.08, release: 0.25, drive: 2 });
+      growl(d + 1.6, 1.35, { f0: 150, f1: 78, cut: 2000, cutTo: 480, q: 2.5, rate: 34, vol: 0.34, attack: 0.09, release: 0.55, drive: 3.2 });
+      noise(d + 1.6, 1.25, { freq: 950, to: 320, q: 1.1, vol: 0.12, attack: 0.07 });
+      note(58, d + 1.6, 1.0, { type: 'sine', vol: 0.18, to: 40 });
+    },
+    /* Horse gallop: clip-clop, clip-clop on each stride, then it rears up with a whinny and a snort */
+    gallop(d) { d = d || 0; for (let n = 0; n < 5; n++) { const t = d + (n + 0.68) * 0.45; clop(t, false); clop(t + 0.07, false); clop(t + 0.14, true); } whinny(d + 2.6, 0.22); },
+    /* What? Airplane: a poof as it turns into a plane, the engine starting and taking off, a faint plane far
+       away, the engine coming back in to land, a bump, and a poof back */
+    plane(d) {
+      d = d || 0;
+      poof(d + 0.45); api.sparkle(d + 0.55);
+      engine(d + 0.85, 1.95, { f0: 60, f1: 150, vol: 0.09, attack: 0.35, release: 0.8, rate: 18 });
+      noise(d + 1.7, 0.9, { freq: 500, to: 2000, q: 0.6, vol: 0.05, attack: 0.2 });
+      engine(d + 2.85, 0.6, { f0: 120, f1: 110, vol: 0.025, attack: 0.25, release: 0.3, rate: 30 });
+      engine(d + 3.45, 1.35, { f0: 150, f1: 85, vol: 0.09, attack: 0.5, release: 0.35, rate: 34 });
+      api.thud(d + 4.72); note(90, d + 4.72, 0.25, { type: 'sine', vol: 0.12, to: 60 });
+      poof(d + 5.0); api.sparkle(d + 5.1);
+    },
     get muted() { return muted; },
     toggle() { muted = !muted; try { localStorage.setItem('ssm.mute', muted ? '1' : '0'); } catch (e) { /* ignore */ } if (!muted) api.pick(); return muted; },
     key() { note(700, 0, 0.05, { type: 'triangle', vol: 0.06, to: 560 }); },
@@ -12251,7 +12612,7 @@ function buyNow(id) {
 function playFlatTrick(svgEl, trick) {
   const cls = 'do-' + (trick || 'hop');
   svgEl.classList.remove(cls); void svgEl.getBoundingClientRect(); svgEl.classList.add(cls);
-  setTimeout(() => svgEl.classList.remove(cls), { freeze: 2100, handstand: 2400, boo: 3000, ants: 4100, handjump: 2900, tumble: 2500, treepose: 3700, invisible: 3500 }[trick] || 1400);
+  setTimeout(() => svgEl.classList.remove(cls), { freeze: 2100, handstand: 2400, boo: 3000, ants: 4100, handjump: 2900, tumble: 2500, treepose: 3700, invisible: 3500, grumble: 3400, gallop: 3700, airplane: 5700 }[trick] || 1400);
 }
 function confirmBuy() {
   const id = S.overlay && S.overlay.id, l = Store.learner(S.shopKid);
@@ -12646,6 +13007,8 @@ document.addEventListener('click', (e) => {
     const sv = flat.querySelector('.buddy-svg'), tr = sv && sv.getAttribute('data-trick');
     if (sv) playFlatTrick(sv, tr);
     if (!Sfx.muted && tr === 'boo') { Sfx.boo(); setTimeout(() => Speech.say('Boo!'), 1850); } else if (tr === 'ants') Sfx.march();
+    else if (tr === 'grumble') Sfx.monster(); else if (tr === 'gallop') Sfx.gallop();
+    else if (!Sfx.muted && tr === 'airplane') { Sfx.plane(); setTimeout(() => Speech.say('What? Airplane!'), 450); }
   }
   const t = e.target.closest('[data-act]');
   if (!t || t.disabled) return;
