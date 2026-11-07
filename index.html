@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261106164907";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261107134020";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -4704,7 +4704,7 @@ const Buddy = (() => {
     /* Andi's November 6 tricks */
     { id: 'grumble', slot: 'trick', name: 'Monster grumble', price: 12 },
     { id: 'gallop', slot: 'trick', name: 'Horse gallop', price: 12 },
-    { id: 'airplane', slot: 'trick', name: 'What? Airplane', price: 15 },
+    { id: 'airplane', slot: 'trick', name: 'Airplane', price: 15 },
     /* Treats are eaten, so they can be bought again and again. Each one helps the buddy grow
        (grow points count toward Big and Hero like stars); fruit helps twice as much. */
     { id: 'apple', slot: 'treat', name: 'Apple', price: 1, use: true, grow: 2, fruit: true },
@@ -4915,7 +4915,7 @@ const Buddy = (() => {
     '<circle cx="' + (c[0] - r * 0.42) + '" cy="' + (c[1] + r * 0.76) + '" r="3" fill="#FF4D4D"/><circle cx="' + (c[0] + r * 0.42) + '" cy="' + (c[1] + r * 0.76) + '" r="3" fill="#34D27B"/>';
   /* The little tree that grows from the feet in the yoga tree handstand (hidden until the trick plays). */
   const TREE_FLAT = '<g class="b-tree"><path d="M100 204 V222" stroke="#8B5A3C" stroke-width="7" stroke-linecap="round"/><circle cx="100" cy="236" r="15" fill="#2FB574"/><circle cx="87" cy="228" r="10" fill="#34D27B"/><circle cx="113" cy="228" r="10" fill="#34D27B"/><circle cx="100" cy="246" r="9" fill="#3FCB6B"/><circle cx="94" cy="232" r="3" fill="#FF8FB1"/><circle cx="108" cy="240" r="3" fill="#FF8FB1"/></g>';
-  /* The wings and tail a flat buddy grows in the What? Airplane trick (hidden until it plays), drawn behind it. */
+  /* The wings and tail a flat buddy grows in the Airplane trick (hidden until it plays), drawn behind it. */
   const PLANE_FLAT = '<g class="b-plane"><path d="M100 70 L92 22 Q100 14 108 22 Z" fill="var(--bc)" stroke="#221D3E" stroke-opacity=".3" stroke-width="2"/>' +
     '<rect x="72" y="58" width="56" height="10" rx="5" fill="var(--bc)" stroke="#221D3E" stroke-opacity=".3" stroke-width="2"/>' +
     '<rect x="4" y="112" width="192" height="20" rx="10" fill="var(--bc)" stroke="#221D3E" stroke-opacity=".3" stroke-width="2"/>' +
@@ -6947,13 +6947,14 @@ const Buddy3D = (() => {
     try {
       if (typeof Sfx === 'undefined' || Sfx.muted) return;
       const d = (delay || 0) / 1000;
-      if (trick === 'boo' && Sfx.boo) { Sfx.boo(d); if (typeof Speech !== 'undefined') setTimeout(() => Speech.say('Boo!'), (delay || 0) + 1850); }
+      if (Sfx.say) Sfx.say(trick, delay);
+      if (trick === 'boo' && Sfx.boo) Sfx.boo(d);
       else if (trick === 'ants' && Sfx.march) Sfx.march(d);
       else if (trick === 'invisible' && Sfx.sparkle) { Sfx.sparkle(d + 0.2); Sfx.sparkle(d + 2.6); }
       else if (trick === 'treepose' && Sfx.sparkle) Sfx.sparkle(d + 1.1);
       else if (trick === 'grumble' && Sfx.monster) Sfx.monster(d);
       else if (trick === 'gallop' && Sfx.gallop) Sfx.gallop(d);
-      else if (trick === 'airplane' && Sfx.plane) { Sfx.plane(d); if (typeof Speech !== 'undefined') setTimeout(() => Speech.say('What? Airplane!'), (delay || 0) + 450); }
+      else if (trick === 'airplane' && Sfx.plane) Sfx.plane(d);
     } catch (e) { /* sound is optional */ }
   }
 
@@ -8065,7 +8066,7 @@ const Buddy3D = (() => {
             popBubble(FX.bubble, k, 0.73, 0.9);
           }
         }
-        /* What? Airplane: a surprised hop and spin, a poof, and the buddy is a toy plane in its own color; the
+        /* Airplane: a surprised hop and spin, a poof, and the buddy is a toy plane in its own color; the
            propeller starts, it taxis, takes off and flies away, passes far away, comes back in to land, and turns
            back into the buddy with another poof (FX.fly moves the plane, the clouds and the shadow) */
         else if (P.trick === 'airplane') {
@@ -9698,10 +9699,13 @@ const Sfx = (() => {
       src.start(now, Math.random() * 0.5); src.stop(now + dur + 0.05);
     } catch (e) { /* audio unavailable */ }
   }
-  /* A drum thump; big ones are the booms. */
+  /* A drum thump; big ones are the booms. The knock and click on top are what an iPad's small speaker plays
+     (it can't play the low thump). */
   function drum(t0, big) {
     note(big ? 98 : 160, t0, big ? 0.5 : 0.13, { type: 'sine', vol: big ? 0.32 : 0.16, to: big ? 36 : 70 });
     if (big) note(62, t0 + 0.01, 0.55, { type: 'triangle', vol: 0.18, to: 30 });
+    note(big ? 330 : 520, t0, big ? 0.3 : 0.09, { type: 'triangle', vol: big ? 0.24 : 0.15, to: big ? 150 : 260 });
+    noise(t0, big ? 0.08 : 0.04, { type: 'bandpass', freq: big ? 900 : 1500, q: 1.2, vol: big ? 0.13 : 0.08, attack: 0.002 });
   }
   /* A rough animal voice for grumbles and roars: buzzy low tones through a little distortion and a closing
      filter, with a fast wobble in loudness (the rattle in a growl). o: f0, f1 (pitch from, to), cut, cutTo
@@ -9763,7 +9767,7 @@ const Sfx = (() => {
       s.type = 'sawtooth'; s2.type = 'square';
       s.frequency.setValueAtTime(o.f0, now); s.frequency.exponentialRampToValueAtTime(o.f1, end);
       s2.frequency.setValueAtTime(o.f0 * 0.5, now); s2.frequency.exponentialRampToValueAtTime(o.f1 * 0.5, end);
-      f.type = 'lowpass'; f.frequency.value = 900; f.Q.value = 1.2;
+      f.type = 'lowpass'; f.frequency.value = o.cut || 1700; f.Q.value = 1.2;
       lfo.frequency.setValueAtTime(o.rate || 22, now); lfo.frequency.exponentialRampToValueAtTime((o.rate || 22) * (o.f1 / o.f0), end);
       am.gain.value = 0.6; depth.gain.value = 0.4; lfo.connect(depth); depth.connect(am.gain);
       out.gain.setValueAtTime(0.0001, now); out.gain.exponentialRampToValueAtTime(vol, now + (o.attack || 0.3)); out.gain.setValueAtTime(vol, end - (o.release || 0.4)); out.gain.exponentialRampToValueAtTime(0.0001, end);
@@ -9772,7 +9776,7 @@ const Sfx = (() => {
     } catch (e) { /* audio unavailable */ }
   }
   /* One hoof on hard ground: a hollow clop. */
-  function clop(t0, loud) { note(loud ? 820 : 980, t0, 0.05, { type: 'triangle', vol: loud ? 0.16 : 0.11, to: loud ? 560 : 700 }); noise(t0, 0.03, { type: 'highpass', freq: 2600, vol: loud ? 0.06 : 0.04, attack: 0.001 }); }
+  function clop(t0, loud) { note(loud ? 820 : 980, t0, 0.06, { type: 'triangle', vol: loud ? 0.26 : 0.18, to: loud ? 560 : 700 }); noise(t0, 0.035, { type: 'highpass', freq: 2200, vol: loud ? 0.1 : 0.07, attack: 0.001 }); }
   /* A puff of smoke: a soft whoosh. */
   function poof(t0) { noise(t0, 0.5, { freq: 700, to: 2600, q: 0.7, vol: 0.1, attack: 0.03 }); note(300, t0, 0.18, { type: 'sine', vol: 0.06, to: 620 }); }
   const api = {
@@ -9781,26 +9785,34 @@ const Sfx = (() => {
     boo(d) { d = d || 0; wail(d + 0.45, 1.5, 330, 520, 0.11); wail(d + 0.45, 1.5, 165, 260, 0.05); note(233, d + 2.05, 0.32, { type: 'sawtooth', vol: 0.06, to: 117 }); note(466, d + 2.05, 0.2, { type: 'triangle', vol: 0.08, to: 233 }); },
     /* Ants go marching: a drum step on each march step, then boom, boom, boom */
     march(d) { d = d || 0; for (let i = 0; i < 10; i++) drum(d + i * 0.3, false); [3.12, 3.387, 3.653].forEach((x) => drum(d + x, true)); },
-    /* Monster grumble: two low grumbles while it crouches and shakes, then a big ROAR (timed to the trick) */
+    /* The words a trick says out loud in the read-aloud voice, timed to the trick: "Boo!", a deep "Roar!", a
+       high "Neigh!", "Airplane!". delay is in milliseconds. */
+    say(trick, delay) {
+      if (muted || typeof Speech === 'undefined') return;
+      const w = { boo: ['Boo!', 1850], grumble: ['Roar!', 1500, { pitch: 0.45, rate: 0.72 }], gallop: ['Neigh!', 2550, { pitch: 1.7, rate: 0.8 }], airplane: ['Airplane!', 450] }[trick];
+      if (w) setTimeout(() => Speech.say(w[0], w[2]), (delay || 0) + w[1]);
+    },
+    /* Monster grumble: two grumbles while it crouches and shakes, then a big ROAR (timed to the trick). Pitched
+       high enough for an iPad's small speaker, which can't play the deepest sounds. */
     monster(d) {
       d = d || 0;
-      growl(d + 0.08, 0.55, { f0: 74, f1: 62, cut: 520, cutTo: 300, q: 2, rate: 17, vol: 0.2, attack: 0.08, release: 0.22, drive: 2 });
-      growl(d + 0.72, 0.62, { f0: 80, f1: 64, cut: 600, cutTo: 320, q: 2, rate: 19, vol: 0.22, attack: 0.08, release: 0.25, drive: 2 });
-      growl(d + 1.6, 1.35, { f0: 150, f1: 78, cut: 2000, cutTo: 480, q: 2.5, rate: 34, vol: 0.34, attack: 0.09, release: 0.55, drive: 3.2 });
-      noise(d + 1.6, 1.25, { freq: 950, to: 320, q: 1.1, vol: 0.12, attack: 0.07 });
-      note(58, d + 1.6, 1.0, { type: 'sine', vol: 0.18, to: 40 });
+      growl(d + 0.08, 0.55, { f0: 125, f1: 105, cut: 1500, cutTo: 900, q: 2.5, rate: 18, vol: 0.32, attack: 0.08, release: 0.22, drive: 3.5 });
+      growl(d + 0.72, 0.62, { f0: 135, f1: 108, cut: 1600, cutTo: 950, q: 2.5, rate: 20, vol: 0.34, attack: 0.08, release: 0.25, drive: 3.5 });
+      growl(d + 1.6, 1.4, { f0: 240, f1: 120, cut: 3800, cutTo: 1300, q: 2, rate: 38, vol: 0.4, attack: 0.1, release: 0.55, drive: 4.5 });
+      noise(d + 1.6, 1.3, { freq: 1500, to: 600, q: 0.9, vol: 0.2, attack: 0.08 });
+      note(70, d + 1.6, 1.0, { type: 'sine', vol: 0.16, to: 45 });
     },
     /* Horse gallop: clip-clop, clip-clop on each stride, then it rears up with a whinny and a snort */
-    gallop(d) { d = d || 0; for (let n = 0; n < 5; n++) { const t = d + (n + 0.68) * 0.45; clop(t, false); clop(t + 0.07, false); clop(t + 0.14, true); } whinny(d + 2.6, 0.22); },
-    /* What? Airplane: a poof as it turns into a plane, the engine starting and taking off, a faint plane far
+    gallop(d) { d = d || 0; for (let n = 0; n < 5; n++) { const t = d + (n + 0.68) * 0.45; clop(t, false); clop(t + 0.07, false); clop(t + 0.14, true); } whinny(d + 3.2, 0.3); },
+    /* Airplane: a poof as it turns into a plane, the engine starting and taking off, a faint plane far
        away, the engine coming back in to land, a bump, and a poof back */
     plane(d) {
       d = d || 0;
       poof(d + 0.45); api.sparkle(d + 0.55);
-      engine(d + 0.85, 1.95, { f0: 60, f1: 150, vol: 0.09, attack: 0.35, release: 0.8, rate: 18 });
-      noise(d + 1.7, 0.9, { freq: 500, to: 2000, q: 0.6, vol: 0.05, attack: 0.2 });
-      engine(d + 2.85, 0.6, { f0: 120, f1: 110, vol: 0.025, attack: 0.25, release: 0.3, rate: 30 });
-      engine(d + 3.45, 1.35, { f0: 150, f1: 85, vol: 0.09, attack: 0.5, release: 0.35, rate: 34 });
+      engine(d + 0.85, 1.95, { f0: 95, f1: 210, vol: 0.14, attack: 0.35, release: 0.8, rate: 18 });
+      noise(d + 1.7, 0.9, { freq: 500, to: 2000, q: 0.6, vol: 0.08, attack: 0.2 });
+      engine(d + 2.85, 0.6, { f0: 170, f1: 160, vol: 0.04, attack: 0.25, release: 0.3, rate: 30 });
+      engine(d + 3.45, 1.35, { f0: 210, f1: 120, vol: 0.14, attack: 0.5, release: 0.35, rate: 34 });
       api.thud(d + 4.72); note(90, d + 4.72, 0.25, { type: 'sine', vol: 0.12, to: 60 });
       poof(d + 5.0); api.sparkle(d + 5.1);
     },
@@ -9976,12 +9988,13 @@ const Speech = {
     choose();
     try { window.speechSynthesis.addEventListener('voiceschanged', choose); } catch (e) { /* older browsers */ }
   },
-  say(text) {
+  /* o (optional): pitch and rate, for a buddy's deep "Roar!" or high "Neigh!" */
+  say(text, o) {
     if (!this.ok || !text) return;
     try {
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
-      u.rate = 0.86; u.pitch = 1.08; u.lang = 'en-US';
+      u.rate = (o && o.rate) || 0.86; u.pitch = (o && o.pitch) || 1.08; u.lang = 'en-US';
       if (this.voice) u.voice = this.voice;
       window.speechSynthesis.speak(u);
     } catch (e) { /* speech unavailable */ }
@@ -13006,9 +13019,9 @@ document.addEventListener('click', (e) => {
   if (flat && !e.target.closest('[data-act]')) {
     const sv = flat.querySelector('.buddy-svg'), tr = sv && sv.getAttribute('data-trick');
     if (sv) playFlatTrick(sv, tr);
-    if (!Sfx.muted && tr === 'boo') { Sfx.boo(); setTimeout(() => Speech.say('Boo!'), 1850); } else if (tr === 'ants') Sfx.march();
-    else if (tr === 'grumble') Sfx.monster(); else if (tr === 'gallop') Sfx.gallop();
-    else if (!Sfx.muted && tr === 'airplane') { Sfx.plane(); setTimeout(() => Speech.say('What? Airplane!'), 450); }
+    Sfx.say(tr, 0);
+    if (tr === 'boo') Sfx.boo(); else if (tr === 'ants') Sfx.march();
+    else if (tr === 'grumble') Sfx.monster(); else if (tr === 'gallop') Sfx.gallop(); else if (tr === 'airplane') Sfx.plane();
   }
   const t = e.target.closest('[data-act]');
   if (!t || t.disabled) return;
