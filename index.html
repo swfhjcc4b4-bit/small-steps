@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261108160453";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261108160912";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -10789,7 +10789,9 @@ const Tutor = (() => {
     if (S.result && S.result.sh && VIEWS.indexOf(S.view) > 0) return S.result.sh.trial ? null : S.result.sh.kid;
     return null;
   }
-  function on(id) { const l = id && Store.learner(id); return !!(l && l.tutor); }
+  /* on when the record says so, and by default for a pre-K child (AJ); Parents → Settings sets it either way */
+  function wants(l) { return !!l && (l.tutor === true || (l.tutor === undefined && l.grade === 'pk')); }
+  function on(id) { return wants(id && Store.learner(id)); }
   function active() { return Store.mode !== 'setup' && VIEWS.indexOf(S.view) >= 0 && on(kidId()); }
   function nameOf(id) { const l = Store.learner(id || kidId()); return (l && l.name) || 'friend'; }
 
@@ -11015,7 +11017,7 @@ const Tutor = (() => {
     try { window.addEventListener('resize', () => { if (shown) place(); }); } catch (e) { /* no window */ }
   }
   init();
-  return { active, on, speakCurrent, sheetStart, answered, results, isCompare, countHint, fixRight, allFixed, afterRender, say, stop, art };
+  return { active, on, wants, speakCurrent, sheetStart, answered, results, isCompare, countHint, fixRight, allFixed, afterRender, say, stop, art };
 })();
 /* Small Steps: state, subjects and the play flows (sheet, results, corrections, celebrations,
    between sheets, placement). */
@@ -13563,8 +13565,8 @@ function historyHTML(E, sessions, kidId) {
 function settingsHTML(l, E, t, subj) {
   const s = E.settingsOf(t);
   const speakRow = (subj === 'reading' ? '' : '<div class="field"><label for="f-speak">Read questions aloud</label><select id="f-speak" data-set="speak">' + opt('1', 'On', s.speak ? '1' : '0') + opt('0', 'Off', s.speak ? '1' : '0') + '</select></div>') +
-    '<div class="field"><label for="f-tutor">Celestina, the tutor (all subjects)</label><select id="f-tutor" data-set="tutor">' + opt('1', 'On', l.tutor ? '1' : '0') + opt('0', 'Off', l.tutor ? '1' : '0') + '</select>' +
-      '<p class="help">For a child who can’t read yet. She reads each question aloud in this device’s voice, asks again after a long wait, counts with the child on “Which is bigger?” in Fix it, and cheers. Scoring and passing don’t change.</p></div>';
+    '<div class="field"><label for="f-tutor">Celestina, the tutor (all subjects)</label><select id="f-tutor" data-set="tutor">' + opt('1', 'On', Tutor.wants(l) ? '1' : '0') + opt('0', 'Off', Tutor.wants(l) ? '1' : '0') + '</select>' +
+      '<p class="help">For a child who can’t read yet (on to start for a pre-K child). She reads each question aloud in this device’s voice, asks again after a long wait, counts with the child on “Which is bigger?” in Fix it, and cheers. Scoring and passing don’t change.</p></div>';
   return '<section class="glass panel"><h3>' + SUBJ[subj].name + ' settings for ' + esc(l.name) + '</h3><div class="form">' +
     '<div class="field"><label for="f-daily">Sheets per day</label><select id="f-daily" data-set="sheetsDay">' + [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12].map((v) => opt(v, v + (v === 1 ? ' sheet' : ' sheets'), E.sheetsPerDay(t))).join('') + '</select>' +
       '<p class="help">' + (subj === 'clock' ? 'Kumon has no clock program; 2 short sheets a day is plenty.' : 'Kumon’s instructor sets this. Kumon families report 5–10 sheets a subject a day, and Kumon suggests 10–15 minutes of focused work for young children.') + '</p></div>' +
