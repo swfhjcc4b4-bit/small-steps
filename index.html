@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261108161339";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261108205746";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1246,6 +1246,32 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .story.long { white-space: pre-line; }
 .ra-para { display: block; height: 0.55em; }
 .ex-job.j-telling b { background: #B9F5D2; } .ex-job.j-telling small { color: var(--mint-deep); }
+
+/* ---------- Which group has more? (grp10, Nov 8, 2026): each group is an answer button ----------
+   Pictures sit in two rows of five from the top left, so both cards are the same size whatever the count and the
+   rows line up for matching. Side by side under the card; stacked when the pad sits beside the card. */
+.choices.v-grp { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 2.4vw, 22px); width: min(100%, 880px); margin: 0 auto; }
+.choices.v-grp .ch.grp-card { display: block; min-width: 0; min-height: 0; width: 100%; padding: clamp(8px, 1.4vw, 14px); border-radius: clamp(20px, 3vw, 30px); font-size: 16px; container-type: inline-size; }
+.gx-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.gx, .gx-e { aspect-ratio: 1 / 1; display: grid; place-items: center; border-radius: 24%; }
+.gx { font-family: var(--font-emoji); font-size: clamp(20px, 6.4vw, 62px); line-height: 1; transition: background 0.15s, transform 0.15s; }
+@supports (container-type: inline-size) { .gx { font-size: 14.5cqi; } }
+@media (min-width: 880px) and (orientation: landscape) {
+  .choices.v-grp { grid-template-columns: minmax(0, 1fr); width: min(100%, 460px, max(240px, calc((100vh - 300px) * 1.15))); }
+}
+/* the worked example: both groups, counted one picture at a time, then the group with more is ringed */
+.ex-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; width: min(100%, 620px); }
+.ex-grp { display: grid; gap: 6px; justify-items: center; padding: 10px; border-radius: 24px; background: #F1EDFC; border: 3px solid #C9C1E8; container-type: inline-size; }
+.ex-grp .gx-grid { width: 100%; }
+.ex-grp .gx { position: relative; opacity: 0; animation: exPop 0.35s var(--spring) forwards; }
+.ex-grp .gx i { position: absolute; right: 2%; bottom: 0; font-style: normal; font-family: var(--font-ui); font-weight: 900; font-size: max(13px, 5cqi); line-height: 1; color: #fff; background: #8B5CF6; border-radius: 999px; padding: 2px 6px; }
+.ex-grp b { font-family: var(--font-read); font-size: clamp(22px, 3.4vw, 32px); line-height: 1.1; color: var(--card-ink); }
+.ex-grp.more { animation: exMore 0.5s ease var(--more-at, 3s) forwards; }
+@keyframes exMore { to { background: #DDF6E8; border-color: var(--mint-deep); box-shadow: 0 0 0 5px rgba(52, 210, 123, 0.35); } }
+@media (prefers-reduced-motion: reduce) {
+  .ex-grp .gx { animation: none; opacity: 1; }
+  .ex-grp.more { animation: none; background: #DDF6E8; border-color: var(--mint-deep); }
+}
 /* ---------- ceremonies: a new belt, the day's medals (ui-cere.js) ---------- */
 .cere { position: fixed; inset: 0; z-index: 80; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; background: radial-gradient(120% 80% at 50% 30%, #35217E, #0A0628 70%); color: #fff; animation: cereIn 0.35s ease-out; outline: none; overflow: hidden; }
 .cere.out { animation: cereOut 0.26s ease-in forwards; }
@@ -1373,6 +1399,8 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 /* her bubble does the talking, so the buddy's hint bubble steps aside; long screens leave room for her */
 body.tutor-on .hint-bubble { display: none; }
 body.tutor-on #app .screen:not(.fill) { padding-bottom: 210px; }
+/* Which group has more?: each picture lights up as she counts it */
+#app .gx.on { background: #FFD54F; box-shadow: inset 0 0 0 3px #F2A900; transform: scale(1.08); }
 </style>
 <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div><canvas id="fx" aria-hidden="true"></canvas><div id="app"></div>
 <script>
@@ -1813,6 +1841,25 @@ const MathCurriculum = (() => {
     'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
   const SIGN = { add: '+', sub: '−', mul: '×', div: '÷' };
   const SAY_OP = { add: 'plus', sub: 'take away', mul: 'times', div: 'divided by' };
+  /* Which group has more? (grp10): everyday things a child knows, one picture each, all drawn the same size.
+     JB, Nov 8, 2026: "crabs, basketballs, footballs, cars, fish, really anything"; the two groups are always
+     two different things. */
+  const THINGS = [
+    ['crab', '🦀', 'crabs'], ['basketball', '🏀', 'basketballs'], ['football', '🏈', 'footballs'], ['car', '🚗', 'cars'],
+    ['fish', '🐟', 'fish'], ['duck', '🦆', 'ducks'], ['frog', '🐸', 'frogs'], ['turtle', '🐢', 'turtles'], ['bee', '🐝', 'bees'],
+    ['ladybug', '🐞', 'ladybugs'], ['dog', '🐶', 'dogs'], ['cat', '🐱', 'cats'], ['bunny', '🐰', 'bunnies'], ['bear', '🐻', 'bears'],
+    ['penguin', '🐧', 'penguins'], ['lion', '🦁', 'lions'], ['elephant', '🐘', 'elephants'], ['dinosaur', '🦖', 'dinosaurs'],
+    ['butterfly', '🦋', 'butterflies'], ['apple', '🍎', 'apples'], ['banana', '🍌', 'bananas'], ['carrot', '🥕', 'carrots'],
+    ['cookie', '🍪', 'cookies'], ['balloon', '🎈', 'balloons'], ['rocket', '🚀', 'rockets'], ['bus', '🚌', 'buses'],
+    ['train', '🚂', 'trains'], ['tractor', '🚜', 'tractors']
+  ];
+  const THING = Object.fromEntries(THINGS.map((t) => [t[0], { id: t[0], pic: t[1], one: t[0], many: t[2] }]));
+  const thing = (k) => THING[k] || THING.crab;
+  /* "3 crabs", "1 fish" */
+  const things = (n, k) => n + ' ' + (n === 1 ? thing(k).one : thing(k).many);
+  const twoThings = () => { const x = pick(THINGS)[0]; let y = pick(THINGS)[0]; while (y === x) y = pick(THINGS)[0]; return [x, y]; };
+  /* the group a count belongs to in a groups problem, as "3 crabs" */
+  const groupOf = (p, n) => { const d = (p && p.data) || {}; return n === d.a ? things(d.a, d.ka) : n === d.b ? things(d.b, d.kb) : String(n); };
 
   function nearChoices(ans, lo, hi, count, sorted) {
     const want = Math.min(count, hi - lo + 1);
@@ -1883,6 +1930,11 @@ const MathCurriculum = (() => {
     compare(a, b) {
       return mk('compare', 'choice', Math.max(a, b), { a, b }, 'q' + Math.min(a, b) + '_' + Math.max(a, b), 'cmp', 'Which number is bigger?', [a, b]);
     },
+    /* two groups of pictures (a of thing ka, b of thing kb); each answer button is a group, and the answer is
+       the bigger count */
+    groups(a, b, ka, kb) {
+      return mk('groups', 'choice', Math.max(a, b), { a, b, ka, kb }, 'g' + Math.min(a, b) + '_' + Math.max(a, b), 'grp', 'Which group has more?', [a, b]);
+    },
     h(a, op, b, fam) {
       const ans = op === 'add' ? a + b : op === 'sub' ? a - b : op === 'mul' ? a * b : a / b;
       return mk('h', 'keypad', ans, { a, op, b }, a + op + b, fam || (op + b), a + ' ' + SAY_OP[op] + ' ' + b);
@@ -1920,6 +1972,10 @@ const MathCurriculum = (() => {
   L('c20', 'count', 'Count to 20', 'Count to 20', 12, () => P.count(ri(8, 20), 20));
   L('n30', 'count', 'What comes next, to 30', 'Next, to 30', 7, () => P.next(ri(4, 27), 'keypad', 30));
   L('m50', 'count', 'Missing numbers to 50', 'Missing, to 50', 8, () => P.missing(ri(10, 47), ri(1, 3)));
+  /* Which group has more? Two groups of 1 to 10 pictures, two different things (Common Core K.CC.C.6), just before
+     comparing the numbers themselves, so it is where Which is bigger? Up to 10 steps back to (added Nov 8, 2026,
+     asked for by JB) */
+  L('grp10', 'count', 'Which group has more?', 'More, to 10', 8, () => { const a = ri(1, 10); let b = ri(1, 10); while (b === a) b = ri(1, 10); const k = twoThings(); return P.groups(a, b, k[0], k[1]); });
   /* Comparing: numbers to 10 first (the kindergarten standard), then two numbers from 11 to 20 */
   L('cmp10', 'count', 'Which is bigger? Up to 10', 'Bigger, to 10', 5, () => { const a = ri(1, 10); let b = ri(1, 10); while (b === a) b = ri(1, 10); return P.compare(a, b); });
   L('cmp', 'count', 'Which is bigger? 11 to 20', 'Bigger, 11 to 20', 5, () => { const a = ri(11, 20); let b = ri(11, 20); while (b === a) b = ri(11, 20); return P.compare(a, b); });
@@ -1998,7 +2054,7 @@ const MathCurriculum = (() => {
   /* Each level's Kumon math level (Kumon's table of learning materials). */
   const KUMON = {};
   const grp = (g, ids) => ids.split(' ').forEach((id) => { KUMON[id] = g; });
-  grp('6A', 'c5 c10 f10'); grp('5A', 'n10 c20 n30 m50 cmp10 cmp');
+  grp('6A', 'c5 c10 f10'); grp('5A', 'n10 c20 n30 m50 grp10 cmp10 cmp');
   grp('3A', 'm100 m120 a1 a1b a1c a2 a2b a3 a3b a13');
   grp('2A', 'a4 a5 a15 a6 a7 a17 a8 a9 a910 a110');
   grp('A', 'sum12 sum15 sum18 sum20 sum24 sum28 sumRev sub1 sub2 sub3 sub10 sub12 sub14 sub16 sub20 subRev');
@@ -2014,6 +2070,7 @@ const MathCurriculum = (() => {
     find: 'Listen again, then find that number.',
     seq: 'Say the numbers out loud and keep counting up.',
     cmp: 'The bigger number comes later when you count.',
+    grp: 'Count each group, touching each picture once. The group with the bigger number has more.',
     near: 'So close. Check each column again.',
     countOn: 'Start at the first number and count on.',
     countBack: 'Start at the first number and count back.',
@@ -2025,7 +2082,7 @@ const MathCurriculum = (() => {
     other: 'Try it again, slowly.'
   };
   const CODE_LABEL = {
-    count: 'Counting slips', find: 'Number recognition', seq: 'Number order', cmp: 'Comparing numbers',
+    count: 'Counting slips', find: 'Number recognition', seq: 'Number order', cmp: 'Comparing numbers', grp: 'Comparing groups',
     near: 'Off by one', countOn: 'Counting on', countBack: 'Counting back', sign: 'Mixed up the sign',
     carry: 'Forgot to carry', borrow: 'Borrowing', table: 'Times-table facts', divide: 'Division facts', other: 'Other slips'
   };
@@ -2038,6 +2095,7 @@ const MathCurriculum = (() => {
       case 'find': return 'find';
       case 'next': case 'missing': return 'seq';
       case 'compare': return 'cmp';
+      case 'groups': return 'grp';
       case 'h': {
         const { a, b, op } = d;
         if (op === 'add') { if (given === a - b) return 'sign'; if (Math.abs(given - p.answer) === 1) return 'countOn'; return 'other'; }
@@ -2079,6 +2137,7 @@ const MathCurriculum = (() => {
       case 'next': return d.seq.join(', ') + ', ?';
       case 'missing': return d.run.map((x, i) => (i === d.gap ? '?' : x)).join(', ');
       case 'compare': return d.a + ' or ' + d.b;
+      case 'groups': return things(d.a, d.ka) + ' or ' + things(d.b, d.kb);
       case 'h': case 'v': return d.a + ' ' + SIGN[d.op] + ' ' + d.b;
       default: return '';
     }
@@ -2088,6 +2147,7 @@ const MathCurriculum = (() => {
     if (p.kind === 'count') return 'Count the dots';
     if (p.kind === 'find') return 'Listen, then tap the number';
     if (p.kind === 'compare') return 'Tap the bigger number';
+    if (p.kind === 'groups') return 'Tap the group with more';
     if (p.kind === 'next') return d2(p.data.seq) + ', ?';
     return problemText(p) + (p.kind === 'missing' ? '' : ' = ?');
     function d2(seq) { return seq.join(', '); }
@@ -2101,7 +2161,8 @@ const MathCurriculum = (() => {
     find: 'Say a number out loud and point to it, then let your child try.',
     next: 'Count the row out loud together, then say what comes next.',
     missing: 'Count the row out loud together and listen for the gap.',
-    compare: 'Count up out loud from the smaller number to show the bigger one comes later.'
+    compare: 'Count up out loud from the smaller number to show the bigger one comes later.',
+    groups: 'Count each group out loud together, touching each picture once, then ask which group has more.'
   };
   function exAdd(a, b, lead) {
     const ans = a + b, hops = [];
@@ -2164,6 +2225,7 @@ const MathCurriculum = (() => {
     n10: () => ({ show: { type: 'seq', run: [3, 4, 5, 6], gap: 3 }, steps: ['Count up: 3, 4, 5…', 'What comes next is 6.'], eq: '3, 4, 5, 6' }),
     n30: () => ({ show: { type: 'seq', run: [17, 18, 19, 20], gap: 3 }, steps: ['Count up: 17, 18, 19…', 'After 19 comes 20.'], eq: '17, 18, 19, 20' }),
     m50: () => ({ show: { type: 'seq', run: [26, 27, 28, 29], gap: 2 }, steps: ['Count along the row: 26, 27…', '28 is missing. Then comes 29.'], eq: '26, 27, 28, 29' }),
+    grp10: () => ({ show: { type: 'groups', a: 3, b: 5, ka: 'crab', kb: 'basketball' }, steps: ['Count the crabs: one, two, three. 3 crabs.', 'Count the basketballs: one, two, three, four, five. 5 basketballs.', '5 is more than 3, so the basketballs have more.'], eq: 'The basketballs have more' }),
     cmp10: () => ({ show: { type: 'big', text: '4   or   7' }, steps: ['Count up: 4 comes before 7.', 'The number that comes later is bigger, so 7 is bigger.'], eq: '7 is bigger' }),
     cmp: () => ({ show: { type: 'big', text: '13   or   16' }, steps: ['Count up from 10: 11, 12, 13, 14, 15, 16.', '16 comes later, so 16 is bigger.'], eq: '16 is bigger' }),
     m100: () => ({ show: { type: 'seq', run: [57, 58, 59, 60], gap: 3 }, steps: ['Count along the row: 57, 58, 59…', 'After 59 comes 60.'], eq: '57, 58, 59, 60' }),
@@ -2208,9 +2270,11 @@ const MathCurriculum = (() => {
     }
     return null;
   }
-  /* A stored problem coming back from the review deck: fresh dot layout, ordered choices. */
+  /* A stored problem coming back from the review deck: fresh dot layout, ordered choices; two groups come back with
+     the same counts as new things. */
   function refresh(p) {
     if (p.kind === 'count') { p.data.seed = ri(1, 99999); if (p.choices) p.choices.sort((a, b) => a - b); }
+    if (p.kind === 'groups' && p.data) { const k = twoThings(); p.data.ka = k[0]; p.data.kb = k[1]; }
     if (p.kind === 'next' && p.choices) p.choices.sort((a, b) => a - b);
     return p;
   }
@@ -2218,7 +2282,7 @@ const MathCurriculum = (() => {
     key: 'math', levels: LEVELS, stages: STAGES, tips: TIPS, tipFor, codeLabels: CODE_LABEL, diagnose, problemText, levelExample, refresh, example, aliases: ALIASES,
     groupLabel: (g) => 'Kumon ' + g, untimedGroups: { '6A': true, '5A': true }, minTestLevels: 1, probeStep: 5,
     defaults: { sheetLen: 20, allowed: 2, dailyMin: 15 }, sheetsDefault: 5, sheetsMin: 5, sheetsMax: 10, sheetUnit: 20,
-    SIGN, WORDS, _internal: { hasCarry, hasBorrow, noCarryAdd, smallFromLarge, noCarryMul, nearChoices }
+    SIGN, WORDS, THINGS, thing, things, groupOf, _internal: { hasCarry, hasBorrow, noCarryAdd, smallFromLarge, noCarryMul, nearChoices }
   };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = MathCurriculum;
@@ -10097,6 +10161,7 @@ function mathPrompt(p, ctx) {
     case 'next': return '<div class="prompt">' + sayBtn + '<span>What comes next?</span></div><div class="seq">' + d.seq.map((x) => '<span class="box static">' + x + '</span>').join('') + ansBox(ctx) + '</div>';
     case 'missing': return '<div class="prompt">' + sayBtn + '<span>Which number is missing?</span></div><div class="seq">' + d.run.map((x, i) => (i === d.gap ? ansBox(ctx) : '<span class="box static">' + x + '</span>')).join('') + '</div>';
     case 'compare': return '<div class="prompt">' + sayBtn + '<span>Which number is bigger?</span></div>';
+    case 'groups': return '<div class="prompt">' + sayBtn + '<span>Which group has more?</span></div>';
     case 'h': return '<div class="eq" aria-label="' + esc(ENG.math.problemText(p)) + '"><span>' + d.a + '</span><span class="op">' + MathCurriculum.SIGN[d.op] + '</span><span>' + d.b + '</span><span class="op">=</span>' + ansBox(ctx) + '</div>';
     case 'v': return colHTML(p, ctx);
     default: return '';
@@ -10200,6 +10265,14 @@ function problemHTML(subj, p, ctx) {
 }
 
 /* ---------- answer pads ---------- */
+/* Which group has more?: one group as a tap target, its pictures in two rows of five from the top left (the same
+   ten places in both groups, so the two cards are the same size whatever the count) */
+function groupHTML(p, n) {
+  const d = p.data || {}, th = MathCurriculum.thing(n === d.a ? d.ka : d.kb);
+  let cells = '';
+  for (let i = 0; i < 10; i++) cells += i < n ? '<span class="gx" data-i="' + (i + 1) + '">' + th.pic + '</span>' : '<span class="gx-e"></span>';
+  return '<span class="gx-grid" aria-hidden="true">' + cells + '</span>';
+}
 function choiceLabel(subj, p, c) {
   if (p.view === 'pic') return ReadingCurriculum.PIC[c] || c;
   if (p.view === 'daypart') return c.charAt(0).toUpperCase() + c.slice(1);
@@ -10217,13 +10290,13 @@ function keypadHTML(input, okLabel, hint) {
 function padHTML(subj, p, ctx, okLabel) {
   if (p.mode === 'choice') {
     const wrong = ctx.wrongChoices || [], right = ctx.rightChoice;
-    const viewCls = p.kind === 'compare' ? 'cmp-card' : p.view === 'pic' ? 'ch-pic' : p.view === 'word' ? 'ch-word' : p.view === 'letter' ? 'ch-letter' : p.view === 'time' ? 'ch-time' : p.view === 'clock' ? 'ch-clock' : p.view === 'daypart' ? 'ch-day' : p.view === 'text' ? 'ch-text' : p.view === 'sent' ? 'ch-sent' : '';
-    return '<div class="choices n' + p.choices.length + ' v-' + (p.kind === 'compare' ? 'cmp' : p.view || 'num') + '">' + p.choices.map((c, ci) => {
+    const viewCls = p.kind === 'compare' ? 'cmp-card' : p.kind === 'groups' ? 'grp-card' : p.view === 'pic' ? 'ch-pic' : p.view === 'word' ? 'ch-word' : p.view === 'letter' ? 'ch-letter' : p.view === 'time' ? 'ch-time' : p.view === 'clock' ? 'ch-clock' : p.view === 'daypart' ? 'ch-day' : p.view === 'text' ? 'ch-text' : p.view === 'sent' ? 'ch-sent' : '';
+    return '<div class="choices n' + p.choices.length + ' v-' + (p.kind === 'compare' ? 'cmp' : p.kind === 'groups' ? 'grp' : p.view || 'num') + '">' + p.choices.map((c, ci) => {
       const isWrong = wrong.indexOf(c) >= 0;
       const st = isWrong ? ' wrong' : right === c ? ' right' : '';
       const long = p.view === 'word' && String(c).length > 9 ? ' long' : '';
-      const aria = p.view === 'pic' ? ' aria-label="' + esc(ReadingCurriculum.spoken(c)) + '"' : p.view === 'clock' ? ' aria-label="Clock ' + (ci + 1) + '"' : '';
-      const label = p.view === 'clock' ? clockSVG(c, { mini: true }) : p.view === 'daypart' ? '<span class="dp-ico" aria-hidden="true">' + ({ morning: '🌅', afternoon: '☀️', night: '🌙' }[c] || '') + '</span><span class="dp-txt">' + esc(choiceLabel(subj, p, c)) + '</span>' : esc(choiceLabel(subj, p, c));
+      const aria = p.view === 'pic' ? ' aria-label="' + esc(ReadingCurriculum.spoken(c)) + '"' : p.view === 'clock' ? ' aria-label="Clock ' + (ci + 1) + '"' : p.kind === 'groups' ? ' aria-label="' + esc(MathCurriculum.groupOf(p, c)) + '"' : '';
+      const label = p.kind === 'groups' ? groupHTML(p, c) : p.view === 'clock' ? clockSVG(c, { mini: true }) : p.view === 'daypart' ? '<span class="dp-ico" aria-hidden="true">' + ({ morning: '🌅', afternoon: '☀️', night: '🌙' }[c] || '') + '</span><span class="dp-txt">' + esc(choiceLabel(subj, p, c)) + '</span>' : esc(choiceLabel(subj, p, c));
       return '<button class="ch ' + viewCls + long + st + '" data-act="choose" data-v="' + esc(c) + '"' + aria + (isWrong ? ' disabled' : '') + '>' + label + '</button>';
     }).join('') + '</div>';
   }
@@ -10785,8 +10858,9 @@ function inputValue(p, input) {
    - when a tap comes before he could have looked, she says "Not so fast! Look first, then tap." before the next
      question (at most twice a sheet);
    - in Fix it, on "Which is bigger?", she counts up to the bigger number while the numbers light up, then says
-     which comes last; a wrong tap there gets no red cross and no greyed-out button (JB: with two buttons he would
-     just tap the other one);
+     which comes last; on "Which group has more?" she counts each group while its pictures light up ("One, two,
+     three crabs."); a wrong tap on either gets no red cross and no greyed-out button (JB: with two buttons he
+     would just tap the other one);
    - reads the hint for other mistakes in Fix it, and cheers a fixed problem, a passed sheet and "All fixed".
    Scoring, passing, timing and the sheets themselves are unchanged. */
 const Tutor = (() => {
@@ -10955,7 +11029,7 @@ const Tutor = (() => {
   }
 
   /* ---------- Fix it ---------- */
-  function isCompare(p) { return !!(p && p.kind === 'compare' && p.mode === 'choice' && p.data && typeof p.data.a === 'number' && typeof p.data.b === 'number'); }
+  function isCompare(p) { return !!(p && (p.kind === 'compare' || p.kind === 'groups') && p.mode === 'choice' && p.data && typeof p.data.a === 'number' && typeof p.data.b === 'number'); }
   function buttons() { return Array.from(document.querySelectorAll('#app [data-act=choose]')); }
   function glow(n, strong) { buttons().forEach((b) => { if (b.getAttribute('data-v') === String(n)) { b.classList.add('t-soft'); if (strong) b.classList.add('t-glow'); } }); }
   function strip(small, big) {
@@ -10974,6 +11048,7 @@ const Tutor = (() => {
   /* JB's wording (Nov 8): "Let's count together… [smaller] to [bigger]… which is bigger?" She counts from the smaller
      number up to the bigger one while the numbers light up, and he still makes the choice */
   function countHint(p, again) {
+    if (p.kind === 'groups') return groupCount(p, again);
     const a = p.data.a, b = p.data.b, big = Math.max(a, b), small = Math.min(a, b);
     if (again) stop();
     clearWait();
@@ -10988,6 +11063,30 @@ const Tutor = (() => {
       say(cap(word(i)), { pose: 'point', rate: 1.0, gap: 60, bubble: shownText, onstart: () => { light(i); if (i === a || i === b) glow(i, false); } });
     }
     say('Which is bigger?', { pose: 'think', onend: () => armWait(p, my) });
+  }
+  /* "Which group has more?" (JB, Nov 8): she counts each group, the one shown first first, lighting each picture as
+     she says its number and naming the group at the last one ("One, two, three crabs. One, two … seven
+     basketballs."), then asks "Which group has more?"; he still makes the choice */
+  function groupBtn(n) { return document.querySelector('#app [data-act=choose][data-v="' + n + '"]'); }
+  function lightPic(n, i) { const b = groupBtn(n), x = b && b.querySelector('.gx[data-i="' + i + '"]'); if (x) x.classList.add('on'); }
+  function groupCount(p, again) {
+    const d = p.data, G = MathCurriculum;
+    if (again) stop();
+    clearWait();
+    const my = ++askGen;
+    say(again ? 'Let’s count together again.' : 'Let’s count together.', {
+      pose: 'point', onstart: () => buttons().forEach((x) => { x.classList.add('t-soft'); x.querySelectorAll('.gx.on').forEach((g) => g.classList.remove('on')); })
+    });
+    (p.choices || [d.a, d.b]).forEach((n) => {
+      const th = G.thing(n === d.a ? d.ka : d.kb), said = [];
+      for (let i = 1; i <= n; i++) {
+        const w = word(i) + (i === n ? ' ' + (n === 1 ? th.one : th.many) + '.' : '');
+        said.push(w);
+        const shownText = cap(said.join(', ')) + (i < n ? '…' : '');
+        say(cap(w), { pose: 'point', rate: 1.0, gap: 60, bubble: shownText, onstart: () => lightPic(n, i) });
+      }
+    });
+    say('Which group has more?', { pose: 'think', onend: () => armWait(p, my) });
   }
   function fixItem(force) {
     const F = S.fix, it = F && F.items[F.cur];
@@ -11004,7 +11103,9 @@ const Tutor = (() => {
   function fixRight(it) {
     askGen++; clearWait(); stop();
     const p = it.p;
-    const line = isCompare(p) ? 'Yes! ' + cap(word(Math.max(p.data.a, p.data.b))) + ' is bigger. You fixed it!' : ['Yes! You fixed it!', 'That’s it! Great job!', 'You got it!'][Math.floor(Math.random() * 3)];
+    const big = isCompare(p) ? Math.max(p.data.a, p.data.b) : 0;
+    const line = isCompare(p) && p.kind === 'groups' ? 'Yes! The ' + MathCurriculum.thing(big === p.data.a ? p.data.ka : p.data.kb).many + ' have more. You fixed it!'
+      : isCompare(p) ? 'Yes! ' + cap(word(big)) + ' is bigger. You fixed it!' : ['Yes! You fixed it!', 'That’s it! Great job!', 'You got it!'][Math.floor(Math.random() * 3)];
     say(line, { pose: 'cheer', happy: true });
   }
   function allFixed() { sayNow('All fixed! Great job, ' + nameOf() + '!', { pose: 'cheer', happy: true }); }
@@ -11374,6 +11475,7 @@ function collectStars(from, to) {
 /* ---------- results ---------- */
 function givenText(subj, p, r) {
   if (r.given == null) return 'No answer';
+  if (p.kind === 'groups') return 'Picked ' + MathCurriculum.groupOf(p, r.given);
   const shown = p.mode === 'clockset' || p.view === 'time' || p.view === 'clock' || (subj === 'clock' && p.input === 'time') ? fmtTime(r.given) : p.view === 'pic' ? ReadingCurriculum.spoken(r.given) : String(r.given);
   return (p.mode === 'choice' ? 'Picked ' : p.mode === 'clockset' ? 'Showed ' : p.mode === 'numtap' ? 'Tapped ' : p.mode === 'build' ? 'Built ' : 'Wrote ') + shown;
 }
@@ -11381,10 +11483,11 @@ function givenText(subj, p, r) {
 function answerText(subj, p) {
   const a = p.answer;
   if (a == null) return '';
+  if (p.kind === 'groups') return MathCurriculum.groupOf(p, a);
   return p.mode === 'clockset' || p.view === 'time' || p.view === 'clock' || (subj === 'clock' && p.input === 'time') ? fmtTime(a) : p.view === 'pic' ? ReadingCurriculum.spoken(a) : String(a);
 }
 function tileHTML(subj, p, r) {
-  const given = r.given == null ? '—' : (p.view === 'time' || p.view === 'clock' || (subj === 'clock' && p.input === 'time') ? fmtTime(r.given) : p.view === 'pic' ? ReadingCurriculum.spoken(r.given) : r.given);
+  const given = r.given == null ? '—' : p.kind === 'groups' ? MathCurriculum.groupOf(p, r.given) : (p.view === 'time' || p.view === 'clock' || (subj === 'clock' && p.input === 'time') ? fmtTime(r.given) : p.view === 'pic' ? ReadingCurriculum.spoken(r.given) : r.given);
   const verb = p.mode === 'choice' ? 'You picked ' : p.mode === 'clockset' ? 'You showed ' : p.mode === 'numtap' ? 'You tapped ' : p.mode === 'build' ? 'You built ' : 'You wrote ';
   const shown = p.mode === 'clockset' ? fmtTime(r.given) : given;
   return '<div class="tile ' + (r.ok ? 'ok' : 'no') + '"><span class="q">' + esc(ENG[subj].problemText(p)) + '</span>' +
@@ -11458,7 +11561,7 @@ function fixHintText(it) {
   const tip = E.tipFor(it.code, it.p);
   if ((it.p.mode === 'choice' || it.p.mode === 'numtap') && it.tries === 0) return tip;
   const shownRaw = it.lastGiven != null ? it.lastGiven : it.given;
-  const shown = shownRaw == null ? null : (it.p.view === 'time' || it.p.mode === 'clockset' || it.p.input === 'time' ? fmtTime(shownRaw) : shownRaw);
+  const shown = shownRaw == null ? null : it.p.kind === 'groups' ? MathCurriculum.groupOf(it.p, shownRaw) : (it.p.view === 'time' || it.p.mode === 'clockset' || it.p.input === 'time' ? fmtTime(shownRaw) : shownRaw);
   const verb = it.p.mode === 'choice' ? 'You picked ' : it.p.mode === 'clockset' ? 'You showed ' : it.p.mode === 'numtap' ? 'You tapped ' : it.p.mode === 'build' ? 'You built ' : 'You wrote ';
   return (shown != null ? verb + shown + '. ' : '') + tip;
 }
@@ -11476,8 +11579,8 @@ function fixAnswer(v) {
   if (F.locked) return;
   const right = v === it.p.answer;
   if (it.firstOk === null) it.firstOk = right;
-  /* Celestina on "Which is bigger?": a wrong tap gets no red cross and greys out nothing (with two buttons he
-     would just tap the other one); she counts up to the bigger number with him again */
+  /* Celestina on "Which is bigger?" and "Which group has more?": a wrong tap gets no red cross and greys out
+     nothing (with two buttons he would just tap the other one); she counts with him again */
   if (!right && typeof Tutor !== 'undefined' && Tutor.active() && Tutor.isCompare(it.p)) {
     it.tries++; it.lastGiven = v; it.code = E.diagnose(it.p, v) || it.code;
     F.input = ''; Sfx.tap(); S.anim = false; render();
@@ -12004,7 +12107,8 @@ function worksheetGridHTML(subj, E, sessions) {
   const keys = Array.from(days.keys()).sort().reverse().slice(0, 14);
   const rows = keys.map((k) => {
     const list = days.get(k).sort((a, b) => String(a.at).localeCompare(String(b.at)));
-    const mins = list.reduce((a, s) => a + (s.secs || 0) + (s.fixSecs || 0), 0) / 60;
+    /* time that counts (metrics.js): a question left open counts at most 5 minutes, a corrections screen left open over 30 none */
+    const mins = list.reduce((a, s) => a + Metrics.work(s), 0) / 60;
     const cells = list.map((s) => {
       const pct = Math.round((100 * (s.n - s.wrong)) / s.n), lv = E.BY[s.levelId], sp = speedOf(s);
       const tag = (s.kind === 'test' ? 'Test ' : '#') + num[s.id];
@@ -12251,9 +12355,26 @@ function exColumn(o) {
     '<div class="ex-col-row"><span class="op">' + sign + '</span>' + row(o.b).map((d) => cell(d)).join('') + '</div>' +
     '<div class="ex-col-line"></div><div class="ex-col-row ans"><span></span>' + row(o.ans).map((d) => cell(d, 'hit')).join('') + '</div></div>';
 }
+/* Which group has more?: each group counted one picture at a time (a number on each), then the group with more ringed */
+function exGroups(o) {
+  let t = 0.35;
+  const panel = (n, k, more) => {
+    const th = MathCurriculum.thing(k);
+    let cells = '';
+    for (let i = 0; i < 10; i++) {
+      if (i < n) { cells += '<span class="gx" style="animation-delay:' + t.toFixed(2) + 's">' + th.pic + '<i>' + (i + 1) + '</i></span>'; t += 0.32; }
+      else cells += '<span class="gx-e"></span>';
+    }
+    t += 0.3;
+    return '<div class="ex-grp' + (more ? ' more' : '') + '"><span class="gx-grid" aria-hidden="true">' + cells + '</span><b>' + esc(MathCurriculum.things(n, k)) + '</b></div>';
+  };
+  const a = panel(o.a, o.ka, o.a > o.b), b = panel(o.b, o.kb, o.b > o.a);
+  return '<div class="ex-groups" role="img" aria-label="' + esc(MathCurriculum.things(o.a, o.ka) + ' and ' + MathCurriculum.things(o.b, o.kb)) + '" style="--more-at:' + t.toFixed(2) + 's">' + a + b + '</div>';
+}
 function exVisual(show) {
   if (!show) return '';
   switch (show.type) {
+    case 'groups': return exGroups(show);
     case 'dots': return exDots(show.n);
     case 'track': return exTrack(show);
     case 'seq': return '<div class="ex-seq">' + show.run.map((n, i) => '<span class="ex-box' + (i === show.gap ? ' hit' : '') + '">' + n + '</span>').join('') + '</div>';
@@ -13581,7 +13702,7 @@ function historyHTML(E, sessions, kidId) {
     const res = s.voided ? '<span class="chip chip-void">Voided</span>' : s.pass ? '<span class="chip chip-ok">' + (isTest ? 'Test passed' : s.boost ? 'Passed ×2' : 'Passed') + ' ✓</span>' : '<span class="chip">' + (isTest ? 'Test not passed' : 'Repeat') + '</span>';
     const change = s.voided ? '' : (s.change === 'up' ? ' <span class="chip chip-ok">Level up</span>' : s.change === 'back' ? ' <span class="chip chip-warn">Review</span>' : s.change === 'return' ? ' <span class="chip chip-ok">Back up</span>' : s.change === 'test' ? ' <span class="chip chip-warn">Test next</span>' : '') +
       (s.undoneAt ? ' <span class="chip">Move undone</span>' : '') + (rushedIds.has(s.id) ? ' <span class="chip chip-warn">Rushed</span>' : '');
-    const fix = s.wrong ? (s.fixed ? 'Fixed in ' + E.fmtTime(s.fixSecs || 0) : 'Not fixed') : '—';
+    const fix = s.wrong ? (s.fixed ? (s.fixSecs == null ? 'Fixed' : 'Fixed in ' + E.fmtTime(s.fixSecs)) : 'Not fixed') : '—';
     const missed = s.missed && s.missed.length ? '<div class="muted">' + esc(s.missed.slice(0, 4).join(' · ')) + (s.missed.length > 4 ? ' …' : '') + '</div>' : '';
     const levelCell = isTest ? 'Level test · ' + esc(groupGradeLabel(subj, s.group || '', true)) : esc(lv ? lv.short : s.levelId);
     const timeCell = E.fmtTime(s.secs) + (s.timed === false ? ' (untimed)' : ' / ' + E.fmtTime(s.target));
