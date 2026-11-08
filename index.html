@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261107134020";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261108113727";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -3151,7 +3151,9 @@ const ReadingCurriculum = (() => {
   const PLACES = ['park', 'farm', 'zoo', 'beach', 'shop', 'pool'];
   const SEEN = ['dog', 'cow', 'duck', 'bird', 'horse', 'lion'];
   const ITEMS = ['apples', 'plums', 'pears', 'cookies', 'grapes', 'eggs'];
-  const NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six'];
+  /* number words up to ten: the "Who is older?" story uses ages up to seven, so a list that stopped at six
+     printed "undefined years old" one time in four (fixed Nov 8, 2026) */
+  const NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
   const STEPS = [['ate breakfast', 'went to school'], ['put on socks', 'put on shoes'], ['washed hands', 'ate lunch'],
     ['brushed teeth', 'went to bed'], ['got in the car', 'went to the park'], ['read a book', 'went to sleep']];
   function story() {
