@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261108113727";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261108142142";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -3162,7 +3162,9 @@ const ReadingCurriculum = (() => {
     let text, q, ans, wrong;
     if (t === 1) {
       const [c1, c2, c3] = sample(COLORS, 3), thing = pick(THINGS);
-      text = A + ' has a ' + c1 + ' ' + thing + '. ' + B + ' has a ' + c2 + ' ' + thing + '.';
+      /* "an orange box", not "a orange box" (fixed Nov 8, 2026) */
+      const an = (w) => (/^[aeiou]/i.test(w) ? 'an ' : 'a ') + w;
+      text = A + ' has ' + an(c1) + ' ' + thing + '. ' + B + ' has ' + an(c2) + ' ' + thing + '.';
       q = 'What color is ' + A + '’s ' + thing + '?'; ans = c1; wrong = [c2, c3];
     } else if (t === 2) {
       const thing = pick(THINGS);
