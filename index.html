@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261108142142";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261108160453";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1345,6 +1345,34 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .t-next i { font-style: normal; font-weight: 900; }
 .trophy .tw0 { color: #F0A46A; } .trophy .tw1 { color: #B9C1CD; } .trophy .tw2 { color: #FFD65A; } .trophy .tw3 { color: #FFFFFF; text-shadow: 0 0 6px rgba(200, 215, 255, 0.9); } .trophy .tw4 { color: #9EDCFF; text-shadow: 0 0 6px rgba(140, 210, 255, 0.8); }
 @media (max-width: 460px) { .t-art { width: 52px; height: 58px; } .t-word { display: none; } .shelf-medals { grid-template-columns: auto repeat(3, minmax(46px, max-content)); column-gap: 8px; padding: 8px 10px; } .smw { min-width: 34px; font-size: 15px; } .sm-tot { font-size: 22px; } .sm-tot i { font-size: 16px; } .sma { gap: 2px; font-size: 18px; } .sma .medal { width: 20px; } }
+/* Celestina, the tutor (tutor.js) */
+.tutor { position: fixed; z-index: 40; pointer-events: none; display: flex; align-items: flex-end; gap: 4px; }
+.tutor[hidden] { display: none; }
+.tutor .t-fig { position: relative; height: var(--th, 180px); width: calc(var(--th, 180px) * 0.957); flex: none; }
+.tutor .t-fig img { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 8px 14px rgba(10, 6, 40, .35)); }
+.tutor .t-b { opacity: 0; }
+.tutor.talking .t-b { animation: tTalk .3s steps(1) infinite; }
+@keyframes tTalk { 0% { opacity: 1; } 50% { opacity: 0; } }
+.tutor .t-bub { position: relative; max-width: min(380px, 44vw); margin-bottom: calc(var(--th, 180px) * .5); padding: 10px 16px 12px; border-radius: 22px;
+  background: #fff; color: #2A2350; box-shadow: 0 12px 26px rgba(10, 6, 40, .35); font-family: var(--font-read); font-weight: 800; font-size: 19px; line-height: 1.25; }
+.tutor .t-bub b { display: block; font-family: "Lilita One", var(--font-display); font-weight: 400; font-size: 15px; letter-spacing: .4px; color: #9A6200; }
+.tutor .t-bub::after { content: ''; position: absolute; right: -12px; bottom: 20px; border-top: 9px solid transparent; border-bottom: 9px solid transparent; border-left: 14px solid #fff; }
+.tutor.quiet .t-bub { visibility: hidden; }
+.tutor.at-top { align-items: flex-start; }
+.tutor.at-top .t-bub { margin-bottom: 0; margin-top: calc(var(--th, 180px) * .08); }
+.tutor.at-top .t-bub::after { top: 20px; bottom: auto; }
+@media (max-width: 600px) { .tutor .t-bub { font-size: 16px; padding: 8px 12px 10px; } }
+/* counting in Fix it: the numbers light up as she says them, and the two answers glow */
+.t-count { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 16px; }
+.t-count i { font-style: normal; min-width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; font-family: var(--font-display); font-size: 19px;
+  color: #9aa0b8; background: #eef0f7; transition: transform .15s, background .15s, color .15s; }
+.t-count i.pick { box-shadow: inset 0 0 0 3px #8B5CF6; }
+.t-count i.on { background: #FFD54F; color: #2A2350; transform: scale(1.15); }
+#app [data-act=choose].t-soft { box-shadow: 0 0 0 4px rgba(255, 213, 79, .75), 0 0 18px 6px rgba(255, 213, 79, .45); }
+#app [data-act=choose].t-glow { box-shadow: 0 0 0 6px rgba(255, 213, 79, .95), 0 0 28px 12px rgba(255, 213, 79, .7); transform: scale(1.06); }
+/* her bubble does the talking, so the buddy's hint bubble steps aside; long screens leave room for her */
+body.tutor-on .hint-bubble { display: none; }
+body.tutor-on #app .screen:not(.fill) { padding-bottom: 210px; }
 </style>
 <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div><canvas id="fx" aria-hidden="true"></canvas><div id="app"></div>
 <script>
@@ -10216,6 +10244,779 @@ function inputValue(p, input) {
   if (p.input === 'time') { const n = parseInt(input, 10); return input.length <= 2 ? n * 100 : n; }
   return parseInt(input, 10);
 }
+/* Celestina: AJ's sheet tutor. An original character, drawn as layered SVG.
+   celestinaSVG(st) -> svg string.
+   st: pose (idle|wave|point|think|cheer|slow|thumbs|gentle), mouth (smile|open|o|grin|flat|soft|wide), eyes 0..1 (blink),
+       happy (closed smiling eyes), look -1..1, tilt (deg), bob (px), sway (hair), flip, armA (deg), w, h, vb, brows */
+(function (root) {
+  let uid = 0;
+  const C = {
+    line: '#8A4E3E', lineDk: '#5E3328',
+    skin: '#FDE8DD', skinSh: '#F4C9B8', skinSh2: '#E9B19E', skinHi: '#FFF6F1', blush: '#F49A92', lip: '#E8909A', lipDk: '#B95A66',
+    mouth: '#7C2F38', tongue: '#EA8B92',
+    hair: '#F0D39C', hairLt: '#FAE8C0', hairHi: '#FFF9EA', hairSh: '#DDB26F', hairSh2: '#C48F4B', hairDeep: '#A8763A', hairLine: '#9A6631',
+    irisDk: '#103E33', iris: '#1F7F60', irisLt: '#7FE3B9', pupil: '#0A251D', lash: '#2B1814', brow: '#A9753F',
+    top: '#FFFFFF', topSh: '#E6E9F1', topSh2: '#D0D5E1', topLine: '#A2A8BC', nail: '#FFF3EE'
+  };
+  const P = (d, fill, x) => '<path d="' + d + '" fill="' + fill + '"' + (x || '') + '/>';
+  const L = (d, c, w, x) => '<path d="' + d + '" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (x || '') + '/>';
+  const OL = (c, w) => ' stroke="' + c + '" stroke-width="' + (w || 1.6) + '" stroke-linejoin="round"';
+  const f1 = (v) => (Math.round(v * 10) / 10).toString();
+
+  /* hair strands: thin lines flowing between two boundary curves (each 4 control points), clipped to the hair shape */
+  function strands(a, b, n, seed, cols, wmin, wmax) {
+    let x = seed; const rnd = () => ((x = (x * 16807) % 2147483647) / 2147483647);
+    let s = '';
+    for (let i = 0; i < n; i++) {
+      const u = (i + 0.2 + rnd() * 0.6) / n, j = (rnd() - 0.5) * 3;
+      const pt = (k) => [a[k][0] + (b[k][0] - a[k][0]) * u + j * (k ? 1 : 0.3), a[k][1] + (b[k][1] - a[k][1]) * u];
+      const p = [0, 1, 2, 3].map(pt);
+      const t0 = rnd() * 0.18, cut = 0.82 + rnd() * 0.18;
+      const lerp = (q, r, t) => [q[0] + (r[0] - q[0]) * t, q[1] + (r[1] - q[1]) * t];
+      const s0 = lerp(p[0], p[1], t0), s3 = lerp(p[2], p[3], cut);
+      const c = cols[Math.floor(rnd() * cols.length)];
+      s += '<path d="M ' + f1(s0[0]) + ' ' + f1(s0[1]) + ' C ' + f1(p[1][0]) + ' ' + f1(p[1][1]) + ', ' + f1(p[2][0]) + ' ' + f1(p[2][1]) + ', ' + f1(s3[0]) + ' ' + f1(s3[1]) +
+        '" fill="none" stroke="' + c[0] + '" stroke-opacity="' + c[1] + '" stroke-width="' + f1(wmin + rnd() * (wmax - wmin)) + '" stroke-linecap="round"/>';
+    }
+    return s;
+  }
+  /* a hair clump: filled shape + clipped strands + outline */
+  function clump(id, d, a, b, n, seed, fill, strandCols, lineW) {
+    return '<clipPath id="' + id + '"><path d="' + d + '"/></clipPath>' + P(d, fill) +
+      '<g clip-path="url(#' + id + ')">' + strands(a, b, n, seed, strandCols, 0.7, 1.6) + '</g>' +
+      P(d, 'none', OL(C.hairLine, lineW || 1.4));
+  }
+
+  function eye(id, open, happy, look) {
+    /* one eye: centre (0,0), outer corner at x = -30 (the caller mirrors the other eye) */
+    if (happy) {
+      return L('M -27 5 C -17 -9, 12 -11, 23 1', C.lash, 3.6) + P('M -27 5 L -35 1 L -28 1 Z', C.lash) + L('M -22 -2 L -30 -8', C.lash, 1.6) +
+        L('M -18 12 C -8 16, 6 16, 14 12', C.blush, 1.2, ' opacity=".5"');
+    }
+    if (open < 0.3) {
+      return L('M -28 3 C -15 11, 10 11, 23 3', C.lash, 3.4) + P('M -28 3 L -36 0 L -29 0 Z', C.lash) + L('M -14 9 C -6 12, 4 12, 12 9', C.line, 1, ' opacity=".4"');
+    }
+    const lx = look * 4.5;
+    const sc = 'M 23 4 C 16 -12, -10 -19, -29 -6 C -27 8, -14 19, 0 19 C 11 19, 20 13, 23 4 Z';
+    let s = '<clipPath id="' + id + '"><path d="' + sc + '"/></clipPath>';
+    s += '<g transform="translate(0 -10) scale(1 ' + open.toFixed(3) + ') translate(0 10)">';
+    s += P(sc, '#FFFFFF');
+    let tex = '';
+    for (let i = 0; i < 14; i++) { const a = i / 14 * Math.PI * 2; tex += 'M ' + f1(lx - 1 + Math.cos(a) * 7) + ' ' + f1(3 + Math.sin(a) * 9) + ' L ' + f1(lx - 1 + Math.cos(a) * 13.5) + ' ' + f1(3 + Math.sin(a) * 16.5) + ' '; }
+    s += '<g clip-path="url(#' + id + ')">' +
+      P('M -32 -22 L 30 -22 L 30 0 C 14 -8, -14 -9, -32 0 Z', '#E8D3D4', ' opacity=".6"') +
+      '<ellipse cx="' + f1(lx - 1) + '" cy="3" rx="14.5" ry="17.5" fill="url(#ir' + id + ')"/>' +
+      '<path d="' + tex + '" stroke="' + C.irisDk + '" stroke-width=".8" opacity=".35"/>' +
+      '<ellipse cx="' + f1(lx - 1) + '" cy="3" rx="14.5" ry="17.5" fill="none" stroke="' + C.irisDk + '" stroke-width="1.5"/>' +
+      P('M ' + f1(lx - 12) + ' 10 C ' + f1(lx - 7) + ' 19, ' + f1(lx + 5) + ' 19, ' + f1(lx + 10) + ' 10 C ' + f1(lx + 5) + ' 15, ' + f1(lx - 7) + ' 15, ' + f1(lx - 12) + ' 10 Z', C.irisLt, ' opacity=".7"') +
+      '<ellipse cx="' + f1(lx - 1) + '" cy="4" rx="5.8" ry="8" fill="' + C.pupil + '"/>' +
+      P('M -32 -24 L 30 -24 L 30 -3 C 14 -11, -14 -12, -32 -3 Z', C.irisDk, ' opacity=".5"') +
+      '<ellipse cx="' + f1(lx - 7.5) + '" cy="-4" rx="4.6" ry="5.6" fill="#FFFFFF"/>' +
+      '<circle cx="' + f1(lx + 6) + '" cy="11" r="2.3" fill="#FFFFFF"/>' +
+      '<circle cx="' + f1(lx + 3) + '" cy="-6" r="1.2" fill="#FFFFFF" opacity=".9"/>' +
+      '</g>';
+    s += '</g>';
+    /* lashes: tapered line, heavier at the outer corner, with three flicks; crease; soft lower lash */
+    s += P('M 24 5 C 17 -13, -10 -21, -30 -7 L -38 -12 L -33 -5 L -39 -4 L -31 -1 L -35 2 L -28 0 C -22 -13, 6 -16, 21 3 Z', C.lash);
+    s += L('M 21 -12 C 9 -21, -12 -23, -27 -15', C.line, 1.1, ' opacity=".65"');
+    s += L('M -25 12 C -15 20, 6 21, 17 14', C.line, 1.1, ' opacity=".55"');
+    s += L('M -25 12 L -29 10', C.lash, 1.3, ' opacity=".6"');
+    return s;
+  }
+
+  function mouthSVG(m) {
+    switch (m) {
+      case 'open': return P('M 248 292 C 254 289.5, 266 289.5, 272 292 C 270 303, 265 309, 260 309 C 255 309, 250 303, 248 292 Z', C.mouth) +
+        P('M 252 302 C 255 307, 265 307, 268 302 C 265 305, 255 305, 252 302 Z', C.tongue) + P('M 250 292.6 C 256 291, 264 291, 270 292.6 L 269 295.4 C 263 294.6, 257 294.6, 251 295.4 Z', '#FFFFFF');
+      case 'wide': return P('M 246 291 C 253 288, 267 288, 274 291 C 273 306, 266 314, 260 314 C 254 314, 247 306, 246 291 Z', C.mouth) +
+        P('M 251 306 C 255 311, 265 311, 269 306 C 265 309, 255 309, 251 306 Z', C.tongue) + P('M 249 291.6 C 256 290, 264 290, 271 291.6 L 270 295 C 264 294, 256 294, 250 295 Z', '#FFFFFF');
+      case 'o': return '<ellipse cx="260" cy="298" rx="6" ry="7.5" fill="' + C.mouth + '"/><ellipse cx="260" cy="301.5" rx="3.8" ry="2.6" fill="' + C.tongue + '"/>';
+      case 'grin': return P('M 244 290 C 253 293, 267 293, 276 290 C 274 303, 267 311, 260 311 C 253 311, 246 303, 244 290 Z', C.mouth) +
+        P('M 247 291 C 254 294, 266 294, 273 291 L 272 295.5 C 266 297.5, 254 297.5, 248 295.5 Z', '#FFFFFF') + P('M 251 304 C 255 309, 265 309, 269 304 C 265 307, 255 307, 251 304 Z', C.tongue);
+      case 'flat': return L('M 250 296 C 256 297, 264 297, 270 296', C.lipDk, 1.8) + L('M 255 302 C 258 303, 262 303, 265 302', C.lip, 1.5, ' opacity=".5"');
+      case 'soft': return L('M 250 295 C 256 298.5, 264 298.5, 270 295', C.lipDk, 1.8) + L('M 255 302 C 258 303.4, 262 303.4, 265 302', C.lip, 1.6, ' opacity=".55"');
+      default: return L('M 247 293 C 253 299.5, 267 299.5, 273 293', C.lipDk, 1.9) + L('M 254.5 303 C 258 304.6, 262 304.6, 265.5 303', C.lip, 1.7, ' opacity=".55"');
+    }
+  }
+
+  function brows(kind) {
+    const k = {
+      soft: ['M 188 202 C 199 194, 216 192, 233 196 C 216 194.5, 200 197, 189 204 Z', 'M 287 196 C 304 192, 321 194, 332 202 L 331 204 C 320 197, 304 194.5, 287 196 Z'],
+      up: ['M 188 196 C 199 186, 216 184, 233 190 C 216 187.5, 200 190, 189 198 Z', 'M 287 190 C 304 184, 321 186, 332 196 L 331 198 C 320 190, 304 187.5, 287 190 Z'],
+      think: ['M 188 202 C 199 194, 216 192, 233 196 C 216 194.5, 200 197, 189 204 Z', 'M 287 190 C 304 182, 321 184, 332 194 L 331 196 C 320 188, 304 185.5, 287 190 Z'],
+      kind: ['M 190 200 C 201 196, 216 192, 233 191 C 216 194, 202 198, 191 202 Z', 'M 287 191 C 304 192, 319 196, 330 200 L 329 202 C 318 198, 304 194, 287 191 Z']
+    }[kind] || null;
+    if (!k) return brows('soft');
+    return P(k[0], C.brow, OL(C.brow, 1.6)) + P(k[1], C.brow, OL(C.brow, 1.6));
+  }
+
+  /* ---------- body: shoulders, torso, arms and hands ----------
+     An arm is one smooth outline from the shoulder to the wrist with a natural taper (shoulder, upper arm,
+     elbow, forearm, wrist) and a soft shadow on the side away from the light. The top of each arm is a round
+     cap centred on the shoulder joint, so the arm can turn without a seam, and the shoulder line from the
+     neck meets that cap at a tangent. Hands are drawn shapes (open, pointing, fist, thumbs-up, flat). */
+  const add = (a, b) => [a[0] + b[0], a[1] + b[1]], sub = (a, b) => [a[0] - b[0], a[1] - b[1]], mul = (a, k) => [a[0] * k, a[1] * k];
+  const unit = (a) => { const l = Math.hypot(a[0], a[1]) || 1; return [a[0] / l, a[1] / l]; };
+  const rotv = (a, deg) => { const r = deg * Math.PI / 180, c = Math.cos(r), s = Math.sin(r); return [a[0] * c - a[1] * s, a[0] * s + a[1] * c]; };
+  const cub = (A, B, D, E, t) => { const m = 1 - t; return [m * m * m * A[0] + 3 * m * m * t * B[0] + 3 * m * t * t * D[0] + t * t * t * E[0], m * m * m * A[1] + 3 * m * m * t * B[1] + 3 * m * t * t * D[1] + t * t * t * E[1]]; };
+  /* a smooth path through points (Catmull-Rom); a point with a third value 1 is a sharp corner */
+  function smooth(pts, closed) {
+    const n = pts.length, k = 1 / 6;
+    const g = (i) => closed ? pts[(i + n) % n] : pts[Math.max(0, Math.min(n - 1, i))];
+    let d = 'M ' + f1(pts[0][0]) + ' ' + f1(pts[0][1]);
+    for (let i = 0; i < (closed ? n : n - 1); i++) {
+      const p0 = g(i - 1), p1 = g(i), p2 = g(i + 1), p3 = g(i + 2);
+      const c1 = p1[2] ? p1 : [p1[0] + (p2[0] - p0[0]) * k, p1[1] + (p2[1] - p0[1]) * k];
+      const c2 = p2[2] ? p2 : [p2[0] - (p3[0] - p1[0]) * k, p2[1] - (p3[1] - p1[1]) * k];
+      d += ' C ' + f1(c1[0]) + ' ' + f1(c1[1]) + ', ' + f1(c2[0]) + ' ' + f1(c2[1]) + ', ' + f1(p2[0]) + ' ' + f1(p2[1]);
+    }
+    return d + (closed ? ' Z' : '');
+  }
+
+  /* shoulder joints, the shoulder line from the neck (it meets the cap circle at a tangent), armpits, torso sides */
+  const SJ = { L: [144, 424], R: [376, 424] }, CAP = 22, LIGHT = [0.6, 0.8];
+  const TRAP = { L: [[240.2, 334], [239.4, 356], [180.02, 382.93], [134.70, 404.06]] };
+  TRAP.R = TRAP.L.map((p) => [520 - p[0], p[1]]);
+  const trapPts = (s, n, dy) => { const T = TRAP[s], o = []; for (let i = 0; i <= n; i++) { const p = cub(T[0], T[1], T[2], T[3], i / n); o.push([p[0], p[1] + (dy || 0)]); } return o; };
+  const trapAtX = (s, x) => { const T = TRAP[s], dec = T[3][0] < T[0][0]; let lo = 0, hi = 1; for (let k = 0; k < 30; k++) { const m = (lo + hi) / 2; if ((cub(T[0], T[1], T[2], T[3], m)[0] > x) === dec) lo = m; else hi = m; } return cub(T[0], T[1], T[2], T[3], (lo + hi) / 2); };
+  const ARMPIT = { L: [164, 468], R: [356, 468] };
+  const SIDE = { L: [[164, 468], [155, 490], [152, 510], [154.5, 530], [162.5, 552], [172, 588], [176.6, 624], [179, 664]] };
+  SIDE.R = SIDE.L.map((p) => [520 - p[0], p[1]]);
+  const sideAtY = (s, y) => { const Q = SIDE[s]; for (let i = 1; i < Q.length; i++) if (y <= Q[i][1]) { const a = Q[i - 1], b = Q[i], t = (y - a[1]) / (b[1] - a[1]); return [a[0] + (b[0] - a[0]) * t, y]; } return Q[Q.length - 1]; };
+
+  /* arm half-widths at q (0..1 upper arm, 1..2 forearm) on the outer and inner side */
+  const UPW = [[0, 22], [0.15, 22.4], [0.42, 20.6], [0.72, 19.2], [1, 17]], FOW = [[0, 17], [0.18, 17.8], [0.48, 15.6], [0.78, 12.2], [1, 10.6]];
+  const prof = (tab, t) => { t = Math.max(0, Math.min(1, t)); for (let i = 1; i < tab.length; i++) if (t <= tab[i][0]) { const a = tab[i - 1], b = tab[i], u = (t - a[0]) / (b[0] - a[0]), s = u * u * (3 - 2 * u); return a[1] + (b[1] - a[1]) * s; } return tab[tab.length - 1][1]; };
+  const bump = (t, c, w) => { const x = (t - c) / w; return Math.abs(x) >= 1 ? 0 : (1 + Math.cos(x * Math.PI)) / 2; };
+  function armHW(q) {
+    if (q <= 1) return { o: prof(UPW, q) + 1.8 * bump(q, 0.2, 0.22), i: prof(UPW, q) + 0.9 * bump(q, 0.52, 0.26) };
+    const v = q - 1;
+    return { o: prof(FOW, v) + 1.3 * bump(v, 0.22, 0.24), i: prof(FOW, v) - 0.5 * bump(v, 0.6, 0.3) };
+  }
+  /* centre line of an arm: shoulder, a rounded elbow, wrist; q runs 0..1 on the upper arm and 1..2 on the forearm */
+  function armLine(S, E, W) {
+    const d1 = unit(sub(E, S)), d2 = unit(sub(W, E)), L1 = Math.hypot(E[0] - S[0], E[1] - S[1]), L2 = Math.hypot(W[0] - E[0], W[1] - E[1]);
+    const r = Math.min(30, L1 * 0.4, L2 * 0.4), A = sub(E, mul(d1, r)), B = add(E, mul(d2, r)), out = [];
+    const n1 = Math.max(2, Math.ceil((L1 - r) / 6));
+    for (let i = 0; i < n1; i++) { const s = i / n1 * (L1 - r); out.push({ p: add(S, mul(d1, s)), t: d1, q: s / L1 }); }
+    for (let i = 0; i < 10; i++) {
+      const t = i / 10, m = 1 - t;
+      const p = [m * m * A[0] + 2 * m * t * E[0] + t * t * B[0], m * m * A[1] + 2 * m * t * E[1] + t * t * B[1]];
+      const tg = unit([2 * m * (E[0] - A[0]) + 2 * t * (B[0] - E[0]), 2 * m * (E[1] - A[1]) + 2 * t * (B[1] - E[1])]);
+      out.push({ p, t: tg, q: t < 0.5 ? (L1 - r + r * t * 2) / L1 : 1 + r * (t - 0.5) * 2 / L2 });
+    }
+    const n2 = Math.max(2, Math.ceil((L2 - r) / 6));
+    for (let i = 0; i <= n2; i++) { const s = r + i / n2 * (L2 - r); out.push({ p: add(E, mul(d2, s)), t: d2, q: 1 + s / L2 }); }
+    return out;
+  }
+  function segX(a, b, c, d) {
+    const r = sub(b, a), s = sub(d, c), den = r[0] * s[1] - r[1] * s[0];
+    if (Math.abs(den) < 1e-9) return null;
+    const u = ((c[0] - a[0]) * s[1] - (c[1] - a[1]) * s[0]) / den, v = ((c[0] - a[0]) * r[1] - (c[1] - a[1]) * r[0]) / den;
+    return u > 0 && u < 1 && v > 0 && v < 1 ? add(a, mul(r, u)) : null;
+  }
+  /* the inside of a bent elbow folds over itself: cut the loop out */
+  function unloop(P0) {
+    const o = P0.slice();
+    for (let i = 0; i < o.length - 3; i++) {
+      for (let j = Math.min(o.length - 2, i + 30); j > i + 1; j--) {
+        const x = segX(o[i].p, o[i + 1].p, o[j].p, o[j + 1].p);
+        if (x) { o.splice(i + 1, j - i, { p: x, q: (o[i + 1].q + o[j].q) / 2 }); break; }
+      }
+    }
+    return o;
+  }
+
+  /* hands, in hand space: the wrist at (0,0), fingers toward -y. Open hands are seen palm-forward with the thumb
+     on the -x side; the caller mirrors them for the other arm. o = outline from the +x wrist round to the -x wrist,
+     d = fine lines, f = shapes drawn on top (a thumb across the fingers), n = nails */
+  function fing(base, ang, len, w0, w1, bend) {
+    const N = 4, R = [], Lf = [];
+    let p = base.slice(), a = ang;
+    for (let i = 0; i <= N; i++) {
+      const t = i / N, w = (w0 + (w1 - w0) * t) / 2, d = [Math.sin(a * Math.PI / 180), -Math.cos(a * Math.PI / 180)], nn = [-d[1], d[0]];
+      R.push([p[0] + nn[0] * w, p[1] + nn[1] * w]); Lf.push([p[0] - nn[0] * w, p[1] - nn[1] * w]);
+      if (i < N) { p = [p[0] + d[0] * len / N, p[1] + d[1] * len / N]; a += bend / N; }
+    }
+    const d = [Math.sin(a * Math.PI / 180), -Math.cos(a * Math.PI / 180)], nn = [-d[1], d[0]], w = w1 / 2, T = [];
+    for (let k = 1; k < 5; k++) { const th = Math.PI * k / 5; T.push([p[0] + nn[0] * w * Math.cos(th) + d[0] * w * 1.1 * Math.sin(th), p[1] + nn[1] * w * Math.cos(th) + d[1] * w * 1.1 * Math.sin(th)]); }
+    return { R, T, L: Lf };
+  }
+  function palmHand(F) {
+    const web = (a, b) => [(a.L[0][0] + b.R[0][0]) / 2, (a.L[0][1] + b.R[0][1]) / 2 + 1.6, 1];
+    const seq = (f) => f.R.concat(f.T, f.L.slice().reverse());
+    const [pk, rg, md, ix, th] = F;
+    return [[11.5, 0, 1], [15.6, -14], [17.6, -29]].concat(seq(pk), [web(pk, rg)], seq(rg), [web(rg, md)], seq(md), [web(md, ix)], seq(ix), [[-15.2, -37.4]], seq(th), [[-21.6, -9.4], [-11.5, 0, 1]]);
+  }
+  const HANDS = {
+    open: () => ({
+      o: palmHand([fing([14, -41.5], 12, 29.5, 7.8, 6.6, 3), fing([5.6, -46.5], 5, 38, 8.6, 7.2, 1), fing([-3, -48], -1, 41, 9, 7.6, -1), fing([-11.6, -45], -7, 37, 8.8, 7.4, -3), fing([-19.5, -25], -40, 26, 14, 9.6, -9)]),
+      d: [['M -11.2 -23 C -8 -28, -7.4 -34.6, -8.6 -40.6', 0.3], ['M 16.6 -30 C 10 -31.6, 3 -33.4, -2 -35.6', 0.22]]
+    }),
+    stop: () => ({
+      o: palmHand([fing([13.2, -41.5], 6, 29.5, 7.8, 6.6, 2), fing([5, -46.5], 2.5, 38, 8.6, 7.2, 1), fing([-3.4, -48], 0, 41, 9, 7.6, 0), fing([-11.8, -45], -3, 37, 8.8, 7.4, -1.5), fing([-18.8, -26], -24, 25, 13.6, 9.4, -7)]),
+      d: [['M -11 -23 C -8 -28, -7.4 -34.6, -8.6 -40.6', 0.3], ['M 16.2 -30 C 10 -31.6, 3 -33.4, -2 -35.6', 0.22]]
+    }),
+    fist: () => ({
+      o: [[11.5, 0, 1], [15.4, -10], [18.4, -23], [19.4, -35], [18, -43.6], [14.2, -47.6], [10.4, -46.8, 1], [7.6, -50.2], [3.4, -51.8], [0.2, -50.4, 1], [-2.8, -53.2], [-7.2, -53.4], [-9.8, -51, 1],
+        [-12.8, -52], [-17.4, -49.4], [-19.8, -43.6], [-21.2, -35], [-21.4, -26], [-19.4, -15.4], [-15.2, -6.8], [-11.5, 0, 1]],
+      d: [['M 10.4 -46.8 C 10.8 -42, 10.8 -38.4, 10.4 -35.4', 0.6], ['M 0.2 -50.4 C 0.6 -45.4, 0.6 -41, 0.2 -37.6', 0.6], ['M -9.8 -51 C -9.6 -46.6, -9.6 -42.6, -10 -39.6', 0.6], ['M 19 -34.6 C 12 -36.2, 4 -36.8, -2.4 -36.4', 0.55]],
+      f: [[[-21.2, -38.6], [-14, -39.2], [-6, -38.2], [0.4, -35.8], [3.6, -31.2], [2, -26.8], [-3.8, -24.8], [-12, -23.4], [-20.6, -21.6]]],
+      n: ['M -3.4 -37.2 C 0 -36.2, 2.4 -33.6, 2.4 -30.6 C 0.4 -31.4, -2.2 -33, -3.4 -37.2 Z']
+    }),
+    thumb: () => ({
+      o: [[11.5, 0, 1], [15.2, -9.6], [17.8, -21.6], [18.4, -33], [17, -42], [12.6, -46.6], [7.4, -47.6, 1], [6.8, -56], [5.8, -65.6], [4.2, -73], [1.4, -77.8], [-3.2, -78.8], [-6.8, -76.2], [-8.4, -70], [-9.6, -60], [-10.6, -50.4],
+        [-14.6, -48], [-18.6, -44.2], [-19.4, -39.6], [-17, -36.6, 1], [-19.8, -32.8], [-20.2, -27.6], [-17.6, -24.8, 1], [-19, -20.8], [-18.4, -16], [-15.4, -13.8, 1], [-15.6, -10], [-14.2, -5.4], [-11.5, 0, 1]],
+      d: [['M -17 -36.6 C -9 -37, -1 -37, 5 -36.4', 0.6], ['M -17.6 -24.8 C -9 -25.2, -1 -25.2, 6 -24.6', 0.6], ['M -15.4 -13.8 C -8 -14.2, -1 -14.2, 5 -13.8', 0.6], ['M -10.4 -49.4 C -4 -46.8, 2 -46.6, 7.2 -47.6', 0.45]],
+      n: ['M -6 -74.8 C -4 -77.2, 0 -77.6, 2.6 -75.2 C 2.4 -71.2, -2 -70.2, -5.6 -71.8 Z']
+    }),
+    point: () => ({
+      o: [[11.5, 0, 1], [15.4, -8], [18.6, -15.6], [19.6, -21.6], [18.8, -25.4, 1], [20.2, -29.4], [20.4, -35], [18.6, -38.8, 1], [19.2, -42.6], [17.6, -47.6], [12.6, -50.2], [6, -50.6], [-1.6, -49.4, 1],
+        [-2, -58], [-2.4, -67], [-3, -74], [-4.6, -79.2], [-8.4, -80.8], [-11.8, -78.6], [-12.6, -72], [-12.8, -62], [-13.2, -53], [-14.6, -45.6], [-16, -36], [-15.8, -24], [-14.4, -13], [-12.4, -5.4], [-11.5, 0, 1]],
+      d: [['M 18.8 -25.4 C 15.4 -26.4, 12 -27.6, 9.4 -29.6', 0.55], ['M 18.6 -38.8 C 15.4 -39, 12 -39.8, 9.4 -41.6', 0.55]],
+      f: [[[-13.4, -8], [-12.6, -18.6], [-10.6, -29], [-7.4, -37.6], [-3.6, -43.2], [0.6, -43.4], [2.4, -39.6], [1.2, -32], [-1.6, -22], [-5.4, -11]]],
+      n: ['M -3.4 -41 C -1.8 -43, 0.8 -42.8, 1.6 -40 C 0.4 -38.2, -1.8 -38.2, -3.4 -41 Z']
+    }),
+    flat: () => ({
+      o: [[11.5, 0, 1], [16, -11], [18.6, -20], [19.4, -29], [18.4, -37], [15.4, -43.4], [12.8, -48], [12.6, -56], [12.2, -66], [11.2, -73], [9, -76.4], [6.4, -76.8], [5.4, -76, 1], [4.8, -79], [2.8, -81.4], [0, -81], [-1.8, -78], [-2.2, -73, 1],
+        [-3, -75.4], [-5.8, -76.6], [-8.6, -74.6], [-9.8, -70], [-10, -64.6, 1], [-12.2, -66.4], [-14.6, -65], [-16.2, -60], [-16.8, -52], [-17, -40], [-16.6, -26], [-14.8, -12], [-11.5, 0, 1]],
+      d: [['M -10 -64.6 C -9.8 -58, -9.8 -52, -10.2 -46', 0.5], ['M -2.2 -73 C -2.4 -64, -2.4 -55, -2.6 -47', 0.5], ['M 5.4 -76 C 5.4 -66, 5.2 -56, 5 -48', 0.5], ['M 12.8 -48 C 12.4 -40, 11.4 -30, 9.8 -22', 0.45]],
+      n: ['M -14.6 -63 C -14.2 -65, -11.6 -65.2, -11.2 -63.2 C -12 -62, -13.8 -62, -14.6 -63 Z', 'M -8.2 -72.6 C -7.6 -74.8, -4.6 -75, -4.2 -72.8 C -5.2 -71.4, -7.2 -71.4, -8.2 -72.6 Z',
+        'M -0.8 -77.6 C -0.2 -80, 3 -80.2, 3.6 -77.8 C 2.6 -76.4, 0.4 -76.4, -0.8 -77.6 Z', 'M 6.8 -74 C 7.4 -76, 10 -76, 10.4 -73.8 C 9.6 -72.6, 7.6 -72.6, 6.8 -74 Z']
+    })
+  };
+  const handPt = (W, ha, mir, p) => add(W, rotv([mir ? -p[0] : p[0], p[1]], ha));
+  /* a hand: skin with a soft shadow along the edges away from the light (drawn by covering a shadow-coloured hand
+     with a skin-coloured copy moved toward the light), fine lines, a thumb across the fingers, nails */
+  function handSVG(kind, W, ha, mir, hid, soft) {
+    const H = HANDS[kind](), sc = '0.95 1';
+    const tf = 'translate(' + f1(W[0]) + ' ' + f1(W[1]) + ') rotate(' + f1(ha) + ')' + (mir ? ' scale(-1 1)' : '') + ' scale(' + sc + ')';
+    let ld = rotv(LIGHT, -ha); if (mir) ld = [-ld[0], ld[1]];
+    const o = H.o, first = o[0], last = o[o.length - 1];
+    const fillD = smooth(o.concat([[last[0] * 0.9, 2.5, 1], [first[0] * 0.9, 2.5, 1]]), true);
+    const extD = smooth(o.concat([[last[0], 26, 1], [first[0], 26, 1]]), true);
+    const mv = (x, y) => ' transform="translate(' + f1(x) + ' ' + f1(y) + ')"';
+    let s = '<g transform="' + tf + '"><clipPath id="' + hid + '"><path d="' + fillD + '"/></clipPath>' + P(fillD, C.skinSh) +
+      '<g clip-path="url(#' + hid + ')">' + P(extD, C.skin, mv(-ld[0] * 5, -ld[1] * 5) + soft) +
+      (H.f || []).map((pts) => P(smooth(pts, true), C.skinSh2, mv(ld[0] * 2.6, ld[1] * 2.6) + ' opacity=".5"' + soft)).join('') + '</g>' +
+      L(smooth(o, false), C.line, 1.4);
+    (H.d || []).forEach((x) => { s += L(x[0], C.line, 1, ' opacity="' + x[1] + '"'); });
+    (H.f || []).forEach((pts) => { s += P(smooth(pts, true), C.skin) + L(smooth(pts, false), C.line, 1.2); });
+    (H.n || []).forEach((d) => { s += P(d, C.nail) + P(d, 'none', OL(C.line, 0.6) + ' stroke-opacity=".3"'); });
+    return s + '</g>';
+  }
+
+  /* where the arms go in each pose (shoulder S is fixed; E elbow, W wrist, the hand and its angle, 0 = fingers up) */
+  function poseArms(pose, A) {
+    const rel = (s) => s === 'L' ? { E: [128, 620], W: [143, 786], hand: 'flat', ha: 174, front: false } : { E: [392, 618], W: [377, 784], hand: 'flat', ha: 186, front: false };
+    let L0 = rel('L'), R0 = rel('R');
+    switch (pose) {
+      case 'wave': R0 = { E: [452, 505], W: [462, 340], hand: 'open', ha: 8, rotF: A, front: true }; break;
+      case 'point': R0 = { E: [418, 555], W: [476, 400], hand: 'point', ha: 45, rotA: A, front: true }; break;
+      case 'think': R0 = { E: [412, 522], W: [322, 382], hand: 'point', ha: -14, front: true }; break;
+      case 'cheer':
+        L0 = { E: [128, 552], W: [186, 396], hand: 'fist', ha: 12, rotF: A, front: true };
+        R0 = { E: [392, 552], W: [334, 396], hand: 'fist', ha: -12, rotF: -A, front: true }; break;
+      case 'slow': R0 = { E: [436, 538], W: [446, 372], hand: 'stop', ha: 6, front: true }; break;
+      case 'thumbs': R0 = { E: [428, 545], W: [440, 380], hand: 'thumb', ha: 2, front: true }; break;
+      case 'gentle': R0 = { E: [412, 566], W: [330, 420], hand: 'flat', ha: -76, mir: false, front: true }; break;
+    }
+    return { L: L0, R: R0 };
+  }
+
+  const offsets = (cl, sg) => {
+    const O = [], I = [];
+    cl.forEach((c) => { const no = [-sg * c.t[1], sg * c.t[0]], hw = armHW(c.q); O.push({ p: add(c.p, mul(no, hw.o)), q: c.q }); I.push({ p: sub(c.p, mul(no, hw.i)), q: c.q }); });
+    return { O, I };
+  };
+  const sampleSeg = (A, B, q0, q1) => {
+    const d = unit(sub(B, A)), len = Math.hypot(B[0] - A[0], B[1] - A[1]), n = Math.max(2, Math.ceil(len / 6)), out = [];
+    for (let i = 0; i <= n; i++) out.push({ p: add(A, mul(d, len * i / n)), t: d, q: q0 + (q1 - q0) * i / n });
+    return out;
+  };
+  /* an arc of points round C0 from angle a0, turning through `del` twice (a half circle), ends excluded */
+  const halfArc = (C0, r, a0, toward) => {
+    let del = toward - a0; while (del > Math.PI) del -= 2 * Math.PI; while (del < -Math.PI) del += 2 * Math.PI;
+    const o = []; for (let k = 1; k < 12; k++) { const t = a0 + 2 * del * k / 12; o.push([C0[0] + r * Math.cos(t), C0[1] + r * Math.sin(t)]); }
+    return o;
+  };
+  const ang = (v) => Math.atan2(v[1], v[0]);
+  /* a soft shadow band on the side away from the light, and a highlight on the lit side */
+  function shading(cl, sg, fadeShoulder) {
+    const runs = [], hil = []; let cur = null;
+    cl.forEach((c) => {
+      const no = [-sg * c.t[1], sg * c.t[0]], hw = armHW(c.q), dot = no[0] * LIGHT[0] + no[1] * LIGHT[1];
+      const sd = dot >= 0 ? 1 : -1, ns = mul(no, sd), hs = sd > 0 ? hw.o : hw.i, hl = sd > 0 ? hw.i : hw.o, kk = Math.abs(dot);
+      const f = fadeShoulder ? Math.min(1, c.q / 0.3) : 1, e = f * f * (3 - 2 * f);
+      const a0 = add(c.p, mul(ns, hs * (1 - (0.24 + 0.46 * kk) * e))), b0 = add(c.p, mul(ns, hs + 6));
+      if (!cur || cur.s !== sd) { cur = { s: sd, A: [], B: [] }; runs.push(cur); }
+      cur.A.push(a0); cur.B.push(b0);
+      hil.push([add(c.p, mul(ns, -hl * 0.5)), add(c.p, mul(ns, -hl * (0.5 + 0.28 * e)))]);
+    });
+    return {
+      shade: runs.filter((r) => r.A.length > 1).map((r) => smooth(r.A.concat(r.B.slice().reverse()), true)).join(' '),
+      hi: smooth(hil.map((h) => h[0]).concat(hil.map((h) => h[1]).reverse()), true)
+    };
+  }
+  function armGeo(side, a, ids) {
+    const S = SJ[side], sg = side === 'L' ? 1 : -1;
+    let E = a.E, W = a.W, ha = a.ha;
+    if (a.rotA) { E = add(S, rotv(sub(E, S), a.rotA)); W = add(S, rotv(sub(W, S), a.rotA)); ha += a.rotA; }
+    if (a.rotF) { W = add(E, rotv(sub(W, E), a.rotF)); ha += a.rotF; }
+    const mir = a.mir == null ? side === 'L' : a.mir;
+    const d1 = unit(sub(E, S)), d2 = unit(sub(W, E)), no1 = [-sg * d1[1], sg * d1[0]], no2 = [-sg * d2[1], sg * d2[0]];
+    const bend = Math.acos(Math.max(-1, Math.min(1, d1[0] * d2[0] + d1[1] * d2[1]))) * 180 / Math.PI;
+    const L1 = Math.hypot(E[0] - S[0], E[1] - S[1]), L2 = Math.hypot(W[0] - E[0], W[1] - E[1]);
+    /* the wrist meets the base of the hand */
+    const hb1 = handPt(W, ha, mir, [11.5 * 0.95, 0]), hb2 = handPt(W, ha, mir, [-11.5 * 0.95, 0]);
+    const outerFirst = (hb1[0] - W[0]) * no2[0] + (hb1[1] - W[1]) * no2[1] > 0, hbO = outerFirst ? hb1 : hb2, hbI = outerFirst ? hb2 : hb1;
+    const shoulderCap = halfArc(S, CAP, ang(mul(no1, -1)), ang(mul(d1, -1)));
+    const pp = (list) => list.map((o) => o.p), ppw = (list) => list.map((o, k) => k === list.length - 1 ? [o.p[0], o.p[1], 1] : o.p);
+    const cid = ids.arm + side, soft = ' filter="url(#' + ids.soft + ')"';
+    const shadeSVG = (fillD, sh, cidx) => '<clipPath id="' + cidx + '"><path d="' + fillD + '"/></clipPath>' + P(fillD, C.skin) +
+      '<g clip-path="url(#' + cidx + ')">' + P(sh.shade, C.skinSh, ' opacity=".95"' + soft) + P(sh.hi, C.skinHi, ' opacity=".6"' + soft) + '</g>';
+    let svg, Iout;
+    if (bend < 100) {
+      /* a gently bent arm: one continuous outline round a rounded elbow */
+      const cl = armLine(S, E, W);
+      let { O, I } = offsets(cl, sg);
+      O[O.length - 1] = { p: hbO, q: 2 }; I[I.length - 1] = { p: hbI, q: 2 };
+      O = unloop(O); I = unloop(I); Iout = I;
+      const fill = smooth(ppw(O).concat(ppw(I).reverse(), shoulderCap), true);
+      const upTo = (list) => { const o = []; for (let k = 0; k < list.length; k++) { o.push(list[k]); if (list[k].q >= 1) break; } return o; };
+      const from = (list) => { let k = list.length - 1; while (k > 0 && list[k - 1].q >= 1) k--; return list.slice(Math.max(0, k - 1)); };
+      svg = shadeSVG(fill, shading(cl, sg, true), cid) +
+        L(smooth(pp(upTo(I)).reverse().concat(shoulderCap, pp(upTo(O))), false), C.line, 1.5, ' mask="url(#' + ids.mask + ')"') +
+        L(smooth(ppw(from(O)), false), C.line, 1.5) + L(smooth(ppw(from(I)), false), C.line, 1.5);
+    } else {
+      /* a folded arm: the forearm comes forward in front of the upper arm */
+      const cu = sampleSeg(S, E, 0, 1), cf = sampleSeg(E, W, 1, 2);
+      const U = offsets(cu, sg), F = offsets(cf, sg);
+      F.O[F.O.length - 1] = { p: hbO, q: 2 }; F.I[F.I.length - 1] = { p: hbI, q: 2 };
+      const r1 = armHW(1).o;
+      const elbowEnd = halfArc(E, r1, ang(no1), ang(d1));
+      const elbowBack = halfArc(E, r1, ang(mul(no2, -1)), ang(mul(d2, -1)));
+      const upFill = smooth(shoulderCap.concat(pp(U.O), elbowEnd, pp(U.I).reverse()), true);
+      const foFill = smooth(elbowBack.concat(ppw(F.O), ppw(F.I).reverse()), true);
+      svg = shadeSVG(upFill, shading(cu, sg, true), cid) +
+        '<g clip-path="url(#' + cid + ')"><path d="' + foFill + '" transform="translate(3 4)" fill="' + C.skinSh2 + '" opacity=".55"' + soft + '/></g>' +
+        L(upFill, C.line, 1.5, ' mask="url(#' + ids.mask + ')"') +
+        shadeSVG(foFill, shading(cf, sg, false), cid + 'f') +
+        L(smooth(ppw(F.I).reverse().concat(elbowBack, ppw(F.O)), false), C.line, 1.5);
+      Iout = U.I;
+    }
+    svg += handSVG(a.hand, W, ha, mir, cid + 'h', soft);
+    return { svg, I: Iout, front: a.front };
+  }
+
+  function bodySVG(st, id) {
+    const PA = poseArms(st.pose, st.armA || 0), ids = { arm: id('ar'), mask: id('am'), soft: id('soft') };
+    const G = { L: armGeo('L', PA.L, ids), R: armGeo('R', PA.R, ids) };
+    /* armpits: when an arm is held a little out from the body, the side of the torso follows it up to the armpit */
+    const ss = (t) => { t = Math.max(0, Math.min(1, t)); return t * t * (3 - 2 * t); };
+    const off = {};
+    ['L', 'R'].forEach((s) => {
+      const y = ARMPIT[s][1], I = G[s].I; let hit = null;
+      for (let k = 1; k < I.length; k++) { const a = I[k - 1].p, b = I[k].p; if ((a[1] - y) * (b[1] - y) <= 0 && a[1] !== b[1]) { hit = a[0] + (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]); break; } }
+      off[s] = hit == null ? 0 : s === 'L' ? Math.min(0, hit - 1.5 - ARMPIT.L[0]) : Math.max(0, hit + 1.5 - ARMPIT.R[0]);
+    });
+    const wy = (y) => y <= 468 ? ss((y - 414) / 54) : 1 - ss((y - 468) / 72);
+    const sh = (s) => (p) => [p[0] + off[s] * wy(p[1]), p[1], p[2]];
+    const corner = (p) => [p[0], p[1], 1];
+    const pit = { L: corner(sh('L')(ARMPIT.L)), R: corner(sh('R')(ARMPIT.R)) };
+    const side = { L: SIDE.L.map(sh('L')), R: SIDE.R.map(sh('R')) };
+    const inner = (s) => side[s].slice(1, -1);
+    const tpL = trapPts('L', 18), tpR = trapPts('R', 18); tpL[18] = corner(tpL[18]); tpR[18] = corner(tpR[18]);
+    const botL = corner(side.L[side.L.length - 1]), botR = corner(side.R[side.R.length - 1]);
+    const bodyPts = [[238, 318, 1]].concat(tpL, [corner(SJ.L), pit.L], inner('L'), [botL, botR], inner('R').reverse(), [pit.R, corner(SJ.R)], tpR.slice().reverse(), [[282, 318, 1]]);
+    const skin = P(smooth(bodyPts, true), C.skin);
+    /* the mask that hides an upper arm's outline where it runs inside the shoulder (so the arm grows out of it) */
+    const mL = trapPts('L', 18, 1.6), mR = trapPts('R', 18, 1.6); mL[18] = corner(mL[18]); mR[18] = corner(mR[18]);
+    const mpts = [[238, 296, 1]].concat(mL, [corner(SJ.L), pit.L, [pit.L[0], pit.L[1] + 3, 1], [pit.R[0], pit.R[1] + 3, 1], pit.R, corner(SJ.R)], mR.slice().reverse(), [[282, 296, 1]]);
+    const mask = '<mask id="' + ids.mask + '" maskUnits="userSpaceOnUse" x="-100" y="-100" width="800" height="900"><rect x="-100" y="-100" width="800" height="900" fill="#fff"/><path d="' + smooth(mpts, true) + '" fill="#000"/></mask>';
+    /* neck base, collarbones */
+    const chest = P('M 240 340 C 247 360, 273 360, 280 340 C 278 370, 242 370, 240 340 Z', C.skinSh, ' opacity=".75" filter="url(#' + ids.soft + ')"') +
+      L('M 248 372 C 236 375.4, 220 374.6, 206 369 M 272 372 C 284 375.4, 300 374.6, 314 369', C.line, 1.1, ' opacity=".38"');
+    /* white tank top: wide straps, a modest scoop neck, a gentle waist */
+    const a = trapAtX('L', 191), m1 = trapAtX('L', 201), m2 = trapAtX('L', 211), b = trapAtX('L', 221);
+    const mir = (p) => [520 - p[0], p[1], p[2]];
+    const neckL = [[b[0], b[1], 1], [222.4, 364], [226.4, 381], [236.4, 397.4], [248.2, 406.8]];
+    const neck = neckL.concat([[260, 409.6]], neckL.slice().reverse().map(mir));
+    const holeBase = [[a[0], a[1], 1], [190, 386], [186.6, 412], [180, 438], [171.6, 456]];
+    const holeL = holeBase.map(sh('L')).concat([pit.L]), holeR = holeBase.map(mir).map(sh('R')).concat([pit.R]);
+    const topPts = [corner(a), m1, m2].concat(neck, [mir(m2), mir(m1)], holeR, inner('R'), [botR, botL], inner('L').reverse(), holeL.slice().reverse().slice(0, -1));
+    const topD = smooth(topPts, true);
+    /* bust: two full, rounded forms under the fitted top. Each gets a soft form shadow inside its lower edge, a cast
+       shadow on the top just below it, a light outline along the underside, and a highlight up top. */
+    function bustSVG() {
+      const RX = 50, RY = 42, CS = [[210, 506], [310, 506]], b4 = id('b4');
+      const ell = (c, dx, dy, rx, ry, fill, extra) => '<ellipse cx="' + f1(c[0] + dx) + '" cy="' + f1(c[1] + dy) + '" rx="' + rx + '" ry="' + ry + '" fill="' + fill + '"' + (extra || '') + '/>';
+      const blur = ' filter="url(#' + b4 + ')"';
+      let o = '<filter id="' + b4 + '" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4.5"/></filter>';
+      CS.forEach((c, k) => {
+        const mf = id('bf' + k), mc = id('bc' + k);
+        o += '<mask id="' + mf + '" maskUnits="userSpaceOnUse" x="0" y="300" width="560" height="400">' + ell(c, 0, 0, RX, RY, '#fff') + ell(c, -8, -13, RX, RY, '#000', blur) + '</mask>' +
+          '<mask id="' + mc + '" maskUnits="userSpaceOnUse" x="0" y="300" width="560" height="400">' + ell(c, 1, 12, RX, RY, '#fff', blur) + ell(c, 0, 0, RX, RY, '#000') + '</mask>' +
+          '<rect x="' + (c[0] - 75) + '" y="440" width="150" height="150" fill="' + C.topSh2 + '" opacity=".8" mask="url(#' + mf + ')"/>' +
+          '<rect x="' + (c[0] - 75) + '" y="440" width="150" height="160" fill="' + C.topSh2 + '" mask="url(#' + mc + ')"/>' +
+          ell(c, -16, -17, 19, 12, '#FFFFFF', ' opacity=".95"' + blur);
+      });
+      o += ell([260, 520], 0, 0, 6, 17, C.topSh2, ' opacity=".55"' + blur);
+      const under = (pts) => L(smooth(pts, false), C.topLine, 1.3, ' opacity=".8"');
+      o += under([[161.5, 516.2], [164.5, 523.4], [169.0, 530.0], [174.8, 535.8], [181.8, 540.7], [189.8, 544.4], [198.4, 546.9], [207.4, 547.9], [216.5, 547.6], [225.3, 546.0], [233.7, 543.0], [241.3, 538.8], [247.8, 533.5], [253.1, 527.3], [257.0, 520.4]]) + under([[358.5, 516.2], [355.5, 523.4], [351.0, 530.0], [345.2, 535.8], [338.2, 540.7], [330.2, 544.4], [321.6, 546.9], [312.6, 547.9], [303.5, 547.6], [294.7, 546.0], [286.3, 543.0], [278.7, 538.8], [272.2, 533.5], [266.9, 527.3], [263.0, 520.4]]);
+      return '<g clip-path="url(#' + id('tc') + ')">' + o + '</g>';
+    }
+    const top = P(topD, 'url(#' + id('tg') + ')') + P(topD, 'url(#' + id('tv') + ')') +
+      '<clipPath id="' + id('tc') + '"><path d="' + topD + '"/></clipPath>' +
+      '<g clip-path="url(#' + id('tc') + ')"><g filter="url(#' + ids.soft + ')">' +
+      P('M 150 450 C 168 470, 176 520, 176 664 L 130 664 L 130 450 Z', C.topSh2, ' opacity=".55"') + P('M 370 450 C 352 470, 344 520, 344 664 L 390 664 L 390 450 Z', C.topSh2, ' opacity=".8"') + '</g></g>' +
+      L(smooth(neck.map((p, i) => i === 0 || i === neck.length - 1 ? p : [p[0], p[1] + 4.5]), false), C.topLine, 1, ' opacity=".4"') +
+      bustSVG() +
+      L('M 212 556 C 215 574, 216 592, 214 608 M 308 556 C 305 574, 304 592, 306 608', C.topSh2, 1, ' opacity=".35"') +
+      L('M 198 604 C 224 612, 250 614, 274 609 M 214 638 C 238 643, 264 644, 292 638', C.topSh2, 1.2, ' opacity=".55"') +
+      L(smooth(neck, false), C.topLine, 1.4) + L(smooth(holeL.concat(inner('L'), [botL]), false), C.topLine, 1.4) + L(smooth(holeR.concat(inner('R'), [botR]), false), C.topLine, 1.4);
+    /* the shoulder line from the neck */
+    const outline = L(smooth(trapPts('L', 18), false), C.line, 1.5) + L(smooth(trapPts('R', 18), false), C.line, 1.5);
+    const back = ['L', 'R'].filter((s) => !G[s].front).map((s) => G[s].svg).join('');
+    const front = ['L', 'R'].filter((s) => G[s].front).map((s) => G[s].svg).join('');
+    return { under: mask + skin + chest + top + outline + back, over: front };
+  }
+
+  root.celestinaSVG = function (o) {
+    const st = Object.assign({ pose: 'idle', mouth: 'smile', eyes: 1, happy: false, look: 0, tilt: 0, bob: 0, sway: 0, flip: false, armA: 0, w: 400 }, o || {});
+    const n = ++uid, id = (s) => 'cl' + n + s;
+    const vb = st.vb || (st.flip ? '-40 30 560 630' : '0 30 560 630');
+    const [, , vw, vh] = vb.split(' ').map(Number);
+    const W = st.w, H = st.h || Math.round(W * vh / vw);
+    const HC = [[C.hairLt, '.55'], [C.hairHi, '.45'], [C.hairSh, '.55'], [C.hairSh2, '.45'], [C.hair, '.6']];
+    const HCd = [[C.hairSh2, '.45'], [C.hair, '.5'], [C.hairLt, '.35'], [C.hairSh2, '.3']];
+    const defs = '<defs>' +
+      '<linearGradient id="' + id('hg') + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + C.hairLt + '"/><stop offset=".5" stop-color="' + C.hair + '"/><stop offset="1" stop-color="' + C.hairSh + '"/></linearGradient>' +
+      '<linearGradient id="' + id('hb') + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + C.hairSh + '"/><stop offset=".7" stop-color="' + C.hairSh + '"/><stop offset="1" stop-color="' + C.hairSh2 + '"/></linearGradient>' +
+      '<linearGradient id="' + id('fg') + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + C.skinSh + '" stop-opacity=".7"/><stop offset=".35" stop-color="' + C.skin + '" stop-opacity="0"/></linearGradient>' +
+      '<radialGradient id="' + id('bl') + '"><stop offset="0" stop-color="' + C.blush + '" stop-opacity=".5"/><stop offset="1" stop-color="' + C.blush + '" stop-opacity="0"/></radialGradient>' +
+      '<linearGradient id="' + id('tg') + '" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="' + C.topSh + '"/><stop offset=".25" stop-color="#FFFFFF"/><stop offset=".7" stop-color="#FFFFFF"/><stop offset="1" stop-color="' + C.topSh2 + '"/></linearGradient>' +
+      '<linearGradient id="' + id('tv') + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset="1" stop-color="' + C.topSh + '" stop-opacity=".8"/></linearGradient>' +
+      ['e1', 'e2'].map((e) => '<linearGradient id="ir' + id(e) + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + C.irisDk + '"/><stop offset=".55" stop-color="' + C.iris + '"/><stop offset="1" stop-color="' + C.irisLt + '"/></linearGradient>').join('') +
+      '<linearGradient id="' + id('sk') + '" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="' + C.skinHi + '"/><stop offset=".45" stop-color="' + C.skin + '"/><stop offset="1" stop-color="' + C.skinSh + '"/></linearGradient>' +
+      '<filter id="' + id('soft') + '" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.6"/></filter>' +
+      '<clipPath id="' + id('face') + '"><path d="M 176 196 C 174 236, 182 268, 204 294 C 222 314, 242 324, 260 326 C 278 324, 298 314, 316 294 C 338 268, 346 236, 344 196 C 342 120, 178 120, 176 196 Z"/></clipPath>' +
+      '<clipPath id="' + id('neck') + '"><path d="M 242 280 L 242 360 L 278 360 L 278 280 Z"/></clipPath>' +
+      '</defs>';
+    const sway = st.sway || 0;
+
+    /* back hair: long, sleek and straight, behind the shoulders */
+    const backD = 'M 262 110 C 202 110, 166 150, 164 208 C 162 262, 162 306, 156 360 C 150 424, 144 504, 138 584 C 136 614, 132 644, 130 664 L 390 664 C 388 644, 384 614, 382 584 C 376 504, 370 424, 364 360 C 358 306, 358 262, 356 208 C 354 150, 322 110, 262 110 Z';
+    const backHair = '<g transform="rotate(' + (sway * 0.4).toFixed(2) + ' 260 120)">' +
+      clump(id('cb'), backD, [[180, 150], [162, 260], [150, 420], [130, 664]], [[340, 150], [358, 260], [370, 420], [390, 664]], 70, 101, 'url(#' + id('hb') + ')', HCd, 1.2) + '</g>';
+
+    /* neck, shoulders, collarbones */
+    const neck = P('M 242 286 L 242 356 C 252 362, 268 362, 278 356 L 278 286 Z', C.skin) + L('M 242 290 L 242 338 M 278 290 L 278 338', C.line, 1.4) +
+      '<g clip-path="url(#' + id('neck') + ')">' + P('M 232 288 C 242 322, 278 322, 288 288 L 288 334 C 274 346, 246 346, 232 334 Z', C.skinSh) + '</g>';
+    const bangLD = 'M 288 106 C 250 110, 212 130, 192 170 C 184 188, 182 212, 188 240 C 192 222, 198 210, 206 202 C 206 210, 208 218, 214 222 C 216 208, 222 198, 230 190 C 230 198, 232 206, 238 212 C 240 198, 246 186, 254 178 C 256 186, 258 194, 262 200 C 264 186, 270 172, 278 162 C 280 170, 282 178, 286 184 C 288 162, 290 138, 294 120 Z';
+    const bangRD = 'M 286 110 C 314 116, 338 138, 348 168 C 352 184, 354 202, 352 222 C 346 206, 338 194, 328 186 C 328 196, 328 206, 326 214 C 320 198, 310 184, 296 176 C 286 172, 282 160, 282 140 C 282 128, 284 118, 286 110 Z';
+    /* face */
+    const faceD = 'M 176 196 C 174 236, 182 268, 204 294 C 222 314, 242 324, 260 326 C 278 324, 298 314, 316 294 C 338 268, 346 236, 344 196 C 342 120, 178 120, 176 196 Z';
+    const face = P(faceD, C.skin) +
+      '<g clip-path="url(#' + id('face') + ')">' +
+      P('M 160 120 L 360 120 L 360 300 L 160 300 Z', 'url(#' + id('fg') + ')') +
+      /* shadow cast by the bangs */
+      '<g transform="translate(4 9)" opacity=".75">' + P(bangLD, C.skinSh) + P(bangRD, C.skinSh) + '</g>' +
+      P('M 176 200 C 178 236, 186 266, 204 290 C 194 280, 184 262, 180 236 Z', C.skinSh2, ' opacity=".6"') +
+      P('M 344 200 C 342 236, 334 266, 316 290 C 326 280, 336 262, 340 236 Z', C.skinSh2, ' opacity=".6"') +
+      '</g>' + P(faceD, 'none', OL(C.line, 1.4)) +
+      '<ellipse cx="210" cy="266" rx="21" ry="11" fill="url(#' + id('bl') + ')"/><ellipse cx="310" cy="266" rx="21" ry="11" fill="url(#' + id('bl') + ')"/>' +
+      L('M 203 263 L 200 268 M 209 263 L 206 268 M 215 263 L 212 268 M 305 263 L 302 268 M 311 263 L 308 268 M 317 263 L 314 268', C.blush, 1, ' opacity=".5"') +
+      L('M 262 254 C 263.5 260, 263.5 265, 259.5 268', C.line, 1.4, ' opacity=".7"') + L('M 256 263 C 256.5 259.5, 258 257.5, 259 257', '#FFFFFF', 1.3, ' opacity=".8"');
+    const eyes = '<g transform="translate(217 234)">' + eye(id('e1'), st.eyes, st.happy, st.look) + '</g>' +
+      '<g transform="translate(303 234) scale(-1 1)">' + eye(id('e2'), st.eyes, st.happy, -st.look) + '</g>';
+    const browKind = st.brows || { think: 'think', slow: 'kind', gentle: 'kind', cheer: 'up', wave: 'up', thumbs: 'up' }[st.pose] || 'soft';
+
+    /* crown: hair flowing from a side part */
+    const crownD = 'M 160 218 C 154 152, 198 100, 264 98 C 328 100, 368 148, 362 218 C 354 192, 342 172, 326 160 C 308 148, 294 142, 288 140 C 272 142, 246 146, 224 156 C 196 168, 172 190, 160 218 Z';
+    const crown = clump(id('cc1'), crownD, [[288, 100], [218, 98], [172, 140], [160, 218]], [[288, 140], [250, 146], [208, 166], [176, 218]], 26, 202, 'url(#' + id('hg') + ')', HC, 1.2) +
+      '<g clip-path="url(#' + id('cc1') + ')">' + strands([[288, 100], [332, 102], [362, 146], [362, 218]], [[288, 140], [316, 148], [338, 170], [348, 218]], 14, 303, HC, 0.7, 1.5) + '</g>' +
+      L('M 288 102 C 287 114, 287 128, 286 140', C.hairSh2, 1.2, ' opacity=".6"');
+    /* side-swept bangs: tapered clumps from the part, falling across her forehead */
+    const bangs =
+      clump(id('cf2'), bangRD, [[292, 112], [326, 128], [344, 170], [352, 222]], [[292, 130], [300, 160], [318, 190], [326, 214]], 8, 404, 'url(#' + id('hg') + ')', HC, 1.1) +
+      clump(id('cf1'), bangLD, [[288, 106], [236, 116], [198, 160], [188, 240]], [[294, 120], [290, 150], [272, 170], [262, 200]], 22, 707, 'url(#' + id('hg') + ')', HC, 1.1) +
+      '<g clip-path="url(#' + id('cf1') + ')">' + L('M 286 120 C 262 140, 236 176, 214 222 M 290 130 C 272 150, 252 176, 238 212 M 292 140 C 280 158, 268 178, 262 200', C.hairSh2, 1.1, ' opacity=".55"') + '</g>';
+    /* long locks in front of the shoulders */
+    const locks =
+      clump(id('cl1'), 'M 170 176 C 156 230, 156 292, 166 344 C 172 384, 170 420, 162 452 C 154 484, 152 516, 160 540 C 166 556, 178 566, 192 572 C 182 556, 176 536, 176 512 C 176 484, 186 456, 196 428 C 206 396, 206 346, 196 280 C 192 248, 192 212, 196 180 Z',
+        [[170, 176], [146, 360], [146, 560], [192, 572]], [[196, 180], [214, 380], [166, 470], [192, 572]], 16, 808, 'url(#' + id('hg') + ')', HC, 1.1) +
+      clump(id('cl2'), 'M 350 176 C 364 230, 364 292, 354 344 C 348 384, 350 420, 358 452 C 366 484, 368 516, 360 540 C 354 556, 342 566, 328 572 C 338 556, 344 536, 344 512 C 344 484, 334 456, 324 428 C 314 396, 314 346, 324 280 C 328 248, 328 212, 324 180 Z',
+        [[350, 176], [374, 360], [374, 560], [328, 572]], [[324, 180], [306, 380], [354, 470], [328, 572]], 16, 909, 'url(#' + id('hg') + ')', HC, 1.1);
+    /* shine across the crown */
+    const shine = '<g filter="url(#' + id('soft') + ')" opacity=".8">' +
+      P('M 196 148 C 222 130, 302 128, 336 146 L 330 153 L 322 148 L 314 156 L 304 149 L 294 157 L 284 150 L 274 157 L 264 150 L 254 157 L 244 150 L 234 157 L 224 151 L 214 158 L 202 154 Z', C.hairHi) + '</g>' +
+      P('M 232 118 C 248 111, 264 109, 278 111 L 272 117 C 260 115, 248 117, 238 122 Z', C.hairHi, ' opacity=".7"');
+
+    const lockShadow = '<g transform="translate(6 5)" opacity=".22" filter="url(#' + id('soft') + ')">' + P('M 160 310 C 162 326, 164 336, 166 344 C 172 384, 170 420, 162 452 C 154 484, 152 516, 160 540 C 166 556, 178 566, 192 572 C 182 556, 176 536, 176 512 C 176 484, 186 456, 196 428 C 206 396, 206 346, 202 310 Z', '#8C6A58') + P('M 360 310 C 358 326, 356 336, 354 344 C 348 384, 350 420, 358 452 C 366 484, 368 516, 360 540 C 354 556, 342 566, 328 572 C 338 556, 344 536, 344 512 C 344 484, 334 456, 324 428 C 314 396, 314 346, 318 310 Z', '#8C6A58') + '</g>';
+    const head = '<g transform="rotate(' + st.tilt.toFixed(2) + ' 260 330) translate(260 352) scale(1.1) translate(-260 -352)">' + neck + face + eyes + mouthSVG(st.mouth) + lockShadow + locks + crown + bangs + shine + '<g opacity=".45">' + brows(browKind) + '</g>' + '</g>';
+    const BD = bodySVG(st, id);
+    const all = '<g transform="translate(0 ' + st.bob.toFixed(2) + ')' + (st.flip ? ' translate(520 0) scale(-1 1)' : '') + '">' + backHair + BD.under + head + BD.over + '</g>';
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + vb + '" width="' + W + '" height="' + H + '">' + defs + all + '</svg>';
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+/* Celestina, AJ's sheet tutor (added Nov 8, 2026, asked for by JB). An original character drawn by celestina.js.
+   For a child whose record has tutor: true (Parents → Settings → Celestina), she stands in a corner of the sheet,
+   Fix it and results screens and talks in this device's own voice:
+   - reads each question aloud as it comes up, with a greeting before the day's first sheet of a subject;
+   - asks again after a long wait ("No rush, AJ. Listen again: ...");
+   - when a tap comes before he could have looked, she says "Not so fast! Look first, then tap." before the next
+     question (at most twice a sheet);
+   - in Fix it, on "Which is bigger?", she counts up to the bigger number while the numbers light up, then says
+     which comes last; a wrong tap there gets no red cross and no greyed-out button (JB: with two buttons he would
+     just tap the other one);
+   - reads the hint for other mistakes in Fix it, and cheers a fixed problem, a passed sheet and "All fixed".
+   Scoring, passing, timing and the sheets themselves are unchanged. */
+const Tutor = (() => {
+  const VOICE = { rate: 0.9, pitch: 1.16 };
+  const VB = '40 70 440 460'; /* head and shoulders of the 560 × 630 drawing */
+  const VIEWS = ['sheet', 'fix', 'results', 'fixed'];
+  const cache = {};
+  let el = null, imgA = null, imgB = null, bub = null, shown = false;
+  let q = [], busy = false, gen = 0, endTimer = 0, utter = null;
+  let waitT = 0, waitN = 0, askGen = 0;
+  let nudgeNext = false, nudges = 0, lastNudge = -9;
+  const word = (n) => (typeof MathCurriculum !== 'undefined' && MathCurriculum.WORDS && MathCurriculum.WORDS[n]) || String(n);
+  const cap = (s) => String(s).charAt(0).toUpperCase() + String(s).slice(1);
+
+  function kidId() {
+    if (S.view === 'sheet' && S.sheet) return S.sheet.trial ? null : S.sheet.kid;
+    if (S.result && S.result.sh && VIEWS.indexOf(S.view) > 0) return S.result.sh.trial ? null : S.result.sh.kid;
+    return null;
+  }
+  function on(id) { const l = id && Store.learner(id); return !!(l && l.tutor); }
+  function active() { return Store.mode !== 'setup' && VIEWS.indexOf(S.view) >= 0 && on(kidId()); }
+  function nameOf(id) { const l = Store.learner(id || kidId()); return (l && l.name) || 'friend'; }
+
+  /* ---------- the drawing: two copies of each pose, mouth closed and open, swapped while she talks ---------- */
+  function art(pose, mouth, happy) {
+    const k = pose + '|' + mouth + '|' + (happy ? 1 : 0);
+    if (cache[k] === undefined) {
+      let svg = '';
+      try { svg = celestinaSVG({ pose, mouth, happy: !!happy, vb: VB, w: 440 }); } catch (e) { svg = ''; }
+      cache[k] = svg ? 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg) : '';
+    }
+    return cache[k];
+  }
+  function mount() {
+    if (el) return;
+    el = document.createElement('div');
+    el.id = 'tutor'; el.className = 'tutor quiet'; el.hidden = true; el.setAttribute('aria-hidden', 'true');
+    el.innerHTML = '<div class="t-bub"><b>Celestina</b><span></span></div><div class="t-fig"><img class="t-a" alt=""><img class="t-b" alt=""></div>';
+    document.body.appendChild(el);
+    imgA = el.querySelector('.t-a'); imgB = el.querySelector('.t-b'); bub = el.querySelector('.t-bub span');
+  }
+  function pose(p, happy) {
+    mount();
+    const a = art(p, happy ? 'wide' : 'smile', happy), b = art(p, 'open', happy);
+    if (a && imgA.getAttribute('src') !== a) imgA.setAttribute('src', a);
+    if (b && imgB.getAttribute('src') !== b) imgB.setAttribute('src', b);
+  }
+  function talking(t) { if (el) el.classList.toggle('talking', !!t); }
+  function bubble(text) { mount(); bub.textContent = text || ''; el.classList.toggle('quiet', !text); }
+
+  /* a corner the problem never uses: in landscape under the answer pad, in portrait the top right of the card */
+  function place() {
+    if (!el) return;
+    const vw = window.innerWidth, vh = window.innerHeight, land = vw >= vh * 1.05;
+    const pad = document.querySelector('#app .pad'), card = document.querySelector('#app .card');
+    let h, css, top = false;
+    if ((S.view === 'sheet' || S.view === 'fix') && land && pad) {
+      /* the lowest button or line in the pad, not the pad's box, which runs to the bottom of the screen */
+      let pb = 0;
+      pad.querySelectorAll('button, p, .help, [data-act]').forEach((x) => { const r = x.getBoundingClientRect(); if (r.height) pb = Math.max(pb, r.bottom); });
+      if (!pb) pb = vh * 0.62;
+      h = Math.round(Math.max(110, Math.min(230, vh - pb - 10)));
+      css = 'right:8px;bottom:0;';
+    } else if ((S.view === 'sheet' || S.view === 'fix') && card) {
+      /* portrait: the top right of the card, kept above the first thing the question shows */
+      const r = card.getBoundingClientRect();
+      let ct = r.bottom;
+      card.querySelectorAll('.prompt, .clock-wrap, svg, img, button, .seq, .word, .pic, .t-count').forEach((x) => { const q = x.getBoundingClientRect(); if (q.height) ct = Math.min(ct, q.top); });
+      h = Math.round(Math.max(96, Math.min(210, r.height * 0.26, ct - r.top - 18)));
+      css = 'right:' + Math.round(Math.max(4, vw - r.right + 6)) + 'px;top:' + Math.round(r.top + 6) + 'px;';
+      top = true;
+    } else {
+      h = Math.round(Math.max(110, Math.min(190, vh * 0.22)));
+      css = 'right:8px;bottom:0;';
+    }
+    el.style.cssText = css + '--th:' + h + 'px';
+    el.classList.toggle('at-top', top);
+  }
+
+  /* ---------- talking: one line at a time, in order ---------- */
+  function say(text, o) {
+    if (!text) return;
+    o = o || {};
+    q.push({ text: String(text), bubble: o.bubble, pose: o.pose || 'idle', happy: !!o.happy, onstart: o.onstart, onend: o.onend, rate: o.rate, gap: o.gap });
+    if (!busy) next();
+  }
+  function stop() {
+    gen++; q = []; busy = false; clearTimeout(endTimer); utter = null;
+    try { if (Speech.ok) window.speechSynthesis.cancel(); } catch (e) { /* speech unavailable */ }
+    talking(false);
+  }
+  function sayNow(text, o) { stop(); say(text, o); }
+  function next() {
+    const it = q.shift();
+    if (!it) { busy = false; talking(false); return; }
+    busy = true;
+    const my = ++gen;
+    pose(it.pose, it.happy); bubble(it.bubble != null ? it.bubble : it.text);
+    if (it.onstart) { try { it.onstart(); } catch (e) { /* screen changed */ } }
+    talking(true);
+    let done = false;
+    const fin = () => {
+      if (done || my !== gen) return;
+      done = true; clearTimeout(endTimer); talking(false);
+      if (it.onend) { try { it.onend(); } catch (e) { /* screen changed */ } }
+      setTimeout(() => { if (my === gen) next(); }, it.gap != null ? it.gap : 140);
+    };
+    /* if the device never says the line has ended, move on after about as long as it takes to say */
+    endTimer = setTimeout(fin, Math.min(15000, 1400 + it.text.length * 105 / (it.rate || 1)));
+    if (Speech.ok) {
+      try {
+        const u = new SpeechSynthesisUtterance(it.text);
+        u.rate = it.rate || VOICE.rate; u.pitch = VOICE.pitch; u.lang = 'en-US';
+        if (Speech.voice) u.voice = Speech.voice;
+        u.onend = fin; u.onerror = fin;
+        utter = u; /* kept, so the browser doesn't drop it before it ends */
+        window.speechSynthesis.speak(u);
+      } catch (e) { /* the timer moves on */ }
+    }
+  }
+
+  /* ---------- the sheet ---------- */
+  function clearWait() { clearTimeout(waitT); waitT = 0; }
+  function armWait(p, my) {
+    clearWait(); waitN = 0;
+    const tick = () => {
+      if (my !== askGen || !active() || waitN >= 2) return;
+      waitN++;
+      say('No rush, ' + nameOf() + '. Listen again: ' + (p.say || 'look carefully.'), { pose: 'gentle', onend: () => { if (my === askGen) waitT = setTimeout(tick, 20000); } });
+    };
+    waitT = setTimeout(tick, 15000);
+  }
+  function ask(p, force) {
+    clearWait();
+    if (!p) return;
+    const my = ++askGen;
+    if (force) stop();
+    if (nudgeNext && !force) { nudgeNext = false; say('Not so fast! Look first, then tap.', { pose: 'slow' }); }
+    say(p.say || 'Look carefully.', { pose: 'point', onend: () => armWait(p, my) });
+  }
+  function sheetStart(sh) {
+    stop(); clearWait(); nudges = 0; lastNudge = -9; nudgeNext = false;
+    if (!sh || sh.trial || !on(sh.kid)) return;
+    if (sh.kind === 'test') say('This is a level test, ' + nameOf(sh.kid) + '. Take your time!', { pose: 'thumbs' });
+    else if (sh.dayNo === 1) {
+      const what = { math: 'do math', reading: 'read', clock: 'tell time' }[sh.subj] || 'practice';
+      say('Hi, ' + nameOf(sh.kid) + '! Let’s ' + what + ' together. I’ll read each one to you.', { pose: 'wave' });
+    }
+  }
+  /* called the moment he answers: she stops reading, and a tap made before he could have looked earns a nudge */
+  function answered(sh) {
+    askGen++; clearWait();
+    const dt = Date.now() - sh.qAt;
+    if (dt < 1200 && nudges < 2 && sh.idx - lastNudge > 1) { nudgeNext = true; nudges++; lastNudge = sh.idx; }
+    stop();
+  }
+  function results(R) {
+    stop(); clearWait();
+    const n = R.sh.problems.length, right = n - R.g.wrong;
+    if (R.ev.pass) say((R.sh.kind === 'test' ? 'You passed the level test! ' : 'You passed! ') + right + ' out of ' + n + '! I knew you could do it!', { pose: 'cheer', happy: true });
+    else if (R.g.wrong > 0) say('You got ' + right + ' out of ' + n + '. Let’s fix the ones we missed together.', { pose: 'gentle' });
+    else say('Every one right! Let’s keep going.', { pose: 'thumbs' });
+    if (R.session && R.session.rushed) say('Whoa, that was fast! Next time, let’s look at each one first.', { pose: 'slow' });
+  }
+
+  /* ---------- Fix it ---------- */
+  function isCompare(p) { return !!(p && p.kind === 'compare' && p.mode === 'choice' && p.data && typeof p.data.a === 'number' && typeof p.data.b === 'number'); }
+  function buttons() { return Array.from(document.querySelectorAll('#app [data-act=choose]')); }
+  function glow(n, strong) { buttons().forEach((b) => { if (b.getAttribute('data-v') === String(n)) { b.classList.add('t-soft'); if (strong) b.classList.add('t-glow'); } }); }
+  function strip(small, big) {
+    const card = document.querySelector('#app .card');
+    if (!card) return;
+    const old = card.querySelector('.t-count');
+    if (old) old.remove();
+    let h = '';
+    for (let i = small; i <= big; i++) h += '<i data-n="' + i + '"' + (i === small || i === big ? ' class="pick"' : '') + '>' + i + '</i>';
+    card.insertAdjacentHTML('beforeend', '<div class="t-count" aria-hidden="true">' + h + '</div>');
+  }
+  function light(i) {
+    const c = document.querySelector('#app .t-count [data-n="' + i + '"]');
+    if (c) c.classList.add('on');
+  }
+  /* JB's wording (Nov 8): "Let's count together… [smaller] to [bigger]… which is bigger?" She counts from the smaller
+     number up to the bigger one while the numbers light up, and he still makes the choice */
+  function countHint(p, again) {
+    const a = p.data.a, b = p.data.b, big = Math.max(a, b), small = Math.min(a, b);
+    if (again) stop();
+    clearWait();
+    const my = ++askGen;
+    say(again ? 'Let’s count together again.' : 'Let’s count together.', {
+      pose: 'point', onstart: () => { strip(small, big); buttons().forEach((x) => x.classList.add('t-soft')); }
+    });
+    const said = [];
+    for (let i = small; i <= big; i++) {
+      said.push(cap(word(i)));
+      const shownText = said.join(', ') + (i < big ? '…' : '');
+      say(cap(word(i)), { pose: 'point', rate: 1.0, gap: 60, bubble: shownText, onstart: () => { light(i); if (i === a || i === b) glow(i, false); } });
+    }
+    say('Which is bigger?', { pose: 'think', onend: () => armWait(p, my) });
+  }
+  function fixItem(force) {
+    const F = S.fix, it = F && F.items[F.cur];
+    if (!it) return;
+    if (force) stop();
+    clearWait();
+    if (isCompare(it.p)) return countHint(it.p, !!force);
+    const my = ++askGen;
+    if (it.type === 'extra') say('One more like that one!', { pose: 'thumbs' });
+    const hint = it.type === 'extra' ? '' : (typeof fixHintText === 'function' ? fixHintText(it) : '');
+    say(it.p.say || 'Try this one.', { pose: 'point', onend: hint ? null : () => armWait(it.p, my) });
+    if (hint) say(hint, { pose: 'think', onend: () => armWait(it.p, my) });
+  }
+  function fixRight(it) {
+    askGen++; clearWait(); stop();
+    const p = it.p;
+    const line = isCompare(p) ? 'Yes! ' + cap(word(Math.max(p.data.a, p.data.b))) + ' is bigger. You fixed it!' : ['Yes! You fixed it!', 'That’s it! Great job!', 'You got it!'][Math.floor(Math.random() * 3)];
+    say(line, { pose: 'cheer', happy: true });
+  }
+  function allFixed() { sayNow('All fixed! Great job, ' + nameOf() + '!', { pose: 'cheer', happy: true }); }
+
+  function speakCurrent(force) {
+    if (S.view === 'sheet' && S.sheet) return ask(S.sheet.problems[S.sheet.idx], force);
+    if (S.view === 'fix') return fixItem(force);
+  }
+  function afterRender() {
+    const act = active();
+    document.body.classList.toggle('tutor-on', act);
+    if (!act) {
+      if (shown) { shown = false; stop(); clearWait(); if (el) el.hidden = true; }
+      return;
+    }
+    mount();
+    if (!shown) { shown = true; el.hidden = false; if (!busy) { pose('idle'); bubble(''); } }
+    place();
+  }
+  function init() {
+    if (typeof Speech === 'undefined' || Speech.tutorWrapped) return;
+    const raw = Speech.say.bind(Speech);
+    Speech.tutorWrapped = true;
+    /* the app's own spoken lines (hints, "Check your answer.") come from Celestina while she's on screen;
+       buddy sounds with their own pitch stay as they are */
+    Speech.say = function (text, o) { if (active() && !(o && (o.pitch || o.rate))) return sayNow(text, { pose: 'think' }); return raw(text, o); };
+    try { window.addEventListener('resize', () => { if (shown) place(); }); } catch (e) { /* no window */ }
+  }
+  init();
+  return { active, on, speakCurrent, sheetStart, answered, results, isCompare, countHint, fixRight, allFixed, afterRender, say, stop, art };
+})();
 /* Small Steps: state, subjects and the play flows (sheet, results, corrections, celebrations,
    between sheets, placement). */
 const SUBJECTS = [
@@ -10353,6 +11154,7 @@ function buildBack(pos) {
   c.built = (c.built || []).filter((x, k) => k !== pos); Sfx.tap(); S.anim = false; render();
 }
 function speakCurrent(force) {
+  if (typeof Tutor !== 'undefined' && Tutor.active()) return Tutor.speakCurrent(force);
   const c = activeCtx(), p = activeProblem();
   if (!c || !p || !p.say) return;
   if (force || c.speak) Speech.say(p.say);
@@ -10409,6 +11211,7 @@ function startSheet(kidId, subj, opts) {
     qAt: Date.now(), qPaused: 0, qSecs: []
   };
   S.view = 'sheet'; S.anim = true;
+  if (typeof Tutor !== 'undefined') Tutor.sheetStart(S.sheet);
   render(); window.scrollTo(0, 0);
   holdScreen(); speakCurrent(); startTick();
 }
@@ -10439,6 +11242,7 @@ function sheetAnswer(v) {
   if (sh.locked) return;
   sh.answers[sh.idx] = v; sh.locked = true;
   if (sh.qSecs) sh.qSecs[sh.idx] = Math.max(0, (Date.now() - sh.qAt - (sh.paused - sh.qPaused)) / 1000);
+  if (typeof Tutor !== 'undefined' && Tutor.active()) Tutor.answered(sh);
   Sfx.tap(); markPicked(v);
   const t0 = Date.now();
   after(BEAT_MS, () => {
@@ -10527,7 +11331,8 @@ function playResults() {
   lit.forEach((on, i) => { if (on) after(120 + i * 350, () => Sfx.star(i)); });
   if (R.ev.pass && R.g.wrong === 0) after(1050, () => Confetti.fromEl(document.querySelector('.stars3'), 50));
   if (R.credit) after(1250, () => collectStars(R.starsBefore, R.credit.buddy.stars));
-  if (R.session.rushed && R.sh.speak) after(700, () => Speech.say('Whoa, that was fast! Let’s slow down and check each one.'));
+  if (typeof Tutor !== 'undefined' && Tutor.active()) Tutor.results(R);
+  else if (R.session.rushed && R.sh.speak) after(700, () => Speech.say('Whoa, that was fast! Let’s slow down and check each one.'));
 }
 function collectStars(from, to) {
   const chip = document.getElementById('starChip'), total = document.getElementById('starTotal');
@@ -10641,8 +11446,17 @@ function fixAnswer(v) {
   if (F.locked) return;
   const right = v === it.p.answer;
   if (it.firstOk === null) it.firstOk = right;
+  /* Celestina on "Which is bigger?": a wrong tap gets no red cross and greys out nothing (with two buttons he
+     would just tap the other one); she counts up to the bigger number with him again */
+  if (!right && typeof Tutor !== 'undefined' && Tutor.active() && Tutor.isCompare(it.p)) {
+    it.tries++; it.lastGiven = v; it.code = E.diagnose(it.p, v) || it.code;
+    F.input = ''; Sfx.tap(); S.anim = false; render();
+    Tutor.countHint(it.p, true);
+    return;
+  }
   if (right) {
     F.flash = 'ok'; F.locked = true; Sfx.correct();
+    if (typeof Tutor !== 'undefined' && Tutor.active()) Tutor.fixRight(it);
     if (it.p.mode === 'choice' || it.p.mode === 'numtap') F.rightChoice = v;
     if (it.type === 'redo' && F.extrasAdded < 3 && F.famsAdded.indexOf(it.p.fam) < 0) {
       const sim = E.similar(it.p);
@@ -10685,7 +11499,8 @@ function finishFix() {
   Store.updateSession(R.sh.kid, R.session.id, R.session.at, { fixSecs: secs, fixed: true, extras: extras.length, extrasWrong: extras.filter((x) => !x.firstOk).length, stars: R.award.total }, R.sh.subj);
   S.view = 'fixed'; S.anim = false; render();
   Sfx.complete();
-  if (F.speak) Speech.say('All fixed. Great job!');
+  if (typeof Tutor !== 'undefined' && Tutor.active()) Tutor.allFixed();
+  else if (F.speak) Speech.say('All fixed. Great job!');
   after(500, () => collectStars(R.starsBefore, R.credit ? R.credit.buddy.stars : R.starsBefore));
 }
 function viewFixed() {
@@ -12747,7 +13562,9 @@ function historyHTML(E, sessions, kidId) {
 }
 function settingsHTML(l, E, t, subj) {
   const s = E.settingsOf(t);
-  const speakRow = subj === 'reading' ? '' : '<div class="field"><label for="f-speak">Read questions aloud</label><select id="f-speak" data-set="speak">' + opt('1', 'On', s.speak ? '1' : '0') + opt('0', 'Off', s.speak ? '1' : '0') + '</select></div>';
+  const speakRow = (subj === 'reading' ? '' : '<div class="field"><label for="f-speak">Read questions aloud</label><select id="f-speak" data-set="speak">' + opt('1', 'On', s.speak ? '1' : '0') + opt('0', 'Off', s.speak ? '1' : '0') + '</select></div>') +
+    '<div class="field"><label for="f-tutor">Celestina, the tutor (all subjects)</label><select id="f-tutor" data-set="tutor">' + opt('1', 'On', l.tutor ? '1' : '0') + opt('0', 'Off', l.tutor ? '1' : '0') + '</select>' +
+      '<p class="help">For a child who can’t read yet. She reads each question aloud in this device’s voice, asks again after a long wait, counts with the child on “Which is bigger?” in Fix it, and cheers. Scoring and passing don’t change.</p></div>';
   return '<section class="glass panel"><h3>' + SUBJ[subj].name + ' settings for ' + esc(l.name) + '</h3><div class="form">' +
     '<div class="field"><label for="f-daily">Sheets per day</label><select id="f-daily" data-set="sheetsDay">' + [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12].map((v) => opt(v, v + (v === 1 ? ' sheet' : ' sheets'), E.sheetsPerDay(t))).join('') + '</select>' +
       '<p class="help">' + (subj === 'clock' ? 'Kumon has no clock program; 2 short sheets a day is plenty.' : 'Kumon’s instructor sets this. Kumon families report 5–10 sheets a subject a day, and Kumon suggests 10–15 minutes of focused work for young children.') + '</p></div>' +
@@ -12840,6 +13657,7 @@ function setLearnerField(key, raw) {
   if (key === 'name') { const v = String(raw).trim().slice(0, 24); if (!v) return; next = Object.assign({}, l, { name: v }); }
   else if (key === 'buddyName') { const v = String(raw).trim().slice(0, 16); if (!v) return; next = Object.assign({}, l, { buddy: Object.assign({}, Buddy.of(l), { name: v }) }); }
   else if (key === 'grade') { if (raw && !(raw in GRADE_NUM)) return; next = Object.assign({}, l, { grade: raw || '', gradeYear: schoolYear(new Date()).y }); }
+  else if (key === 'tutor') next = Object.assign({}, l, { tutor: raw === '1' });
   else {
     const subj = S.parentSubj, E = ENG[subj], t = trackOf(l, subj), s = E.settingsOf(t);
     const nt = Object.assign({}, t, { settings: Object.assign({}, s) });
@@ -13008,6 +13826,7 @@ function render() {
   S.anim = false;
   if (S.view === 'sheet') updateClock();
   if (typeof Buddy3D !== 'undefined') Buddy3D.mount(app);
+  if (typeof Tutor !== 'undefined') Tutor.afterRender();
 }
 function onStore() {
   if (['home', 'parent', 'placeDone', 'between', 'shop'].indexOf(S.view) < 0) return;
