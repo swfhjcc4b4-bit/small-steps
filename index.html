@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261109215743";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261109220625";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -989,6 +989,28 @@ details.more[open] > summary h3::after { content: " −"; }
 .b-plane { opacity: 0; transform-origin: 100px 122px; transform: scale(0, 1); }
 .buddy-svg.do-airplane .b-plane { animation: trPlaneParts 5.6s ease-in-out; }
 @keyframes trPlaneParts { 0%, 8% { opacity: 0; transform: scale(0, 1); } 13%, 88% { opacity: 1; transform: scale(1, 1); } 93%, 100% { opacity: 0; transform: scale(0, 1); } }
+/* Rocket (Andi's November 9 trick), flat: a hop, the nose cone and fins appear, it rumbles through the countdown,
+   blasts off out of the top, a little rocket flies once around the moon in the corner, then it comes back down
+   onto the pad, squashes a little as it lands, and the rocket parts go away */
+.buddy-svg.do-rocket .buddy-anim { animation: trRocket 8s linear; transform-origin: 100px 206px; }
+@keyframes trRocket { 0%, 100% { transform: translate(0, 0) rotate(0) scale(1, 1); } 3% { transform: translate(0, -16px) rotate(-8deg) scale(1, 1); } 6.5%, 12% { transform: translate(0, 0) rotate(0) scale(1, 1); } 14%, 18%, 22% { transform: translate(-1px, 0) rotate(0) scale(1, 1); } 16%, 20%, 24% { transform: translate(1px, 0) rotate(0) scale(1, 1); } 26%, 29%, 32%, 34.5% { transform: translate(-2.5px, 0) rotate(0) scale(1, 1); } 27.5%, 30.5%, 33.5% { transform: translate(2.5px, 0) rotate(0) scale(1, 1); } 36% { transform: translate(0, 0) rotate(0) scale(1, 1); animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45); } 50%, 72% { transform: translate(0, -340px) rotate(0) scale(1, 1); } 72% { animation-timing-function: cubic-bezier(0, 0.55, 0.45, 1); } 87% { transform: translate(0, 0) rotate(0) scale(1, 1); } 88.5% { transform: translate(0, 0) rotate(0) scale(1.05, 0.93); } 90% { transform: translate(0, 0) rotate(0) scale(1, 1); } 95% { transform: translate(0, -14px) rotate(0) scale(1, 1); } }
+.b-rocket { opacity: 0; transform-origin: 100px 120px; transform: scale(0.5); }
+.buddy-svg.do-rocket .b-rocket { animation: trRocketParts 8s ease-in-out; }
+@keyframes trRocketParts { 0%, 6.5% { opacity: 0; transform: scale(0.5); } 10%, 89% { opacity: 1; transform: scale(1); } 92%, 100% { opacity: 0; transform: scale(0.5); } }
+.b-flame { opacity: 0; }
+.buddy-svg.do-rocket .b-flame { animation: trRocketFlame 8s linear; }
+@keyframes trRocketFlame { 0%, 25% { opacity: 0; } 30% { opacity: 0.6; } 35%, 52% { opacity: 1; } 53%, 71% { opacity: 0; } 72%, 87% { opacity: 1; } 90%, 100% { opacity: 0; } }
+.b-flame-in { transform-origin: 100px 212px; }
+.buddy-svg.do-rocket .b-flame-in { animation: flameFlicker 0.14s ease-in-out infinite alternate; }
+@keyframes flameFlicker { from { transform: scaleY(0.82); } to { transform: scaleY(1.16); } }
+.b-moon, .b-orbit { opacity: 0; }
+.buddy-svg.do-rocket .b-moon { animation: trRocketMoon 8s ease-in-out; }
+@keyframes trRocketMoon { 0%, 44% { opacity: 0; } 50%, 76% { opacity: 1; } 82%, 100% { opacity: 0; } }
+.buddy-svg.do-rocket .b-orbit { animation: trRocketOrbitShow 8s linear; }
+@keyframes trRocketOrbitShow { 0%, 51% { opacity: 0; } 52%, 71% { opacity: 1; } 72%, 100% { opacity: 0; } }
+.b-orbit-r { transform-origin: 154px 48px; }
+.buddy-svg.do-rocket .b-orbit-r { animation: trRocketOrbit 8s linear; }
+@keyframes trRocketOrbit { 0%, 51% { transform: rotate(0deg); } 72%, 100% { transform: rotate(360deg); } }
 /* light-up glasses, flat: the frames change color */
 .i-neon { animation: neonCycle 2.6s linear infinite; }
 .i-neon-glow { animation: neonCycle 2.6s linear infinite; }
@@ -4899,6 +4921,8 @@ const Buddy = (() => {
     { id: 'grumble', slot: 'trick', name: 'Monster grumble', price: 12 },
     { id: 'gallop', slot: 'trick', name: 'Horse gallop', price: 12 },
     { id: 'airplane', slot: 'trick', name: 'Airplane', price: 15 },
+    /* Andi's November 9 trick */
+    { id: 'rocket', slot: 'trick', name: 'Rocket', price: 15 },
     /* Treats are eaten, so they can be bought again and again. Each one helps the buddy grow
        (grow points count toward Big and Hero like stars); fruit helps twice as much. */
     { id: 'apple', slot: 'treat', name: 'Apple', price: 1, use: true, grow: 2, fruit: true },
@@ -5115,6 +5139,18 @@ const Buddy = (() => {
     '<rect x="4" y="112" width="192" height="20" rx="10" fill="var(--bc)" stroke="#221D3E" stroke-opacity=".3" stroke-width="2"/>' +
     '<rect x="12" y="116" width="16" height="12" rx="5" fill="#fff" opacity=".85"/><rect x="172" y="116" width="16" height="12" rx="5" fill="#fff" opacity=".85"/>' +
     '<circle cx="46" cy="136" r="9" fill="#8A90A6"/><circle cx="154" cy="136" r="9" fill="#8A90A6"/><circle cx="46" cy="136" r="3.5" fill="#FFC531"/><circle cx="154" cy="136" r="3.5" fill="#FFC531"/></g>';
+  /* The nose cone, fins, nozzle and flame a flat buddy grows in the Rocket trick (hidden until it plays), drawn
+     behind it; the flame flickers under the nozzle while it flies. */
+  const ROCKET_FLAT = '<g class="b-rocket"><path d="M100 -4 L73 48 Q100 58 127 48 Z" fill="var(--bc)" stroke="#221D3E" stroke-opacity=".3" stroke-width="2"/>' +
+    '<path d="M100 -4 L90 15 Q100 19 110 15 Z" fill="#221D3E" fill-opacity=".35"/>' +
+    '<path d="M54 148 L20 206 L58 196 Z" fill="var(--bc)" stroke="#221D3E" stroke-opacity=".3" stroke-width="2"/><path d="M146 148 L180 206 L142 196 Z" fill="var(--bc)" stroke="#221D3E" stroke-opacity=".3" stroke-width="2"/>' +
+    '<path d="M54 148 L20 206 L58 196 Z M146 148 L180 206 L142 196 Z" fill="#221D3E" fill-opacity=".2"/>' +
+    '<g class="b-flame"><g class="b-flame-in"><path d="M83 212 Q100 266 117 212 Z" fill="#FF8A1F"/><path d="M90 212 Q100 246 110 212 Z" fill="#FFE45C"/></g></g>' +
+    '<rect x="81" y="200" width="38" height="13" rx="4" fill="#3A3550"/></g>';
+  /* The moon in the top corner and the little rocket that flies once around it while the buddy is up there. */
+  const ROCKET_SKY = '<g class="b-moon"><circle cx="154" cy="48" r="20" fill="#E4E1D6" stroke="#C3BEAE" stroke-width="2"/><circle cx="147" cy="42" r="4" fill="#C3BEAE"/><circle cx="160" cy="55" r="5.5" fill="#C3BEAE"/><circle cx="160" cy="39" r="2.5" fill="#C3BEAE"/></g>' +
+    '<g class="b-orbit"><g class="b-orbit-r"><path d="M141 14 L135 16 L141 18 Z" fill="#FFC531"/><path d="M145 12 L140 8.5 L141.5 13 Z M145 20 L140 23.5 L141.5 19 Z" fill="#3A3550"/>' +
+    '<ellipse cx="151" cy="16" rx="9" ry="4.6" fill="#E8453C"/><path d="M159 12.8 L166 16 L159 19.2 Z" fill="#B42E27"/><circle cx="153" cy="16" r="2" fill="#9FE3FF"/></g></g>';
   const EYES = {
     round: (s) => '<circle class="i-lens" cx="' + (-s / 2) + '" cy="0" r="14"/><circle class="i-lens" cx="' + (s / 2) + '" cy="0" r="14"/><path class="i-frame" d="M' + (-s / 2 + 14) + ' 0 L' + (s / 2 - 14) + ' 0"/>',
     shades: (s) => '<rect class="i-dark" x="' + (-s / 2 - 16) + '" y="-11" width="32" height="22" rx="8"/><rect class="i-dark" x="' + (s / 2 - 16) + '" y="-11" width="32" height="22" rx="8"/><path class="i-frame" d="M' + (-s / 2 + 16) + ' -4 L' + (s / 2 - 16) + ' -4"/><path class="i-shine" d="M' + (-s / 2 - 8) + ' -5 l6 -3 M' + (s / 2 - 8) + ' -5 l6 -3"/>',
@@ -5271,6 +5307,15 @@ const Buddy = (() => {
       '<circle cx="22" cy="-3" r="5" fill="#fff"/><circle cx="23.5" cy="-3" r="2.5" fill="#221D3E"/>' +
       '<ellipse cx="36" cy="0" rx="3.2" ry="4.2" fill="#FFC531"/><rect x="37" y="-16" width="3" height="32" rx="1.5" fill="#8A90A6"/></g>' +
       '<path d="M34 -36 h9 M36 -27 h11" stroke="#9FC6FF" stroke-width="3" stroke-linecap="round"/>',
+    /* Andi's November 9 trick: a rocket on its way around the moon, its eyes looking out of the window */
+    rocket: '<circle cx="26" cy="-26" r="15" fill="#E4E1D6" stroke="#C3BEAE" stroke-width="2"/><circle cx="21" cy="-30" r="3.5" fill="#C3BEAE"/><circle cx="31" cy="-21" r="4.5" fill="#C3BEAE"/><circle cx="31" cy="-33" r="2" fill="#C3BEAE"/>' +
+      '<path d="M-30 30 C-40 4 -6 -40 26 -44" stroke="#C9CDEB" stroke-width="3" fill="none" stroke-dasharray="4 4" stroke-linecap="round"/>' +
+      '<g transform="translate(-6 10) rotate(35)"><path d="M-7 22 Q0 44 7 22 Z" fill="#FF8A1F"/><path d="M-4 22 Q0 35 4 22 Z" fill="#FFE45C"/>' +
+      '<path d="M-10 6 L-20 22 L-9 19 Z" fill="#B42E27"/><path d="M10 6 L20 22 L9 19 Z" fill="#B42E27"/>' +
+      '<path d="M0 -30 C12 -18 12 6 9 20 L-9 20 C-12 6 -12 -18 0 -30 Z" fill="#E8453C"/><path d="M0 -30 C5 -25 7 -21 8 -18 L-8 -18 C-7 -21 -5 -25 0 -30 Z" fill="#B42E27"/>' +
+      '<rect x="-10.5" y="8" width="21" height="4" fill="#fff" opacity=".9"/>' +
+      '<circle cy="-6" r="6" fill="#9FE3FF" stroke="#FFC531" stroke-width="2"/><circle cx="-1.8" cy="-6" r="1.5" fill="#221D3E"/><circle cx="1.8" cy="-6" r="1.5" fill="#221D3E"/>' +
+      '<rect x="-6" y="19" width="12" height="4" rx="1.5" fill="#3A3550"/></g>',
     /* an original snack bag of cheese puffs: a blue bag, open at the top, a yellow burst with a cheese wedge, puffs peeking out */
     cheesepuffs: '<g transform="rotate(-8)">' + [[-12, -36, -22], [0, -40, 4], [12, -35, 24]].map((q) => '<rect x="' + (q[0] - 5) + '" y="' + q[1] + '" width="10" height="22" rx="5" fill="#FF9E2C" stroke="#E8781A" stroke-width="1.4" transform="rotate(' + q[2] + ' ' + q[0] + ' ' + (q[1] + 11) + ')"/>').join('') +
       '<path d="M-27 -24 Q-14 -30 0 -25 Q14 -30 27 -24 Q33 6 28 36 Q0 42 -28 36 Q-33 6 -27 -24 Z" fill="#2E86DE"/><path d="M-27 -24 Q-14 -30 0 -25 Q14 -30 27 -24 Q14 -20 0 -21 Q-14 -20 -27 -24 Z" fill="#1F5FA8"/>' +
@@ -5366,6 +5411,7 @@ const Buddy = (() => {
     if (fly) out += flatFly(type, fc);
     if (w.back && BACK[w.back] && !A.backFront) out += at(A.back, BACK[w.back]);
     if (trick === 'airplane') out += PLANE_FLAT;
+    if (trick === 'rocket') out += ROCKET_FLAT;
     out += paint && !(pv && pv.def) ? BODY[type].replace(/class="b-body"/g, 'class="b-body" style="fill:url(#' + pid + ')"') : BODY[type];
     if (w.back && BACK[w.back] && A.backFront) out += at(A.back, '<g transform="scale(0.72)">' + BACK[w.back] + '</g>');
     if (w.neck && NECK[w.neck]) out += at(A.neck, NECK[w.neck]);
@@ -5377,6 +5423,7 @@ const Buddy = (() => {
     if (form >= 4 && w.head !== 'astronaut') out += '<circle cx="' + A.eyes[0] + '" cy="' + (A.eyes[1] - 6) + '" r="' + (type === 'slug' ? 40 : 46) + '" fill="#DDF6FF" fill-opacity=".16" stroke="#E8FBFF" stroke-opacity=".75" stroke-width="2.5"/>';
     if (trick === 'treepose') out += TREE_FLAT;
     out += '</g></g>' + flatOrbit(power, form, crown, A, fc);
+    if (trick === 'rocket') out += ROCKET_SKY;
     friends.forEach((f, i) => {
       if (!SIDE[f]) return;
       out += i === 0 ? '<g class="b-side">' + at(A.side, SIDE[f]) + '</g>'
@@ -6968,6 +7015,41 @@ const Buddy3D = (() => {
     plane.userData = { prop, blur };
     return plane;
   }
+  /* The toy rocket a buddy turns into (Andi's November 9 trick), in its own color: a round window with its eyes
+     looking out, a white band, a dark nose tip, four fins and a flame under the nozzle. Nose up, standing on its
+     fins (y = 0). */
+  const ROCKET_S = 0.95;
+  function toyRocket(base) {
+    const skin = mat.vinyl(base, { roughness: 0.34, clearcoat: 0.8 }), deep = mat.vinyl(mix(base, '#12082e', 0.6), { roughness: 0.4, clearcoat: 0.6 });
+    const white = mat.vinyl('#FFFFFF', { roughness: 0.35, clearcoat: 0.6 }), dark = mat.satin('#2A2540', { roughness: 0.55 }), gold = mat.gloss('#FFC531', { roughness: 0.25 });
+    const body = G([0, 0.16, 0]);
+    const prof = [[0.001, 0], [0.2, 0.01], [0.29, 0.12], [0.33, 0.42], [0.33, 0.86], [0.29, 1.12], [0.2, 1.34], [0.1, 1.48], [0.001, 1.55]];
+    body.add(M(new T.LatheGeometry(prof.map((q) => new T.Vector2(q[0], q[1])), 48), skin));
+    body.add(M(new T.CylinderGeometry(0.336, 0.336, 0.09, 48, 1, true), white, [0, 0.36, 0]));
+    body.add(M(new T.ConeGeometry(0.186, 0.2, 40), deep, [0, 1.46, 0]));
+    const win = G([0, 0.88, 0.318]);
+    win.add(M(new T.TorusGeometry(0.15, 0.03, 12, 40), gold));
+    win.add(M(new T.CircleGeometry(0.15, 40), mat.glass('#BFE9FF', { opacity: 0.5 }), [0, 0, 0.012]));
+    [-1, 1].forEach((sx) => { const e = eye(0.06); e.position.set(sx * 0.064, -0.005, 0.03); win.add(e); });
+    body.add(win);
+    [0, 1, 2, 3].forEach((i) => { const f = G(null, [0, (i * Math.PI) / 2 + Math.PI / 4, 0]); f.add(M(sph(1, 24, 16), deep, [0.34, 0.2, 0], [0, 0, -0.35], [0.2, 0.3, 0.04])); body.add(f); });
+    const flame = G([0, 0.03, 0]);
+    flame.add(M(new T.ConeGeometry(0.17, 0.62, 24, 1, true), mat.glow('#FF8A1F', { transparent: true, opacity: 0.9, depthWrite: false }), [0, -0.31, 0], [Math.PI, 0, 0]));
+    flame.add(M(new T.ConeGeometry(0.095, 0.42, 20, 1, true), mat.glow('#FFE45C', { transparent: true, opacity: 0.95, depthWrite: false }), [0, -0.21, 0], [Math.PI, 0, 0]));
+    flame.visible = false;
+    const rocket = G(null, null, ROCKET_S, body, M(new T.CylinderGeometry(0.15, 0.21, 0.14, 28), dark, [0, 0.09, 0]), flame);
+    rocket.userData = { flame };
+    return rocket;
+  }
+  /* The moon the rocket flies around: pale gray with a few craters, turning slowly. */
+  function toyMoon() {
+    const g = new T.Group(), rock = mat.satin('#E4E1D6', { roughness: 0.85 }), pit = mat.satin('#C3BEAE', { roughness: 0.9 });
+    g.add(M(sph(1, 40, 28), rock));
+    [[0.35, 0.4, 0.86, 0.2], [-0.42, 0.1, 0.9, 0.15], [0.05, -0.45, 0.89, 0.24], [-0.2, 0.62, 0.76, 0.12], [0.62, -0.18, 0.76, 0.14], [-0.66, -0.4, 0.64, 0.17], [0.7, 0.5, -0.5, 0.2], [-0.5, 0.3, -0.8, 0.18]].forEach((c) => {
+      const n = Math.hypot(c[0], c[1], c[2]); g.add(M(sph(1, 20, 14), pit, [c[0] / n * 0.96, c[1] / n * 0.96, c[2] / n * 0.96], null, c[3]));
+    });
+    return g;
+  }
   function ant() {
     const g = new T.Group(), shell = mat.gloss('#4A2A1C', { roughness: 0.28 }), legM = mat.satin('#2E1A12', { roughness: 0.6 });
     g.add(M(sph(1, 18, 14), shell, [0.078, 0.082, 0], null, [0.048, 0.044, 0.044]));
@@ -7133,6 +7215,75 @@ const Buddy3D = (() => {
         },
         cleanup() { sh.position.x = sh0.x; sh.position.z = sh0.z; sh.scale.copy(sh0.s); }
       };
+    } else if (kind === 'rocket') {
+      /* the toy rocket, the moon, the two poofs and the smoke; the flight is worked out in fly() */
+      const rocket = toyRocket(PLANE_TINT[P.paint] || P.base || '#E8453C'), moon = toyMoon(), flame = rocket.userData.flame, puffs = [], smoke = [], rnd = seeded(11);
+      rocket.visible = false; moon.visible = false; P.root.add(rocket); P.root.add(moon);
+      const cloud = () => new T.Sprite(new T.SpriteMaterial({ map: puffTex('cloud', '252,252,255', '226,230,245'), transparent: true, depthWrite: false, toneMapped: false }));
+      for (let i = 0; i < 10; i++) { const s = cloud(); s.userData.o = [(rnd() - 0.5) * 1.5, 0.2 + rnd() * 1.6, 0.25 + rnd() * 0.5, rnd()]; s.visible = false; s.renderOrder = 18; P.root.add(s); puffs.push(s); }
+      for (let i = 0; i < 16; i++) { const s = cloud(); s.userData.o = [(rnd() - 0.5) * 2, rnd(), rnd()]; s.visible = false; s.renderOrder = 5; P.root.add(s); smoke.push(s); }
+      const sh = P.shadow, sh0 = { x: sh.position.x, z: sh.position.z, s: sh.scale.clone() }, cl = (q) => Math.max(0, Math.min(1, q)), es = (q) => q * q * (3 - 2 * q);
+      /* the moon sits up and to the left, far back; the rocket circles it once, in front of it and then behind */
+      const MOON = [-0.75, 2.6, -5], MOON_R = 0.72, ORBIT = 1.2, UP = V(0, 1, 0), dir = V(0, 0, 0);
+      const orbitAt = (q) => { const a = Math.PI * 0.15 + q * Math.PI * 2; return [MOON[0] + ORBIT * Math.cos(a), MOON[1] + 0.32 * ORBIT * Math.sin(a), MOON[2] + ORBIT * Math.sin(a)]; };
+      const burst = (k, k0, at) => puffs.forEach((s) => {
+        const a = (k - k0) / 0.085, o = s.userData.o;
+        if (a <= 0 || a >= 1) return;
+        s.visible = true; s.position.set(at[0] + o[0] * (0.55 + 0.6 * a), at[1] + o[1] * 0.8, at[2] + o[2]);
+        s.scale.setScalar((0.5 + 0.75 * a) * (0.9 + 0.2 * o[3])); s.material.opacity = 1 - a * a;
+      });
+      /* smoke billowing out at the pad: k0..k1 is when it puffs, strength how much */
+      const billow = (k, k0, k1, strength) => smoke.forEach((s, i) => {
+        const ki = k0 + ((k1 - k0) * i) / smoke.length, a = (k - ki) / 0.12, o = s.userData.o;
+        if (a <= 0 || a >= 1) return;
+        s.visible = true; s.position.set(o[0] * (0.4 + 0.9 * a), 0.08 + 0.25 * a * o[1], 0.2 + 0.4 * o[2]);
+        s.scale.setScalar((0.25 + 0.6 * a) * strength); s.material.opacity = 0.85 * (1 - a);
+      });
+      v.fx = {
+        kind, rocket, moon, objs: [rocket, moon].concat(puffs, smoke),
+        /* place everything for this moment of the trick (k from 0 to 1); returns how strong the shadow is */
+        fly(k, now) {
+          puffs.forEach((s) => { s.visible = false; }); smoke.forEach((s) => { s.visible = false; });
+          if (k > 0.065 && k < 0.155) burst(k, 0.065, [0, 0, 0]);
+          if (k > 0.895 && k < 0.985) burst(k, 0.895, [0, 0, 0]);
+          const mk = es(cl((k - 0.4) / 0.06)) * (1 - es(cl((k - 0.8) / 0.06)));
+          moon.visible = mk > 0.005; moon.position.set(MOON[0], MOON[1], MOON[2]); moon.scale.setScalar(MOON_R * Math.max(0.001, mk)); moon.rotation.y = now / 5000;
+          if (k < 0.085 || k > 0.92) { rocket.visible = false; flame.visible = false; sh.position.x = sh0.x; sh.position.z = sh0.z; sh.scale.copy(sh0.s); return 1; }
+          let at = [0, 0, 0], s = 1, fl = 0, shadow = 1, small = 1;
+          rocket.quaternion.set(0, 0, 0, 1);
+          if (k < 0.12) { const e = es(cl((k - 0.085) / 0.035)); s = e * (1 + 0.2 * Math.sin(Math.PI * e)); }
+          else if (k < 0.36) {
+            /* the countdown: it starts to rumble, then the flame lights and the smoke billows */
+            const q = (k - 0.12) / 0.24, amp = 0.004 + 0.022 * q * q;
+            at = [amp * Math.sin(now / 21), 0, amp * Math.cos(now / 27)]; fl = q > 0.55 ? 0.45 * (q - 0.55) / 0.45 : 0;
+            if (q > 0.6) billow(k, 0.26, 0.38, 0.6 + q);
+          } else if (k < 0.5) {
+            /* blast off: straight up and out of the top, faster and faster */
+            const q = (k - 0.36) / 0.14; at = [0, 9 * q * q, 0]; fl = 1; shadow = cl(1 - at[1] * 0.5);
+            billow(k, 0.34, 0.46, 1.6);
+          } else if (k < 0.505) { rocket.visible = false; flame.visible = false; return 0; }
+          else if (k < 0.75) {
+            /* once around the moon, nose first */
+            const q = (k - 0.505) / 0.245, a = orbitAt(q), b = orbitAt(Math.min(1, q + 0.01));
+            at = a; small = 0.5; fl = 0.85; shadow = 0;
+            dir.set(b[0] - a[0], b[1] - a[1], b[2] - a[2]).normalize(); rocket.quaternion.setFromUnitVectors(UP, dir);
+            const pop = cl(q / 0.06) * (1 - cl((q - 0.94) / 0.06)); s = es(pop);
+          } else if (k < 0.755) { rocket.visible = false; flame.visible = false; return 0; }
+          else if (k < 0.87) {
+            /* back down onto the pad, flame first, slowing to a soft landing */
+            const q = (k - 0.755) / 0.115, r = 1 - q; at = [0, 8.5 * r * r, 0]; fl = 1; shadow = cl(1 - at[1] * 0.5);
+            if (q > 0.7) billow(k, 0.84, 0.9, 1.2);
+          } else if (k < 0.9) { const q = (k - 0.87) / 0.03; fl = 1 - q; billow(k, 0.84, 0.9, 1.2); }
+          else s = 1 - es(cl((k - 0.9) / 0.02));
+          rocket.visible = s > 0.002;
+          rocket.position.set(at[0], at[1], at[2]); rocket.scale.setScalar(ROCKET_S * small * Math.max(0.001, s));
+          flame.visible = fl > 0.02; flame.scale.set(1, Math.max(0.001, fl * (0.82 + 0.36 * Math.abs(Math.sin(now / 37)))), 1);
+          /* the shadow stays on the pad and fades as it climbs */
+          sh.position.x = sh0.x; sh.position.z = sh0.z; sh.scale.set(sh0.s.x * 0.7 * Math.max(0.3, 1 - at[1] * 0.2), sh0.s.y * 0.7, sh0.s.z);
+          return shadow;
+        },
+        cleanup() { sh.position.x = sh0.x; sh.position.z = sh0.z; sh.scale.copy(sh0.s); }
+      };
     } else return null;
     return v.fx;
   }
@@ -7149,6 +7300,7 @@ const Buddy3D = (() => {
       else if (trick === 'grumble' && Sfx.monster) Sfx.monster(d);
       else if (trick === 'gallop' && Sfx.gallop) Sfx.gallop(d);
       else if (trick === 'airplane' && Sfx.plane) Sfx.plane(d);
+      else if (trick === 'rocket' && Sfx.rocket) Sfx.rocket(d);
     } catch (e) { /* sound is optional */ }
   }
 
@@ -8048,9 +8200,9 @@ const Buddy3D = (() => {
     v.canvas.addEventListener('pointerup', up);
     v.canvas.addEventListener('pointercancel', () => { down = false; });
   }
-  const TRICK_MS = { bounce: 1000, twirl: 950, wiggle: 1300, jelly: 1000, flip: 950, tornado: 1500, freeze: 2000, wigglejump: 1300, handstand: 2300, boo: 2900, ants: 4000, tumble: 2400, handjump: 2800, treepose: 3600, invisible: 3400, grumble: 3300, gallop: 3600, airplane: 5600 };
+  const TRICK_MS = { bounce: 1000, twirl: 950, wiggle: 1300, jelly: 1000, flip: 950, tornado: 1500, freeze: 2000, wigglejump: 1300, handstand: 2300, boo: 2900, ants: 4000, tumble: 2400, handjump: 2800, treepose: 3600, invisible: 3400, grumble: 3300, gallop: 3600, airplane: 5600, rocket: 8000 };
   /* tricks that bring props of their own (trickFx) */
-  const PROP_TRICKS = ['boo', 'ants', 'treepose', 'invisible', 'grumble', 'gallop', 'airplane'];
+  const PROP_TRICKS = ['boo', 'ants', 'treepose', 'invisible', 'grumble', 'gallop', 'airplane', 'rocket'];
   const tmpC = T ? new T.Color() : null;
   const ease2 = (q) => q * q * (3 - 2 * q);
   function pose(v, now) {
@@ -8266,6 +8418,16 @@ const Buddy3D = (() => {
         else if (P.trick === 'airplane') {
           if (k < 0.075) { const e = Math.sin((Math.PI * k) / 0.075); y = 0.34 * e; yaw += ease(k / 0.075) * Math.PI * 2; sy = 1 + 0.06 * e; sx = 1 - 0.04 * e; }
           const gone = ease(Math.min(1, Math.max(0, (k - 0.08) / 0.03))), back = ease(Math.min(1, Math.max(0, (k - 0.915) / 0.035)));
+          planeHide = gone * (1 - back);
+          if (k > 0.95) { const e = Math.sin((Math.PI * (k - 0.95)) / 0.05); y = 0.22 * e; sy = 1 + 0.07 * e; sx = 1 - 0.04 * e; }
+          if (FX && FX.fly) shadowK = FX.fly(k, now);
+        }
+        /* Rocket (Andi's November 9 trick): a hop and spin, a poof, and the buddy is a toy rocket in its own color;
+           "Three, two, one, blast off!", it rumbles, blasts off out of the top, flies once around the moon, comes
+           back down onto the pad and turns back into the buddy with another poof (FX.fly moves the rocket) */
+        else if (P.trick === 'rocket') {
+          if (k < 0.065) { const e = Math.sin((Math.PI * k) / 0.065); y = 0.34 * e; yaw += ease(k / 0.065) * Math.PI * 2; sy = 1 + 0.06 * e; sx = 1 - 0.04 * e; }
+          const gone = ease(Math.min(1, Math.max(0, (k - 0.07) / 0.03))), back = ease(Math.min(1, Math.max(0, (k - 0.905) / 0.035)));
           planeHide = gone * (1 - back);
           if (k > 0.95) { const e = Math.sin((Math.PI * (k - 0.95)) / 0.05); y = 0.22 * e; sy = 1 + 0.07 * e; sx = 1 - 0.04 * e; }
           if (FX && FX.fly) shadowK = FX.fly(k, now);
@@ -9983,6 +10145,27 @@ const Sfx = (() => {
   }
   /* One hoof on hard ground: a hollow clop. */
   function clop(t0, loud) { note(loud ? 820 : 980, t0, 0.06, { type: 'triangle', vol: loud ? 0.26 : 0.18, to: loud ? 560 : 700 }); noise(t0, 0.035, { type: 'highpass', freq: 2200, vol: loud ? 0.1 : 0.07, attack: 0.001 }); }
+  /* A rocket's roar (Andi's November 9 trick): noise through a band that moves from f0 to f1, held at full strength
+     between a fade in and a fade out, with a second band under it. Kept above about 300 Hz so an iPad's small
+     speaker plays it. */
+  function thrust(t0, dur, o) {
+    if (muted) return;
+    const c = ac(); if (!c) return;
+    try {
+      if (!noiseBuf) { noiseBuf = c.createBuffer(1, c.sampleRate, c.sampleRate); const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+      const now = c.currentTime + (t0 || 0), end = now + dur, vol = o.vol || 0.1, at = now + (o.attack || 0.2);
+      const src = c.createBufferSource(), f = c.createBiquadFilter(), f2 = c.createBiquadFilter(), g2 = c.createGain(), out = c.createGain();
+      src.buffer = noiseBuf; src.loop = true;
+      f.type = 'bandpass'; f.Q.value = 0.9; f.frequency.setValueAtTime(o.f0, now); f.frequency.exponentialRampToValueAtTime(o.f1, end);
+      f2.type = 'bandpass'; f2.Q.value = 0.7; f2.frequency.setValueAtTime(Math.max(320, o.f0 * 0.55), now); f2.frequency.exponentialRampToValueAtTime(Math.max(320, o.f1 * 0.55), end);
+      g2.gain.value = 0.7;
+      out.gain.setValueAtTime(0.0001, now); out.gain.exponentialRampToValueAtTime(vol, at); out.gain.setValueAtTime(vol, Math.max(at, end - (o.release || 0.4))); out.gain.exponentialRampToValueAtTime(0.0001, end);
+      src.connect(f); f.connect(out); src.connect(f2); f2.connect(g2); g2.connect(out); out.connect(master);
+      src.start(now, Math.random() * 0.5); src.stop(end + 0.05);
+    } catch (e) { /* audio unavailable */ }
+  }
+  /* the crackle in a rocket's roar */
+  function crackle(t0, dur, vol) { for (let t = 0; t < dur; t += 0.05 + Math.random() * 0.05) noise(t0 + t, 0.03, { type: 'highpass', freq: 2400 + Math.random() * 1600, vol: vol * (0.6 + 0.4 * Math.random()), attack: 0.002 }); }
   /* A puff of smoke: a soft whoosh. */
   function poof(t0) { noise(t0, 0.5, { freq: 700, to: 2600, q: 0.7, vol: 0.1, attack: 0.03 }); note(300, t0, 0.18, { type: 'sine', vol: 0.06, to: 620 }); }
   const api = {
@@ -9995,7 +10178,7 @@ const Sfx = (() => {
        high "Neigh!", "Airplane!". delay is in milliseconds. */
     say(trick, delay) {
       if (muted || typeof Speech === 'undefined') return;
-      const w = { boo: ['Boo!', 1850], grumble: ['Roar!', 1500, { pitch: 0.45, rate: 0.72 }], gallop: ['Neigh!', 2550, { pitch: 1.7, rate: 0.8 }], airplane: ['Airplane!', 450] }[trick];
+      const w = { boo: ['Boo!', 1850], grumble: ['Roar!', 1500, { pitch: 0.45, rate: 0.72 }], gallop: ['Neigh!', 2550, { pitch: 1.7, rate: 0.8 }], airplane: ['Airplane!', 450], rocket: ['Three, two, one, blast off!', 800, { rate: 0.95 }] }[trick];
       if (w) setTimeout(() => Speech.say(w[0], w[2]), (delay || 0) + w[1]);
     },
     /* Monster grumble: two grumbles while it crouches and shakes, then a big ROAR (timed to the trick). Pitched
@@ -10021,6 +10204,23 @@ const Sfx = (() => {
       engine(d + 3.45, 1.35, { f0: 210, f1: 120, vol: 0.14, attack: 0.5, release: 0.35, rate: 34 });
       api.thud(d + 4.72); note(90, d + 4.72, 0.25, { type: 'sine', vol: 0.12, to: 60 });
       poof(d + 5.0); api.sparkle(d + 5.1);
+    },
+    /* Rocket: a poof as it turns into a rocket, "Three, two, one, blast off!" over a rumble that builds, the roar
+       and crackle of blast-off rising away, a faint rocket far off going around the moon, the roar coming back
+       down to land, a bump, the flame going out, and a poof back */
+    rocket(d) {
+      d = d || 0;
+      poof(d + 0.52); api.sparkle(d + 0.6);
+      thrust(d + 1.9, 1.0, { f0: 380, f1: 560, vol: 0.07, attack: 0.8, release: 0.05 });
+      thrust(d + 2.85, 1.4, { f0: 700, f1: 420, vol: 0.22, attack: 0.06, release: 0.75 });
+      crackle(d + 2.9, 1.0, 0.05);
+      noise(d + 3.1, 0.9, { freq: 600, to: 2600, q: 0.6, vol: 0.07, attack: 0.15 });
+      thrust(d + 4.1, 1.8, { f0: 1150, f1: 900, vol: 0.035, attack: 0.4, release: 0.5 });
+      api.sparkle(d + 5.0);
+      thrust(d + 6.0, 1.0, { f0: 420, f1: 620, vol: 0.17, attack: 0.55, release: 0.12 });
+      api.thud(d + 6.96); note(150, d + 6.96, 0.25, { type: 'sine', vol: 0.12, to: 90 });
+      noise(d + 7.0, 0.35, { freq: 2000, to: 700, q: 0.8, vol: 0.05, attack: 0.01 });
+      poof(d + 7.16); api.sparkle(d + 7.25);
     },
     get muted() { return muted; },
     toggle() { muted = !muted; try { localStorage.setItem('ssm.mute', muted ? '1' : '0'); } catch (e) { /* ignore */ } if (!muted) api.pick(); return muted; },
@@ -13692,7 +13892,7 @@ function buyNow(id) {
 function playFlatTrick(svgEl, trick) {
   const cls = 'do-' + (trick || 'hop');
   svgEl.classList.remove(cls); void svgEl.getBoundingClientRect(); svgEl.classList.add(cls);
-  setTimeout(() => svgEl.classList.remove(cls), { freeze: 2100, handstand: 2400, boo: 3000, ants: 4100, handjump: 2900, tumble: 2500, treepose: 3700, invisible: 3500, grumble: 3400, gallop: 3700, airplane: 5700 }[trick] || 1400);
+  setTimeout(() => svgEl.classList.remove(cls), { freeze: 2100, handstand: 2400, boo: 3000, ants: 4100, handjump: 2900, tumble: 2500, treepose: 3700, invisible: 3500, grumble: 3400, gallop: 3700, airplane: 5700, rocket: 8100 }[trick] || 1400);
 }
 function confirmBuy() {
   const id = S.overlay && S.overlay.id, l = Store.learner(S.shopKid);
@@ -14097,7 +14297,7 @@ document.addEventListener('click', (e) => {
     if (sv) playFlatTrick(sv, tr);
     Sfx.say(tr, 0);
     if (tr === 'boo') Sfx.boo(); else if (tr === 'ants') Sfx.march();
-    else if (tr === 'grumble') Sfx.monster(); else if (tr === 'gallop') Sfx.gallop(); else if (tr === 'airplane') Sfx.plane();
+    else if (tr === 'grumble') Sfx.monster(); else if (tr === 'gallop') Sfx.gallop(); else if (tr === 'airplane') Sfx.plane(); else if (tr === 'rocket') Sfx.rocket();
   }
   const t = e.target.closest('[data-act]');
   if (!t || t.disabled) return;
