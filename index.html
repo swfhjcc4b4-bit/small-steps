@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261108205746";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261109194356";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -4506,13 +4506,43 @@ const ReadAloud = (() => {
     TIERS.forEach((t) => { const i = levelIndexOf(t.lvl); if (i >= 0 && i <= here) best = t; });
     return best;
   }
+  /* Read to me has its own level (JB, Nov 9, 2026), apart from the reading sheets: it moves up one set after 4 reads
+     in a row with at least 95% of the words right, over at least 2 days, and back one set after 2 reads in a row under
+     90% ("Too hard" counts as one). It never holds back the reading sheets, and the sheets never move it. A child with
+     no Read to me level yet starts at the set for their reading level (track.raTier), and only reads from then on
+     count (track.raSince). */
+  const UP_PCT = 0.95, UP_RUN = 4, UP_DAYS = 2, DOWN_PCT = 0.9, DOWN_RUN = 2;
+  const pctOf = (h) => (h && !h.skipped && h.words > 0 && h.missed != null ? (h.words - h.missed) / h.words : 0);
+  const tierById = (id) => TIERS.find((x) => x.lvl === id) || null;
+  function tierOf(track, levelIndexOf, levelId) { return tierById(track && track.raTier) || tierFor(levelIndexOf, levelId); }
+  /* where a child stands on their Read to me set: reads in a row at 95% or more (and on how many days), reads in a row
+     under 90%, and the sets above and below */
+  function standing(track, levelIndexOf, levelId, history, dayOf) {
+    const tier = tierOf(track, levelIndexOf, levelId), since = (track && track.raTier && track.raSince) || '';
+    const mine = (history || []).filter((h) => h && !h.voided && h.tier === tier.lvl && (!since || String(h.at) >= since))
+      .sort((a, b) => String(a.at).localeCompare(String(b.at)));
+    let run = 0, low = 0;
+    for (let i = mine.length - 1; i >= 0 && pctOf(mine[i]) >= UP_PCT; i--) run++;
+    for (let i = mine.length - 1; i >= 0 && pctOf(mine[i]) < DOWN_PCT; i--) low++;
+    const day = dayOf || ((at) => String(at).slice(0, 10));
+    const days = new Set(mine.slice(mine.length - run).map((h) => day(h.at))).size;
+    const i = TIERS.indexOf(tier);
+    return { tier, run, low, days, need: UP_RUN, upPct: UP_PCT, downPct: DOWN_PCT, up: TIERS[i + 1] || null, down: i > 0 ? TIERS[i - 1] : null };
+  }
+  /* the move a saved read makes, if any: { change: 'up' | 'back', from, to } */
+  function afterRead(track, levelIndexOf, levelId, history, dayOf) {
+    const st = standing(track, levelIndexOf, levelId, history, dayOf);
+    if (st.run >= UP_RUN && st.days >= UP_DAYS && st.up) return { change: 'up', from: st.tier.lvl, to: st.up.lvl };
+    if (st.low >= DOWN_RUN && st.down) return { change: 'back', from: st.tier.lvl, to: st.down.lvl };
+    return null;
+  }
   /* A read that was too hard: the grown-up tapped Too hard, or under half the words were right. */
   const tooHard = (h) => !!h && (!!h.skipped || (h.words > 0 && h.missed != null && (h.words - h.missed) / h.words < 0.5));
   /* Next passage: one not read yet in its tier, else the one read longest ago. After a read that was
      too hard, the next one comes from the tier below the one that was too hard (unless the child's
      level has since dropped below it); a good read there brings the child's own tier back. */
-  function next(levelIndexOf, levelId, history) {
-    let t = tierFor(levelIndexOf, levelId);
+  function next(levelIndexOf, levelId, history, track) {
+    let t = tierOf(track, levelIndexOf, levelId);
     const hist = (history || []).filter((h) => h && h.item), last = {};
     const latest = hist.reduce((a, h) => (!a || String(h.at) > String(a.at) ? h : a), null);
     if (tooHard(latest)) {
@@ -4524,7 +4554,7 @@ const ReadAloud = (() => {
     const pickFrom = fresh.length ? fresh : t.items.slice().sort((a, b) => String(last[a.id]).localeCompare(String(last[b.id])));
     return BY_ID[(fresh.length ? pickFrom[Math.floor(Math.random() * pickFrom.length)] : pickFrom[0]).id];
   }
-  return { TIERS, BY_ID, words, tierFor, next, tooHard, get: (id) => BY_ID[id] || null };
+  return { TIERS, BY_ID, words, tierFor, tierOf, tierById, standing, afterRead, pctOf, UP_PCT, UP_RUN, UP_DAYS, DOWN_PCT, DOWN_RUN, next, tooHard, get: (id) => BY_ID[id] || null };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = ReadAloud;
 /* Small Steps: the book shelf. Picture books and early readers for each Kumon reading level,
@@ -11165,7 +11195,7 @@ function bestStreak(l) { return Math.max.apply(null, SUBJECTS.map((s) => ENG[s.k
 /* Undo: each sheet or read saves how its subject stood before it (level, passes, the day's count, and
    the review-deck entries it changed), so a parent can void the newest one and have it done again.
    The last few are kept; a level a parent sets by hand clears them. */
-const LV_FIELDS = ['levelId', 'levelSince', 'top', 'passes', 'runDays', 'lastBoost', 'lowRun', 'backFrom', 'testFor', 'testWait', 'sheets', 'passed', 'dayStreak', 'planDay', 'planSheets', 'dayCount', 'lastDay', 'lastAt', 'raGate', 'raDay', 'raCount'];
+const LV_FIELDS = ['levelId', 'levelSince', 'top', 'passes', 'runDays', 'lastBoost', 'lowRun', 'backFrom', 'testFor', 'testWait', 'sheets', 'passed', 'dayStreak', 'planDay', 'planSheets', 'dayCount', 'lastDay', 'lastAt', 'raGate', 'raDay', 'raCount', 'raTier', 'raSince'];
 const UNDO_KEEP = 5;
 function snapOf(t) { const o = {}; LV_FIELDS.forEach((k) => { o[k] = t[k] === undefined ? null : t[k]; }); return JSON.parse(JSON.stringify(o)); }
 function revDiff(before, after) {
@@ -12455,7 +12485,7 @@ function startRead(kidId) {
   const l = Store.learner(kidId);
   if (!l) return;
   const E = ENG.reading, t = trackOf(l, 'reading');
-  const item = ReadAloud.next(E.levelIndex, E.canon(t.levelId), Store.sessionsFor(kidId, 'readaloud'));
+  const item = ReadAloud.next(E.levelIndex, E.canon(t.levelId), Store.sessionsFor(kidId, 'readaloud'), t);
   S.ra = { kid: kidId, item, words: ReadAloud.words(item.text), miss: {}, phase: item.mode === 'read' ? 'ready' : 'reading', start: Date.now(), secs: 0, q: null };
   S.kid = kidId; S.subj = 'reading'; S.view = 'read'; S.anim = true;
   Sfx.unlock(); Sfx.pick(); render(); window.scrollTo(0, 0); holdScreen();
@@ -12483,51 +12513,55 @@ function raSave() {
   const l = Store.learner(R.kid);
   if (!l) return goHome();
   const E = ENG.reading, t = trackOf(l, 'reading'), r = raResult(R), now = new Date(), awardsBefore = awardSnap(l);
-  /* a good read at the level's own set lets a waiting level-up through */
-  const gate = raGateOn(t) ? t.raGate : null;
-  const opens = !!gate && R.item.lvl === ReadAloud.tierFor(E.levelIndex, gate.level).lvl && r.n > 0 && r.right / r.n >= RA_GATE;
-  const b = Buddy.of(l), cr = hasBuddy(l) ? Buddy.credit(b, opens ? 7 : 2, { noSheet: true, levelUp: opens && !gate.apply.testFor, streak: bestStreak(l) }) : null;
+  /* Read to me's own level (JB, Nov 9, 2026): a child's first read under it starts the level at the set for their
+     reading level, and counts from this read on; 4 reads in a row at 95% or more move it up, 2 under 90% move it down */
+  const raT = t.raTier && ReadAloud.tierById(t.raTier) ? t : Object.assign({}, t, { raTier: ReadAloud.tierFor(E.levelIndex, E.canon(t.levelId)).lvl, raSince: now.toISOString() });
   const sid = Store.newId();
-  Store.appendSession(R.kid, Object.assign({ id: sid, subject: 'readaloud', kind: 'read', at: now.toISOString(), item: R.item.id, mode: R.item.mode, tier: R.item.lvl,
+  const rec = { id: sid, subject: 'readaloud', kind: 'read', at: now.toISOString(), item: R.item.id, mode: R.item.mode, tier: R.item.lvl,
     levelId: E.canon(t.levelId), words: r.n, missed: r.miss, secs: R.item.mode === 'read' ? r.secs : null, wpm: r.wpm, q: R.q, goalMet: r.goal ? r.goal.met : null,
-    missedWords: Object.keys(R.miss).map((i) => R.words[i].replace(/[^A-Za-z’']/g, '')).slice(0, 12), stars: cr ? (opens ? 7 : 2) : 0 },
-    opens ? { change: gate.apply.testFor ? 'test' : 'up', from: gate.level, to: gate.apply.levelId } : {}));
-  let l2 = putTrack(l, 'reading', pushUndo(Object.assign({}, t, { raDay: E.todayKey(now), raCount: (t.raCount || 0) + 1 }, opens ? Object.assign({}, gate.apply, { raGate: null }) : {}), sid, t));
+    missedWords: Object.keys(R.miss).map((i) => R.words[i].replace(/[^A-Za-z’']/g, '')).slice(0, 12) };
+  const move = ReadAloud.afterRead(raT, E.levelIndex, E.canon(t.levelId), Store.sessionsFor(R.kid, 'readaloud').concat([rec]), (at) => E.todayKey(new Date(at)));
+  const up = !!(move && move.change === 'up');
+  const b = Buddy.of(l), cr = hasBuddy(l) ? Buddy.credit(b, up ? 7 : 2, { noSheet: true, levelUp: up, streak: bestStreak(l) }) : null;
+  Store.appendSession(R.kid, Object.assign(rec, { stars: cr ? (up ? 7 : 2) : 0 }, move ? { raChange: move.change, raFrom: move.from, raTo: move.to } : {}));
+  const nt = Object.assign({}, raT, { raDay: E.todayKey(now), raCount: (t.raCount || 0) + 1 }, move ? { raTier: move.to, raSince: new Date(now.getTime() + 1).toISOString() } : {});
+  let l2 = putTrack(l, 'reading', pushUndo(nt, sid, t));
   if (cr) l2 = Object.assign({}, l2, { buddy: cr.buddy });
   Store.saveLearner(l2);
   clearInterval(raTimer); releaseScreen(); S.ra = null;
   Sfx.fanfare();
   goHome();
   const news = newsText(l2, cr && cr.steps, awardNews(awardsBefore, l2));
-  if (opens) {
+  if (up) {
     after(150, () => Confetti.party());
-    toast((gate.apply.testFor ? 'Great reading! Next: the level test.' : 'Great reading! New level: ' + E.BY[gate.apply.levelId].name) + (news ? ' ' + news : ''));
+    toast('Great reading! Read to me moves up to ' + raSetName(move.to) + '.' + (news ? ' ' + news : ''));
   } else {
     if (news) after(150, () => Confetti.party());
     toast((cr ? '+2 stars for reading aloud!' : 'Reading saved') + (news ? ' ' + news : ''));
   }
 }
-/* Moving up at the word levels waits for reading aloud. The picture sheets can be passed from a letter
-   or two, so once a child has passed enough sheets to move up from a word level (or to take the level
-   test), the move waits for a Read to me at that level with at least 80% of the words right (5 of 6).
-   Sheets go on meanwhile; a sheet that isn't passed resets the run as usual and drops the wait. */
-const RA_GATE = 0.8;
+/* Until Nov 9, 2026 moving up at the word levels waited for a Read to me with 5 of 6 words right (raGate); JB took
+   that out, so raGateOn is false except for a wait saved before then, which the next sheet drops (none was saved
+   when the rule changed). */
 const raGateOn = (t) => !!(t && t.raGate && t.raGate.level === ENG.reading.canon(t.levelId));
-function goodRead(kidId, lv) {
-  const tier = ReadAloud.tierFor(ENG.reading.levelIndex, lv).lvl;
-  return Store.sessionsFor(kidId, 'readaloud').some((x) => x.levelId === lv && x.tier === tier && !x.skipped && x.words > 0 && x.missed != null && (x.words - x.missed) / x.words >= RA_GATE);
-}
 function readGate(kidId, before, out) {
-  const E = ENG.reading, lv = E.canon(before.levelId), ev = out.ev;
+  /* JB, Nov 9, 2026: moving up in the reading sheets is not conditioned on Read to me at all, so a sheet never waits for
+     a read; a wait left over from before is dropped */
   let after = out.learner;
-  if (!ev.pass && after.raGate) after = Object.assign({}, after, { raGate: null });
-  const moving = (ev.levelUp && !ev.returned) || ev.testReady;
-  if (!E.BY[lv] || E.BY[lv].stage !== 'words' || !moving || !raOn(before) || goodRead(kidId, lv)) return { learner: after, ev };
-  const apply = {};
-  ['levelId', 'testFor', 'testWait', 'passes', 'runDays', 'lastBoost', 'lowRun', 'backFrom'].forEach((k) => { apply[k] = after[k]; });
-  const held = Object.assign({}, after, { levelId: before.levelId, testFor: before.testFor || '', testWait: !!before.testWait, backFrom: before.backFrom || '',
-    passes: Math.max(before.passes || 0, E.settingsOf(before).toAdvance), runDays: before.runDays || [], raGate: { level: lv, apply } });
-  return { learner: held, ev: Object.assign({}, ev, { levelUp: false, testReady: false, readGate: true, to: lv }) };
+  if (after.raGate) after = Object.assign({}, after, { raGate: null });
+  return { learner: after, ev: out.ev };
+}
+/* a Read to me set by name: the reading level it starts at ("Short stories") */
+const raSetName = (lvl) => (ENG.reading.BY[lvl] ? ENG.reading.BY[lvl].name : lvl);
+/* where a child stands on Read to me's own level, in a sentence for Parents → Reading */
+function raStandingText(l) {
+  const E = ENG.reading, t = trackOf(l, 'reading'), who = l.name || 'your child';
+  const st = ReadAloud.standing(t, E.levelIndex, E.canon(t.levelId), Store.sessionsFor(l.id, 'readaloud'), (at) => E.todayKey(new Date(at)));
+  const up = st.up ? ' move it up to ' + raSetName(st.up.lvl) : ' finish the last set';
+  const down = st.down ? '; 2 reads in a row under 90% move it back to ' + raSetName(st.down.lvl) : '';
+  if (!t.raTier) return 'Read to me level: ' + raSetName(st.tier.lvl) + ', the set for ' + who + '’s reading level. It starts counting at the next read: 4 reads in a row with at least 95% of the words right, over at least 2 days,' + up + down + '.';
+  const run = st.run ? st.run + ' of 4 reads in a row at 95% or more so far' + (st.run > 1 ? ' (on ' + st.days + (st.days === 1 ? ' day)' : ' days)') : '') : 'No reads at 95% or more in a row yet';
+  return 'Read to me level: ' + raSetName(st.tier.lvl) + (t.raSince ? ', since ' + fmtWhen(t.raSince) : '') + '. ' + run + '. 4 in a row, over at least 2 days,' + up + down + '.';
 }
 /* Too hard for now: saved as too hard, no stars, and the day's read-aloud counts as done so the tile
    doesn't ask again today. The next read comes from an easier set (ReadAloud.next). */
@@ -12590,8 +12624,8 @@ function readAloudHTML(l) {
   const rows = list.map((s) => (s.skipped ? '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '</td><td><span class="chip">Too hard</span><div class="muted">' + esc(String(s.words)) + ' words</div></td><td>—</td><td>—' + end(s) + '</td></tr>' :
     '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '</td><td>' + (s.words - s.missed) + '/' + s.words + (s.missedWords && s.missedWords.length ? '<div class="muted">' + esc(s.missedWords.slice(0, 5).join(' · ')) + '</div>' : '') + '</td><td>' +
     (s.secs ? ENG.math.fmtTime(s.secs) + (s.wpm ? ' · ' + s.wpm + ' wpm' : '') : '—') + '</td><td>' + (s.q == null ? '—' : s.q ? '<span class="chip chip-ok">Knew it</span>' : '<span class="chip">Not yet</span>') + (s.goalMet ? ' <span class="chip chip-ok">Goal</span>' : '') + end(s) + '</td></tr>')).join('');
-  const rt = trackOf(l, 'reading'), wait = raGateOn(rt) ? '<p class="sub"><b>Waiting to move up:</b> ' + esc(l.name) + ' has passed the sheets on ' + esc(ENG.reading.BY[rt.raGate.level].name) + '. A Read to me with at least 5 of 6 words right moves ' + esc(l.name) + ' up.</p>' : '';
-  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. “Too hard for now” saves it as too hard, and the next one comes from an easier set. At the word levels, moving up waits for a Read to me with at least 5 of 6 words right, since the picture sheets can be passed from a letter or two. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute. Done and Too hard ask a grown-up’s × question first. A read saved by mistake can be voided: it comes off the record and the next read is picked as if it never happened.</p>' + wait +
+  const level = '<p class="sub"><b>' + esc(raStandingText(l)) + '</b></p>';
+  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. Read to me has its own level, apart from the reading sheets: 4 reads in a row with at least 95% of the words right, over at least 2 days, move it up one set, and 2 reads in a row under 90% move it back one (Too hard counts as under 90%). The reading sheets move up on their own and never wait for a read. “Too hard for now” saves it as too hard, and the next one comes from an easier set. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute. Done and Too hard ask a grown-up’s × question first. A read saved by mistake can be voided: it comes off the record and the next read is picked as if it never happened.</p>' + level +
     (rows ? '<div class="table-wrap"><table class="hist"><thead><tr><th>When</th><th>Words right</th><th>Time</th><th>Question</th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="sub">Nothing read aloud yet.</p>') +
     '<div class="actions"><button class="btn btn-glass btn-small" data-act="raNow" data-kid="' + esc(l.id) + '">Start a read-aloud now</button></div></section>';
 }
@@ -13899,14 +13933,17 @@ function levelChanges(l) {
   const since = Date.now() - CHANGE_DAYS * 86400000, out = [];
   ['math', 'reading', 'clock', 'readaloud'].forEach((kind) => {
     Store.sessionsFor(l.id, kind).forEach((s) => {
-      if (['up', 'back', 'return'].indexOf(s.change) < 0 || !s.to || new Date(s.at).getTime() < since) return;
+      if (new Date(s.at).getTime() < since) return;
+      /* Read to me's own level (from Nov 9, 2026): listed, with no Undo; voiding the read that made it puts it back */
+      if (kind === 'readaloud' && (s.raChange === 'up' || s.raChange === 'back') && s.raTo) out.push({ kind, subj: 'reading', s, from: s.raFrom, to: s.raTo, change: s.raChange, ra: true });
+      if (['up', 'back', 'return'].indexOf(s.change) < 0 || !s.to) return;
       out.push({ kind, subj: trackKey(kind), s, from: kind === 'readaloud' ? s.from : s.levelId, to: s.to, change: s.change });
     });
   });
   out.sort((a, b) => String(b.s.at).localeCompare(String(a.s.at)));
   const seen = {};
   out.forEach((c) => {
-    if (seen[c.subj]) return;
+    if (c.ra || seen[c.subj]) return;
     seen[c.subj] = true;
     const E = ENG[c.subj], t = trackOf(l, c.subj), at = E.canon(t.levelId) === E.canon(c.to), back = t.backFrom ? E.canon(t.backFrom) : '';
     c.canUndo = !c.s.undoneAt && at && (c.change === 'back' ? back === E.canon(c.from) : !back);
@@ -13915,6 +13952,8 @@ function levelChanges(l) {
 }
 function changeText(c) {
   const E = ENG[c.subj], nm = (id) => (E.BY[id] ? E.BY[id].name : id);
+  if (c.ra) return c.change === 'up' ? { head: 'Read to me moved up', line: nm(c.from) + ' → ' + nm(c.to) + ', after 4 reads in a row with at least 95% of the words right' }
+    : { head: 'Read to me stepped back', line: nm(c.from) + ' → ' + nm(c.to) + ', after 2 reads in a row under 90%' };
   if (c.change === 'up') return { head: 'Moved up', line: nm(c.from) + ' → ' + nm(c.to) + (c.kind === 'readaloud' ? ', after reading aloud' : c.s.kind === 'test' ? ', after passing the level test' : '') };
   if (c.change === 'back') return { head: 'Stepped back for review', line: nm(c.from) + ' → ' + nm(c.to) + ', after two sheets under 70%' };
   return { head: 'Back up after review', line: nm(c.from) + ' → ' + nm(c.to) };
@@ -13925,7 +13964,7 @@ function changesHTML(l) {
   const rows = list.slice(0, 8).map((c) => {
     const tx = changeText(c);
     const end = c.s.undoneAt ? '<span class="chip">Undone</span>' : c.canUndo ? '<button class="btn btn-glass btn-small" data-act="undoChange" data-kid="' + esc(l.id) + '" data-subj="' + c.kind + '" data-id="' + esc(c.s.id) + '">Undo</button>' : '';
-    return '<div class="chg-row"><div><b>' + SUBJ[c.subj].name + ': ' + esc(tx.head) + '</b> <span class="muted">' + esc(fmtWhen(c.s.at)) + '</span><p>' + esc(tx.line) + '</p></div>' + end + '</div>';
+    return '<div class="chg-row"><div><b>' + (c.ra ? '' : SUBJ[c.subj].name + ': ') + esc(tx.head) + '</b> <span class="muted">' + esc(fmtWhen(c.s.at)) + '</span><p>' + esc(tx.line) + '</p></div>' + end + '</div>';
   }).join('');
   return '<section class="glass panel"><h3>Level changes</h3><p class="sub">The app moves levels by itself, the way a Kumon instructor would. Undo puts the newest change in a subject back; passes there start again from 0.</p><div class="chg-list">' + rows + '</div></section>';
 }
