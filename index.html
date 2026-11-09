@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261109194550";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261109215743";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -3524,15 +3524,76 @@ const ReadingCurriculum = (() => {
   }
 
   /* ---------- Passages (Kumon AI): a short story with several questions ----------
-     The stories are the read-aloud passages for Kumon 2A and AI (read-aloud.js). A sheet reads one
-     story and answers all of its questions in a row, then the next story. */
-  const RA = () => (typeof ReadAloud !== 'undefined' ? ReadAloud : (typeof require === 'function' ? require('./read-aloud.js') : null));
+     Three sentences and three questions each (JB, Nov 9, 2026). Until then this level used the Read to me passages
+     (45 to 84 words, up to 9 sentences) straight after Short stories' two sentences: far too long to read alone. Those
+     stay in Read to me. A sheet reads one story and answers its questions in a row, then the next story. All text is
+     written for this app. */
+  const STORIES3 = [
+    ['Mia has a red ball. She takes it to the park. Her dog runs after the ball.',
+      [['What color is Mia’s ball?', 'Red', ['Blue', 'Green']], ['Where does Mia take the ball?', 'To the park', ['To school', 'To the beach']], ['Who runs after the ball?', 'Her dog', ['Her cat', 'Her mom']]]],
+    ['Ben gets up early. He eats eggs and toast. Then he walks to school with Dad.',
+      [['What does Ben eat?', 'Eggs and toast', ['A banana', 'Pancakes']], ['Who walks to school with Ben?', 'Dad', ['Mom', 'His sister']], ['When does Ben get up?', 'Early', ['Late', 'At noon']]]],
+    ['Kim plants three seeds in a pot. She gives them water every day. Soon three green plants come up.',
+      [['How many seeds does Kim plant?', 'Three', ['Two', 'Five']], ['What does Kim give the seeds every day?', 'Water', ['Milk', 'Sand']], ['What color are the plants?', 'Green', ['Red', 'Yellow']]]],
+    ['Tom and Sam build a sand castle at the beach. A big wave knocks it down. They laugh and build a new one.',
+      [['Where are Tom and Sam?', 'At the beach', ['At the park', 'At school']], ['What knocks the castle down?', 'A big wave', ['A dog', 'The wind']], ['What do they do next?', 'Build a new one', ['Go home', 'Cry']]]],
+    ['Ana has a little gray kitten named Smoky. Smoky likes to sleep in a box. At night, Smoky sleeps on Ana’s bed.',
+      [['What is the kitten’s name?', 'Smoky', ['Bubbles', 'Sunny']], ['What does Smoky like to sleep in?', 'A box', ['A bag', 'A shoe']], ['Where does Smoky sleep at night?', 'On Ana’s bed', ['In the yard', 'Under the table']]]],
+    ['Max sees dark clouds in the sky. He puts on his yellow coat and boots. Then he jumps in the puddles.',
+      [['What does Max see in the sky?', 'Dark clouds', ['The sun', 'A bird']], ['What color is Max’s coat?', 'Yellow', ['Red', 'Blue']], ['What does Max do last?', 'Jumps in the puddles', ['Goes to bed', 'Reads a book']]]],
+    ['Liz makes a card for her grandma. She draws a big pink heart on it. Grandma hugs Liz when she gets the card.',
+      [['Who is the card for?', 'Her grandma', ['Her teacher', 'Her brother']], ['What does Liz draw?', 'A big pink heart', ['A blue fish', 'A green tree']], ['What does Grandma do?', 'Hugs Liz', ['Sings a song', 'Bakes a cake']]]],
+    ['Leo counts the ducks at the pond. He sees four big ducks and two little ducks. The little ducks swim behind their mom.',
+      [['Where are the ducks?', 'At the pond', ['In the barn', 'At school']], ['How many big ducks does Leo see?', 'Four', ['Two', 'Six']], ['Who do the little ducks swim behind?', 'Their mom', ['Leo', 'A frog']]]],
+    ['Zoe’s bike has a flat tire. Dad helps her fix it. Then Zoe rides to her friend’s house.',
+      [['What is wrong with Zoe’s bike?', 'It has a flat tire', ['It is too small', 'It has no bell']], ['Who helps Zoe fix the bike?', 'Dad', ['Mom', 'Her friend']], ['Where does Zoe ride?', 'To her friend’s house', ['To the store', 'To the beach']]]],
+    ['Sam’s class goes to the zoo. They see a tall giraffe eating leaves. Sam likes the monkeys best.',
+      [['Where does Sam’s class go?', 'To the zoo', ['To the farm', 'To the library']], ['What is the giraffe eating?', 'Leaves', ['Fish', 'Bananas']], ['Which animals does Sam like best?', 'The monkeys', ['The lions', 'The bears']]]],
+    ['Nina bakes cookies with her mom. They put chocolate chips in the dough. The kitchen smells sweet.',
+      [['Who bakes with Nina?', 'Her mom', ['Her dad', 'Her teacher']], ['What do they put in the dough?', 'Chocolate chips', ['Apples', 'Nuts']], ['How does the kitchen smell?', 'Sweet', ['Bad', 'Like soap']]]],
+    ['Omar loses his blue hat at school. He looks for it all morning. He finds it on the playground.',
+      [['What does Omar lose?', 'His blue hat', ['His red bag', 'His lunch box']], ['Where does Omar lose his hat?', 'At school', ['At the park', 'At home']], ['Where does he find the hat?', 'On the playground', ['On the bus', 'Under his bed']]]],
+    ['Lily goes fishing with her grandpa. She catches a big silver fish. Grandpa takes a picture of Lily and the fish.',
+      [['Who goes fishing with Lily?', 'Her grandpa', ['Her sister', 'Her dad']], ['What does Lily catch?', 'A big silver fish', ['A little red fish', 'A crab']], ['What does Grandpa do?', 'Takes a picture', ['Cooks the fish', 'Falls in the water']]]],
+    ['Jack’s tooth is loose. He wiggles it all day. At dinner, the tooth falls out.',
+      [['What is loose?', 'Jack’s tooth', ['Jack’s shoe', 'Jack’s button']], ['What does Jack do all day?', 'Wiggles his tooth', ['Plays ball', 'Sleeps']], ['When does the tooth fall out?', 'At dinner', ['At school', 'In the morning']]]],
+    ['It is snowing outside. Ana and Ben make a snowman. They give it a carrot nose and a red hat.',
+      [['What is the weather like?', 'It is snowing', ['It is sunny', 'It is raining']], ['Who makes the snowman?', 'Ana and Ben', ['Ana and Mom', 'Ben and Dad']], ['What is the snowman’s nose?', 'A carrot', ['A rock', 'A button']]]],
+    ['Mia’s mom gives her a fish tank. Mia puts two orange fish in it. She feeds them every morning.',
+      [['What does Mom give Mia?', 'A fish tank', ['A dog bed', 'A bird cage']], ['How many fish does Mia put in the tank?', 'Two', ['One', 'Four']], ['When does Mia feed the fish?', 'Every morning', ['Every night', 'Once a week']]]],
+    ['Tom cannot play outside because it is raining. He builds a fort with blankets. His sister reads a book with him in the fort.',
+      [['Why can’t Tom play outside?', 'It is raining', ['It is dark', 'He is sick']], ['What does Tom build?', 'A fort', ['A boat', 'A tower']], ['Who reads with Tom?', 'His sister', ['His dad', 'His friend']]]],
+    ['Kim’s family goes camping. They sleep in a green tent. At night, they look at the stars.',
+      [['What does Kim’s family do?', 'They go camping', ['They go shopping', 'They go swimming']], ['What color is the tent?', 'Green', ['Red', 'Orange']], ['What do they look at at night?', 'The stars', ['The sun', 'A movie']]]],
+    ['Ben has five balloons for his party. One balloon pops. Now he has four balloons.',
+      [['How many balloons does Ben have at first?', 'Five', ['Four', 'Six']], ['What happens to one balloon?', 'It pops', ['It flies away', 'It gets lost']], ['How many balloons does Ben have now?', 'Four', ['Five', 'Three']]]],
+    ['Zoe has a pet bird named Sunny. Sunny is bright yellow. He sings when Zoe comes home.',
+      [['What is the bird’s name?', 'Sunny', ['Smoky', 'Bubbles']], ['What color is Sunny?', 'Bright yellow', ['Blue', 'Green']], ['When does Sunny sing?', 'When Zoe comes home', ['When it rains', 'At bedtime']]]],
+    ['Sam plays the drums in the band. Lily plays the flute. Their teacher claps at the end of the song.',
+      [['What does Sam play?', 'The drums', ['The piano', 'The bells']], ['Who plays the flute?', 'Lily', ['Sam', 'Their teacher']], ['What does the teacher do?', 'Claps', ['Sings', 'Dances']]]],
+    ['Max finds a frog by the river. The frog is small and green. It jumps into the water with a splash.',
+      [['Where does Max find the frog?', 'By the river', ['In the garden', 'On the road']], ['What does the frog look like?', 'Small and green', ['Big and brown', 'Small and red']], ['Where does the frog jump?', 'Into the water', ['Onto a rock', 'Into a tree']]]],
+    ['Nina’s dad cuts a big watermelon. He gives Nina a slice. Nina spits the seeds into a cup.',
+      [['What does Dad cut?', 'A big watermelon', ['An apple', 'A pie']], ['Who gets a slice?', 'Nina', ['Mom', 'The dog']], ['Where does Nina put the seeds?', 'Into a cup', ['On the floor', 'In her pocket']]]],
+    ['Leo’s shoes are too small. He goes to the store with Mom. He picks new shoes with blue stripes.',
+      [['What is wrong with Leo’s shoes?', 'They are too small', ['They are wet', 'They are lost']], ['Who goes to the store with Leo?', 'Mom', ['Dad', 'Grandma']], ['What is on Leo’s new shoes?', 'Blue stripes', ['Red dots', 'Green stars']]]],
+    ['Omar’s cat climbs up a tall tree. It cannot get down. A neighbor uses a ladder to get the cat.',
+      [['Where does the cat climb?', 'Up a tall tree', ['Onto the roof', 'Into a box']], ['What is the problem?', 'The cat cannot get down', ['The cat is hungry', 'The cat is wet']], ['Who gets the cat down?', 'A neighbor', ['Omar’s mom', 'A firefighter']]]],
+    ['Lily and Max go to the library. Lily picks a book about dinosaurs. Max picks a book about trains.',
+      [['Where do Lily and Max go?', 'To the library', ['To the zoo', 'To the park']], ['What is Lily’s book about?', 'Dinosaurs', ['Trains', 'Horses']], ['What is Max’s book about?', 'Trains', ['Dinosaurs', 'Boats']]]],
+    ['Ana’s little brother is crying. Ana gives him his teddy bear. He stops crying and smiles.',
+      [['Who is crying?', 'Ana’s little brother', ['Ana', 'Ana’s mom']], ['What does Ana give him?', 'His teddy bear', ['A cookie', 'A ball']], ['What does he do then?', 'Stops crying and smiles', ['Goes to sleep', 'Runs outside']]]],
+    ['Jack and his dad wash the car. They use a hose and lots of soap. The car shines in the sun.',
+      [['What do Jack and his dad wash?', 'The car', ['The dog', 'The windows']], ['What do they use?', 'A hose and soap', ['A broom', 'A towel and paint']], ['What does the car do in the sun?', 'It shines', ['It melts', 'It gets dirty']]]],
+    ['Kim sees a rainbow after the rain. It has many colors. She runs to show her mom.',
+      [['When does Kim see the rainbow?', 'After the rain', ['At night', 'Before school']], ['What does the rainbow have?', 'Many colors', ['One color', 'A pot of gold']], ['What does Kim do?', 'Runs to show her mom', ['Takes a nap', 'Draws a picture']]]],
+    ['Ben’s team plays baseball on Saturday. Ben hits the ball very far. His team wins the game.',
+      [['What game does Ben’s team play?', 'Baseball', ['Soccer', 'Basketball']], ['When do they play?', 'On Saturday', ['On Monday', 'At night']], ['Who wins the game?', 'Ben’s team', ['The other team', 'Nobody']]]]
+  ];
   let PASSAGES = null;
   function passages() {
     if (PASSAGES) return PASSAGES;
-    const R = RA();
-    PASSAGES = [];
-    if (R) R.TIERS.forEach((t) => { if (t.lvl === 'cloze' || t.lvl === 'story') t.items.forEach((it) => { if (it.qs) PASSAGES.push(it); }); });
+    PASSAGES = STORIES3.map(([text, qs], i) => ({ id: 's3:' + i, text, qs }));
     return PASSAGES;
   }
   function passageQ(it, k) {
@@ -3960,7 +4021,7 @@ const ReadingCurriculum = (() => {
       steps: ['Words go in an order that makes sense.', 'Read each one out loud.', 'Pick the one that sounds like how we talk: The cat naps.'] },
     riddle: { show: { type: 'sentence', text: 'I am long and yellow. Monkeys like to eat me.', q: 'What am I?', fill: 'a banana', pic: PIC.banana },
       steps: ['Read every clue.', 'Think of something that fits all the clues.', 'Long, yellow, and monkeys eat it: a banana!'] },
-    passage: { show: { type: 'sentence', text: 'Ben has a little fish named Bubbles. Bubbles is orange and white.', q: 'What color is Bubbles?', fill: 'Orange and white' },
+    passage: { show: { type: 'sentence', text: 'Ben has a little fish named Bubbles. Bubbles is orange and white. Ben feeds Bubbles every morning.', q: 'What color is Bubbles?', fill: 'Orange and white' },
       steps: ['Read the whole story first.', 'Then read the question.', 'Look back at the story to find the answer.', 'Each story has a few questions in a row.'] },
     seq: { show: { type: 'seq3', text: 'Tom had a bath after he played in the mud. Then he put on his pajamas.', items: [['First', 'Tom played in the mud.'], ['Next', 'Tom had a bath.'], ['Last', 'He put on his pajamas.']] },
       steps: ['Read the whole story.', 'Look for clue words like after, then and before.', 'Think about the order things really happened.'] },
