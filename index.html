@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261109194356";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261109194550";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -4508,11 +4508,13 @@ const ReadAloud = (() => {
   }
   /* Read to me has its own level (JB, Nov 9, 2026), apart from the reading sheets: it moves up one set after 4 reads
      in a row with at least 95% of the words right, over at least 2 days, and back one set after 2 reads in a row under
-     90% ("Too hard" counts as one). It never holds back the reading sheets, and the sheets never move it. A child with
-     no Read to me level yet starts at the set for their reading level (track.raTier), and only reads from then on
-     count (track.raSince). */
-  const UP_PCT = 0.95, UP_RUN = 4, UP_DAYS = 2, DOWN_PCT = 0.9, DOWN_RUN = 2;
+     90% ("Too hard" counts as one). A read under 90% counts only with at least 2 words missed, so one slip in a short
+     rhyme (8 of 9 words is 89%) doesn't. It never holds back the reading sheets, and the sheets never move it. A child
+     with no Read to me level yet starts at the set for their reading level (track.raTier), and only reads from then
+     on count (track.raSince). */
+  const UP_PCT = 0.95, UP_RUN = 4, UP_DAYS = 2, DOWN_PCT = 0.9, DOWN_MIN = 2, DOWN_RUN = 2;
   const pctOf = (h) => (h && !h.skipped && h.words > 0 && h.missed != null ? (h.words - h.missed) / h.words : 0);
+  const lowRead = (h) => !!h && (!!h.skipped || (h.words > 0 && h.missed != null && h.missed >= DOWN_MIN && pctOf(h) < DOWN_PCT));
   const tierById = (id) => TIERS.find((x) => x.lvl === id) || null;
   function tierOf(track, levelIndexOf, levelId) { return tierById(track && track.raTier) || tierFor(levelIndexOf, levelId); }
   /* where a child stands on their Read to me set: reads in a row at 95% or more (and on how many days), reads in a row
@@ -4523,7 +4525,7 @@ const ReadAloud = (() => {
       .sort((a, b) => String(a.at).localeCompare(String(b.at)));
     let run = 0, low = 0;
     for (let i = mine.length - 1; i >= 0 && pctOf(mine[i]) >= UP_PCT; i--) run++;
-    for (let i = mine.length - 1; i >= 0 && pctOf(mine[i]) < DOWN_PCT; i--) low++;
+    for (let i = mine.length - 1; i >= 0 && lowRead(mine[i]); i--) low++;
     const day = dayOf || ((at) => String(at).slice(0, 10));
     const days = new Set(mine.slice(mine.length - run).map((h) => day(h.at))).size;
     const i = TIERS.indexOf(tier);
@@ -4554,7 +4556,7 @@ const ReadAloud = (() => {
     const pickFrom = fresh.length ? fresh : t.items.slice().sort((a, b) => String(last[a.id]).localeCompare(String(last[b.id])));
     return BY_ID[(fresh.length ? pickFrom[Math.floor(Math.random() * pickFrom.length)] : pickFrom[0]).id];
   }
-  return { TIERS, BY_ID, words, tierFor, tierOf, tierById, standing, afterRead, pctOf, UP_PCT, UP_RUN, UP_DAYS, DOWN_PCT, DOWN_RUN, next, tooHard, get: (id) => BY_ID[id] || null };
+  return { TIERS, BY_ID, words, tierFor, tierOf, tierById, standing, afterRead, pctOf, lowRead, UP_PCT, UP_RUN, UP_DAYS, DOWN_PCT, DOWN_MIN, DOWN_RUN, next, tooHard, get: (id) => BY_ID[id] || null };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = ReadAloud;
 /* Small Steps: the book shelf. Picture books and early readers for each Kumon reading level,
@@ -12625,7 +12627,7 @@ function readAloudHTML(l) {
     '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '</td><td>' + (s.words - s.missed) + '/' + s.words + (s.missedWords && s.missedWords.length ? '<div class="muted">' + esc(s.missedWords.slice(0, 5).join(' · ')) + '</div>' : '') + '</td><td>' +
     (s.secs ? ENG.math.fmtTime(s.secs) + (s.wpm ? ' · ' + s.wpm + ' wpm' : '') : '—') + '</td><td>' + (s.q == null ? '—' : s.q ? '<span class="chip chip-ok">Knew it</span>' : '<span class="chip">Not yet</span>') + (s.goalMet ? ' <span class="chip chip-ok">Goal</span>' : '') + end(s) + '</td></tr>')).join('');
   const level = '<p class="sub"><b>' + esc(raStandingText(l)) + '</b></p>';
-  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. Read to me has its own level, apart from the reading sheets: 4 reads in a row with at least 95% of the words right, over at least 2 days, move it up one set, and 2 reads in a row under 90% move it back one (Too hard counts as under 90%). The reading sheets move up on their own and never wait for a read. “Too hard for now” saves it as too hard, and the next one comes from an easier set. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute. Done and Too hard ask a grown-up’s × question first. A read saved by mistake can be voided: it comes off the record and the next read is picked as if it never happened.</p>' + level +
+  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. Read to me has its own level, apart from the reading sheets: 4 reads in a row with at least 95% of the words right, over at least 2 days, move it up one set, and 2 reads in a row under 90% move it back one (Too hard counts as one; a read under 90% counts only with at least 2 words missed, so one slip in a short rhyme doesn’t). The reading sheets move up on their own and never wait for a read. “Too hard for now” saves it as too hard, and the next one comes from an easier set. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute. Done and Too hard ask a grown-up’s × question first. A read saved by mistake can be voided: it comes off the record and the next read is picked as if it never happened.</p>' + level +
     (rows ? '<div class="table-wrap"><table class="hist"><thead><tr><th>When</th><th>Words right</th><th>Time</th><th>Question</th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="sub">Nothing read aloud yet.</p>') +
     '<div class="actions"><button class="btn btn-glass btn-small" data-act="raNow" data-kid="' + esc(l.id) + '">Start a read-aloud now</button></div></section>';
 }
