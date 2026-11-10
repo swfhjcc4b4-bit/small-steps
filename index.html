@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261110070210";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261110091339";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -12828,16 +12828,21 @@ function readGate(kidId, before, out) {
 }
 /* a Read to me set by name: the reading level it starts at ("Short stories") */
 const raSetName = (lvl) => (ENG.reading.BY[lvl] ? ENG.reading.BY[lvl].name : lvl);
+/* The pace bar in words: percentile first, with its group and the WPM (JB, Nov 10, 2026: "JUST USE PERCENTILES ...
+   Include the corresponding wpm of course but start with percentile"). 29 WPM is the 50th percentile of first
+   graders in January (Hasbrouck and Tindal, 2017). Were the bar ever another number, it is said as the number until
+   its percentile is written here too, so the words can never name a percentile the number is not. */
+const raPaceWords = () => (ReadAloud.UP_WPM === 29 ? 'the 50th percentile of first graders in January (29 WPM)' : ReadAloud.UP_WPM + ' WPM');
 /* where a child stands on Read to me's own level, in a sentence for Parents → Reading */
 function raStandingText(l) {
   const E = ENG.reading, t = trackOf(l, 'reading'), who = l.name || 'your child';
   const st = ReadAloud.standing(t, E.levelIndex, E.canon(t.levelId), Store.sessionsFor(l.id, 'readaloud'), (at) => E.todayKey(new Date(at)));
   const up = st.up ? ' move it up to ' + raSetName(st.up.lvl) : ' finish the last set';
-  /* the pace bar (JB, Nov 10, 2026): on a timed set a read also needs at least 29 WPM to count */
-  const bar = st.upWpm ? ' and ' + st.upWpm + ' WPM or more' : '';
-  if (!t.raTier) return 'Read to me level: ' + raSetName(st.tier.lvl) + ', the set for ' + who + '’s reading level. It starts counting at the next read: 4 reads in a row with at least 95% of the words right' + (st.upWpm ? ' and at least ' + st.upWpm + ' WPM' : '') + ', over at least 2 days,' + up + '.';
+  /* the pace bar (JB, Nov 10, 2026): on a timed set a read also has to be at the pace bar or faster to count */
+  const bar = st.upWpm ? ' and at the pace bar or faster' : '', barIs = st.upWpm ? ' The pace bar is ' + raPaceWords() + '.' : '';
+  if (!t.raTier) return 'Read to me level: ' + raSetName(st.tier.lvl) + ', the set for ' + who + '’s reading level. It starts counting at the next read: 4 reads in a row with at least 95% of the words right' + bar + ', over at least 2 days,' + up + '.' + barIs;
   const run = st.run ? st.run + ' of 4 reads in a row at 95% or more' + bar + ' so far' + (st.run > 1 ? ' (on ' + st.days + (st.days === 1 ? ' day)' : ' days)') : '') : 'No reads at 95% or more' + bar + ' in a row yet';
-  return 'Read to me level: ' + raSetName(st.tier.lvl) + (t.raSince ? ', since ' + fmtWhen(t.raSince) : '') + '. ' + run + '. 4 in a row, over at least 2 days,' + up + '.';
+  return 'Read to me level: ' + raSetName(st.tier.lvl) + (t.raSince ? ', since ' + fmtWhen(t.raSince) : '') + '. ' + run + '. 4 in a row, over at least 2 days,' + up + '.' + barIs;
 }
 /* Too hard for now: saved as too hard, no stars, and the day's read-aloud counts as done so the tile
    doesn't ask again today. The next read comes from an easier set (ReadAloud.next). */
@@ -12901,7 +12906,7 @@ function readAloudHTML(l) {
     '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '</td><td>' + (s.words - s.missed) + '/' + s.words + (s.missedWords && s.missedWords.length ? '<div class="muted">' + esc(s.missedWords.slice(0, 5).join(' · ')) + '</div>' : '') + '</td><td>' +
     (s.secs ? ENG.math.fmtTime(s.secs) + (s.wpm ? ' · ' + s.wpm + ' wpm' : '') : '—') + '</td><td>' + (s.q == null ? '—' : s.q ? '<span class="chip chip-ok">Knew it</span>' : '<span class="chip">Not yet</span>') + (s.goalMet ? ' <span class="chip chip-ok">Goal</span>' : '') + end(s) + '</td></tr>')).join('');
   const level = '<p class="sub"><b>' + esc(raStandingText(l)) + '</b></p>';
-  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. Read to me has its own level, apart from the reading sheets: 4 reads in a row with at least 95% of the words right, over at least 2 days, move it up one set. On every timed set (the ones your child reads alone, single words included) each of those reads also needs at least ' + ReadAloud.UP_WPM + ' WPM, the pace bar: the 50th percentile of first graders in January. The reading sheets move up on their own and never wait for a read. “Too hard for now” is the grown-up’s own choice: it saves the read as too hard, and the next one comes from an easier set, once; the level itself stays where it is. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute. Done and Too hard ask a grown-up’s × question first. A read saved by mistake can be voided: it comes off the record and the next read is picked as if it never happened.</p>' + level +
+  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. Read to me has its own level, apart from the reading sheets: 4 reads in a row with at least 95% of the words right, over at least 2 days, move it up one set. On every timed set (the ones your child reads alone, single words included) each of those reads also has to be at the pace bar or faster: ' + raPaceWords() + '. The reading sheets move up on their own and never wait for a read. “Too hard for now” is the grown-up’s own choice: it saves the read as too hard, and the next one comes from an easier set, once; the level itself stays where it is. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute. Done and Too hard ask a grown-up’s × question first. A read saved by mistake can be voided: it comes off the record and the next read is picked as if it never happened.</p>' + level +
     (rows ? '<div class="table-wrap"><table class="hist"><thead><tr><th>When</th><th>Words right</th><th>Time</th><th>Question</th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="sub">Nothing read aloud yet.</p>') +
     '<div class="actions"><button class="btn btn-glass btn-small" data-act="raNow" data-kid="' + esc(l.id) + '">Start a read-aloud now</button></div></section>';
 }
@@ -14229,7 +14234,7 @@ function levelChanges(l) {
 }
 function changeText(c) {
   const E = ENG[c.subj], nm = (id) => (E.BY[id] ? E.BY[id].name : id);
-  if (c.ra) return { head: 'Read to me moved up', line: nm(c.from) + ' → ' + nm(c.to) + ', after 4 reads in a row with at least 95% of the words right' + (ReadAloud.paceBar(ReadAloud.tierById(c.from)) ? ' and at least ' + ReadAloud.UP_WPM + ' WPM' : '') };
+  if (c.ra) return { head: 'Read to me moved up', line: nm(c.from) + ' → ' + nm(c.to) + ', after 4 reads in a row with at least 95% of the words right' + (ReadAloud.paceBar(ReadAloud.tierById(c.from)) ? ' and at the pace bar or faster (' + raPaceWords() + ')' : '') };
   if (c.change === 'up') return { head: 'Moved up', line: nm(c.from) + ' → ' + nm(c.to) + (c.kind === 'readaloud' ? ', after reading aloud' : c.s.kind === 'test' ? ', after passing the level test' : '') };
   if (c.change === 'back') return { head: 'Stepped back for review', line: nm(c.from) + ' → ' + nm(c.to) + ', after two sheets under 70%' };
   return { head: 'Back up after review', line: nm(c.from) + ' → ' + nm(c.to) };
