@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261109220625";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261110062640";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -4590,42 +4590,44 @@ const ReadAloud = (() => {
     return best;
   }
   /* Read to me has its own level (JB, Nov 9, 2026), apart from the reading sheets: it moves up one set after 4 reads
-     in a row with at least 95% of the words right, over at least 2 days, and back one set after 2 reads in a row under
-     90% ("Too hard" counts as one). A read under 90% counts only with at least 2 words missed, so one slip in a short
-     rhyme (8 of 9 words is 89%) doesn't. It never holds back the reading sheets, and the sheets never move it. A child
-     with no Read to me level yet starts at the set for their reading level (track.raTier), and only reads from then
-     on count (track.raSince). */
-  const UP_PCT = 0.95, UP_RUN = 4, UP_DAYS = 2, DOWN_PCT = 0.9, DOWN_MIN = 2, DOWN_RUN = 2;
+     in a row with at least 95% of the words right, over at least 2 days. It never moves down (JB, Nov 10, 2026: "She
+     stays put on read to me and can advance based on agreed >95% words correct 4x in a row over 2 days."): no read,
+     however low, and no run of low reads steps it back; a low read only starts the count of 4 again. The step back
+     after 2 reads in a row under 90%, in the app on Nov 9 and 10, was never approved by JB and is gone; no read ever
+     made that move. It never holds back the reading sheets, and the sheets never move it. A child with no Read to me
+     level yet starts at the set for their reading level (track.raTier), and only reads from then on count
+     (track.raSince). */
+  const UP_PCT = 0.95, UP_RUN = 4, UP_DAYS = 2;
   const pctOf = (h) => (h && !h.skipped && h.words > 0 && h.missed != null ? (h.words - h.missed) / h.words : 0);
-  const lowRead = (h) => !!h && (!!h.skipped || (h.words > 0 && h.missed != null && h.missed >= DOWN_MIN && pctOf(h) < DOWN_PCT));
   const tierById = (id) => TIERS.find((x) => x.lvl === id) || null;
   function tierOf(track, levelIndexOf, levelId) { return tierById(track && track.raTier) || tierFor(levelIndexOf, levelId); }
-  /* where a child stands on their Read to me set: reads in a row at 95% or more (and on how many days), reads in a row
-     under 90%, and the sets above and below */
+  /* where a child stands on their Read to me set: reads in a row at 95% or more (and on how many days), and the set
+     above. There is nothing about a set below: the level only moves up. */
   function standing(track, levelIndexOf, levelId, history, dayOf) {
     const tier = tierOf(track, levelIndexOf, levelId), since = (track && track.raTier && track.raSince) || '';
     const mine = (history || []).filter((h) => h && !h.voided && h.tier === tier.lvl && (!since || String(h.at) >= since))
       .sort((a, b) => String(a.at).localeCompare(String(b.at)));
-    let run = 0, low = 0;
+    let run = 0;
     for (let i = mine.length - 1; i >= 0 && pctOf(mine[i]) >= UP_PCT; i--) run++;
-    for (let i = mine.length - 1; i >= 0 && lowRead(mine[i]); i--) low++;
     const day = dayOf || ((at) => String(at).slice(0, 10));
     const days = new Set(mine.slice(mine.length - run).map((h) => day(h.at))).size;
     const i = TIERS.indexOf(tier);
-    return { tier, run, low, days, need: UP_RUN, upPct: UP_PCT, downPct: DOWN_PCT, up: TIERS[i + 1] || null, down: i > 0 ? TIERS[i - 1] : null };
+    return { tier, run, days, need: UP_RUN, upPct: UP_PCT, up: TIERS[i + 1] || null };
   }
-  /* the move a saved read makes, if any: { change: 'up' | 'back', from, to } */
+  /* the move a saved read makes, if any. Only ever up: { change: 'up', from, to } */
   function afterRead(track, levelIndexOf, levelId, history, dayOf) {
     const st = standing(track, levelIndexOf, levelId, history, dayOf);
     if (st.run >= UP_RUN && st.days >= UP_DAYS && st.up) return { change: 'up', from: st.tier.lvl, to: st.up.lvl };
-    if (st.low >= DOWN_RUN && st.down) return { change: 'back', from: st.tier.lvl, to: st.down.lvl };
     return null;
   }
-  /* A read that was too hard: the grown-up tapped Too hard, or under half the words were right. */
-  const tooHard = (h) => !!h && (!!h.skipped || (h.words > 0 && h.missed != null && (h.words - h.missed) / h.words < 0.5));
-  /* Next passage: one not read yet in its tier, else the one read longest ago. After a read that was
-     too hard, the next one comes from the tier below the one that was too hard (unless the child's
-     level has since dropped below it); a good read there brings the child's own tier back. */
+  /* A read the grown-up saved as too hard (the Too hard for now button). Until Nov 10, 2026 a read with under half
+     the words right counted as too hard as well, and the app gave an easier passage next by itself; JB: Read to me
+     never moves a child down, so now only the grown-up's own tap does that. */
+  const tooHard = (h) => !!h && !!h.skipped;
+  /* Next passage: one not read yet in its tier, else the one read longest ago. After the grown-up taps Too hard
+     for now, the next one comes from the tier below the one that was too hard (unless the child's level has since
+     dropped below it); the read after that is from the child's own tier again. The Read to me level (raTier)
+     itself doesn't change. */
   function next(levelIndexOf, levelId, history, track) {
     let t = tierOf(track, levelIndexOf, levelId);
     const hist = (history || []).filter((h) => h && h.item), last = {};
@@ -4639,7 +4641,7 @@ const ReadAloud = (() => {
     const pickFrom = fresh.length ? fresh : t.items.slice().sort((a, b) => String(last[a.id]).localeCompare(String(last[b.id])));
     return BY_ID[(fresh.length ? pickFrom[Math.floor(Math.random() * pickFrom.length)] : pickFrom[0]).id];
   }
-  return { TIERS, BY_ID, words, tierFor, tierOf, tierById, standing, afterRead, pctOf, lowRead, UP_PCT, UP_RUN, UP_DAYS, DOWN_PCT, DOWN_MIN, DOWN_RUN, next, tooHard, get: (id) => BY_ID[id] || null };
+  return { TIERS, BY_ID, words, tierFor, tierOf, tierById, standing, afterRead, pctOf, UP_PCT, UP_RUN, UP_DAYS, next, tooHard, get: (id) => BY_ID[id] || null };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = ReadAloud;
 /* Small Steps: the book shelf. Picture books and early readers for each Kumon reading level,
@@ -12777,7 +12779,8 @@ function raSave() {
   if (!l) return goHome();
   const E = ENG.reading, t = trackOf(l, 'reading'), r = raResult(R), now = new Date(), awardsBefore = awardSnap(l);
   /* Read to me's own level (JB, Nov 9, 2026): a child's first read under it starts the level at the set for their
-     reading level, and counts from this read on; 4 reads in a row at 95% or more move it up, 2 under 90% move it down */
+     reading level, and counts from this read on; 4 reads in a row at 95% or more, over at least 2 days, move it up.
+     It never moves down (JB, Nov 10, 2026) */
   const raT = t.raTier && ReadAloud.tierById(t.raTier) ? t : Object.assign({}, t, { raTier: ReadAloud.tierFor(E.levelIndex, E.canon(t.levelId)).lvl, raSince: now.toISOString() });
   const sid = Store.newId();
   const rec = { id: sid, subject: 'readaloud', kind: 'read', at: now.toISOString(), item: R.item.id, mode: R.item.mode, tier: R.item.lvl,
@@ -12821,10 +12824,11 @@ function raStandingText(l) {
   const E = ENG.reading, t = trackOf(l, 'reading'), who = l.name || 'your child';
   const st = ReadAloud.standing(t, E.levelIndex, E.canon(t.levelId), Store.sessionsFor(l.id, 'readaloud'), (at) => E.todayKey(new Date(at)));
   const up = st.up ? ' move it up to ' + raSetName(st.up.lvl) : ' finish the last set';
-  const down = st.down ? '; 2 reads in a row under 90% move it back to ' + raSetName(st.down.lvl) : '';
-  if (!t.raTier) return 'Read to me level: ' + raSetName(st.tier.lvl) + ', the set for ' + who + '’s reading level. It starts counting at the next read: 4 reads in a row with at least 95% of the words right, over at least 2 days,' + up + down + '.';
+  /* JB, Nov 10, 2026: Read to me never moves down, and the sentence says so */
+  const stays = ' It never moves down.';
+  if (!t.raTier) return 'Read to me level: ' + raSetName(st.tier.lvl) + ', the set for ' + who + '’s reading level. It starts counting at the next read: 4 reads in a row with at least 95% of the words right, over at least 2 days,' + up + '.' + stays;
   const run = st.run ? st.run + ' of 4 reads in a row at 95% or more so far' + (st.run > 1 ? ' (on ' + st.days + (st.days === 1 ? ' day)' : ' days)') : '') : 'No reads at 95% or more in a row yet';
-  return 'Read to me level: ' + raSetName(st.tier.lvl) + (t.raSince ? ', since ' + fmtWhen(t.raSince) : '') + '. ' + run + '. 4 in a row, over at least 2 days,' + up + down + '.';
+  return 'Read to me level: ' + raSetName(st.tier.lvl) + (t.raSince ? ', since ' + fmtWhen(t.raSince) : '') + '. ' + run + '. 4 in a row, over at least 2 days,' + up + '.' + stays;
 }
 /* Too hard for now: saved as too hard, no stars, and the day's read-aloud counts as done so the tile
    doesn't ask again today. The next read comes from an easier set (ReadAloud.next). */
@@ -12888,7 +12892,7 @@ function readAloudHTML(l) {
     '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '</td><td>' + (s.words - s.missed) + '/' + s.words + (s.missedWords && s.missedWords.length ? '<div class="muted">' + esc(s.missedWords.slice(0, 5).join(' · ')) + '</div>' : '') + '</td><td>' +
     (s.secs ? ENG.math.fmtTime(s.secs) + (s.wpm ? ' · ' + s.wpm + ' wpm' : '') : '—') + '</td><td>' + (s.q == null ? '—' : s.q ? '<span class="chip chip-ok">Knew it</span>' : '<span class="chip">Not yet</span>') + (s.goalMet ? ' <span class="chip chip-ok">Goal</span>' : '') + end(s) + '</td></tr>')).join('');
   const level = '<p class="sub"><b>' + esc(raStandingText(l)) + '</b></p>';
-  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. Read to me has its own level, apart from the reading sheets: 4 reads in a row with at least 95% of the words right, over at least 2 days, move it up one set, and 2 reads in a row under 90% move it back one (Too hard counts as one; a read under 90% counts only with at least 2 words missed, so one slip in a short rhyme doesn’t). The reading sheets move up on their own and never wait for a read. “Too hard for now” saves it as too hard, and the next one comes from an easier set. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute. Done and Too hard ask a grown-up’s × question first. A read saved by mistake can be voided: it comes off the record and the next read is picked as if it never happened.</p>' + level +
+  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. Read to me has its own level, apart from the reading sheets: 4 reads in a row with at least 95% of the words right, over at least 2 days, move it up one set. It never moves down: a low read only starts the count of 4 again. The reading sheets move up on their own and never wait for a read. “Too hard for now” is the grown-up’s own choice: it saves the read as too hard, and the next one comes from an easier set, once; the level itself stays where it is. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute. Done and Too hard ask a grown-up’s × question first. A read saved by mistake can be voided: it comes off the record and the next read is picked as if it never happened.</p>' + level +
     (rows ? '<div class="table-wrap"><table class="hist"><thead><tr><th>When</th><th>Words right</th><th>Time</th><th>Question</th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="sub">Nothing read aloud yet.</p>') +
     '<div class="actions"><button class="btn btn-glass btn-small" data-act="raNow" data-kid="' + esc(l.id) + '">Start a read-aloud now</button></div></section>';
 }
@@ -14197,8 +14201,9 @@ function levelChanges(l) {
   ['math', 'reading', 'clock', 'readaloud'].forEach((kind) => {
     Store.sessionsFor(l.id, kind).forEach((s) => {
       if (new Date(s.at).getTime() < since) return;
-      /* Read to me's own level (from Nov 9, 2026): listed, with no Undo; voiding the read that made it puts it back */
-      if (kind === 'readaloud' && (s.raChange === 'up' || s.raChange === 'back') && s.raTo) out.push({ kind, subj: 'reading', s, from: s.raFrom, to: s.raTo, change: s.raChange, ra: true });
+      /* Read to me's own level (from Nov 9, 2026): a move up is listed, with no Undo; voiding the read that made it
+         puts it back. It never moves down (JB, Nov 10, 2026), so there is nothing else to list */
+      if (kind === 'readaloud' && s.raChange === 'up' && s.raTo) out.push({ kind, subj: 'reading', s, from: s.raFrom, to: s.raTo, change: s.raChange, ra: true });
       if (['up', 'back', 'return'].indexOf(s.change) < 0 || !s.to) return;
       out.push({ kind, subj: trackKey(kind), s, from: kind === 'readaloud' ? s.from : s.levelId, to: s.to, change: s.change });
     });
@@ -14215,8 +14220,7 @@ function levelChanges(l) {
 }
 function changeText(c) {
   const E = ENG[c.subj], nm = (id) => (E.BY[id] ? E.BY[id].name : id);
-  if (c.ra) return c.change === 'up' ? { head: 'Read to me moved up', line: nm(c.from) + ' → ' + nm(c.to) + ', after 4 reads in a row with at least 95% of the words right' }
-    : { head: 'Read to me stepped back', line: nm(c.from) + ' → ' + nm(c.to) + ', after 2 reads in a row under 90%' };
+  if (c.ra) return { head: 'Read to me moved up', line: nm(c.from) + ' → ' + nm(c.to) + ', after 4 reads in a row with at least 95% of the words right' };
   if (c.change === 'up') return { head: 'Moved up', line: nm(c.from) + ' → ' + nm(c.to) + (c.kind === 'readaloud' ? ', after reading aloud' : c.s.kind === 'test' ? ', after passing the level test' : '') };
   if (c.change === 'back') return { head: 'Stepped back for review', line: nm(c.from) + ' → ' + nm(c.to) + ', after two sheets under 70%' };
   return { head: 'Back up after review', line: nm(c.from) + ' → ' + nm(c.to) };
