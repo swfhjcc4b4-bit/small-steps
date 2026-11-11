@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261110091339";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261111233016";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -3310,7 +3310,7 @@ const ReadingCurriculum = (() => {
       const [s1, s2] = pick(STEPS), other = pick(STEPS.filter((x) => x[0] !== s1))[1];
       text = 'First ' + A + ' ' + s1 + '. Then ' + A + ' ' + s2 + '.';
       if (Math.random() < 0.5) { q = 'What did ' + A + ' do first?'; ans = s1; wrong = [s2, other]; }
-      else { q = 'What did ' + A + ' do next?'; ans = s2; wrong = [s1, pick(STEPS.filter((x) => x[0] !== s1))[0]]; }
+      else { q = 'What did ' + A + ' do last?'; ans = s2; wrong = [s1, pick(STEPS.filter((x) => x[0] !== s1))[0]]; }
     }
     return mk('story', ans, shuffle([ans].concat(wrong)), 'word', { t: 'story', text, q }, 'Read the story, then answer the question.',
       'st:' + text + '|' + q, 'story' + t, { text, q });
@@ -3558,7 +3558,7 @@ const ReadingCurriculum = (() => {
     ['Kim plants three seeds in a pot. She gives them water every day. Soon three green plants come up.',
       [['How many seeds does Kim plant?', 'Three', ['Two', 'Five']], ['What does Kim give the seeds every day?', 'Water', ['Milk', 'Sand']], ['What color are the plants?', 'Green', ['Red', 'Yellow']]]],
     ['Tom and Sam build a sand castle at the beach. A big wave knocks it down. They laugh and build a new one.',
-      [['Where are Tom and Sam?', 'At the beach', ['At the park', 'At school']], ['What knocks the castle down?', 'A big wave', ['A dog', 'The wind']], ['What do they do next?', 'Build a new one', ['Go home', 'Cry']]]],
+      [['Where are Tom and Sam?', 'At the beach', ['At the park', 'At school']], ['What knocks the castle down?', 'A big wave', ['A dog', 'The wind']], ['What do they do after the wave knocks the castle down?', 'Build a new one', ['Go home', 'Cry']]]],
     ['Ana has a little gray kitten named Smoky. Smoky likes to sleep in a box. At night, Smoky sleeps on Ana’s bed.',
       [['What is the kitten’s name?', 'Smoky', ['Bubbles', 'Sunny']], ['What does Smoky like to sleep in?', 'A box', ['A bag', 'A shoe']], ['Where does Smoky sleep at night?', 'On Ana’s bed', ['In the yard', 'Under the table']]]],
     ['Max sees dark clouds in the sky. He puts on his yellow coat and boots. Then he jumps in the puddles.',
@@ -3604,7 +3604,7 @@ const ReadingCurriculum = (() => {
     ['Lily and Max go to the library. Lily picks a book about dinosaurs. Max picks a book about trains.',
       [['Where do Lily and Max go?', 'To the library', ['To the zoo', 'To the park']], ['What is Lily’s book about?', 'Dinosaurs', ['Trains', 'Horses']], ['What is Max’s book about?', 'Trains', ['Dinosaurs', 'Boats']]]],
     ['Ana’s little brother is crying. Ana gives him his teddy bear. He stops crying and smiles.',
-      [['Who is crying?', 'Ana’s little brother', ['Ana', 'Ana’s mom']], ['What does Ana give him?', 'His teddy bear', ['A cookie', 'A ball']], ['What does he do then?', 'Stops crying and smiles', ['Goes to sleep', 'Runs outside']]]],
+      [['Who is crying?', 'Ana’s little brother', ['Ana', 'Ana’s mom']], ['What does Ana give him?', 'His teddy bear', ['A cookie', 'A ball']], ['What does he do when he gets his teddy bear?', 'Stops crying and smiles', ['Goes to sleep', 'Runs outside']]]],
     ['Jack and his dad wash the car. They use a hose and lots of soap. The car shines in the sun.',
       [['What do Jack and his dad wash?', 'The car', ['The dog', 'The windows']], ['What do they use?', 'A hose and soap', ['A broom', 'A towel and paint']], ['What does the car do in the sun?', 'It shines', ['It melts', 'It gets dirty']]]],
     ['Kim sees a rainbow after the rain. It has many colors. She runs to show her mom.',
@@ -3626,66 +3626,130 @@ const ReadingCurriculum = (() => {
   function passage() { const it = pick(passages()); return passageQ(it, ri(0, it.qs.length - 1)); }
   function passageSet() { const it = pick(passages()); return shuffle(it.qs.map((x, k) => k)).map((k) => passageQ(it, k)); }
 
-  /* ---------- First, next, last (Kumon AII: order of events). Some stories tell things out of
-     order ("after he played in the mud"), so the answer comes from reading, not from position. ---------- */
+  /* ---------- First, next, last (Kumon AII: order of events) ----------
+     Each story tells exactly three things, and its words say the order they happened in. Some stories tell them
+     out of order ("after he played in the mud", "Before Jada went down the slide"), so the answer comes from
+     reading, not from position.
+     The three questions are "What happened first?", "What happened in the middle?" and "What happened last?".
+     Until Nov 11, 2026 the second was "What happened next?", with nothing to say next after what: for "Ella fed
+     her dog after she walked him. Then the dog took a long nap." a child who picked "The dog took a nap." had
+     answered the question as it was asked, and the app marked her wrong. JB, that day: "If you want to continue
+     this question it should really be: What happened in the middle?"
+     Each entry: [story, [the three things in the order they happened, as the answer choices],
+                         [the piece of the story that tells each one, in the same order]].
+     test-questions.js reads the pieces and fails the build unless the story is those three pieces and nothing
+     else but order words (Then, Next, Last, after, Before, ...), the order the words give is the order of the
+     choices, and every word of a choice is a word of the story. ---------- */
   const SEQ = [
-    ['Mia put a seed in the dirt. She gave it water every day. Soon a little plant came up.', ['Mia planted a seed.', 'She gave it water.', 'A plant came up.']],
-    ['Ben put on his socks. Then he put on his shoes. Last, he tied the laces.', ['Ben put on his socks.', 'He put on his shoes.', 'He tied the laces.']],
-    ['Before bed, Kim took a bath. After her bath, she brushed her teeth. Then Dad read her a story.', ['Kim took a bath.', 'She brushed her teeth.', 'Dad read her a story.']],
-    ['Tom had a bath after he played in the mud. Then he put on his pajamas.', ['Tom played in the mud.', 'Tom had a bath.', 'He put on his pajamas.']],
-    ['The egg cracked open. A tiny chick came out. Soon the chick was walking around the yard.', ['The egg cracked open.', 'A chick came out.', 'The chick walked around.']],
-    ['Sam mixed the flour and eggs. He put the cake in the oven. When it was done, everyone ate a slice.', ['Sam mixed the flour and eggs.', 'He baked the cake.', 'Everyone ate cake.']],
-    ['Ana put on her helmet. She rode her bike to the park. At the park, she met her friends.', ['Ana put on her helmet.', 'She rode to the park.', 'She met her friends.']],
-    ['Dad washed the car. After that, he dried it with a towel. Then the car was shiny and clean.', ['Dad washed the car.', 'He dried it with a towel.', 'The car was shiny.']],
-    ['It started to rain, so Max ran inside. He took off his wet coat. Then he had a cup of warm milk.', ['It started to rain.', 'Max took off his coat.', 'Max had warm milk.']],
-    ['Liz ate lunch after she finished her painting. Then she went outside to play.', ['Liz finished her painting.', 'Liz ate lunch.', 'She went outside to play.']],
-    ['The caterpillar ate and ate. Then it made a cocoon. At last, it came out as a butterfly.', ['The caterpillar ate and ate.', 'It made a cocoon.', 'It came out as a butterfly.']],
-    ['Before school, Jack ate a big bowl of cereal. After school, he did his homework. At night, he went to sleep.', ['Jack ate cereal.', 'He did his homework.', 'He went to sleep.']],
-    ['Nina wrote a letter to Grandma. She put it in an envelope. Then she dropped it in the mailbox.', ['Nina wrote a letter.', 'She put it in an envelope.', 'She mailed the letter.']],
-    ['The snow melted in the sun. After the snow was gone, green grass came up. Then the first flowers opened.', ['The snow melted.', 'Green grass came up.', 'The flowers opened.']],
-    ['We went to the store to buy apples. At home, Mom cut them up. Then we baked an apple pie.', ['We bought apples.', 'Mom cut up the apples.', 'We baked a pie.']],
-    ['Before he jumped in the pool, Leo put on his goggles. He swam to the other side. Then he climbed out and dried off.', ['Leo put on his goggles.', 'He swam across the pool.', 'He dried off.']],
-    ['Ella fed her dog after she walked him. Then the dog took a long nap.', ['Ella walked her dog.', 'Ella fed her dog.', 'The dog took a nap.']],
-    ['The bus stopped at the corner. The kids climbed on. Then the bus drove to school.', ['The bus stopped.', 'The kids climbed on.', 'The bus drove to school.']],
-    ['Omar built a tower of blocks. His baby sister knocked it down. So Omar built it again, even taller.', ['Omar built a tower.', 'His sister knocked it down.', 'Omar built it again.']],
-    ['First the farmer planted corn. All summer the corn grew tall. In the fall, the farmer picked it.', ['The farmer planted corn.', 'The corn grew tall.', 'The farmer picked the corn.']],
-    ['The campers made a fire before they went into the tent. They cooked hot dogs on it. Later, they crawled into their sleeping bags.', ['The campers made a fire.', 'They cooked hot dogs.', 'They got in their sleeping bags.']],
-    ['Pam found a lost kitten. She took it to the vet. Then she brought it home and named it Pepper.', ['Pam found a kitten.', 'She took it to the vet.', 'She named it Pepper.']],
+    ['Mia put a seed in the dirt. She gave it water every day. Soon a little plant came up.',
+      ['Mia put a seed in the dirt.', 'She gave it water.', 'A plant came up.'], ['Mia put a seed in the dirt', 'She gave it water every day', 'a little plant came up']],
+    ['Ben put on his socks. Then he put on his shoes. Last, he tied the laces.',
+      ['Ben put on his socks.', 'He put on his shoes.', 'He tied the laces.'], ['Ben put on his socks', 'he put on his shoes', 'he tied the laces']],
+    ['Before bed, Kim took a bath. After her bath, she brushed her teeth. Then Dad read her a story.',
+      ['Kim took a bath.', 'She brushed her teeth.', 'Dad read her a story.'], ['Before bed, Kim took a bath', 'After her bath, she brushed her teeth', 'Dad read her a story']],
+    ['Tom had a bath after he played in the mud. Then he put on his pajamas.',
+      ['Tom played in the mud.', 'Tom had a bath.', 'He put on his pajamas.'], ['he played in the mud', 'Tom had a bath', 'he put on his pajamas']],
+    ['The egg cracked open. A tiny chick came out. Soon the chick was walking around the yard.',
+      ['The egg cracked open.', 'A chick came out.', 'The chick was walking around.'], ['The egg cracked open', 'A tiny chick came out', 'the chick was walking around the yard']],
+    ['Sam mixed the flour and eggs. He put the cake in the oven. When it was done, everyone ate a slice.',
+      ['Sam mixed the flour and eggs.', 'He put the cake in the oven.', 'Everyone ate a slice.'], ['Sam mixed the flour and eggs', 'He put the cake in the oven', 'When it was done, everyone ate a slice']],
+    ['Ana put on her helmet. She rode her bike to the park. At the park, she met her friends.',
+      ['Ana put on her helmet.', 'She rode her bike to the park.', 'She met her friends.'], ['Ana put on her helmet', 'She rode her bike to the park', 'At the park, she met her friends']],
+    ['Dad washed the car. After that, he dried it with a towel. Then the car was shiny and clean.',
+      ['Dad washed the car.', 'He dried it with a towel.', 'The car was shiny and clean.'], ['Dad washed the car', 'he dried it with a towel', 'the car was shiny and clean']],
+    ['Max ran inside from the rain. He took off his wet coat. Then he had a cup of warm milk.',
+      ['Max ran inside.', 'He took off his wet coat.', 'He had a cup of warm milk.'], ['Max ran inside from the rain', 'He took off his wet coat', 'he had a cup of warm milk']],
+    ['Liz ate lunch after she finished her painting. Then she went outside to play.',
+      ['Liz finished her painting.', 'Liz ate lunch.', 'She went outside to play.'], ['she finished her painting', 'Liz ate lunch', 'she went outside to play']],
+    ['The caterpillar ate and ate. Then it made a cocoon. At last, it came out as a butterfly.',
+      ['The caterpillar ate and ate.', 'It made a cocoon.', 'It came out as a butterfly.'], ['The caterpillar ate and ate', 'it made a cocoon', 'it came out as a butterfly']],
+    ['In the morning, Jack ate a big bowl of cereal. In the afternoon, he did his homework. At night, he went to sleep.',
+      ['Jack ate a bowl of cereal.', 'He did his homework.', 'He went to sleep.'], ['In the morning, Jack ate a big bowl of cereal', 'In the afternoon, he did his homework', 'At night, he went to sleep']],
+    ['Nina wrote a letter to Grandma. She put it in an envelope. Then she dropped it in the mailbox.',
+      ['Nina wrote a letter.', 'She put it in an envelope.', 'She dropped it in the mailbox.'], ['Nina wrote a letter to Grandma', 'She put it in an envelope', 'she dropped it in the mailbox']],
+    ['The snow melted in the sun. After the snow was gone, green grass came up. Then the first flowers opened.',
+      ['The snow melted.', 'Green grass came up.', 'The first flowers opened.'], ['The snow melted in the sun', 'After the snow was gone, green grass came up', 'the first flowers opened']],
+    ['We bought apples at the store. At home, Mom cut them up. Then we baked an apple pie.',
+      ['We bought apples.', 'Mom cut up the apples.', 'We baked an apple pie.'], ['We bought apples at the store', 'At home, Mom cut them up', 'we baked an apple pie']],
+    ['Before Leo swam across the pool, he put on his goggles. Then he dried off.',
+      ['Leo put on his goggles.', 'He swam across the pool.', 'He dried off.'], ['he put on his goggles', 'Leo swam across the pool', 'he dried off']],
+    ['Ella fed her dog after she walked him. Then the dog took a long nap.',
+      ['Ella walked her dog.', 'Ella fed her dog.', 'The dog took a nap.'], ['she walked him', 'Ella fed her dog', 'the dog took a long nap']],
+    ['The bus stopped at the corner. The kids climbed on. Then the bus drove to school.',
+      ['The bus stopped at the corner.', 'The kids climbed on.', 'The bus drove to school.'], ['The bus stopped at the corner', 'The kids climbed on', 'the bus drove to school']],
+    ['Omar built a tower of blocks. His baby sister knocked it down. So Omar built it again, even taller.',
+      ['Omar built a tower.', 'His sister knocked it down.', 'Omar built it again.'], ['Omar built a tower of blocks', 'His baby sister knocked it down', 'Omar built it again, even taller']],
+    ['First the farmer planted corn. All summer the corn grew tall. In the fall, the farmer picked it.',
+      ['The farmer planted corn.', 'The corn grew tall.', 'The farmer picked the corn.'], ['the farmer planted corn', 'All summer the corn grew tall', 'In the fall, the farmer picked it']],
+    ['Before they cooked hot dogs, the campers made a fire. Later, they crawled into their sleeping bags.',
+      ['The campers made a fire.', 'They cooked hot dogs.', 'They crawled into their sleeping bags.'], ['the campers made a fire', 'they cooked hot dogs', 'they crawled into their sleeping bags']],
+    ['Pam found a lost kitten. She took it to the vet. Then she named it Pepper.',
+      ['Pam found a kitten.', 'She took it to the vet.', 'She named it Pepper.'], ['Pam found a lost kitten', 'She took it to the vet', 'she named it Pepper']],
     /* more stories (October 26) */
-    ['Zoe got a new puppy. She named him Rocket. Then she taught him to sit.', ['Zoe got a puppy.', 'She named him Rocket.', 'She taught him to sit.']],
-    ['Before the game, Eli put on his cleats. He kicked the ball into the goal. After the game, his team ate oranges.', ['Eli put on his cleats.', 'He kicked the ball into the goal.', 'His team ate oranges.']],
-    ['Mom filled the pool with water. Then the kids put on their swimsuits. Last, they jumped in with a big splash.', ['Mom filled the pool.', 'The kids put on their swimsuits.', 'They jumped in.']],
-    ['Ray brushed his teeth after he ate breakfast. Then he got on the bus to school.', ['Ray ate breakfast.', 'Ray brushed his teeth.', 'He got on the bus.']],
-    ['The baker mixed the dough. Next, she shaped it into loaves. Then she baked the bread until it was brown.', ['The baker mixed the dough.', 'She shaped the loaves.', 'She baked the bread.']],
-    ['The tadpole swam in the pond. Slowly it grew legs. At last, it hopped out as a frog.', ['The tadpole swam in the pond.', 'It grew legs.', 'It hopped out as a frog.']],
-    ['Before dinner, Lee and his sister set the table. After dinner, they washed the dishes. Then they played a game.', ['They set the table.', 'They washed the dishes.', 'They played a game.']],
-    ['Gus planted a pumpkin seed in May. All summer, the vine grew and grew. In October, he picked a giant pumpkin.', ['Gus planted a seed.', 'The vine grew.', 'He picked a pumpkin.']],
-    ['Ivy painted a picture of the sea. She let the paint dry. Then she hung it on the wall.', ['Ivy painted a picture.', 'She let the paint dry.', 'She hung it on the wall.']],
-    ['The power went out in the storm. Dad lit a candle. When the lights came back on, everyone cheered.', ['The power went out.', 'Dad lit a candle.', 'The lights came back on.']],
-    ['Noah fell and scraped his knee. His mom washed it. Then she put a bandage on it.', ['Noah scraped his knee.', 'His mom washed it.', 'She put on a bandage.']],
-    ['Before Jada went down the slide, she climbed the ladder. At the bottom, she landed in the sand.', ['Jada climbed the ladder.', 'She went down the slide.', 'She landed in the sand.']],
-    ['The farmer milked the cow. He poured the milk into a big can. Then he drove it to town.', ['The farmer milked the cow.', 'He poured the milk into a can.', 'He drove it to town.']],
-    ['Kai found his library book under the bed after he looked everywhere else. Then he took it back to the library.', ['Kai looked everywhere.', 'He found the book under the bed.', 'He took it back to the library.']],
-    ['The puppy chewed up a shoe. Dad found the pieces. After that, he bought the puppy a chew toy.', ['The puppy chewed a shoe.', 'Dad found the pieces.', 'He bought a chew toy.']],
-    ['First, Grandma cut up the apples. Next, she cooked them in a pot. At the end, we had warm applesauce.', ['Grandma cut up the apples.', 'She cooked them in a pot.', 'We had applesauce.']],
-    ['Sara wrapped a gift for her dad. She hid it in the closet. On his birthday, she gave it to him.', ['Sara wrapped a gift.', 'She hid it in the closet.', 'She gave it to her dad.']],
-    ['The frog hopped onto a log after it caught a fly. Then it took a nap in the sun.', ['The frog caught a fly.', 'It hopped onto a log.', 'It took a nap.']],
-    ['The class rode a bus to the farm. They fed the goats. Before they left, they went on a hay ride.', ['The class rode to the farm.', 'They fed the goats.', 'They went on a hay ride.']],
-    ['Ben woke up and saw snow outside. He put on his boots and ran out. Then he made a snow angel.', ['Ben saw snow outside.', 'He put on his boots.', 'He made a snow angel.']],
-    ['Before the race, Theo tied his shoes tight. When the race began, he ran as fast as he could. He crossed the line in second place.', ['Theo tied his shoes.', 'He ran as fast as he could.', 'He crossed the line.']],
-    ['Lily cracked two eggs into a bowl. She stirred them with a fork. Then Dad cooked them in a pan.', ['Lily cracked the eggs.', 'She stirred them.', 'Dad cooked them.']],
-    ['The robin built a nest. She laid three blue eggs in it. A few weeks later, three baby birds hatched.', ['The robin built a nest.', 'She laid three eggs.', 'Baby birds hatched.']],
-    ['Max turned off the light after he finished his book. Then he fell asleep.', ['Max finished his book.', 'He turned off the light.', 'He fell asleep.']],
-    ['We drove to the beach. We set up our big umbrella. After lunch, we looked for shells.', ['We drove to the beach.', 'We set up the umbrella.', 'We looked for shells.']],
-    ['The clown juggled three balls. Then he rode a tiny bike. At the end of the show, everyone clapped.', ['The clown juggled.', 'He rode a tiny bike.', 'Everyone clapped.']],
-    ['Mia put her wet socks by the fire. When they were dry, she put them back on. Then she went out to sled again.', ['Mia put her socks by the fire.', 'She put the dry socks on.', 'She went out to sled.']],
-    ['Our cat climbed up the tall tree. Then she was too scared to come down. A firefighter used a ladder to get her.', ['The cat climbed the tree.', 'She was scared to come down.', 'A firefighter got her down.']]
+    ['Zoe got a new puppy. She named him Rocket. Then she taught him to sit.',
+      ['Zoe got a puppy.', 'She named him Rocket.', 'She taught him to sit.'], ['Zoe got a new puppy', 'She named him Rocket', 'she taught him to sit']],
+    ['Before the game, Eli put on his cleats. In the game, he kicked the ball into the goal. After the game, his team ate oranges.',
+      ['Eli put on his cleats.', 'He kicked the ball into the goal.', 'His team ate oranges.'], ['Before the game, Eli put on his cleats', 'In the game, he kicked the ball into the goal', 'After the game, his team ate oranges']],
+    ['Mom filled the pool with water. Then the kids put on their swimsuits. Last, they jumped in with a big splash.',
+      ['Mom filled the pool.', 'The kids put on their swimsuits.', 'They jumped in.'], ['Mom filled the pool with water', 'the kids put on their swimsuits', 'they jumped in with a big splash']],
+    ['Ray brushed his teeth after he ate breakfast. Then he got on the bus to school.',
+      ['Ray ate breakfast.', 'Ray brushed his teeth.', 'He got on the bus.'], ['he ate breakfast', 'Ray brushed his teeth', 'he got on the bus to school']],
+    ['The baker mixed the dough. Next, she shaped it into loaves. Then she baked the bread until it was brown.',
+      ['The baker mixed the dough.', 'She shaped it into loaves.', 'She baked the bread.'], ['The baker mixed the dough', 'she shaped it into loaves', 'she baked the bread until it was brown']],
+    ['The tadpole swam in the pond. Slowly it grew legs. At last, it hopped out as a frog.',
+      ['The tadpole swam in the pond.', 'It grew legs.', 'It hopped out as a frog.'], ['The tadpole swam in the pond', 'Slowly it grew legs', 'it hopped out as a frog']],
+    ['Lee and his sister set the table. Then the family ate dinner. After dinner, they washed the dishes.',
+      ['They set the table.', 'The family ate dinner.', 'They washed the dishes.'], ['Lee and his sister set the table', 'the family ate dinner', 'After dinner, they washed the dishes']],
+    ['Gus planted a pumpkin seed in May. All summer, the vine grew and grew. In October, he picked a giant pumpkin.',
+      ['Gus planted a pumpkin seed.', 'The vine grew and grew.', 'He picked a giant pumpkin.'], ['Gus planted a pumpkin seed in May', 'All summer, the vine grew and grew', 'In October, he picked a giant pumpkin']],
+    ['Ivy painted a picture of the sea. She let the paint dry. Then she hung it on the wall.',
+      ['Ivy painted a picture.', 'She let the paint dry.', 'She hung it on the wall.'], ['Ivy painted a picture of the sea', 'She let the paint dry', 'she hung it on the wall']],
+    ['The power went out in the storm. Dad lit a candle. Then the lights came back on.',
+      ['The power went out.', 'Dad lit a candle.', 'The lights came back on.'], ['The power went out in the storm', 'Dad lit a candle', 'the lights came back on']],
+    ['Noah scraped his knee. His mom washed it. Then she put a bandage on it.',
+      ['Noah scraped his knee.', 'His mom washed it.', 'She put a bandage on it.'], ['Noah scraped his knee', 'His mom washed it', 'she put a bandage on it']],
+    ['Before Jada went down the slide, she climbed the ladder. At the bottom, she landed in the sand.',
+      ['Jada climbed the ladder.', 'She went down the slide.', 'She landed in the sand.'], ['she climbed the ladder', 'Jada went down the slide', 'At the bottom, she landed in the sand']],
+    ['The farmer milked the cow. He poured the milk into a big can. Then he drove it to town.',
+      ['The farmer milked the cow.', 'He poured the milk into a can.', 'He drove it to town.'], ['The farmer milked the cow', 'He poured the milk into a big can', 'he drove it to town']],
+    ['Kai found his library book after he looked under the bed. Then he took it back to the library.',
+      ['Kai looked under the bed.', 'He found his library book.', 'He took it back to the library.'], ['he looked under the bed', 'Kai found his library book', 'he took it back to the library']],
+    ['The puppy chewed up a shoe. Dad found the pieces. After that, he bought the puppy a chew toy.',
+      ['The puppy chewed up a shoe.', 'Dad found the pieces.', 'Dad bought a chew toy.'], ['The puppy chewed up a shoe', 'Dad found the pieces', 'he bought the puppy a chew toy']],
+    ['First, Grandma cut up the apples. Next, she cooked them in a pot. At the end, we had warm applesauce.',
+      ['Grandma cut up the apples.', 'She cooked them in a pot.', 'We had warm applesauce.'], ['Grandma cut up the apples', 'she cooked them in a pot', 'At the end, we had warm applesauce']],
+    ['Sara wrapped a gift for her dad. She hid it in the closet. On his birthday, she gave it to him.',
+      ['Sara wrapped a gift.', 'She hid it in the closet.', 'She gave it to her dad.'], ['Sara wrapped a gift for her dad', 'She hid it in the closet', 'On his birthday, she gave it to him']],
+    ['The frog hopped onto a log after it caught a fly. Then it took a nap in the sun.',
+      ['The frog caught a fly.', 'It hopped onto a log.', 'It took a nap.'], ['it caught a fly', 'The frog hopped onto a log', 'it took a nap in the sun']],
+    ['The class rode a bus to the farm. They fed the goats. Then they went on a hay ride.',
+      ['The class rode a bus to the farm.', 'They fed the goats.', 'They went on a hay ride.'], ['The class rode a bus to the farm', 'They fed the goats', 'they went on a hay ride']],
+    ['Ben saw snow outside. He put on his boots. Then he made a snow angel.',
+      ['Ben saw snow outside.', 'He put on his boots.', 'He made a snow angel.'], ['Ben saw snow outside', 'He put on his boots', 'he made a snow angel']],
+    ['Before the race, Theo tied his shoes tight. When the race began, he ran as fast as he could. He crossed the line in second place.',
+      ['Theo tied his shoes.', 'He ran as fast as he could.', 'He crossed the line.'], ['Before the race, Theo tied his shoes tight', 'When the race began, he ran as fast as he could', 'He crossed the line in second place']],
+    ['Lily cracked two eggs into a bowl. She stirred them with a fork. Then Dad cooked them in a pan.',
+      ['Lily cracked two eggs.', 'She stirred them.', 'Dad cooked them.'], ['Lily cracked two eggs into a bowl', 'She stirred them with a fork', 'Dad cooked them in a pan']],
+    ['The robin built a nest. She laid three blue eggs in it. A few weeks later, three baby birds hatched.',
+      ['The robin built a nest.', 'She laid three eggs.', 'Three baby birds hatched.'], ['The robin built a nest', 'She laid three blue eggs in it', 'A few weeks later, three baby birds hatched']],
+    ['Max turned off the light after he finished his book. Then he fell asleep.',
+      ['Max finished his book.', 'He turned off the light.', 'He fell asleep.'], ['he finished his book', 'Max turned off the light', 'he fell asleep']],
+    ['We drove to the beach. We set up our big umbrella. Then we looked for shells.',
+      ['We drove to the beach.', 'We set up our umbrella.', 'We looked for shells.'], ['We drove to the beach', 'We set up our big umbrella', 'we looked for shells']],
+    ['The clown juggled three balls. Then he rode a tiny bike. At the end of the show, everyone clapped.',
+      ['The clown juggled three balls.', 'He rode a tiny bike.', 'Everyone clapped.'], ['The clown juggled three balls', 'he rode a tiny bike', 'At the end of the show, everyone clapped']],
+    ['Mia put her wet socks by the fire. When they were dry, she put them back on. Then she went out to sled again.',
+      ['Mia put her socks by the fire.', 'She put them back on.', 'She went out to sled.'], ['Mia put her wet socks by the fire', 'When they were dry, she put them back on', 'she went out to sled again']],
+    ['Our cat climbed up the tall tree. Then she was too scared to come down. A firefighter used a ladder to get her.',
+      ['Our cat climbed up the tree.', 'She was too scared to come down.', 'A firefighter used a ladder to get her.'], ['Our cat climbed up the tall tree', 'she was too scared to come down', 'A firefighter used a ladder to get her']]
   ];
-  const SEQ_Q = ['What happened first?', 'What happened next?', 'What happened last?'];
-  function seq() {
-    const i = ri(0, SEQ.length - 1), [text, ev] = SEQ[i], k = ri(0, 2);
+  const SEQ_Q = ['What happened first?', 'What happened in the middle?', 'What happened last?'];
+  /* story i, question k (0 first, 1 in the middle, 2 last): the three choices are the story's three things */
+  function seqQ(i, k) {
+    const text = SEQ[i][0], ev = SEQ[i][1];
     return mk('seq', ev[k], shuffle(ev), 'sent', { t: 'story', text, q: SEQ_Q[k] }, 'Read the story, then answer the question.', 'sq:' + i + ':' + k, 'seq' + k, { text, q: SEQ_Q[k] });
   }
+  function seq() { return seqQ(ri(0, SEQ.length - 1), ri(0, 2)); }
 
   function mk(kind, answer, choices, view, prompt, say, key, fam, data) {
     const p = { kind, mode: 'choice', answer, choices, view, prompt, key, fam, data: data || {} };
@@ -4012,7 +4076,21 @@ const ReadingCurriculum = (() => {
       default: return 'spell ' + (d.word || '');
     }
   }
-  function refresh(p) { return p; }
+  /* A question that comes back from the review deck is made again from the words the app uses now, so a wording
+     that was taken out never returns: "What happened next?" is "What happened in the middle?" (JB, Nov 11, 2026),
+     and a story or a story question that was reworded comes back as it reads now. Anything else comes back as it
+     was stored. */
+  function refresh(p) {
+    if (!p || !p.key) return p;
+    let m;
+    if (p.kind === 'seq' && (m = /^sq:(\d+):([012])$/.exec(p.key)) && SEQ[+m[1]]) return seqQ(+m[1], +m[2]);
+    if (p.kind === 'passage' && (m = /^pg:s3:(\d+):(\d+)$/.exec(p.key))) { const it = passages()[+m[1]]; if (it && it.qs[+m[2]]) return passageQ(it, +m[2]); }
+    if (p.kind === 'story' && p.prompt && (m = /^What did (.+) do next\?$/.exec(p.prompt.q || ''))) {
+      const q = 'What did ' + m[1] + ' do last?';
+      return Object.assign({}, p, { prompt: Object.assign({}, p.prompt, { q }), data: Object.assign({}, p.data, { q }) });
+    }
+    return p;
+  }
 
   /* ---------- Worked examples ----------
      Shown before the first sheet of each new level. At 7A–5A Kumon has the parent model the
@@ -4045,7 +4123,7 @@ const ReadingCurriculum = (() => {
       steps: ['Read every clue.', 'Think of something that fits all the clues.', 'Long, yellow, and monkeys eat it: a banana!'] },
     passage: { show: { type: 'sentence', text: 'Ben has a little fish named Bubbles. Bubbles is orange and white. Ben feeds Bubbles every morning.', q: 'What color is Bubbles?', fill: 'Orange and white' },
       steps: ['Read the whole story first.', 'Then read the question.', 'Look back at the story to find the answer.', 'Each story has a few questions in a row.'] },
-    seq: { show: { type: 'seq3', text: 'Tom had a bath after he played in the mud. Then he put on his pajamas.', items: [['First', 'Tom played in the mud.'], ['Next', 'Tom had a bath.'], ['Last', 'He put on his pajamas.']] },
+    seq: { show: { type: 'seq3', text: 'Tom had a bath after he played in the mud. Then he put on his pajamas.', items: [['First', 'Tom played in the mud.'], ['Middle', 'Tom had a bath.'], ['Last', 'He put on his pajamas.']] },
       steps: ['Read the whole story.', 'Look for clue words like after, then and before.', 'Think about the order things really happened.'] },
     plural: { show: { type: 'sentence', text: 'Two little ___ ran under the bed.', fill: 'mice', pic: PIC.mouse },
       steps: ['One mouse, two mice. Some words change when there is more than one.', 'Others add an ending: one box, two boxes. One baby, two babies.', 'Look for clue words like two, many, a and one.'] },
@@ -4127,18 +4205,20 @@ const TimeCurriculum = (() => {
   const AMPM = [
     ['You eat breakfast.', '🥣', 700, 'a.m.'], ['You go to bed.', '🛏️', 800, 'p.m.'], ['School starts.', '🏫', 830, 'a.m.'],
     ['You eat dinner.', '🍝', 600, 'p.m.'], ['The sun comes up.', '🌅', 630, 'a.m.'], ['You eat lunch.', '🥪', 1230, 'p.m.'],
-    ['The stars are out.', '🌌', 900, 'p.m.'], ['You wake up.', '⏰', 715, 'a.m.'], ['The moon is high in the sky.', '🌙', 1000, 'p.m.'],
+    ['The stars are out.', '🌌', 900, 'p.m.'], ['You wake up.', '⏰', 715, 'a.m.'], ['It is dark, and the moon is high in the sky.', '🌙', 1000, 'p.m.'],
     ['You have a morning snack.', '🍎', 1000, 'a.m.'], ['You read a story before bed.', '📖', 730, 'p.m.'], ['You play after school.', '⚽', 400, 'p.m.'],
-    ['The school bus comes in the morning.', '🚌', 745, 'a.m.'], ['The sun goes down.', '🌇', 700, 'p.m.'], ['Your alarm clock rings.', '⏰', 645, 'a.m.'],
+    ['The school bus comes in the morning.', '🚌', 745, 'a.m.'], ['The sun goes down.', '🌇', 700, 'p.m.'], ['Your alarm clock wakes you up.', '⏰', 645, 'a.m.'],
     ['You brush your teeth after waking up.', '🪥', 705, 'a.m.']
   ];
 
   /* Getting ready (before telling time): times of day, the numbers on a clock face, their order,
-     and the short hand on its own. */
+     and the short hand on its own. Each scene fits one time of day only: "You eat lunch." (noon, or before it at
+     school) and "You go to sleep." (a nap) were reworded on Nov 11, 2026, and in the a.m. and p.m. scenes above
+     the moon scene now says it is dark and the alarm clock wakes you up. */
   const DAYS = [
     ['You eat breakfast.', '🥣', 'morning'], ['The sun comes up and you wake up.', '🌅', 'morning'], ['You brush your teeth before school.', '🪥', 'morning'],
-    ['You eat lunch.', '🥪', 'afternoon'], ['You play ball at the park after school.', '⚽', 'afternoon'], ['You have a snack after school.', '🍎', 'afternoon'],
-    ['You go to sleep.', '🛏️', 'night'], ['The moon and stars come out.', '🌙', 'night'], ['You hear a bedtime story.', '📖', 'night'], ['You hug your teddy in bed.', '🧸', 'night']
+    ['School is over and you go home.', '🎒', 'afternoon'], ['You play ball at the park after school.', '⚽', 'afternoon'], ['You have a snack after school.', '🍎', 'afternoon'],
+    ['You go to sleep for the night.', '🛏️', 'night'], ['The moon and stars come out.', '🌙', 'night'], ['You hear a bedtime story.', '📖', 'night'], ['You hug your teddy in bed.', '🧸', 'night']
   ];
   const w12 = (n) => ((((n - 1) % 12) + 12) % 12) + 1;
   const numChoices = (n) => shuffle([n, w12(n + 1), w12(n - 1)]);
@@ -4371,7 +4451,7 @@ const TimeCurriculum = (() => {
     key: 'clock', levels: LEVELS, stages: STAGES, tips: TIPS, codeLabels: CODE_LABEL, diagnose, problemText, refresh, example,
     groupLabel: (g) => ({ PK: 'Pre-K', G1: 'US Grade 1', G2: 'US Grade 2', G3: 'US Grade 3' }[g] || g), untimedGroups: { PK: true, G1: true }, minTestLevels: 2, testNBy: { PK: 10 }, testAllowedBy: { PK: 1 },
     defaults: { sheetLen: 10, allowed: 1, dailyMin: 5 }, sheetsDefault: 2, sheetsMin: 1, sheetsMax: 6,
-    fmt, hOf, mOf, addMin, swapped, _data: { AMPM }
+    fmt, hOf, mOf, addMin, swapped, _data: { AMPM, DAYS }
   };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = TimeCurriculum;
