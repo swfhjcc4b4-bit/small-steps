@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261111234550";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261112062710";</script></head><body>
 <title>Small Steps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -3626,7 +3626,8 @@ const ReadingCurriculum = (() => {
   function passage() { const it = pick(passages()); return passageQ(it, ri(0, it.qs.length - 1)); }
   function passageSet() { const it = pick(passages()); return shuffle(it.qs.map((x, k) => k)).map((k) => passageQ(it, k)); }
 
-  /* ---------- First, next, last (Kumon AII: order of events) ----------
+  /* ---------- First, middle, last (Kumon AII: order of events). The level was named 'First, next, last' until
+     Nov 12, 2026, when JB had it renamed to match its questions ("Make it first middle last"). ----------
      Each story tells exactly three things, and its words say the order they happened in. Some stories tell them
      out of order ("after he played in the mud", "Before Jada went down the slide"), so the answer comes from
      reading, not from position.
@@ -3949,7 +3950,7 @@ const ReadingCurriculum = (() => {
   L('riddle', 'sentences', '2A', 'Riddles: What am I?', 'Riddles', 18);
   L('story', 'sentences', 'AI', 'Short stories', 'Stories', 30);
   L('passage', 'sentences', 'AI', 'Read a story, answer questions', 'Story questions', 35, { len: 6, multi: passageSet });
-  L('seq', 'sentences', 'AII', 'First, next, last', 'First, next, last', 40, { len: 6 });
+  L('seq', 'sentences', 'AII', 'First, middle, last', 'First, middle, last', 40, { len: 6 });
   L('plural', 'grammar', 'BI', 'More than one: mice, feet, leaves', 'Plurals', 14);
   L('past', 'grammar', 'BI', 'Yesterday words: went, saw, ate', 'Past tense', 14);
   L('pronoun', 'grammar', 'BI', 'He, she, they, myself', 'Pronouns', 16);
