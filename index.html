@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261112214200";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261113201004";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1428,6 +1428,59 @@ body.tutor-on .hint-bubble { display: none; }
 body.tutor-on #app .screen:not(.fill) { padding-bottom: 210px; }
 /* Which group has more?: each picture lights up as she counts it */
 #app .gx.on { background: #FFD54F; box-shadow: inset 0 0 0 3px #F2A900; transform: scale(1.08); }
+/* Spelling (JB, Nov 12, 2026): the home tile, the screens Andi uses, and the Parents panel. */
+:root { --sub-spell: #9D8CFF; }
+/* the tile: a full-width row under the three subjects, laid out like a subject row on a phone */
+.subj.s-spell { --acc: var(--sub-spell); grid-column: 1 / -1; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; text-align: left; justify-items: start; column-gap: 14px; padding: 10px 16px 10px 12px; }
+.subj.s-spell .subj-ring { width: 56px; height: 56px; }
+.subj.s-spell .subj-icon { inset: 10px; }
+.subj.s-spell .subj-level { min-height: 0; }
+.subj.s-spell .subj-go { justify-self: end; align-self: center; }
+.subj-go.spl { background: var(--sub-spell); color: #160B4A; box-shadow: 0 3px 0 #5B47C9; }
+@container kid (min-width: 640px) { .subj.s-spell { padding: 12px 20px 12px 14px; } .subj.s-spell .subj-ring { width: 64px; height: 64px; } .subj.s-spell .subj-icon { inset: 12px; } }
+
+.spl-screen { gap: 18px; }
+.spl-title { font-family: var(--font-display); font-size: clamp(30px, 4.6vw, 46px); line-height: 1.1; margin: 0; text-align: center; color: #fff; }
+.spl-sub { margin: -6px 0 0; text-align: center; color: var(--ink-soft); font-size: 18px; }
+.spl-how { margin: 0; font-size: clamp(17px, 2.2vw, 21px); line-height: 1.45; color: var(--card-soft); text-align: center; max-width: 34em; }
+.card .spl-title { color: var(--card-ink); }
+.spl-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 26px 22px; text-align: center; }
+.spl-n { margin: 0; font-family: var(--font-display); font-size: 22px; color: #6A4FE0; }
+.spl-again { margin: -6px 0 0; font-family: var(--font-display); font-size: 18px; color: var(--card-soft); }
+.spl-noaudio { margin: 0; font-size: 18px; }
+.spl-ctl { margin-top: 4px; }
+.spl-bar { height: 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
+.spl-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #C9BFFF, var(--sub-spell)); transition: width 0.3s ease; }
+.spl-lists { display: grid; gap: 14px; }
+.spl-list { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 22px; min-height: 0 !important; text-align: left; flex-wrap: wrap; }
+@media (max-width: 460px) { .spl-list { flex-direction: column; text-align: center; } }
+.spl-list h2 { margin: 0; font-family: var(--font-display); font-size: clamp(22px, 3vw, 30px); color: var(--card-ink); }
+.spl-list p { margin: 4px 0 0; color: var(--card-soft); font-size: 17px; }
+.spl-list.sent { border-color: color-mix(in srgb, var(--mint) 55%, transparent); }
+.spl-shots { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.spl-shot { position: relative; margin: 0; width: clamp(120px, 22vw, 200px); }
+.spl-shot img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 12px; border: 2px solid rgba(255, 255, 255, 0.5); background: #fff; }
+.spl-shot figcaption { text-align: center; font-size: 14px; color: var(--card-soft); margin-top: 4px; }
+.spl-drop { position: absolute; top: -10px; right: -10px; width: 36px; height: 36px; }
+.spl-spin { width: 54px; height: 54px; border-radius: 50%; border: 6px solid var(--card-line); border-top-color: #6A4FE0; animation: splSpin 0.9s linear infinite; }
+@keyframes splSpin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spl-spin { animation-duration: 3s; } }
+.spl-big { margin: 0; font-family: var(--font-display); font-size: clamp(40px, 7vw, 64px); color: #C77A00; display: flex; align-items: center; gap: 10px; }
+.spl-big svg { width: 0.9em; height: 0.9em; }
+.spl-word { margin: 0; font-family: var(--font-read); font-weight: 700; font-size: clamp(56px, 11vw, 110px); line-height: 1.1; letter-spacing: 0.06em; color: var(--card-ink); }
+/* Parents */
+.spl-check { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid rgba(255, 255, 255, 0.12); }
+.spl-check .help { margin: 4px 0 0; }
+.spl-hand { margin: 10px 0; padding: 12px; border-radius: 14px; background: rgba(255, 255, 255, 0.06); }
+.spl-chip { cursor: pointer; font-size: 16px; }
+.spl-acts { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; }
+table.hist.spl-table { min-width: 0; }
+.spl-table td { overflow-wrap: anywhere; }
+/* a quiet button on a light card */
+.spl-soft { font-family: var(--font-display); font-size: 18px; color: #3A2A7A; background: #EFE7FF; border-radius: 999px; padding: 10px 20px; box-shadow: 0 3px 0 #C9BCF5; }
+.spl-soft:active { transform: translateY(2px); box-shadow: 0 1px 0 #C9BCF5; }
+.spl-noaudio { color: var(--card-ink); }
+.spl-screen .card.spl-card { min-height: clamp(220px, 34vh, 440px); }
 </style>
 <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div><canvas id="fx" aria-hidden="true"></canvas><div id="app"></div>
 <script>
@@ -4739,6 +4792,185 @@ const ReadAloud = (() => {
   return { TIERS, BY_ID, words, tierFor, tierOf, tierById, standing, afterRead, pctOf, paceBar, countsUp, UP_PCT, UP_RUN, UP_DAYS, UP_WPM, next, tooHard, get: (id) => BY_ID[id] || null };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = ReadAloud;
+/* Small Steps: spelling (JB, Nov 12, 2026, app build chat: "So Andi also does spelling words every day and there are two
+   sets- one set of kindergarten words and one set of grade 1 words 35 and 45 words, respectively. Right now these words
+   are read to her and she writes them down on a piece of bond paper. When done we check the words and score it. Can we
+   automate this and incorporate it into the app? Say the app goes through the list and says it out loud for her to write
+   on her paper then once she is done the app can instruct her to take a picture of the entire paper to then score it?").
+
+   His answers, the same night: both lists every day ("Both sets, all 80 words"); the score back within a minute (a
+   program in the data repo reads the picture with Claude as soon as it arrives); for each word the app says "Word
+   sentence word. No number"; and a word with the right letters but one written backwards (a b that looks like a d) is
+   "Right, with a note". A capital letter where the word is lower case is not a spelling mistake (put to him; it counts
+   as right until he says otherwise).
+
+   This file holds the lists and the rules every part of the app and the data repo's tools share: what is said, how a
+   written word is compared with the list, and how a test is tallied from the scorer's verdicts, a grown-up's marks and
+   a test scored by hand. It is copied to the data repo's tools/app with every release, and the scorer there uses it. */
+const Spelling = (() => {
+  'use strict';
+  /* The two lists, in the order Andi does them. Each word has a short sentence that uses it, said between the word and
+     the word again, so words that sound alike (to and too, new and knew, there and their) are told apart.
+     The words are JB's: the two sheets he sent on Nov 13, 2026 ("Kinder RED WORDS" and "1st RED WORDS", with "First
+     this for the app"), in each sheet's order, every column top to bottom, the left column first. The kindergarten
+     sheet has 34 words (he had said 35; put to him), the grade 1 sheet 45. The sentences are the app's own. */
+  const LISTS = [
+    { id: 'k', name: 'Kindergarten words', short: 'Kindergarten', words: [
+      { w: 'the', s: 'The cat is asleep.' },
+      { w: 'was', s: 'It was a cold day.' },
+      { w: 'is', s: 'The sun is hot.' },
+      { w: 'to', s: 'We walk to the park.' },
+      { w: 'for', s: 'This gift is for you.' },
+      { w: 'like', s: 'I like ice cream.' },
+      { w: 'of', s: 'I drank a glass of milk.' },
+      { w: 'want', s: 'I want a puppy.' },
+      { w: 'with', s: 'Come and play with me.' },
+      { w: 'said', s: 'Mom said yes.' },
+      { w: 'you', s: 'I can see you.' },
+      { w: 'put', s: 'Put the toys away.' },
+      { w: 'from', s: 'This card is from Grandma.' },
+      { w: 'off', s: 'Turn off the light.' },
+      { w: 'has', s: 'The dog has a ball.' },
+      { w: 'have', s: 'We have a big yard.' },
+      { w: 'his', s: 'He lost his hat.' },
+      { w: 'my', s: 'This is my bed.' },
+      { w: 'me', s: 'Can you help me?' },
+      { w: 'into', s: 'The frog jumped into the pond.' },
+      { w: 'now', s: 'Come inside now.' },
+      { w: 'new', s: 'She got new shoes.' },
+      { w: 'give', s: 'Give the dog a bone.' },
+      { w: 'or', s: 'Do you want milk or juice?' },
+      { w: 'by', s: 'Sit by me.' },
+      { w: 'do', s: 'Do you like cats?' },
+      { w: 'are', s: 'The kids are happy.' },
+      { w: 'they', s: 'They are my friends.' },
+      { w: 'any', s: 'Do you have any pets?' },
+      { w: 'come', s: 'Come to my party.' },
+      { w: 'who', s: 'Who is at the door?' },
+      { w: 'what', s: 'What is your name?' },
+      { w: 'where', s: 'Where is my coat?' },
+      { w: 'why', s: 'Why is the sky blue?' }
+    ] },
+    { id: 'g1', name: 'Grade 1 words', short: 'Grade 1', words: [
+      { w: 'were', s: 'We were at the beach.' },
+      { w: 'does', s: 'Does your dog bark?' },
+      { w: 'been', s: 'I have been to the zoo.' },
+      { w: 'there', s: 'Put the box over there.' },
+      { w: 'done', s: 'I am done with my lunch.' },
+      { w: 'here', s: 'Come here, please.' },
+      { w: 'down', s: 'Sit down on the rug.' },
+      { w: 'people', s: 'Many people came to the party.' },
+      { w: 'saw', s: 'I saw a big dog.' },
+      { w: 'other', s: 'Where is my other sock?' },
+      { w: 'should', s: 'We should go to bed.' },
+      { w: 'could', s: 'I could not find my shoe.' },
+      { w: 'would', s: 'Would you like a snack?' },
+      { w: 'over', s: 'The cow jumped over the moon.' },
+      { w: 'some', s: 'Can I have some grapes?' },
+      { w: 'love', s: 'I love my family.' },
+      { w: 'live', s: 'Fish live in the sea.' },
+      { w: 'out', s: 'The cat ran out the door.' },
+      { w: 'too', s: 'This soup is too hot.' },
+      { w: 'eye', s: 'Close one eye.' },
+      { w: 'boy', s: 'The boy kicked the ball.' },
+      { w: 'girl', s: 'The girl rode a red bike.' },
+      { w: 'sign', s: 'Stop at the stop sign.' },
+      { w: 'your', s: 'Is this your jacket?' },
+      { w: 'which', s: 'Which one do you want?' },
+      { w: 'look', s: 'Look at the bird.' },
+      { w: 'also', s: 'I also want a turn.' },
+      { w: 'use', s: 'Use a pencil to write.' },
+      { w: 'today', s: 'Today is a sunny day.' },
+      { w: 'our', s: 'This is our house.' },
+      { w: 'yesterday', s: 'Yesterday it rained all day.' },
+      { w: 'first', s: 'I was first in line.' },
+      { w: 'around', s: 'The dog ran around the tree.' },
+      { w: 'going', s: 'We are going to the store.' },
+      { w: 'walk', s: 'We walk to school.' },
+      { w: 'their', s: 'The kids rode their bikes.' },
+      { w: 'how', s: 'How old are you?' },
+      { w: 'once', s: 'I rode a pony once.' },
+      { w: 'another', s: 'Can I have another cookie?' },
+      { w: 'pull', s: 'Pull the wagon up the hill.' },
+      { w: 'wash', s: 'Wash your hands before you eat.' },
+      { w: 'every', s: 'I brush my teeth every day.' },
+      { w: 'know', s: 'I know your name.' },
+      { w: 'knew', s: 'I knew the answer.' },
+      { w: 'friend', s: 'You are my best friend.' }
+    ] }
+  ];
+  const BY = {};
+  LISTS.forEach((l) => { BY[l.id] = l; });
+  const ready = () => LISTS.every((l) => l.words.length > 0);
+
+  /* What the app says for each word: the word, the sentence, the word again, and no number. */
+  const sayText = (e) => e.w + '. ' + e.s + ' ' + e.w + '.';
+  /* The rewrite after a test: the word, its letters one by one (as capitals, so the voice says each letter's name: a
+     small "a" alone is read as the word "a"), the word. */
+  const spellOut = (w) => w + '. ' + String(w).replace(/[^A-Za-z]/g, '').toUpperCase().split('').join(', ') + '. ' + w + '.';
+
+  /* ---------- comparing what she wrote with the list ---------- */
+  const norm = (s) => String(s == null ? '' : s).normalize('NFKC').toLowerCase().replace(/[’‘`´]/g, "'").replace(/\s+/g, ' ')
+    .replace(/^[\s"“”.,!?;:]+|[\s"“”.,!?;:]+$/g, '');
+  /* letters that are each other written backwards: a b turned around is a d, a p turned around is a q */
+  const MIRROR = { b: 'd', d: 'b', p: 'q', q: 'p' };
+  /* ok: the word is spelled right under JB's rules. notes: each letter that was right but written backwards. */
+  function compare(target, written) {
+    const t = norm(target), w = norm(written);
+    if (!w) return { ok: false, empty: true, notes: [] };
+    if (t === w) return { ok: true, notes: [] };
+    if (t.length !== w.length) return { ok: false, notes: [] };
+    const notes = [];
+    for (let i = 0; i < t.length; i++) {
+      if (t[i] === w[i]) continue;
+      if (MIRROR[t[i]] === w[i]) { notes.push({ letter: t[i], looks: w[i], at: i }); continue; }
+      return { ok: false, notes: [] };
+    }
+    return { ok: true, notes };
+  }
+  /* a backwards letter in words: "b written backwards (it looks like d)" */
+  const revText = (r) => (r.looks ? r.letter + ' written backwards (it looks like ' + r.looks + ')' : r.letter + ' written backwards');
+
+  /* ---------- a test, tallied ----------
+     A test is one list said once, in order (a session with subject 'spelling' in the child's log). The scorer adds
+     score.words[i] = { v: 'right' | 'wrong' | 'check', wrote, wrote2, rev, why } and never writes anything else; a
+     grown-up's marks[i] = 'right' | 'wrong' settle a word the scorer left to check, or overrule it; a test scored by
+     hand (hand: true) counts every word not marked wrong as right. Nothing here is written by both. */
+  function tally(s) {
+    const words = (s && s.words) || [], n = words.length, marks = (s && s.marks) || {};
+    const sc = s && s.score && Array.isArray(s.score.words) ? s.score.words : null;
+    const per = words.map((w, i) => {
+      const m = marks[i] || marks[String(i)], x = sc ? sc[i] || null : null;
+      let v;
+      if (m === 'right' || m === 'wrong') v = m;
+      else if (x && (x.v === 'right' || x.v === 'wrong' || x.v === 'check')) v = x.v;
+      else if (s.hand) v = 'right';
+      else v = 'wait';
+      return { i, w, v, by: m === 'right' || m === 'wrong' ? 'parent' : x ? 'claude' : s.hand ? 'hand' : null,
+        wrote: x && x.wrote != null ? x.wrote : null, wrote2: x && x.wrote2 != null ? x.wrote2 : null, rev: (x && x.rev) || [], why: (x && x.why) || '' };
+    });
+    const count = (k) => per.filter((p) => p.v === k).length;
+    const right = count('right'), wrong = count('wrong'), check = count('check'), wait = count('wait');
+    return {
+      n, per, right, wrong, check, wait,
+      scored: !!sc || !!(s && s.hand),
+      done: n > 0 && check === 0 && wait === 0,
+      misses: per.filter((p) => p.v === 'wrong'),
+      reversed: per.filter((p) => p.v === 'right' && p.rev && p.rev.length)
+    };
+  }
+  /* where a test stands: 'checking' (sent, the scorer has not answered), 'error' (the scorer could not score it; a
+     grown-up can score it by hand), 'check' (scored, with words for a grown-up to settle), 'done' */
+  function status(s) {
+    const t = tally(s);
+    if (t.done) return 'done';
+    if (t.scored) return 'check';
+    if (s && s.scoreError) return 'error';
+    return 'checking';
+  }
+  return { LISTS, BY, ready, sayText, spellOut, norm, compare, revText, tally, status, MIRROR };
+})();
+if (typeof module !== 'undefined' && module.exports) module.exports = Spelling;
 /* Small Steps: the book shelf. Picture books and early readers for each Kumon reading level,
    picked for this app: Kumon's own Recommended Reading List says it may not be reproduced, so it
    is linked, not copied. "to" books are read aloud to the child; "alone" books are for the
@@ -10156,6 +10388,21 @@ const SiteSync = (() => {
     return Promise.resolve();
   }
 
+  /* ---------- a file that is not a record: a spelling picture (JB, Nov 12, 2026) ----------
+     Sent once, straight away (not queued with the records), as a new file in the folder. A file already there from an
+     earlier try that did not hear back counts as sent. Throws when the key is missing or the folder can't be reached,
+     so the screen can say so and the child can tap Send again. */
+  async function putFile(path, b64, message) {
+    if (!token) throw new Error('This device is not set up to save to the progress folder.');
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const r = await api('PUT', repoPath('/contents/' + path), { message: message || 'Add ' + path, content: b64, branch: CFG.branch });
+      if (r.ok) return true;
+      if (r.status === 422) { const g = await api('GET', repoPath('/contents/' + path + '?ref=' + CFG.branch)); if (g.ok) return true; }
+      if (r.status !== 409 && r.status !== 422) throw new Error('save ' + r.status);
+    }
+    throw new Error('save conflict');
+  }
+
   /* ---------- the database surface the store uses ---------- */
   const db = {
     collection(name) {
@@ -10186,7 +10433,7 @@ const SiteSync = (() => {
     return db;
   }
   return {
-    active, start, setup, signOut, lock, unlockBlob, normPass, flush, refresh,
+    active, start, setup, signOut, lock, unlockBlob, normPass, flush, refresh, putFile,
     get ready() { return !!(token || lsGet(LS_TOKEN)); },
     get lastSync() { return lastSync; },
     get lastError() { return lastError; },
@@ -14074,6 +14321,313 @@ const Cere = (() => {
   }
   return { belt, medals, close, medalSummary, get isOpen() { return !!cur; } };
 })();
+/* Small Steps: spelling, the screens (JB, Nov 12, 2026; the lists and rules are in spelling.js, and the data repo's
+   tools/spelling/score.js reads the pictures).
+   Andi taps Spelling, picks a list, and hears each word: the word, a sentence with it, the word again, no number. She
+   writes it on her paper and taps Next. At the end the iPad's camera takes a picture of each page; the pictures go to the
+   family's private folder and the test is saved with them; within about a minute the score comes back. She sees how
+   many she spelled right and rewrites each word she missed, looking at it. A word the scorer's two readings disagree on
+   waits for a grown-up in Parents → Reading, who can also score a whole test by hand. */
+
+/* The pictures go to the private folder through the website's key, so spelling runs on the kids' website, not in the
+   master copy in Claude. */
+const SpellIO = {
+  canUpload: () => Store.backend === 'site' && !!SiteSync.ready,
+  put: (p, b64, msg) => SiteSync.putFile(p, b64, msg)
+};
+/* on for a kindergarten child and up (Andi), off for a younger one (AJ), unless a grown-up set it in Reading settings */
+const spellWanted = (l) => !!l && (l.spellOn === true || (l.spellOn !== false && GRADE_NUM[l.grade] != null && GRADE_NUM[l.grade] >= 0));
+const spellOn = (l) => spellWanted(l) && Spelling.ready() && SpellIO.canUpload();
+const spellTests = (kid) => Store.sessionsFor(kid, 'spelling').filter((s) => s && s.kind === 'test');
+function spellToday(kid) {
+  const tk = ENG.reading.todayKey(), today = spellTests(kid).filter((s) => ENG.reading.todayKey(new Date(s.at)) === tk);
+  return Spelling.LISTS.map((L) => ({ L, s: today.filter((s) => s.list === L.id).slice(-1)[0] || null }));
+}
+/* which results this device has shown (kept on the device only, so looking at a score writes nothing to the record) */
+const SPELL_SEEN = 'ssm.spell.seen.v1';
+const spellSeen = () => { try { return JSON.parse(localStorage.getItem(SPELL_SEEN) || '[]'); } catch (e) { return []; } };
+function markSpellSeen(id) { try { const a = spellSeen(); if (a.indexOf(id) < 0) localStorage.setItem(SPELL_SEEN, JSON.stringify(a.concat([id]).slice(-60))); } catch (e) { /* storage unavailable */ } }
+
+/* ---------- the home tile ---------- */
+function spellTile(l) {
+  const day = spellToday(l.id), total = day.length, done = day.filter((d) => d.s).length, seen = spellSeen();
+  const checking = day.some((d) => d.s && Spelling.status(d.s) === 'checking');
+  const ready = day.some((d) => d.s && Spelling.status(d.s) !== 'checking' && seen.indexOf(d.s.id) < 0);
+  const go = done < total ? '<span class="subj-go spl">' + (done === 0 ? 'Spell' : done + ' of ' + total) + '</span>'
+    : checking ? '<span class="subj-go read">Checking…</span>' : ready ? '<span class="subj-go test">Score ready!</span>' : '<span class="subj-go done">Done ✓</span>';
+  return '<button class="subj s-spell" data-act="splDay" data-kid="' + esc(l.id) + '" aria-label="Spelling, ' + done + ' of ' + total + ' lists today">' +
+    '<span class="subj-ring">' + ringSVG(done, total, 26) + '<span class="subj-icon">' + SPELL_ICON + '</span></span>' +
+    '<span><span class="subj-name">Spelling</span><br><span class="subj-level">' + esc(Spelling.LISTS.map((L) => L.short).join(' and ')) + ' words</span></span>' + go + '</button>';
+}
+const SPELL_ICON = '<svg viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="10" fill="#9D8CFF"/><text x="13" y="22" font-family="Andika, sans-serif" font-weight="700" font-size="11" fill="#fff" text-anchor="middle">abc</text>' +
+  '<path d="M18 31l12-12 3 3-12 12h-3z" fill="#FFC531" stroke="#3A2A7A" stroke-width="1.6" stroke-linejoin="round"/><path d="M28 21l3 3" stroke="#3A2A7A" stroke-width="1.6"/></svg>';
+
+/* ---------- the flow ---------- */
+function splOpen(kid) {
+  if (!Spelling.ready()) return toast('The spelling lists are not in the app yet.');
+  if (!SpellIO.canUpload()) return toast('Spelling works on the kids’ iPads, where the pictures can be sent.');
+  S.sp = { kid, phase: 'day' }; S.kid = kid; S.view = 'spell'; S.anim = true;
+  Sfx.unlock(); Sfx.pick(); render(); window.scrollTo(0, 0);
+}
+function splStartList(id) {
+  const P = S.sp, L = Spelling.BY[id];
+  if (!P || !L) return;
+  Object.assign(P, { list: id, words: L.words.map((e) => ({ w: e.w, s: e.s })), i: 0, phase: 'intro', photos: [], sid: null, err: '', sending: false });
+  S.anim = true; Sfx.tap(); render(); window.scrollTo(0, 0);
+}
+const splSay = () => { const P = S.sp; if (P && P.phase === 'say' && P.words[P.i]) Speech.say(Spelling.sayText(P.words[P.i]), { rate: 0.8 }); };
+function splGo() { const P = S.sp; if (!P) return; P.phase = 'say'; P.i = 0; P.startAt = new Date().toISOString(); P.t0 = Date.now(); S.anim = true; holdScreen(); render(); splSay(); }
+function splNext() {
+  const P = S.sp; if (!P) return;
+  Sfx.tap();
+  if (P.i < P.words.length - 1) { P.i++; S.anim = true; render(); splSay(); return; }
+  P.secs = Math.round((Date.now() - P.t0) / 1000); P.phase = 'photo'; S.anim = true;
+  try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) { /* ignore */ }
+  render(); window.scrollTo(0, 0); Speech.say('All done! Now take a picture of your paper.');
+}
+function splBack() { const P = S.sp; if (!P || P.i === 0) return; P.i--; Sfx.tap(); S.anim = true; render(); splSay(); }
+
+/* The camera: one file input kept outside the screen, so a redraw while the camera is open cannot lose the picture. */
+function splCamInput() {
+  let el = document.getElementById('splCam');
+  if (!el) {
+    el = document.createElement('input');
+    el.type = 'file'; el.accept = 'image/*'; el.setAttribute('capture', 'environment'); el.id = 'splCam'; el.hidden = true;
+    el.addEventListener('change', () => { const f = el.files && el.files[0]; el.value = ''; if (f) splTook(f); });
+    document.body.appendChild(el);
+  }
+  return el;
+}
+function splCam() { Sfx.tap(); splCamInput().click(); }
+/* a picture is made at most 2000 pixels on its long side and saved as a JPEG: sharp enough for a child's writing,
+   small enough to send */
+function splShrink(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      const k = Math.min(1, 2000 / Math.max(img.naturalWidth, img.naturalHeight)), c = document.createElement('canvas');
+      c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      const data = c.toDataURL('image/jpeg', 0.85);
+      resolve({ b64: data.split(',')[1], url: data, w: c.width, h: c.height });
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('That picture could not be opened.')); };
+    img.src = url;
+  });
+}
+function splTook(file) {
+  const P = S.sp;
+  if (!P || P.phase !== 'photo') return;
+  splShrink(file).then((ph) => { if (S.sp !== P) return; P.photos.push(ph); P.err = ''; Sfx.pick(); render(); })
+    .catch((e) => { P.err = e.message; render(); });
+}
+function splDrop(k) { const P = S.sp; if (!P) return; P.photos.splice(k, 1); Sfx.tap(); render(); }
+async function splSend() {
+  const P = S.sp;
+  if (!P || P.sending || !P.photos.length) return;
+  const l = Store.learner(P.kid);
+  if (!l) return goHome();
+  P.sending = true; P.err = ''; P.phase = 'send'; render();
+  const sid = P.sid || (P.sid = Store.newId()), paths = [];
+  for (let k = 0; k < P.photos.length; k++) {
+    const ph = P.photos[k], p = SiteSync.cfg.dir + '/spelling-photos/' + P.kid + '/' + sid + '-' + (k + 1) + '.jpg';
+    if (!ph.sent) {
+      try { await SpellIO.put(p, ph.b64, 'Spelling picture ' + (k + 1) + ' of ' + P.photos.length + ' (' + Spelling.BY[P.list].short.toLowerCase() + ' words)'); ph.sent = true; }
+      catch (e) { if (S.sp === P) { P.sending = false; P.phase = 'photo'; P.err = 'The picture didn’t send. Check the internet and tap Send again.'; render(); } return; }
+    }
+    paths.push(p);
+    if (S.sp === P) { P.sentN = k + 1; render(); }
+  }
+  Store.appendSession(P.kid, { id: sid, subject: 'spelling', kind: 'test', at: P.startAt, list: P.list, listName: Spelling.BY[P.list].name,
+    words: P.words.map((e) => e.w), secs: P.secs || null, photos: paths, sentAt: new Date().toISOString() });
+  if (S.sp !== P) return;
+  P.sending = false; P.phase = 'wait'; P.waitAt = Date.now(); P.photos = [];
+  releaseScreen(); Sfx.complete(); render();
+}
+/* the test this screen is about, as saved (the score arrives in it from the folder) */
+const splTest = () => { const P = S.sp; return P && P.sid ? spellTests(P.kid).find((s) => s.id === P.sid) || null : null; };
+function splResult(id) {
+  const P = S.sp; if (!P) return;
+  const s = spellTests(P.kid).find((x) => x.id === id);
+  if (!s) return;
+  Object.assign(P, { list: s.list, sid: s.id, phase: Spelling.status(s) === 'checking' || Spelling.status(s) === 'error' ? 'wait' : 'result', waitAt: Date.now() });
+  if (P.phase === 'result') markSpellSeen(s.id);
+  S.anim = true; Sfx.tap(); render(); window.scrollTo(0, 0);
+}
+function splFix() { const P = S.sp, s = splTest(); if (!P || !s) return; P.fix = Spelling.tally(s).misses.map((m) => m.w); P.fixI = 0; P.phase = 'fix'; S.anim = true; render(); splSayFix(); }
+const splSayFix = () => { const P = S.sp; if (P && P.phase === 'fix' && P.fix[P.fixI]) Speech.say(Spelling.spellOut(P.fix[P.fixI]), { rate: 0.8 }); };
+function splFixNext() {
+  const P = S.sp; if (!P) return;
+  if (P.fixI < P.fix.length - 1) { P.fixI++; Sfx.tap(); S.anim = true; render(); splSayFix(); return; }
+  const s = splTest();
+  if (s && !s.rewrittenAt) Store.updateSession(P.kid, s.id, s.at, { rewrittenAt: new Date().toISOString(), rewrote: P.fix.length }, 'spelling');
+  P.phase = 'fixed'; Sfx.complete(); after(150, () => Confetti.party()); render(); Speech.say('All fixed! Great job.');
+}
+function splQuit() {
+  const P = S.sp;
+  if (P && (P.phase === 'say' || (P.phase === 'photo' && P.photos.length)) && !P.sid) {
+    confirmBox('Stop spelling?', 'The words said so far are not saved.', 'Stop', () => { S.sp = null; releaseScreen(); goHome(); }, true);
+    return;
+  }
+  S.sp = null; releaseScreen(); Sfx.tap(); goHome();
+}
+
+/* ---------- the screens ---------- */
+function viewSpell() {
+  const P = S.sp, l = (P && Store.learner(P.kid)) || { name: '' };
+  if (!P) return viewHome();
+  const L = P.list ? Spelling.BY[P.list] : null;
+  const head = '<div class="hud"><button class="icon-btn" data-act="splQuit" aria-label="Stop">' + ICON.close + '</button><div class="hud-title" style="--acc:var(--sub-spell)">' + miniBuddy(l) +
+    '<div><b>' + esc(l.name) + ' spells</b><small><span class="sub-chip">Spelling</span> ' + (L ? esc(L.name) : 'Today’s lists') + '</small></div></div></div>';
+  let body = '';
+  const acts = (inner) => '<div class="actions center spl-ctl">' + inner + '</div>';
+  if (P.phase === 'day') {
+    const seen = spellSeen();
+    body = '<h1 class="spl-title">Spelling</h1><p class="spl-sub">Two lists today. Get your paper and pencil.</p><div class="spl-lists">' + spellToday(P.kid).map((d) => {
+      const s = d.s, st = s ? Spelling.status(s) : null, t = s ? Spelling.tally(s) : null;
+      const line = !s ? d.L.words.length + ' words' : st === 'checking' ? 'Claude is checking it' : st === 'error' ? 'Waiting for a grown-up to score it' : t.right + ' of ' + t.n + ' right' + (t.check ? ' · ' + t.check + ' for a grown-up to check' : '');
+      const btn = !s ? '<button class="btn btn-gold btn-big" data-act="splList" data-list="' + d.L.id + '">Start</button>'
+        : '<button class="btn ' + (st !== 'checking' && seen.indexOf(s.id) < 0 ? 'btn-gold' : 'spl-soft') + '" data-act="splSee" data-id="' + esc(s.id) + '">' + (st === 'checking' ? 'See' : 'See my score') + '</button>';
+      return '<section class="card spl-list' + (s ? ' sent' : '') + '"><div><h2>' + esc(d.L.name) + '</h2><p>' + esc(line) + '</p></div>' + btn + '</section>';
+    }).join('') + '</div>' + acts('<button class="btn btn-glass" data-act="splQuit">Back home</button>');
+  } else if (P.phase === 'intro') {
+    body = '<section class="card spl-card"><h1 class="spl-title">' + esc(L.name) + '</h1><p class="spl-how">Get your paper and pencil. Listen to each word, write it down, then tap <b>Next</b>. Tap the speaker to hear a word again.</p>' +
+      '<p class="spl-n">' + P.words.length + ' words</p></section>' + acts('<button class="btn btn-gold btn-big" data-act="splGo">Start</button>');
+  } else if (P.phase === 'say') {
+    const pct = Math.round((100 * P.i) / P.words.length), last = P.i === P.words.length - 1;
+    body = '<div class="spl-bar" role="progressbar" aria-valuemin="0" aria-valuemax="' + P.words.length + '" aria-valuenow="' + P.i + '"><i style="width:' + pct + '%"></i></div>' +
+      /* nothing on this screen may spell a word of either list ("the word" did: "the" is the first kindergarten word) */
+      '<section class="card spl-card spl-say' + (S.anim ? ' enter' : '') + '"><p class="spl-how">Listen, then write it.</p>' +
+      '<button class="say-btn say-big pulse" data-act="splAgain" aria-label="Say it again">' + ICON.speaker + '</button><p class="spl-again">Say it again</p>' +
+      (Speech.ok ? '' : '<p class="spl-noaudio">This device can’t talk. A grown-up can read the word: <b>' + esc(P.words[P.i].w) + '</b>. ' + esc(P.words[P.i].s) + '</p>') + '</section>' +
+      acts((P.i ? '<button class="btn btn-glass" data-act="splBack">Back</button>' : '') + '<button class="btn btn-gold btn-big" data-act="splNext">' + (last ? 'I’m done' : 'Next') + '</button>');
+  } else if (P.phase === 'photo' || P.phase === 'send') {
+    const thumbs = P.photos.map((ph, k) => '<figure class="spl-shot"><img src="' + ph.url + '" alt="Page ' + (k + 1) + '"><figcaption>Page ' + (k + 1) + '</figcaption>' +
+      (P.phase === 'photo' ? '<button class="icon-btn spl-drop" data-act="splDrop" data-k="' + k + '" aria-label="Take page ' + (k + 1) + ' again">' + ICON.close + '</button>' : '') + '</figure>').join('');
+    body = '<section class="card spl-card"><h1 class="spl-title">' + (P.phase === 'send' ? 'Sending…' : 'Take a picture') + '</h1>' +
+      (P.phase === 'send' ? '<p class="spl-how">Sending your ' + (P.photos.length > 1 ? P.photos.length + ' pictures' : 'picture') + (P.sentN ? ' (' + P.sentN + ' sent)' : '') + '.</p><div class="spl-spin" aria-hidden="true"></div>'
+        : '<p class="spl-how">Lay your paper flat. Hold the iPad over it so the <b>whole page</b> fits in the picture.' + (P.photos.length ? ' More words on another page? Take that page too.' : '') + '</p>') +
+      (thumbs ? '<div class="spl-shots">' + thumbs + '</div>' : '') + (P.err ? '<p class="note note-red">' + esc(P.err) + '</p>' : '') + '</section>' +
+      (P.phase === 'photo' ? acts(P.photos.length ? '<button class="btn btn-glass" data-act="splCam">Add a page</button><button class="btn btn-gold btn-big" data-act="splSend">Send</button>'
+        : '<button class="btn btn-gold btn-big" data-act="splCam">Take a picture</button>') : '');
+  } else if (P.phase === 'wait') {
+    const s = splTest(), st = s ? Spelling.status(s) : 'checking';
+    if (s && (st === 'check' || st === 'done')) { P.phase = 'result'; markSpellSeen(s.id); return viewSpell(); }
+    const long = Date.now() - (P.waitAt || Date.now()) > 120000;
+    body = '<section class="card spl-card"><h1 class="spl-title">' + (st === 'error' ? 'Not scored yet' : 'Checking your words…') + '</h1>' +
+      (st === 'error' ? '<p class="spl-how">A grown-up will score this one. Your picture is saved.</p>'
+        : '<div class="spl-spin" aria-hidden="true"></div><p class="spl-how">Claude is reading your paper. It takes about a minute.' + (long ? ' It’s taking longer today. You can go home: your score will be on the Spelling tile.' : '') + '</p>') +
+      '</section>' + acts('<button class="btn btn-glass" data-act="splDayBack">Back to spelling</button>');
+  } else if (P.phase === 'result') {
+    const s = splTest();
+    if (!s) { P.phase = 'day'; return viewSpell(); }
+    const t = Spelling.tally(s), all = t.done && !t.wrong;
+    const rev = t.reversed.map((p) => esc(p.rev.map((r) => r.letter).join(', ')) + ' in <b>' + esc(p.w) + '</b>').join('; ');
+    body = '<section class="card spl-card spl-res"><h1 class="spl-title">' + (all ? 'All right!' : t.right >= 0.8 * t.n ? 'Great spelling!' : 'Good try!') + '</h1>' +
+      '<p class="spl-big">' + ICON.star + ' ' + t.right + ' / ' + t.n + '</p>' +
+      (t.check ? '<p class="spl-how">' + t.check + (t.check === 1 ? ' word waits' : ' words wait') + ' for a grown-up to check.</p>' : '') +
+      (rev ? '<p class="spl-how">Right, but written backwards: ' + rev + '.</p>' : '') +
+      (t.misses.length ? '<p class="spl-how">Let’s fix ' + (t.misses.length === 1 ? 'the word' : 'the ' + t.misses.length + ' words') + ' you missed.</p>' : '') + '</section>' +
+      acts(t.misses.length ? '<button class="btn btn-gold btn-big" data-act="splFix">Fix ' + (t.misses.length === 1 ? 'it' : 'them') + '</button>' : '<button class="btn btn-gold btn-big" data-act="splDayBack">Done</button>');
+    if (all && S.anim) after(200, () => Confetti.party());
+  } else if (P.phase === 'fix') {
+    const w = P.fix[P.fixI];
+    body = '<div class="spl-bar"><i style="width:' + Math.round((100 * P.fixI) / P.fix.length) + '%"></i></div><section class="card spl-card' + (S.anim ? ' enter' : '') + '"><p class="spl-how">Look at the word. Write it again on your paper, the right way.</p>' +
+      '<p class="spl-word">' + esc(w) + '</p></section>' + acts('<button class="btn btn-glass" data-act="splFixSay">Say it again</button><button class="btn btn-gold btn-big" data-act="splFixNext">Done</button>');
+  } else if (P.phase === 'fixed') {
+    body = '<section class="card spl-card spl-res"><h1 class="spl-title">All fixed!</h1><p class="spl-how">Great spelling work.</p></section>' + acts('<button class="btn btn-gold btn-big" data-act="splDayBack">Done</button>');
+  }
+  return '<div class="screen fill spl-screen">' + head + body + '</div>';
+}
+
+/* ---------- parents: the record, words to check, scoring by hand ---------- */
+function spellParentHTML(l) {
+  if (!spellWanted(l)) return '';
+  const list = Store.sessionsFor(l.id, 'spelling', { withVoided: true }).filter((s) => s.kind === 'test').slice(-12).reverse();
+  const nm = (s) => esc((Spelling.BY[s.list] && Spelling.BY[s.list].short) || s.list);
+  const checks = [];
+  list.forEach((s) => { if (s.voided) return; Spelling.tally(s).per.forEach((p) => { if (p.v === 'check') checks.push({ s, p }); }); });
+  const quote = (x) => '“' + esc(x) + '”';
+  const checkRows = checks.map(({ s, p }) => '<div class="spl-check"><div><b>' + esc(p.w) + '</b> <span class="muted">· ' + nm(s) + ' words, ' + esc(fmtWhen(s.at)) + ', word ' + (p.i + 1) + ' of ' + s.words.length + '</span>' +
+    '<p class="help">' + (p.wrote2 != null ? 'Claude read it as ' + quote(p.wrote) + ' one time and ' + quote(p.wrote2) + ' the other.' : p.wrote ? 'Claude read it as ' + quote(p.wrote) + '. ' + esc(p.why) : esc(p.why)) + ' Look at ' + esc(l.name) + '’s paper.</p></div>' +
+    '<div class="actions"><button class="btn btn-gold btn-small" data-act="splMark" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '" data-i="' + p.i + '" data-v="right">Spelled right</button>' +
+    '<button class="btn btn-glass btn-small" data-act="splMark" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '" data-i="' + p.i + '" data-v="wrong">Spelled wrong</button></div></div>').join('');
+  const hand = S.spHand && list.find((s) => s.id === S.spHand.id);
+  let handBox = '';
+  if (hand) {
+    handBox = '<div class="spl-hand"><p class="help">Tap each word ' + esc(l.name) + ' spelled wrong on the paper, then Save. Every word not tapped counts as right.</p><div class="chips">' +
+      hand.words.map((w, i) => '<button class="chip spl-chip' + (S.spHand.wrong[i] ? ' chip-bad' : '') + '" data-act="splHandWord" data-i="' + i + '">' + esc(w) + '</button>').join('') + '</div>' +
+      '<div class="actions"><button class="btn btn-gold btn-small" data-act="splHandSave" data-kid="' + esc(l.id) + '">Save the score</button><button class="btn btn-glass btn-small" data-act="splHandCancel">Cancel</button></div></div>';
+  }
+  const rows = list.map((s) => {
+    const t = Spelling.tally(s), st = s.voided ? 'void' : Spelling.status(s);
+    const miss = t.misses.map((m) => esc(m.w) + (m.wrote ? ' (' + quote(m.wrote) + ')' : m.by === 'claude' ? ' (not written)' : '')).join(' · ');
+    const rev = t.reversed.map((p) => esc(p.rev.map((r) => r.letter).join(', ')) + ' in ' + esc(p.w)).join(' · ');
+    const stat = st === 'void' ? '<span class="chip chip-void">Voided</span>' : st === 'checking' ? '<span class="chip">Claude is checking</span>' : st === 'error' ? '<span class="chip chip-warn">Not scored</span><div class="muted">' + esc((s.scoreError && s.scoreError.why) || '') + '</div>'
+      : st === 'check' ? '<span class="chip chip-warn">' + t.check + ' to check</span>' : '<span class="chip chip-ok">Scored' + (s.hand ? ' by hand' : '') + '</span>';
+    const acts = s.voided ? '' : (!t.scored || st === 'error' ? '<button class="btn-link" data-act="splHand" data-id="' + esc(s.id) + '">Score by hand</button>' : '') +
+      (st === 'error' ? ' <button class="btn-link" data-act="splRescore" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '">Try Claude again</button>' : '') +
+      ' <button class="btn-link" data-act="splVoid" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '">Void</button>';
+    return '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '<div class="muted">' + nm(s) + '</div></td><td>' + (t.scored ? t.right + '/' + t.n : '—') + (miss ? '<div class="muted">Missed: ' + miss + '</div>' : '') + (rev ? '<div class="muted">Backwards: ' + rev + '</div>' : '') +
+      (s.rewrittenAt ? '<div class="muted">Rewrote the ' + (s.rewrote || t.misses.length) + ' missed</div>' : '') + '</td><td>' + stat + '<div class="spl-acts">' + acts + '</div></td></tr>';
+  }).join('');
+  return '<section class="glass panel"><h3>Spelling</h3>' +
+    '<p class="sub">Each day ' + esc(l.name) + ' writes both lists on paper and sends a picture of each. Claude reads each picture twice, separately, and a word the two readings disagree on waits for you here. A letter written backwards counts as right, with a note.</p>' +
+    (checks.length ? '<h4>' + checks.length + (checks.length === 1 ? ' word to check' : ' words to check') + '</h4>' + checkRows : '') + handBox +
+    (rows ? '<div class="table-wrap"><table class="hist spl-table"><thead><tr><th>When</th><th>Score</th><th>Status</th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="muted">No spelling tests yet.</p>') + '</section>';
+}
+function splMark(kid, id, i, v) {
+  const s = spellTests(kid).find((x) => x.id === id);
+  if (!s) return;
+  Store.updateSession(kid, id, s.at, { marks: Object.assign({}, s.marks || {}, { [i]: v }) }, 'spelling');
+  Sfx.tap(); render(); toast(v === 'right' ? 'Marked right' : 'Marked wrong');
+}
+/* a test saved by mistake comes off the record; spelling moves no level and gives no stars, so nothing else changes */
+function splVoid(kid, id) {
+  const l = Store.learner(kid), s = spellTests(kid).find((x) => x.id === id);
+  if (!l || !s) return;
+  Sfx.tap();
+  openGate(() => { Store.updateSession(kid, id, s.at, { voided: true, voidedAt: new Date().toISOString() }, 'spelling'); render(); toast('Voided'); },
+    'Void ' + l.name + '’s ' + ((Spelling.BY[s.list] && Spelling.BY[s.list].short.toLowerCase()) || '') + ' spelling test from ' + fmtWhen(s.at) + '? It comes off the record. Answer to void it.');
+}
+function splHandSave(kid) {
+  const H = S.spHand, s = H && spellTests(kid).find((x) => x.id === H.id);
+  if (!s) { S.spHand = null; return render(); }
+  const marks = {};
+  Object.keys(H.wrong).forEach((i) => { if (H.wrong[i]) marks[i] = 'wrong'; });
+  Store.updateSession(kid, s.id, s.at, { hand: true, marks, handAt: new Date().toISOString() }, 'spelling');
+  S.spHand = null; Sfx.tap(); render(); toast('Score saved: ' + (s.words.length - Object.keys(marks).length) + ' of ' + s.words.length);
+}
+
+/* ---------- taps ---------- */
+function spellAct(act, t) {
+  switch (act) {
+    case 'splDay': splOpen(t.getAttribute('data-kid')); return true;
+    case 'splList': splStartList(t.getAttribute('data-list')); return true;
+    case 'splGo': splGo(); return true;
+    case 'splAgain': Sfx.tap(); splSay(); return true;
+    case 'splNext': splNext(); return true;
+    case 'splBack': splBack(); return true;
+    case 'splCam': splCam(); return true;
+    case 'splDrop': splDrop(Number(t.getAttribute('data-k'))); return true;
+    case 'splSend': splSend(); return true;
+    case 'splSee': splResult(t.getAttribute('data-id')); return true;
+    case 'splFix': splFix(); return true;
+    case 'splFixSay': Sfx.tap(); splSayFix(); return true;
+    case 'splFixNext': splFixNext(); return true;
+    case 'splDayBack': if (S.sp) { S.sp.phase = 'day'; S.anim = true; Sfx.tap(); render(); window.scrollTo(0, 0); } return true;
+    case 'splQuit': splQuit(); return true;
+    case 'splMark': splMark(t.getAttribute('data-kid'), t.getAttribute('data-id'), Number(t.getAttribute('data-i')), t.getAttribute('data-v')); return true;
+    case 'splHand': S.spHand = { id: t.getAttribute('data-id'), wrong: {} }; Sfx.tap(); render(); return true;
+    case 'splHandWord': if (S.spHand) { const i = Number(t.getAttribute('data-i')); S.spHand.wrong[i] = !S.spHand.wrong[i]; Sfx.key(); render(); } return true;
+    case 'splHandSave': splHandSave(t.getAttribute('data-kid')); return true;
+    case 'splHandCancel': S.spHand = null; Sfx.tap(); render(); return true;
+    case 'splVoid': splVoid(t.getAttribute('data-kid'), t.getAttribute('data-id')); return true;
+    case 'splRescore': { const kid = t.getAttribute('data-kid'), s = spellTests(kid).find((x) => x.id === t.getAttribute('data-id')); if (s) { Store.updateSession(kid, s.id, s.at, { rescoreAt: new Date().toISOString() }, 'spelling'); toast('Asked Claude to score it again'); render(); } return true; }
+    default: return false;
+  }
+}
 /* Small Steps: home, buddy picker, shop, parent area, overlays, events and startup. */
 
 /* ---------- home ---------- */
@@ -14123,7 +14677,7 @@ function kidCard(l) {
     '<div class="kid-row"><span class="star-chip">' + ICON.star + b.stars + '</span>' +
     (has ? shopButton(l, '') : '<button class="btn btn-gold btn-small" data-act="pickBuddy" data-kid="' + esc(l.id) + '">Pick a buddy</button>') + bookQuickButton(l) + '</div>' +
     (has && Buddy.goalOf(b) ? goalHTML(b, l.id) : '') + '</div></div>' +
-    '<div class="subjects">' + SUBJECTS.map((s) => subjectTile(l, s)).join('') + '</div></div></article>';
+    '<div class="subjects">' + SUBJECTS.map((s) => subjectTile(l, s)).join('') + (spellOn(l) ? spellTile(l) : '') + '</div></div></article>';
 }
 function viewHome() {
   const kids = Store.learners();
@@ -14392,7 +14946,9 @@ function settingsHTML(l, E, t, subj) {
     '<div class="field"><label for="f-daily">Sheets per day</label><select id="f-daily" data-set="sheetsDay">' + [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12].map((v) => opt(v, v + (v === 1 ? ' sheet' : ' sheets'), E.sheetsPerDay(t))).join('') + '</select>' +
       '<p class="help">' + (subj === 'clock' ? 'Kumon has no clock program; 2 short sheets a day is plenty.' : 'Kumon’s instructor sets this. Kumon families report 5–10 sheets a subject a day, and Kumon suggests 10–15 minutes of focused work for young children.') + '</p></div>' +
     (subj === 'reading' ? '<div class="field"><label for="f-ra">Read aloud each day</label><select id="f-ra" data-set="readAloud">' + opt('1', 'On', s.readAloud === false ? '0' : '1') + opt('0', 'Off', s.readAloud === false ? '0' : '1') + '</select>' +
-      '<p class="help">After the reading sheets, the reading tile says “Read to me.” You listen and tap any word that was missed.</p></div>' : '') +
+      '<p class="help">After the reading sheets, the reading tile says “Read to me.” You listen and tap any word that was missed.</p></div>' +
+      '<div class="field"><label for="f-spell">Spelling each day</label><select id="f-spell" data-set="spellOn">' + opt('1', 'On', spellWanted(l) ? '1' : '0') + opt('0', 'Off', spellWanted(l) ? '1' : '0') + '</select>' +
+      '<p class="help">The kindergarten and grade 1 lists, said word, sentence, word. ' + esc(l.name) + ' writes them on paper and the iPad sends a picture of each page; Claude scores it in about a minute. On to start for a kindergarten child and up.</p></div>' : '') +
     '<div class="field"><label for="f-len">Problems per sheet</label><select id="f-len" data-set="sheetLen">' + opt(10, '10', s.sheetLen) + opt(15, '15', s.sheetLen) + opt(20, '20' + (subj === 'math' ? ' (about one Kumon worksheet)' : ''), s.sheetLen) + '</select>' +
       (subj === 'reading' ? '<p class="help">The story levels (Kumon AI and AII) stop at 6 problems a sheet, because each one comes with a story to read.</p>' : '') + '</div>' +
     '<div class="field"><label for="f-allowed">Misses allowed to pass</label><select id="f-allowed" data-set="allowed">' + [0, 1, 2, 3].map((v) => opt(v, (v === 0 ? 'None' : String(v)) + ' (' + Math.round(100 * (s.sheetLen - v) / s.sheetLen) + '% to pass)', s.allowed)).join('') + '</select></div>' +
@@ -14465,7 +15021,7 @@ function viewParent() {
     else if (sec === 'settings') inner = '<div class="panels two"><div class="panels">' + level + settingsHTML(l, E, t, subj) + '</div><div class="panels">' + buddyPanelHTML(l) + devicePanelHTML() + '</div></div>';
     else if (sec === 'guide') inner = guideHTML();
     else if (sec === 'books') inner = booksHTML(l);
-    else inner = '<div class="panels two"><div class="panels">' + changesHTML(l) + overview + levelChartHTML(subj, E, t, sessions, l) + worksheetGridHTML(subj, E, sessions) + '</div><div class="panels">' + loadPanelHTML(l) + (subj === 'reading' ? readAloudHTML(l) + booksSummaryHTML(l) : '') + studyCalendarHTML(l) + troubleHTML(E, t, sessions) +
+    else inner = '<div class="panels two"><div class="panels">' + changesHTML(l) + overview + levelChartHTML(subj, E, t, sessions, l) + worksheetGridHTML(subj, E, sessions) + '</div><div class="panels">' + loadPanelHTML(l) + (subj === 'reading' ? readAloudHTML(l) + spellParentHTML(l) + booksSummaryHTML(l) : '') + studyCalendarHTML(l) + troubleHTML(E, t, sessions) +
       '<details class="glass panel more"><summary><h3 style="display:inline">All sheets as a table</h3></summary>' + historyHTML(E, withVoided, l.id).replace(/^<section class="glass panel">/, '<div>').replace(/<\/section>$/, '</div>') + '</details></div></div>';
     body = '<div class="kid-row parent-nav">' + seg + secTabs + '</div>' + inner;
   }
@@ -14481,6 +15037,7 @@ function setLearnerField(key, raw) {
   else if (key === 'buddyName') { const v = String(raw).trim().slice(0, 16); if (!v) return; next = Object.assign({}, l, { buddy: Object.assign({}, Buddy.of(l), { name: v }) }); }
   else if (key === 'grade') { if (raw && !(raw in GRADE_NUM)) return; next = Object.assign({}, l, { grade: raw || '', gradeYear: schoolYear(new Date()).y }); }
   else if (key === 'tutor') next = Object.assign({}, l, { tutor: raw === '1' });
+  else if (key === 'spellOn') next = Object.assign({}, l, { spellOn: raw === '1' });
   else {
     const subj = S.parentSubj, E = ENG[subj], t = trackOf(l, subj), s = E.settingsOf(t);
     const nt = Object.assign({}, t, { settings: Object.assign({}, s) });
@@ -14643,7 +15200,7 @@ function render() {
   lastView = S.view;
   const views = { sheet: viewSheet, results: viewResults, fix: viewFix, fixed: viewFixed, levelup: viewLevelUp, change: viewChange, between: viewBetween,
     place: viewPlace, placeDone: viewPlaceDone, checkIntro: viewCheckIntro, checkDone: viewCheckDone, trialDone: viewTrialDone, parent: viewParent, pick: viewPick, shop: viewShop, home: viewHome,
-    example: viewExample, read: viewRead };
+    example: viewExample, read: viewRead, spell: viewSpell };
   const vfn = Store.mode === 'setup' ? viewSetup : (views[S.view] || viewHome);
   /* lists that scroll on their own (the closet's items on phones) keep their place across redraws */
   const kept = {};
@@ -14657,7 +15214,7 @@ function render() {
   if (typeof Tutor !== 'undefined') Tutor.afterRender();
 }
 function onStore() {
-  if (['home', 'parent', 'placeDone', 'between', 'shop'].indexOf(S.view) < 0) return;
+  if (['home', 'parent', 'placeDone', 'between', 'shop', 'spell'].indexOf(S.view) < 0) return;
   const a = document.activeElement;
   if (a && (a.tagName === 'INPUT' || a.tagName === 'SELECT')) { S.deferRender = true; return; }
   render();
@@ -14809,7 +15366,7 @@ document.addEventListener('click', (e) => {
       if (l) confirmBox('Remove ' + l.name + '?', 'This deletes their levels, buddy, stars and history in every subject.', 'Remove', () => { Store.deleteLearner(l.id); S.parentKid = null; render(); toast(l.name + ' removed'); }, true);
       break;
     }
-    default: break;
+    default: if (act.indexOf('spl') === 0) spellAct(act, t); break;
   }
 });
 document.addEventListener('change', (e) => {
