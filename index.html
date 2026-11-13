@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261113201004";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261113215246";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -4804,6 +4804,12 @@ if (typeof module !== 'undefined' && module.exports) module.exports = ReadAloud;
    "Right, with a note". A capital letter where the word is lower case is not a spelling mistake (put to him; it counts
    as right until he says otherwise).
 
+   His answers on Nov 13, 2026, once the lists were in: the kindergarten sheet's 34 words are all of them ("yes its 34,
+   my mistake"); "ignore case and ignore inverted b or p or d or whatever all inversions; and obviously you know this
+   is a 5 year old writing so penmanship will appear correspondingly". So a capital is never a mistake, any letter
+   turned around (backwards or upside down) counts as the letter, and the scorer's readers judge which letters she
+   meant, not how neat they are.
+
    This file holds the lists and the rules every part of the app and the data repo's tools share: what is said, how a
    written word is compared with the list, and how a test is tallied from the scorer's verdicts, a grown-up's marks and
    a test scored by hand. It is copied to the data repo's tools/app with every release, and the scorer there uses it. */
@@ -4813,7 +4819,8 @@ const Spelling = (() => {
      the word again, so words that sound alike (to and too, new and knew, there and their) are told apart.
      The words are JB's: the two sheets he sent on Nov 13, 2026 ("Kinder RED WORDS" and "1st RED WORDS", with "First
      this for the app"), in each sheet's order, every column top to bottom, the left column first. The kindergarten
-     sheet has 34 words (he had said 35; put to him), the grade 1 sheet 45. The sentences are the app's own. */
+     sheet has 34 words (he had said 35, and confirmed 34: "yes its 34, my mistake"), the grade 1 sheet 45. The
+     sentences are the app's own. */
   const LISTS = [
     { id: 'k', name: 'Kindergarten words', short: 'Kindergarten', words: [
       { w: 'the', s: 'The cat is asleep.' },
@@ -4912,9 +4919,15 @@ const Spelling = (() => {
   /* ---------- comparing what she wrote with the list ---------- */
   const norm = (s) => String(s == null ? '' : s).normalize('NFKC').toLowerCase().replace(/[’‘`´]/g, "'").replace(/\s+/g, ' ')
     .replace(/^[\s"“”.,!?;:]+|[\s"“”.,!?;:]+$/g, '');
-  /* letters that are each other written backwards: a b turned around is a d, a p turned around is a q */
+  /* Letters that are each other turned around, backwards or upside down (JB, Nov 13, 2026: "ignore inverted b or p or d
+     or whatever all inversions"): b, d, p and q are each other; n and u, and m and w, are each other upside down. A
+     letter that turned around is still itself (a backwards s, j or z) is read as itself by the scorer's readers. */
+  const INVERSIONS = [['b', 'd', 'p', 'q'], ['n', 'u'], ['m', 'w']];
+  const inverted = (a, b) => a !== b && INVERSIONS.some((g) => g.indexOf(a) >= 0 && g.indexOf(b) >= 0);
+  /* the plain backwards pairs, kept for older readers of this file */
   const MIRROR = { b: 'd', d: 'b', p: 'q', q: 'p' };
-  /* ok: the word is spelled right under JB's rules. notes: each letter that was right but written backwards. */
+  /* ok: the word is spelled right under JB's rules (a capital is not a mistake; a letter turned around counts as the
+     letter). notes: each letter that was right but turned around. */
   function compare(target, written) {
     const t = norm(target), w = norm(written);
     if (!w) return { ok: false, empty: true, notes: [] };
@@ -4923,7 +4936,7 @@ const Spelling = (() => {
     const notes = [];
     for (let i = 0; i < t.length; i++) {
       if (t[i] === w[i]) continue;
-      if (MIRROR[t[i]] === w[i]) { notes.push({ letter: t[i], looks: w[i], at: i }); continue; }
+      if (inverted(t[i], w[i])) { notes.push({ letter: t[i], looks: w[i], at: i }); continue; }
       return { ok: false, notes: [] };
     }
     return { ok: true, notes };
@@ -4968,7 +4981,7 @@ const Spelling = (() => {
     if (s && s.scoreError) return 'error';
     return 'checking';
   }
-  return { LISTS, BY, ready, sayText, spellOut, norm, compare, revText, tally, status, MIRROR };
+  return { LISTS, BY, ready, sayText, spellOut, norm, compare, revText, tally, status, MIRROR, INVERSIONS, inverted };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = Spelling;
 /* Small Steps: the book shelf. Picture books and early readers for each Kumon reading level,
