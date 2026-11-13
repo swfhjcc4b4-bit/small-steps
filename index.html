@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261113215246";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261113223353";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1481,6 +1481,37 @@ table.hist.spl-table { min-width: 0; }
 .spl-soft:active { transform: translateY(2px); box-shadow: 0 1px 0 #C9BCF5; }
 .spl-noaudio { color: var(--card-ink); }
 .spl-screen .card.spl-card { min-height: clamp(220px, 34vh, 440px); }
+/* her pages, to look at (JB, Nov 13, 2026: "I want to be able to see the pictures that were taken"): on the test's own
+   view, in Parents → Reading, and whole over everything when tapped */
+.spl-view { align-items: stretch; }
+.spl-view .spl-title, .spl-view .spl-how, .spl-view .spl-big { align-self: center; }
+.spl-h2 { margin: 6px 0 0; font-family: var(--font-display); font-size: clamp(20px, 2.8vw, 26px); color: var(--card-ink); text-align: center; }
+.spl-pages { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+.spl-page { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 0; padding: 0; width: clamp(120px, 36vw, 260px); background: none; border: 0; cursor: zoom-in; font: inherit; color: var(--card-soft); }
+.spl-page img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 12px; border: 2px solid var(--card-line); background: #fff; }
+.spl-page span { font-size: 14px; }
+.spl-page.none { cursor: default; justify-content: center; aspect-ratio: 3 / 4; padding: 10px; border-radius: 12px; border: 2px dashed var(--card-line); text-align: center; }
+.spl-page.none small { font-size: 13px; line-height: 1.35; }
+.spl-pages.small { justify-content: flex-start; gap: 8px; margin-top: 8px; }
+.spl-pages.small .spl-page { width: 84px; color: var(--ink-soft); }
+.spl-pages.small .spl-page img { border-radius: 8px; border-color: rgba(255, 255, 255, 0.35); }
+.spl-pages.small .spl-page.none { width: 84px; border-color: rgba(255, 255, 255, 0.3); color: var(--ink-soft); }
+.spl-pages.small .spl-page.none small { font-size: 11px; }
+.spl-light { position: fixed; inset: 0; z-index: 9000; background: rgba(8, 4, 24, 0.94); }
+.spl-light-in { position: absolute; inset: 0; overflow: auto; display: flex; align-items: center; justify-content: center; padding: max(16px, env(safe-area-inset-top)) 16px max(44px, env(safe-area-inset-bottom)); -webkit-overflow-scrolling: touch; }
+.spl-light img { display: block; max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; background: #fff; cursor: zoom-in; }
+.spl-light.zoom .spl-light-in { display: block; padding: 0; }
+.spl-light.zoom img { max-width: none; max-height: none; height: auto; border-radius: 0; cursor: zoom-out; }
+.spl-light-x { position: absolute; top: max(12px, env(safe-area-inset-top)); right: 12px; width: 44px; height: 44px; z-index: 1; background: rgba(20, 12, 48, 0.86); color: #fff; border: 2px solid rgba(255, 255, 255, 0.7); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); }
+.spl-light-tip { position: absolute; left: 50%; bottom: max(10px, env(safe-area-inset-bottom)); transform: translateX(-50%); margin: 0; padding: 4px 12px; border-radius: 999px; background: rgba(0, 0, 0, 0.5); color: #fff; font-size: 14px; white-space: nowrap; pointer-events: none; }
+.spl-light.zoom .spl-light-tip { display: none; }
+.spl-check .spl-pages.small { margin-top: 6px; }
+/* the view-only form's list of earlier tests */
+.spl-earlier { display: grid; gap: 4px; padding: 16px 18px; min-height: 0 !important; }
+.spl-earlier h2 { margin: 0 0 6px; font-family: var(--font-display); font-size: clamp(20px, 2.8vw, 26px); color: var(--card-ink); }
+.spl-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1.4fr); gap: 10px; align-items: center; padding: 10px 6px; border: 0; border-top: 1px solid var(--card-line); background: none; font: inherit; color: var(--card-ink); text-align: left; cursor: pointer; }
+.spl-row b { font-weight: 700; text-align: right; }
+@media (max-width: 460px) { .spl-row { grid-template-columns: 1fr 1fr; } .spl-row b { grid-column: 1 / -1; text-align: left; } }
 </style>
 <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div><canvas id="fx" aria-hidden="true"></canvas><div id="app"></div>
 <script>
@@ -10416,6 +10447,15 @@ const SiteSync = (() => {
     throw new Error('save conflict');
   }
 
+  /* A spelling picture back from the folder, to look at (JB, Nov 13, 2026: "I want to be able to see the pictures that
+     were taken"). Pictures are never deleted from the folder. */
+  async function getFile(path) {
+    if (!token) throw new Error('This device is not set up to read the progress folder.');
+    const r = await api('GET', repoPath('/contents/' + path + '?ref=' + CFG.branch), null, { Accept: 'application/vnd.github.raw' });
+    if (!r.ok) throw new Error('read ' + r.status);
+    return r.blob();
+  }
+
   /* ---------- the database surface the store uses ---------- */
   const db = {
     collection(name) {
@@ -10446,7 +10486,7 @@ const SiteSync = (() => {
     return db;
   }
   return {
-    active, start, setup, signOut, lock, unlockBlob, normPass, flush, refresh, putFile,
+    active, start, setup, signOut, lock, unlockBlob, normPass, flush, refresh, putFile, getFile,
     get ready() { return !!(token || lsGet(LS_TOKEN)); },
     get lastSync() { return lastSync; },
     get lastError() { return lastError; },
@@ -10475,6 +10515,10 @@ const Store = (() => {
   let lastError = '';
   let loaded = false;             // learners have arrived from the source of truth
   let state = { learners: {}, logs: {}, feedback: {} };
+  /* Master copy only: where each spelling picture's copy is kept with the page (JB, Nov 13, 2026: "I want to be able to
+     see the pictures that were taken all of which should be stored permanently"). The hourly sync copies each new
+     picture from the progress folder into the page's own files and writes photos/spelling: { photos: [{ path, url }] }. */
+  let photoMap = {};
   const listeners = new Set();
   const emit = () => listeners.forEach((fn) => { try { fn(); } catch (e) { console.error(e); } });
 
@@ -10531,6 +10575,15 @@ const Store = (() => {
     sub('learners', (out) => { state = Object.assign({}, state, { learners: out }); loaded = true; });
     sub('logs', (out) => { state = Object.assign({}, state, { logs: out }); });
     sub('feedback', (out) => { state = Object.assign({}, state, { feedback: out }); });
+    if (backend === 'claude') {
+      try {
+        db.collection('photos').onSnapshot((snap) => {
+          const m = {};
+          snap.docs.forEach((doc) => { const d = doc.exists ? doc.data() : null; ((d && d.photos) || []).forEach((x) => { if (x && x.path && x.url) m[x.path] = x.url; }); });
+          photoMap = m; emit();
+        }, () => { /* no copies yet */ });
+      } catch (e) { /* no copies yet */ }
+    }
   }
 
   function saveLearner(l) {
@@ -10626,7 +10679,9 @@ const Store = (() => {
     get lastError() { return lastError; },
     learners: () => Object.values(state.learners).sort((a, b) => ((a.order || 0) - (b.order || 0)) || String(a.name).localeCompare(String(b.name))),
     learner: (id) => state.learners[id] || null,
-    saveLearner, appendSession, updateSession, deleteLearner, sessionsFor, newId, saveFeedback, feedbackFor, saveSiteDoc
+    saveLearner, appendSession, updateSession, deleteLearner, sessionsFor, newId, saveFeedback, feedbackFor, saveSiteDoc,
+    /* the page's own copy of a spelling picture, by its path in the progress folder (master copy only) */
+    photoUrl: (p) => photoMap[p] || null
   };
 })();
 /* Small Steps: sound and celebration effects. Sounds are synthesized with Web Audio (no files)
@@ -14350,11 +14405,70 @@ const SpellIO = {
 };
 /* on for a kindergarten child and up (Andi), off for a younger one (AJ), unless a grown-up set it in Reading settings */
 const spellWanted = (l) => !!l && (l.spellOn === true || (l.spellOn !== false && GRADE_NUM[l.grade] != null && GRADE_NUM[l.grade] >= 0));
-const spellOn = (l) => spellWanted(l) && Spelling.ready() && SpellIO.canUpload();
+/* The tile shows on every device (JB, Nov 13, 2026: "NO I WANT IT ON MY PHONE TOO!!!!!!"). Where the picture can't be sent
+   (the master copy in Claude), it opens a view of her lists, scores and pages instead of the test. */
+const spellOn = (l) => spellWanted(l) && Spelling.ready();
+const spellLook = () => !SpellIO.canUpload();
+
+/* ---------- her pages, to look at ----------
+   JB, Nov 13, 2026: "I want to be able to see the pictures that were taken all of which should be stored permanently".
+   Every picture stays in the progress folder for good (nothing deletes one; voiding a test keeps it). On the kids'
+   website a page comes back from the folder; in the master copy it is the copy the hourly sync keeps with the page. */
+const SpellPics = (() => {
+  const got = {};
+  function want(p) {
+    /* the master copy: the sync's copy, looked up fresh each time, since the sync may add one while the page is open */
+    const here = Store.photoUrl && Store.photoUrl(p);
+    if (here) return { state: 'ok', url: here };
+    /* the kids' website: fetched once from the folder with the website's key; a page that failed is tried again after a minute */
+    if (got[p] && !(got[p].state === 'failed' && Date.now() - got[p].at > 60000)) return got[p];
+    if (Store.backend === 'site' && SiteSync.ready && SiteSync.getFile) {
+      got[p] = { state: 'loading' };
+      SiteSync.getFile(p).then((blob) => { got[p] = { state: 'ok', url: URL.createObjectURL(blob) }; render(); })
+        .catch(() => { got[p] = { state: 'failed', at: Date.now() }; render(); });
+      return got[p];
+    }
+    return { state: 'later' };
+  }
+  return { want };
+})();
+/* the pages of a test: a picture of each, tap for the whole page; big on the test's own view, small in Parents */
+function splPagesHTML(s, small) {
+  const ps = (s && Array.isArray(s.photos)) ? s.photos : [];
+  if (!ps.length) return '';
+  return '<div class="spl-pages' + (small ? ' small' : '') + '">' + ps.map((p, k) => {
+    const x = SpellPics.want(p), name = 'Page ' + (k + 1);
+    if (x.state === 'ok') return '<button class="spl-page" data-act="splPic" data-src="' + esc(x.url) + '" aria-label="' + name + ', bigger"><img src="' + esc(x.url) + '" alt="' + name + '"><span>' + name + '</span></button>';
+    const why = x.state === 'loading' ? 'Loading…' : x.state === 'failed' ? 'Couldn’t load it. Check the internet.' : 'It comes with the next sync.';
+    return '<div class="spl-page none"><b>' + name + '</b><small>' + why + '</small></div>';
+  }).join('') + '</div>';
+}
+/* a page, whole, over everything. A tap on the page zooms in where it was tapped (two and a half times, to read her
+   letters on a phone) and out again; a tap beside it, the X or Escape closes it. */
+function splPicOpen(src) {
+  const old = document.getElementById('splLight'); if (old) old.remove();
+  const el = document.createElement('div');
+  el.id = 'splLight'; el.className = 'spl-light'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'The page, whole');
+  el.innerHTML = '<div class="spl-light-in"><img alt="The page, whole"></div><button class="icon-btn spl-light-x" aria-label="Close">' + ICON.close + '</button>' +
+    '<p class="spl-light-tip">Tap the page to zoom in or out.</p>';
+  const img = el.querySelector('img'), box = el.querySelector('.spl-light-in');
+  img.src = src;
+  const close = () => { el.remove(); document.removeEventListener('keydown', key); };
+  const key = (e) => { if (e.key === 'Escape') close(); };
+  el.addEventListener('click', (e) => {
+    if (e.target !== img) return close();
+    if (el.classList.contains('zoom')) { el.classList.remove('zoom'); img.style.width = ''; return; }
+    const r = img.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+    el.classList.add('zoom'); img.style.width = Math.round(r.width * 2.5) + 'px';
+    box.scrollLeft = fx * img.offsetWidth - e.clientX; box.scrollTop = fy * img.offsetHeight - e.clientY;
+  });
+  document.addEventListener('keydown', key);
+  document.body.appendChild(el);
+}
 const spellTests = (kid) => Store.sessionsFor(kid, 'spelling').filter((s) => s && s.kind === 'test');
 function spellToday(kid) {
   const tk = ENG.reading.todayKey(), today = spellTests(kid).filter((s) => ENG.reading.todayKey(new Date(s.at)) === tk);
-  return Spelling.LISTS.map((L) => ({ L, s: today.filter((s) => s.list === L.id).slice(-1)[0] || null }));
+  return Spelling.LISTS.map((L) => ({ L, s: today.find((s) => s.list === L.id) || null }));
 }
 /* which results this device has shown (kept on the device only, so looking at a score writes nothing to the record) */
 const SPELL_SEEN = 'ssm.spell.seen.v1';
@@ -14366,7 +14480,7 @@ function spellTile(l) {
   const day = spellToday(l.id), total = day.length, done = day.filter((d) => d.s).length, seen = spellSeen();
   const checking = day.some((d) => d.s && Spelling.status(d.s) === 'checking');
   const ready = day.some((d) => d.s && Spelling.status(d.s) !== 'checking' && seen.indexOf(d.s.id) < 0);
-  const go = done < total ? '<span class="subj-go spl">' + (done === 0 ? 'Spell' : done + ' of ' + total) + '</span>'
+  const go = done < total ? '<span class="subj-go spl">' + (done === 0 && !spellLook() ? 'Spell' : done + ' of ' + total) + '</span>'
     : checking ? '<span class="subj-go read">Checking…</span>' : ready ? '<span class="subj-go test">Score ready!</span>' : '<span class="subj-go done">Done ✓</span>';
   return '<button class="subj s-spell" data-act="splDay" data-kid="' + esc(l.id) + '" aria-label="Spelling, ' + done + ' of ' + total + ' lists today">' +
     '<span class="subj-ring">' + ringSVG(done, total, 26) + '<span class="subj-icon">' + SPELL_ICON + '</span></span>' +
@@ -14378,8 +14492,7 @@ const SPELL_ICON = '<svg viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2
 /* ---------- the flow ---------- */
 function splOpen(kid) {
   if (!Spelling.ready()) return toast('The spelling lists are not in the app yet.');
-  if (!SpellIO.canUpload()) return toast('Spelling works on the kids’ iPads, where the pictures can be sent.');
-  S.sp = { kid, phase: 'day' }; S.kid = kid; S.view = 'spell'; S.anim = true;
+  S.sp = { kid, phase: 'day', look: spellLook() }; S.kid = kid; S.view = 'spell'; S.anim = true;
   Sfx.unlock(); Sfx.pick(); render(); window.scrollTo(0, 0);
 }
 function splStartList(id) {
@@ -14495,7 +14608,33 @@ function viewSpell() {
     '<div><b>' + esc(l.name) + ' spells</b><small><span class="sub-chip">Spelling</span> ' + (L ? esc(L.name) : 'Today’s lists') + '</small></div></div></div>';
   let body = '';
   const acts = (inner) => '<div class="actions center spl-ctl">' + inner + '</div>';
-  if (P.phase === 'day') {
+  if (P.phase === 'day' && P.look) {
+    /* the view-only form (the master copy): today's two lists, then every earlier test, each with its pages */
+    const all = spellTests(P.kid).slice().sort((a, b) => String(b.at).localeCompare(String(a.at)));
+    const tk = ENG.reading.todayKey(), earlier = all.filter((s) => ENG.reading.todayKey(new Date(s.at)) !== tk);
+    const line = (s) => { const st = Spelling.status(s), t = Spelling.tally(s);
+      return st === 'checking' ? 'Claude is checking it' : st === 'error' ? 'Not scored yet: score it in Parents → Reading' : t.right + ' of ' + t.n + ' right' + (t.check ? ' · ' + t.check + ' to check' : ''); };
+    body = '<h1 class="spl-title">Spelling</h1><p class="spl-sub">' + esc(l.name) + '’s scores and pages. The tests themselves are taken on the kids’ iPads, which send the pictures.</p><div class="spl-lists">' + spellToday(P.kid).map((d) =>
+      '<section class="card spl-list' + (d.s ? ' sent' : '') + '"><div><h2>' + esc(d.L.name) + '</h2><p>' + (d.s ? esc(line(d.s)) : 'Not done yet today') + '</p></div>' +
+      (d.s ? '<button class="btn btn-gold" data-act="splView" data-id="' + esc(d.s.id) + '">See it</button>' : '') + '</section>').join('') + '</div>' +
+      (earlier.length ? '<section class="card spl-earlier"><h2>Earlier</h2>' + earlier.map((s) => '<button class="spl-row" data-act="splView" data-id="' + esc(s.id) + '"><span>' + esc(fmtWhen(s.at)) + '</span><span>' +
+        esc((Spelling.BY[s.list] && Spelling.BY[s.list].short) || s.listName || s.list) + '</span><b>' + esc(line(s)) + '</b></button>').join('') + '</section>' : '') +
+      acts('<button class="btn btn-glass" data-act="splQuit">Back home</button>');
+  } else if (P.phase === 'view') {
+    const s = spellTests(P.kid).find((x) => x.id === P.sid);
+    if (!s) { P.phase = 'day'; return viewSpell(); }
+    const t = Spelling.tally(s), st = Spelling.status(s);
+    const said = (x) => '“' + esc(x) + '”';
+    const miss = t.misses.map((m) => '<b>' + esc(m.w) + '</b>' + (m.wrote ? ' (wrote ' + said(m.wrote) + ')' : m.by === 'claude' ? ' (not written)' : '')).join(', ');
+    const rev = t.reversed.map((p) => esc(p.rev.map((r) => r.letter).join(', ')) + ' in <b>' + esc(p.w) + '</b>').join('; ');
+    const chk = t.per.filter((p) => p.v === 'check').map((p) => '<b>' + esc(p.w) + '</b>').join(', ');
+    body = '<section class="card spl-card spl-view"><h1 class="spl-title">' + esc((Spelling.BY[s.list] && Spelling.BY[s.list].name) || s.listName || s.list) + '</h1><p class="spl-how">' + esc(fmtWhen(s.at)) + '</p>' +
+      (t.scored ? '<p class="spl-big">' + ICON.star + ' ' + t.right + ' / ' + t.n + '</p>' : '<p class="spl-how">' + (st === 'error' ? 'Not scored yet. Score it in Parents → Reading.' : 'Claude is checking it.') + '</p>') +
+      (miss ? '<p class="spl-how">Missed: ' + miss + '.</p>' : '') + (rev ? '<p class="spl-how">Right, but written backwards: ' + rev + '.</p>' : '') +
+      (chk ? '<p class="spl-how">For a grown-up to check in Parents → Reading: ' + chk + '.</p>' : '') +
+      (s.photos && s.photos.length ? '<h2 class="spl-h2">' + esc(l.name) + '’s ' + (s.photos.length > 1 ? s.photos.length + ' pages' : 'page') + '</h2>' + splPagesHTML(s) : '<p class="spl-how">No picture was sent with this list.</p>') + '</section>' +
+      acts('<button class="btn btn-glass" data-act="splDayBack">Back to spelling</button>');
+  } else if (P.phase === 'day') {
     const seen = spellSeen();
     body = '<h1 class="spl-title">Spelling</h1><p class="spl-sub">Two lists today. Get your paper and pencil.</p><div class="spl-lists">' + spellToday(P.kid).map((d) => {
       const s = d.s, st = s ? Spelling.status(s) : null, t = s ? Spelling.tally(s) : null;
@@ -14557,13 +14696,15 @@ function viewSpell() {
 /* ---------- parents: the record, words to check, scoring by hand ---------- */
 function spellParentHTML(l) {
   if (!spellWanted(l)) return '';
-  const list = Store.sessionsFor(l.id, 'spelling', { withVoided: true }).filter((s) => s.kind === 'test').slice(-12).reverse();
+  const every = Store.sessionsFor(l.id, 'spelling', { withVoided: true }).filter((s) => s.kind === 'test');
+  /* sessionsFor gives newest first; the twelve newest unless every test was asked for */
+  const list = S.spAll ? every : every.slice(0, 12);
   const nm = (s) => esc((Spelling.BY[s.list] && Spelling.BY[s.list].short) || s.list);
   const checks = [];
   list.forEach((s) => { if (s.voided) return; Spelling.tally(s).per.forEach((p) => { if (p.v === 'check') checks.push({ s, p }); }); });
   const quote = (x) => '“' + esc(x) + '”';
   const checkRows = checks.map(({ s, p }) => '<div class="spl-check"><div><b>' + esc(p.w) + '</b> <span class="muted">· ' + nm(s) + ' words, ' + esc(fmtWhen(s.at)) + ', word ' + (p.i + 1) + ' of ' + s.words.length + '</span>' +
-    '<p class="help">' + (p.wrote2 != null ? 'Claude read it as ' + quote(p.wrote) + ' one time and ' + quote(p.wrote2) + ' the other.' : p.wrote ? 'Claude read it as ' + quote(p.wrote) + '. ' + esc(p.why) : esc(p.why)) + ' Look at ' + esc(l.name) + '’s paper.</p></div>' +
+    '<p class="help">' + (p.wrote2 != null ? 'Claude read it as ' + quote(p.wrote) + ' one time and ' + quote(p.wrote2) + ' the other.' : p.wrote ? 'Claude read it as ' + quote(p.wrote) + '. ' + esc(p.why) : esc(p.why)) + ' Look at ' + esc(l.name) + '’s paper or its picture.</p>' + splPagesHTML(s, true) + '</div>' +
     '<div class="actions"><button class="btn btn-gold btn-small" data-act="splMark" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '" data-i="' + p.i + '" data-v="right">Spelled right</button>' +
     '<button class="btn btn-glass btn-small" data-act="splMark" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '" data-i="' + p.i + '" data-v="wrong">Spelled wrong</button></div></div>').join('');
   const hand = S.spHand && list.find((s) => s.id === S.spHand.id);
@@ -14583,12 +14724,14 @@ function spellParentHTML(l) {
       (st === 'error' ? ' <button class="btn-link" data-act="splRescore" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '">Try Claude again</button>' : '') +
       ' <button class="btn-link" data-act="splVoid" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '">Void</button>';
     return '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '<div class="muted">' + nm(s) + '</div></td><td>' + (t.scored ? t.right + '/' + t.n : '—') + (miss ? '<div class="muted">Missed: ' + miss + '</div>' : '') + (rev ? '<div class="muted">Backwards: ' + rev + '</div>' : '') +
-      (s.rewrittenAt ? '<div class="muted">Rewrote the ' + (s.rewrote || t.misses.length) + ' missed</div>' : '') + '</td><td>' + stat + '<div class="spl-acts">' + acts + '</div></td></tr>';
+      (s.rewrittenAt ? '<div class="muted">Rewrote the ' + (s.rewrote || t.misses.length) + ' missed</div>' : '') + splPagesHTML(s, true) + '</td><td>' + stat + '<div class="spl-acts">' + acts + '</div></td></tr>';
   }).join('');
+  const more = every.length > 12 ? '<p><button class="btn-link" data-act="splAll">' + (S.spAll ? 'Show the 12 newest' : 'Show all ' + every.length + ' tests') + '</button></p>' : '';
   return '<section class="glass panel"><h3>Spelling</h3>' +
-    '<p class="sub">Each day ' + esc(l.name) + ' writes both lists on paper and sends a picture of each. Claude reads each picture twice, separately, and a word the two readings disagree on waits for you here. A letter written backwards counts as right, with a note.</p>' +
+    '<p class="sub">Each day ' + esc(l.name) + ' writes both lists on paper and sends a picture of each. Claude reads each picture twice, separately, and a word the two readings disagree on waits for you here. A capital is never a mistake, and a letter written backwards or upside down counts as right, with a note.</p>' +
     (checks.length ? '<h4>' + checks.length + (checks.length === 1 ? ' word to check' : ' words to check') + '</h4>' + checkRows : '') + handBox +
-    (rows ? '<div class="table-wrap"><table class="hist spl-table"><thead><tr><th>When</th><th>Score</th><th>Status</th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="muted">No spelling tests yet.</p>') + '</section>';
+    (rows ? '<div class="table-wrap"><table class="hist spl-table"><thead><tr><th>When</th><th>Score</th><th>Status</th></tr></thead><tbody>' + rows + '</tbody></table></div>' + more : '<p class="muted">No spelling tests yet.</p>') +
+    '<p class="help">Every picture of ' + esc(l.name) + '’s pages is kept for good, a voided test’s too. Tap a page to see it whole.</p></section>';
 }
 function splMark(kid, id, i, v) {
   const s = spellTests(kid).find((x) => x.id === id);
@@ -14626,6 +14769,10 @@ function spellAct(act, t) {
     case 'splDrop': splDrop(Number(t.getAttribute('data-k'))); return true;
     case 'splSend': splSend(); return true;
     case 'splSee': splResult(t.getAttribute('data-id')); return true;
+    case 'splView': if (S.sp) { const id = t.getAttribute('data-id'), s = spellTests(S.sp.kid).find((x) => x.id === id); if (s && Spelling.status(s) !== 'checking') markSpellSeen(id);
+      S.sp.sid = id; S.sp.phase = 'view'; S.anim = true; Sfx.tap(); render(); window.scrollTo(0, 0); } return true;
+    case 'splPic': splPicOpen(t.getAttribute('data-src')); return true;
+    case 'splAll': S.spAll = !S.spAll; Sfx.tap(); render(); return true;
     case 'splFix': splFix(); return true;
     case 'splFixSay': Sfx.tap(); splSayFix(); return true;
     case 'splFixNext': splFixNext(); return true;
