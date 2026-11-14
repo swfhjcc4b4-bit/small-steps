@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261113225315";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261114044715";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1467,7 +1467,10 @@ body.tutor-on #app .screen:not(.fill) { padding-bottom: 210px; }
 @media (prefers-reduced-motion: reduce) { .spl-spin { animation-duration: 3s; } }
 .spl-big { margin: 0; font-family: var(--font-display); font-size: clamp(40px, 7vw, 64px); color: #C77A00; display: flex; align-items: center; gap: 10px; }
 .spl-big svg { width: 0.9em; height: 0.9em; }
-.spl-word { margin: 0; font-family: var(--font-read); font-weight: 700; font-size: clamp(56px, 11vw, 110px); line-height: 1.1; letter-spacing: 0.06em; color: var(--card-ink); }
+/* the words she missed, spelled right, on the screen with her score (JB, Nov 13, 2026: "Take them out and show the
+   words"): to look at only, each word whole in the reading font */
+.spl-missed { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 12px; max-width: 100%; }
+.spl-missed li { font-family: var(--font-read); font-weight: 700; font-size: clamp(24px, 3.4vw, 34px); line-height: 1.15; letter-spacing: 0.04em; color: #2A1D63; padding: 6px 16px 8px; border-radius: 14px; background: #F3EEFF; border: 2px solid #DCD2FF; white-space: nowrap; }
 /* Parents */
 .spl-check { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid rgba(255, 255, 255, 0.12); }
 .spl-check .help { margin: 4px 0 0; }
@@ -4943,9 +4946,6 @@ const Spelling = (() => {
 
   /* What the app says for each word: the word, the sentence, the word again, and no number. */
   const sayText = (e) => e.w + '. ' + e.s + ' ' + e.w + '.';
-  /* The rewrite after a test: the word, its letters one by one (as capitals, so the voice says each letter's name: a
-     small "a" alone is read as the word "a"), the word. */
-  const spellOut = (w) => w + '. ' + String(w).replace(/[^A-Za-z]/g, '').toUpperCase().split('').join(', ') + '. ' + w + '.';
 
   /* ---------- comparing what she wrote with the list ---------- */
   const norm = (s) => String(s == null ? '' : s).normalize('NFKC').toLowerCase().replace(/[’‘`´]/g, "'").replace(/\s+/g, ' ')
@@ -5012,7 +5012,7 @@ const Spelling = (() => {
     if (s && s.scoreError) return 'error';
     return 'checking';
   }
-  return { LISTS, BY, ready, sayText, spellOut, norm, compare, revText, tally, status, MIRROR, INVERSIONS, inverted };
+  return { LISTS, BY, ready, sayText, norm, compare, revText, tally, status, MIRROR, INVERSIONS, inverted };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = Spelling;
 /* Small Steps: the book shelf. Picture books and early readers for each Kumon reading level,
@@ -14394,7 +14394,9 @@ const Cere = (() => {
    Andi taps Spelling, picks a list, and hears each word: the word, a sentence with it, the word again, no number. She
    writes it on her paper and taps Next. At the end the iPad's camera takes a picture of each page; the pictures go to the
    family's private folder and the test is saved with them; within about a minute the score comes back. She sees how
-   many she spelled right and rewrites each word she missed, looking at it. A word the scorer's two readings disagree on
+   many she spelled right and the words she missed, spelled right, to look at. There is no rewrite of the missed words
+   (JB, Nov 13, 2026: "Forget about the re-dos. She will do the same thing every night so there is no need", then
+   "Take them out and show the words"): she writes both lists every night. A word the scorer's two readings disagree on
    waits for a grown-up in Parents → Reading, who can also score a whole test by hand. */
 
 /* The pictures go to the private folder through the website's key, so spelling runs on the kids' website, not in the
@@ -14581,15 +14583,6 @@ function splResult(id) {
   if (P.phase === 'result') markSpellSeen(s.id);
   S.anim = true; Sfx.tap(); render(); window.scrollTo(0, 0);
 }
-function splFix() { const P = S.sp, s = splTest(); if (!P || !s) return; P.fix = Spelling.tally(s).misses.map((m) => m.w); P.fixI = 0; P.phase = 'fix'; S.anim = true; render(); splSayFix(); }
-const splSayFix = () => { const P = S.sp; if (P && P.phase === 'fix' && P.fix[P.fixI]) Speech.say(Spelling.spellOut(P.fix[P.fixI]), { rate: 0.8 }); };
-function splFixNext() {
-  const P = S.sp; if (!P) return;
-  if (P.fixI < P.fix.length - 1) { P.fixI++; Sfx.tap(); S.anim = true; render(); splSayFix(); return; }
-  const s = splTest();
-  if (s && !s.rewrittenAt) Store.updateSession(P.kid, s.id, s.at, { rewrittenAt: new Date().toISOString(), rewrote: P.fix.length }, 'spelling');
-  P.phase = 'fixed'; Sfx.complete(); after(150, () => Confetti.party()); render(); Speech.say('All fixed! Great job.');
-}
 function splQuit() {
   const P = S.sp;
   if (P && (P.phase === 'say' || (P.phase === 'photo' && P.photos.length)) && !P.sid) {
@@ -14613,7 +14606,7 @@ function viewSpell() {
     const all = spellTests(P.kid).slice().sort((a, b) => String(b.at).localeCompare(String(a.at)));
     const tk = ENG.reading.todayKey(), earlier = all.filter((s) => ENG.reading.todayKey(new Date(s.at)) !== tk);
     const line = (s) => { const st = Spelling.status(s), t = Spelling.tally(s);
-      return st === 'checking' ? 'Claude is checking it' : st === 'error' ? 'Not scored yet: score it in Parents → Reading' : t.right + ' of ' + t.n + ' right' + (t.check ? ' · ' + t.check + ' to check' : ''); };
+      return st === 'checking' ? 'Claude is checking it' : st === 'error' ? 'Not scored yet: score it in Parents → Reading' : t.right + ' of ' + t.n + ' right' + (t.check ? ' · ' + t.check + ' for you to decide' : ''); };
     body = '<h1 class="spl-title">Spelling</h1><p class="spl-sub">' + esc(l.name) + '’s scores and pages. The tests themselves are taken on the kids’ iPads, which send the pictures.</p><div class="spl-lists">' + spellToday(P.kid).map((d) =>
       '<section class="card spl-list' + (d.s ? ' sent' : '') + '"><div><h2>' + esc(d.L.name) + '</h2><p>' + (d.s ? esc(line(d.s)) : 'Not done yet today') + '</p></div>' +
       (d.s ? '<button class="btn btn-gold" data-act="splView" data-id="' + esc(d.s.id) + '">See it</button>' : '') + '</section>').join('') + '</div>' +
@@ -14631,7 +14624,8 @@ function viewSpell() {
     body = '<section class="card spl-card spl-view"><h1 class="spl-title">' + esc((Spelling.BY[s.list] && Spelling.BY[s.list].name) || s.listName || s.list) + '</h1><p class="spl-how">' + esc(fmtWhen(s.at)) + '</p>' +
       (t.scored ? '<p class="spl-big">' + ICON.star + ' ' + t.right + ' / ' + t.n + '</p>' : '<p class="spl-how">' + (st === 'error' ? 'Not scored yet. Score it in Parents → Reading.' : 'Claude is checking it.') + '</p>') +
       (miss ? '<p class="spl-how">Missed: ' + miss + '.</p>' : '') + (rev ? '<p class="spl-how">Right, but written backwards: ' + rev + '.</p>' : '') +
-      (chk ? '<p class="spl-how">For a grown-up to check in Parents → Reading: ' + chk + '.</p>' : '') +
+      /* said to a parent in plain words (JB, Nov 13, 2026: "talk in simple English"): the master copy is the parents' */
+      (chk ? '<p class="spl-how">Claude couldn’t tell whether ' + (t.check === 1 ? 'this one was' : 'these were') + ' spelled right, so ' + (t.check === 1 ? 'it is' : 'they are') + ' for you to decide in Parents → Reading: ' + chk + '.</p>' : '') +
       (s.photos && s.photos.length ? '<h2 class="spl-h2">' + esc(l.name) + '’s ' + (s.photos.length > 1 ? s.photos.length + ' pages' : 'page') + '</h2>' + splPagesHTML(s) : '<p class="spl-how">No picture was sent with this list.</p>') + '</section>' +
       acts('<button class="btn btn-glass" data-act="splDayBack">Back to spelling</button>');
   } else if (P.phase === 'day') {
@@ -14680,15 +14674,12 @@ function viewSpell() {
       '<p class="spl-big">' + ICON.star + ' ' + t.right + ' / ' + t.n + '</p>' +
       (t.check ? '<p class="spl-how">' + t.check + (t.check === 1 ? ' word waits' : ' words wait') + ' for a grown-up to check.</p>' : '') +
       (rev ? '<p class="spl-how">Right, but written backwards: ' + rev + '.</p>' : '') +
-      (t.misses.length ? '<p class="spl-how">Let’s fix ' + (t.misses.length === 1 ? 'the word' : 'the ' + t.misses.length + ' words') + ' you missed.</p>' : '') + '</section>' +
-      acts(t.misses.length ? '<button class="btn btn-gold btn-big" data-act="splFix">Fix ' + (t.misses.length === 1 ? 'it' : 'them') + '</button>' : '<button class="btn btn-gold btn-big" data-act="splDayBack">Done</button>');
+      /* the words she missed, spelled right, to look at: nothing to write and nothing to tap through (JB, Nov 13, 2026:
+         "Take them out and show the words"); what she wrote is not shown to her */
+      (t.misses.length ? '<h2 class="spl-h2">' + (t.misses.length === 1 ? 'The word you missed, spelled right' : 'The ' + t.misses.length + ' words you missed, spelled right') + '</h2>' +
+        '<ul class="spl-missed">' + t.misses.map((m) => '<li>' + esc(m.w) + '</li>').join('') + '</ul>' : '') + '</section>' +
+      acts('<button class="btn btn-gold btn-big" data-act="splDayBack">Done</button>');
     if (all && S.anim) after(200, () => Confetti.party());
-  } else if (P.phase === 'fix') {
-    const w = P.fix[P.fixI];
-    body = '<div class="spl-bar"><i style="width:' + Math.round((100 * P.fixI) / P.fix.length) + '%"></i></div><section class="card spl-card' + (S.anim ? ' enter' : '') + '"><p class="spl-how">Look at the word. Write it again on your paper, the right way.</p>' +
-      '<p class="spl-word">' + esc(w) + '</p></section>' + acts('<button class="btn btn-glass" data-act="splFixSay">Say it again</button><button class="btn btn-gold btn-big" data-act="splFixNext">Done</button>');
-  } else if (P.phase === 'fixed') {
-    body = '<section class="card spl-card spl-res"><h1 class="spl-title">All fixed!</h1><p class="spl-how">Great spelling work.</p></section>' + acts('<button class="btn btn-gold btn-big" data-act="splDayBack">Done</button>');
   }
   return '<div class="screen fill spl-screen">' + head + body + '</div>';
 }
@@ -14719,17 +14710,19 @@ function spellParentHTML(l) {
     const miss = t.misses.map((m) => esc(m.w) + (m.wrote ? ' (' + quote(m.wrote) + ')' : m.by === 'claude' ? ' (not written)' : '')).join(' · ');
     const rev = t.reversed.map((p) => esc(p.rev.map((r) => r.letter).join(', ')) + ' in ' + esc(p.w)).join(' · ');
     const stat = st === 'void' ? '<span class="chip chip-void">Voided</span>' : st === 'checking' ? '<span class="chip">Claude is checking</span>' : st === 'error' ? '<span class="chip chip-warn">Not scored</span><div class="muted">' + esc((s.scoreError && s.scoreError.why) || '') + '</div>'
-      : st === 'check' ? '<span class="chip chip-warn">' + t.check + ' to check</span>' : '<span class="chip chip-ok">Scored' + (s.hand ? ' by hand' : '') + '</span>';
+      : st === 'check' ? '<span class="chip chip-warn">' + t.check + ' for you to decide</span>' : '<span class="chip chip-ok">Scored' + (s.hand ? ' by hand' : '') + '</span>';
     const acts = s.voided ? '' : (!t.scored || st === 'error' ? '<button class="btn-link" data-act="splHand" data-id="' + esc(s.id) + '">Score by hand</button>' : '') +
       (st === 'error' ? ' <button class="btn-link" data-act="splRescore" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '">Try Claude again</button>' : '') +
       ' <button class="btn-link" data-act="splVoid" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '">Void</button>';
     return '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '<div class="muted">' + nm(s) + '</div></td><td>' + (t.scored ? t.right + '/' + t.n : '—') + (miss ? '<div class="muted">Missed: ' + miss + '</div>' : '') + (rev ? '<div class="muted">Backwards: ' + rev + '</div>' : '') +
-      (s.rewrittenAt ? '<div class="muted">Rewrote the ' + (s.rewrote || t.misses.length) + ' missed</div>' : '') + splPagesHTML(s, true) + '</td><td>' + stat + '<div class="spl-acts">' + acts + '</div></td></tr>';
+      splPagesHTML(s, true) + '</td><td>' + stat + '<div class="spl-acts">' + acts + '</div></td></tr>';
   }).join('');
   const more = every.length > 12 ? '<p><button class="btn-link" data-act="splAll">' + (S.spAll ? 'Show the 12 newest' : 'Show all ' + every.length + ' tests') + '</button></p>' : '';
   return '<section class="glass panel"><h3>Spelling</h3>' +
     '<p class="sub">Each day ' + esc(l.name) + ' writes both lists on paper and sends a picture of each. Claude reads each picture twice, separately, and a word the two readings disagree on waits for you here. A capital is never a mistake, and a letter written backwards or upside down counts as right, with a note.</p>' +
-    (checks.length ? '<h4>' + checks.length + (checks.length === 1 ? ' word to check' : ' words to check') + '</h4>' + checkRows : '') + handBox +
+    /* in plain words (JB, Nov 13, 2026: "talk in simple English"): what these words are and what to do */
+    (checks.length ? '<h4>' + checks.length + (checks.length === 1 ? ' word for you to decide' : ' words for you to decide') + '</h4>' +
+      '<p class="help">Claude couldn’t tell whether ' + (checks.length === 1 ? 'this word was' : 'these words were') + ' spelled right. Look at ' + esc(l.name) + '’s picture or the paper, then tap Spelled right or Spelled wrong. The score is final once you do.</p>' + checkRows : '') + handBox +
     (rows ? '<div class="table-wrap"><table class="hist spl-table"><thead><tr><th>When</th><th>Score</th><th>Status</th></tr></thead><tbody>' + rows + '</tbody></table></div>' + more : '<p class="muted">No spelling tests yet.</p>') +
     '<p class="help">Every picture of ' + esc(l.name) + '’s pages is kept for good, a voided test’s too. Tap a page to see it whole.</p></section>';
 }
@@ -14773,9 +14766,6 @@ function spellAct(act, t) {
       S.sp.sid = id; S.sp.phase = 'view'; S.anim = true; Sfx.tap(); render(); window.scrollTo(0, 0); } return true;
     case 'splPic': splPicOpen(t.getAttribute('data-src')); return true;
     case 'splAll': S.spAll = !S.spAll; Sfx.tap(); render(); return true;
-    case 'splFix': splFix(); return true;
-    case 'splFixSay': Sfx.tap(); splSayFix(); return true;
-    case 'splFixNext': splFixNext(); return true;
     case 'splDayBack': if (S.sp) { S.sp.phase = 'day'; S.anim = true; Sfx.tap(); render(); window.scrollTo(0, 0); } return true;
     case 'splQuit': splQuit(); return true;
     case 'splMark': splMark(t.getAttribute('data-kid'), t.getAttribute('data-id'), Number(t.getAttribute('data-i')), t.getAttribute('data-v')); return true;
