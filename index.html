@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261114110308";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261115145459";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1485,6 +1485,12 @@ body.tutor-on #app .screen:not(.fill) { padding-bottom: 210px; }
 @media (prefers-reduced-motion: reduce) { .spl-spin { animation-duration: 3s; } }
 .spl-big { margin: 0; font-family: var(--font-display); font-size: clamp(40px, 7vw, 64px); color: #C77A00; display: flex; align-items: center; gap: 10px; }
 .spl-big svg { width: 0.9em; height: 0.9em; }
+/* her stars for the list (JB, Nov 15, 2026: 1 for finishing, 3 for 90% or more, 5 for every word), on the white card */
+.spl-stars { margin: 0; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px 10px; font-family: var(--font-display); font-size: clamp(19px, 2.6vw, 25px); color: #6B4A00; text-align: center; }
+.spl-stars .star-chip { color: #8A5A00; background: #FFF4CC; border-color: #F2C744; box-shadow: none; }
+/* and in Parents, under the score */
+.spl-starn { display: flex; align-items: center; gap: 4px; margin-top: 2px; color: var(--gold-hi); font-weight: 700; font-size: 13px; }
+.spl-starn svg { width: 14px; height: 14px; }
 /* the words she missed, spelled right, on the screen with her score (JB, Nov 13, 2026: "Take them out and show the
    words"): to look at only, each word whole in the reading font */
 .spl-missed { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 12px; max-width: 100%; }
@@ -5052,7 +5058,43 @@ const Spelling = (() => {
     if (s && s.scoreError) return 'error';
     return 'checking';
   }
-  return { LISTS, BY, ready, sayText, norm, compare, revText, tally, status, MIRROR, INVERSIONS, inverted };
+
+  /* ---------- stars ----------
+     JB, Nov 15, 2026: "We should give Andi some stars for her spelling. How should we do it? I think just for every
+     completion: 1 star if she does it. 3 stars if it's 90%. 5 stars if it's 100%." Each list she finishes (sends with its
+     pictures) earns 1 star; with 90% of its words or more spelled right, 3 in all; with every word right, 5 in all. A
+     word left for a grown-up to decide counts once it is decided; a voided list earns none. The rule began on Nov 15,
+     2026 (Eastern time), so lists from before then earn none. */
+  const STARS_FROM = '2026-11-15T05:00:00.000Z';
+  function starsFor(s) {
+    const when = s && s.at ? Date.parse(s.at) : NaN;
+    if (!s || s.kind !== 'test' || s.voided || !(when >= Date.parse(STARS_FROM))) return 0;
+    const t = tally(s);
+    if (t.n > 0 && t.right === t.n) return 5;
+    if (t.n > 0 && t.right * 10 >= t.n * 9) return 3;
+    return 1;
+  }
+  /* What a list has given her buddy so far is kept on the list as marks that are each written once and never changed:
+     star1 when its first star is given, star3 when it reaches 3, star5 when it reaches 5, and starsBack (the number
+     given) when a voided list gives them back. The copies of a month's lists on the iPad, in the progress folder and in
+     the master copy are merged field by field, and a copy that missed a later change keeps its older value of a field
+     it has; a mark that is only ever added can never be undone that way, so no list's stars are given twice. */
+  const STEPS = [[1, 'star1'], [3, 'star3'], [5, 'star5']];
+  const starsTop = (s) => STEPS.reduce((n, st) => (s && s[st[1]] ? st[0] : n), 0);
+  function starsGiven(s) { return s && s.starsBack != null ? 0 : starsTop(s); }
+  /* what to do for a list now: { add, patch } to give more, { take, patch } to give back a voided list's, or null.
+     A list's stars never go down but for a void, and a list that gave them back is closed for good. */
+  function starsMove(s) {
+    if (!s || s.kind !== 'test' || s.starsBack != null) return null;
+    const top = starsTop(s);
+    if (s.voided) return top ? { take: top, patch: { starsBack: top } } : null;
+    const due = starsFor(s);
+    if (due <= top) return null;
+    const patch = {};
+    STEPS.forEach((st) => { if (st[0] <= due && !s[st[1]]) patch[st[1]] = true; });
+    return { add: due - top, patch };
+  }
+  return { LISTS, BY, ready, sayText, norm, compare, revText, tally, status, starsFor, starsGiven, starsMove, STARS_FROM, MIRROR, INVERSIONS, inverted };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = Spelling;
 /* Small Steps: the book shelf. Picture books and early readers for each Kumon reading level,
@@ -5284,6 +5326,12 @@ const Buddy = (() => {
     { id: 'tank', slot: 'back', name: 'Air tank', price: 10 },
     { id: 'flippers', slot: 'feet', name: 'Flippers', price: 6 },
     { id: 'skis', slot: 'feet', name: 'Skis', price: 10 },
+    /* Andi's November 15 footwear: space boots to go with the astronaut helmet, flip flops for the beach, cowboy boots
+       for the cowboy hat and snow boots for the snow */
+    { id: 'spaceboots', slot: 'feet', name: 'Space boots', price: 10 },
+    { id: 'flipflops', slot: 'feet', name: 'Flip flops', price: 4 },
+    { id: 'cowboyboots', slot: 'feet', name: 'Cowboy boots', price: 8 },
+    { id: 'snowboots', slot: 'feet', name: 'Snow boots', price: 8 },
     { id: 'chick', slot: 'side', name: 'Little chick', price: 5 },
     { id: 'bee', slot: 'side', name: 'Bumblebee', price: 8 },
     { id: 'fishbowl', slot: 'side', name: 'Goldfish', price: 10 },
@@ -5360,7 +5408,11 @@ const Buddy = (() => {
     { id: 'cupcake', slot: 'treat', name: 'Cupcake', price: 2, use: true, grow: 2 },
     { id: 'pizza', slot: 'treat', name: 'Pizza', price: 3, use: true, grow: 3 },
     { id: 'cake', slot: 'treat', name: 'Birthday cake', price: 5, use: true, grow: 5 },
-    { id: 'cheesepuffs', slot: 'treat', name: 'Cheese puffs', price: 2, use: true, grow: 2 }
+    { id: 'cheesepuffs', slot: 'treat', name: 'Cheese puffs', price: 2, use: true, grow: 2 },
+    /* Andi's November 15 snacks, each drawn as a plain snack with no maker's name or markings on it */
+    { id: 'goldfish', slot: 'treat', name: 'Goldfish crackers', price: 2, use: true, grow: 2 },
+    { id: 'oreos', slot: 'treat', name: 'Oreos', price: 2, use: true, grow: 2 },
+    { id: 'popcorn', slot: 'treat', name: 'Popcorn', price: 2, use: true, grow: 2 }
   ];
   const ITEM = Object.fromEntries(ITEMS.map((i) => [i.id, i]));
 
@@ -5660,10 +5712,52 @@ const Buddy = (() => {
     return '<path d="M' + a + ' ' + t + ' H' + (b - 14) + ' Q' + (b - 3) + ' ' + t + ' ' + (b + 1) + ' ' + (t - 9) + ' L' + (b + 5) + ' ' + (t - 8) + ' Q' + (b + 1) + ' ' + (t + 4.5) + ' ' + (b - 14) + ' ' + (t + 4.5) + ' H' + a + ' Q' + (a - 3) + ' ' + (t + 2.2) + ' ' + a + ' ' + t + ' Z" fill="' + q[2] + '" stroke="#1D4FB8" stroke-width="1.2"/>' +
       '<path d="M' + (a + 6) + ' ' + (t + 2.2) + ' H' + (b - 16) + '" stroke="#FFFFFF" stroke-width="1.4" stroke-linecap="round"/>';
   }).join('') + feet.map((f) => '<rect x="' + (f - 10) + '" y="' + (y - 5) + '" width="20" height="6" rx="2" fill="#3A3550"/><rect x="' + (f + 6) + '" y="' + (y - 7) + '" width="6" height="4" rx="1.5" fill="#E8453C"/>').join('');
+  /* Andi's November 15 footwear, seen from the front on each foot (x, y as for the flippers): a boot's shaft round the
+     leg, its toe and its sole; the flip flops are a sole under the foot and a strap over it. */
+  const SHOE = {
+    spaceboots: '<rect x="-9" y="-13" width="18" height="15" rx="5" fill="#F4F6FB" stroke="#B8C0D4" stroke-width="1.2"/>' +
+      '<path d="M-12.5 9 Q-13 -1.5 -6 -1.5 H6 Q13 -1.5 12.5 9 Z" fill="#F4F6FB" stroke="#B8C0D4" stroke-width="1.2"/>' +
+      '<rect x="-10" y="-15" width="20" height="5" rx="2.5" fill="#3D7BEA"/><rect x="-13.5" y="7.5" width="27" height="4.5" rx="2.2" fill="#8A93A8"/>' +
+      '<circle cx="0" cy="3.2" r="2.6" fill="#4FE3FF"/><circle cx="-0.8" cy="2.4" r="0.9" fill="#FFFFFF"/>',
+    cowboyboots: '<path d="M-9 -15 Q-4.5 -12 0 -15.5 Q4.5 -12 9 -15 V2 H-9 Z" fill="#A3652F"/>' +
+      '<path d="M-5.5 -9.5 Q0 -4.5 5.5 -9.5 M-4.5 -5.5 Q0 -1.5 4.5 -5.5" stroke="#F2C98A" stroke-width="1.1" fill="none" stroke-linecap="round"/>' +
+      '<path d="M-11 9 Q-11 -0.5 -4.5 -1 H4.5 Q11 -0.5 11 9 Z" fill="#A3652F"/><path d="M-4 3 Q0 0.5 4 3" stroke="#7A4A20" stroke-width="1" fill="none" stroke-linecap="round"/>' +
+      '<rect x="-12" y="7.5" width="24" height="4.5" rx="1.5" fill="#5A3A1C"/>',
+    snowboots: '<rect x="-10" y="-11" width="20" height="13" rx="5" fill="#7B61FF"/>' +
+      '<path d="M-4 -6.5 L4 -3.5 M4 -6.5 L-4 -3.5 M-4 -1.5 L4 1.5 M4 -1.5 L-4 1.5" stroke="#FFFFFF" stroke-width="1.3" stroke-linecap="round"/>' +
+      '<path d="M-13 8.5 Q-13.5 -1.5 -6 -1.5 H6 Q13.5 -1.5 13 8.5 Z" fill="#5A43D6"/>' +
+      [-9, -4.5, 0, 4.5, 9].map((x) => '<circle cx="' + x + '" cy="-12" r="3.8" fill="#FFFFFF" stroke="#E3E6F5" stroke-width="0.8"/>').join('') +
+      '<rect x="-14" y="7" width="28" height="5.5" rx="2.5" fill="#3A3550"/><path d="M-9.5 12.5 v-2 M-4.75 12.5 v-2 M0 12.5 v-2 M4.75 12.5 v-2 M9.5 12.5 v-2" stroke="#6B6885" stroke-width="1.4"/>',
+    flipflops: '<ellipse cx="0" cy="8.5" rx="13.5" ry="3.4" fill="#FF6FAE" stroke="#E0458C" stroke-width="1"/>' +
+      '<path d="M-9.5 5.5 Q-5 -1.5 0 6 Q5 -1.5 9.5 5.5" fill="none" stroke="#FFC531" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<g transform="translate(0 5.6)">' + [0, 72, 144, 216, 288].map((a) => '<circle cx="0" cy="-2" r="1.7" fill="#FFFFFF" transform="rotate(' + a + ')"/>').join('') + '<circle r="1.3" fill="#FFC531"/></g>'
+  };
+  const shoes = (id) => (type) => (FOOT[type] || FOOT.ladybug).map((f) => at(f, SHOE[id])).join('');
   const FEET = {
     flippers: (type) => (FOOT[type] || FOOT.ladybug).map((f, i) => flipper(f[0], f[1], i ? -1 : 1)).join(''),
-    skis: (type) => { const k = SKI[type] || SKI.ladybug; return skiPair(k[0], k[1], k[2], (FOOT[type] || FOOT.ladybug).map((f) => f[0])); }
+    skis: (type) => { const k = SKI[type] || SKI.ladybug; return skiPair(k[0], k[1], k[2], (FOOT[type] || FOOT.ladybug).map((f) => f[0])); },
+    spaceboots: shoes('spaceboots'), flipflops: shoes('flipflops'), cowboyboots: shoes('cowboyboots'), snowboots: shoes('snowboots')
   };
+  /* The same four for the shop, from the side, toes to the right (the flip flops from above): a pair, the one behind
+     a little darker. */
+  const SHOE_SIDE = {
+    spaceboots: '<path d="M-11 -19 Q-11 -22 -8 -22 H4 Q7 -22 7 -19 V-3 Q7 -1 9 -1 H15 Q23 -1 23 6 V8 H-11 Z" fill="#F4F6FB" stroke="#B8C0D4" stroke-width="1.2"/>' +
+      '<rect x="-12.5" y="-24" width="21" height="6" rx="3" fill="#3D7BEA"/><path d="M-11 -6 H7" stroke="#B8C0D4" stroke-width="1.2"/>' +
+      '<rect x="-12.5" y="7" width="37" height="5" rx="2.5" fill="#8A93A8"/><circle cx="15" cy="3.5" r="2.6" fill="#4FE3FF"/><circle cx="14.2" cy="2.7" r="0.9" fill="#FFFFFF"/>',
+    cowboyboots: '<path d="M-10 -24 Q-6 -21 -2 -24 L6 -24 Q4 -19 6 -14 L7 -5 Q10 -2 16 -1 Q25 1 28 6 L28 7 H-10 Z" fill="#A3652F"/>' +
+      '<path d="M-7 -24 Q-4.5 -29 -2 -24" stroke="#7A4A20" stroke-width="1.8" fill="none"/>' +
+      '<path d="M-7 -18 Q-1 -15 3 -9 M-8 -11 Q-2 -8 1 -2" stroke="#F2C98A" stroke-width="1.2" fill="none" stroke-linecap="round"/>' +
+      '<path d="M-10 7 H-2 L-3 13 H-10 Z" fill="#5A3A1C"/><path d="M-2 7 H28 Q27.5 9.5 24 9.5 H-2 Z" fill="#5A3A1C"/>',
+    snowboots: '<path d="M-11 -16 H7 V-3 Q18 -4 23 3 Q24.5 6 23.5 8 H-11 Z" fill="#7B61FF"/><path d="M8 -2.5 Q18 -3.5 23 3 Q24.5 6 23.5 8 H9 Z" fill="#5A43D6"/>' +
+      '<path d="M2 -12 L7 -10 M2 -8 L7 -6 M2 -4 L7 -2" stroke="#FFFFFF" stroke-width="1.4" stroke-linecap="round"/>' +
+      [-10.5, -6, -1.5, 3, 7.5].map((x) => '<circle cx="' + x + '" cy="-17" r="4.2" fill="#FFFFFF" stroke="#E3E6F5" stroke-width="0.8"/>').join('') +
+      '<rect x="-12.5" y="7" width="37.5" height="6" rx="2.5" fill="#3A3550"/><path d="M-8 13 v-2 M-2 13 v-2 M4 13 v-2 M10 13 v-2 M16 13 v-2 M22 13 v-2" stroke="#6B6885" stroke-width="1.4"/>',
+    flipflops: '<path d="M0 -23 C8 -23 10 -10 9 -1 C8 9 7 20 0 21 C-7 20 -8 9 -9 -1 C-10 -10 -8 -23 0 -23 Z" fill="#FF6FAE" stroke="#E0458C" stroke-width="1.2"/>' +
+      '<path d="M0 -20 C6 -20 7 -10 6.5 -2 C6 8 5 17 0 18 C-5 17 -6 8 -6.5 -2 C-7 -10 -6 -20 0 -20 Z" fill="#FFB3D4"/>' +
+      '<path d="M0 -13 Q-6 -8 -8.5 1 M0 -13 Q6 -8 8.5 1" stroke="#FFC531" stroke-width="3.2" fill="none" stroke-linecap="round"/>' +
+      '<g transform="translate(0 -13.5)">' + [0, 72, 144, 216, 288].map((a) => '<circle cx="0" cy="-2.2" r="1.9" fill="#FFFFFF" transform="rotate(' + a + ')"/>').join('') + '<circle r="1.4" fill="#FFC531"/></g>'
+  };
+
   const SIDE = {
     chick: '<ellipse class="i-yellow" cx="0" cy="0" rx="16" ry="14"/><circle class="i-yellow" cx="-6" cy="-16" r="10"/><circle class="b-pupil" cx="-9" cy="-18" r="2"/><path class="i-orange" d="M-17 -16 L-24 -13 L-16 -11 Z"/><path class="i-legs" d="M-6 13 l0 6 M4 13 l0 6"/>',
     bee: '<ellipse class="i-wing" cx="-4" cy="-16" rx="9" ry="7"/><ellipse class="i-wing" cx="8" cy="-16" rx="9" ry="7"/><ellipse class="i-yellow" cx="0" cy="0" rx="18" ry="13"/><path class="i-band" d="M-6 -12 L-6 12 M4 -13 L4 13"/><circle class="b-pupil" cx="-11" cy="-3" r="2.4"/><path class="b-mouth" d="M-14 4 Q-11 7 -8 4"/>',
@@ -5796,6 +5890,21 @@ const Buddy = (() => {
       '<path d="M-20 -14 Q-24 6 -20 26" stroke="#fff" stroke-opacity=".3" stroke-width="4" fill="none" stroke-linecap="round"/>' +
       '<path d="M0 -10 L4 -3 L12 -6 L9 2 L17 5 L9 9 L12 17 L4 14 L0 21 L-4 14 L-12 17 L-9 9 L-17 5 L-9 2 L-12 -6 L-4 -3 Z" fill="#FFD43B"/><path d="M-8 9 L9 1 L9 11 Z" fill="#FFB020" stroke="#E08A00" stroke-width="1"/><circle cx="2" cy="7" r="1.6" fill="#E08A00"/><circle cx="6" cy="5" r="1.1" fill="#E08A00"/></g>' +
       '<rect x="22" y="28" width="9" height="20" rx="4.5" fill="#FF9E2C" stroke="#E8781A" stroke-width="1.4" transform="rotate(64 26.5 38)"/>',
+    /* Andi's November 15 snacks, plain: orange fish-shaped crackers heaped in a bowl, two chocolate sandwich cookies
+       with a third leaning on them, and a striped box of popcorn */
+    goldfish: '<ellipse cx="0" cy="-2" rx="36" ry="7" fill="#2F86C6"/>' +
+      [[-22, -2, -18], [22, -1, 200], [-10, -6, 12], [9, -7, 168], [-18, -11, 30], [17, -12, 150], [0, -14, -6], [-8, -21, 190], [8, -20, 20], [0, -27, 172]].map((q) => '<g transform="translate(' + q[0] + ' ' + q[1] + ') rotate(' + q[2] + ')"><path d="M5.5 0 L13 -5 Q11.5 0 13 5 Z" fill="#FF9E2C" stroke="#D9741A" stroke-width="1" stroke-linejoin="round"/><ellipse rx="8.5" ry="4.8" fill="#FF9E2C" stroke="#D9741A" stroke-width="1"/><circle cx="-4.6" cy="-1.2" r="0.95" fill="#8A4A10"/></g>').join('') +
+      '<path d="M-36 -2 Q-34 30 0 32 Q34 30 36 -2 A36 7 0 0 1 -36 -2 Z" fill="#4FA8E8"/><path d="M36 -2 A36 7 0 0 1 -36 -2" fill="none" stroke="#8CCBF5" stroke-width="2"/>' +
+      '<path d="M-26 9 Q-24 21 -12 26" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+      [[27, 37, -20]].map((q) => '<g transform="translate(' + q[0] + ' ' + q[1] + ') rotate(' + q[2] + ')"><path d="M5.5 0 L13 -5 Q11.5 0 13 5 Z" fill="#FF9E2C" stroke="#D9741A" stroke-width="1" stroke-linejoin="round"/><ellipse rx="8.5" ry="4.8" fill="#FF9E2C" stroke="#D9741A" stroke-width="1"/><circle cx="-4.6" cy="-1.2" r="0.95" fill="#8A4A10"/></g>').join(''),
+    oreos: '<g transform="translate(9 -18) rotate(24)"><circle r="21" fill="#3B2418"/><circle r="16.5" fill="none" stroke="#2A170E" stroke-width="2"/>' +
+      [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((a) => '<circle cx="0" cy="-12" r="1.4" fill="#4A2E1E" transform="rotate(' + a + ')"/>').join('') + '<circle r="21" fill="none" stroke="#2A170E" stroke-width="1.5" stroke-dasharray="2.4 2.4"/></g>' +
+      [[0, 22], [0, 6]].map((q) => '<g transform="translate(' + q[0] + ' ' + q[1] + ')"><rect x="-30" y="0" width="60" height="7" rx="3.5" fill="#3B2418"/><rect x="-28" y="6" width="56" height="5" fill="#FFF8EC"/><rect x="-30" y="10" width="60" height="7" rx="3.5" fill="#3B2418"/>' +
+        '<path d="M-26 3.5 H26 M-26 13.5 H26" stroke="#2A170E" stroke-width="1.2" stroke-dasharray="2.4 2.4"/></g>').join(''),
+    popcorn: [[-18, -14], [-8, -20], [4, -22], [16, -16], [-12, -28], [2, -32], [12, -28], [-2, -40], [-20, -6], [20, -6], [-6, -10], [8, -10]].map((q, i) =>
+      '<g transform="translate(' + q[0] + ' ' + q[1] + ') rotate(' + (i * 47) + ')"><circle cx="-3" cy="0" r="5" fill="#FFF6DC" stroke="#F0D9A0" stroke-width="1"/><circle cx="3" cy="-1.5" r="4.6" fill="#FFF6DC" stroke="#F0D9A0" stroke-width="1"/><circle cx="0" cy="3.5" r="4.2" fill="#FFF6DC" stroke="#F0D9A0" stroke-width="1"/><circle cx="0.5" cy="0.6" r="1.6" fill="#FFD43B"/></g>').join('') +
+      '<path d="M-25 -4 L25 -4 L18 40 L-18 40 Z" fill="#FFFFFF"/><path d="M-25 -4 L-15 -4 L-11 40 L-18 40 Z M-5 -4 L5 -4 L3.6 40 L-3.6 40 Z M15 -4 L25 -4 L18 40 L11 40 Z" fill="#E8453C"/>' +
+      '<rect x="-27" y="-8" width="54" height="6" rx="2.5" fill="#E8453C" stroke="#B42E27" stroke-width="1"/><path d="M-25 -4 L25 -4 L18 40 L-18 40 Z" fill="none" stroke="#C7C2D6" stroke-width="1"/>',
     ants: '<path d="M-46 30 H46" stroke="#9BA4BA" stroke-width="3" stroke-linecap="round"/>' + [-29, 0, 29].map((x, i) => '<g transform="translate(' + x + ' ' + (i === 1 ? 12 : 16) + ')"><path d="M-9 2 L-13 13 M-3 3 L-3 14 M3 2 L7 13" stroke="#3A2418" stroke-width="2" stroke-linecap="round" fill="none"/><ellipse cx="-9" cy="0" rx="7" ry="5.5" fill="#3A2418"/><circle cx="-1" cy="-1" r="3.6" fill="#3A2418"/><circle cx="6" cy="-3.5" r="4.6" fill="#3A2418"/><path d="M8 -7 Q11 -13 15 -13 M6 -8 Q7 -15 11 -17" stroke="#3A2418" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="8" cy="-4.5" r="1.3" fill="#fff"/></g>').join(''),
     apple: '<circle cx="-9" cy="6" r="24" fill="#E8453C"/><circle cx="9" cy="6" r="24" fill="#E8453C"/><ellipse cx="-14" cy="-6" rx="7" ry="4" fill="#fff" opacity=".45"/><path d="M0 -16 C2 -26 6 -30 10 -32" stroke="#6B4423" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M4 -24 C16 -36 28 -26 22 -20 C14 -16 8 -18 4 -24 Z" fill="#34D27B"/>',
     cookie: '<circle r="34" fill="#D9A066"/><circle r="30" fill="#E6B479"/><circle cx="-12" cy="-10" r="5" fill="#5A3A22"/><circle cx="10" cy="-14" r="4.5" fill="#5A3A22"/><circle cx="14" cy="8" r="5" fill="#5A3A22"/><circle cx="-8" cy="12" r="4.5" fill="#5A3A22"/><circle cx="2" cy="-1" r="3.5" fill="#5A3A22"/>',
@@ -5946,6 +6055,13 @@ const Buddy = (() => {
     else if (it.slot === 'back') { inner = BACK[id]; vb = '-75 -45 150 115'; }
     else if (id === 'flippers') { inner = flipper(-16, 0, 1) + flipper(16, 0, -1); vb = '-38 -12 76 30'; }
     else if (id === 'skis') { inner = '<g transform="rotate(-28)">' + skiPair(-58, 58, 0, [-18, 18]) + '</g>'; vb = '-66 -48 132 96'; }
+    else if (id === 'flipflops') { inner = '<g transform="translate(-11 2) rotate(-10)">' + SHOE_SIDE.flipflops + '</g><g transform="translate(11 -2) rotate(10)">' + SHOE_SIDE.flipflops + '</g>'; vb = '-26 -28 52 54'; }
+    else if (SHOE_SIDE[id]) {
+      const fid = 'sd' + (++clipN);
+      inner = '<defs><filter id="' + fid + '"><feColorMatrix type="matrix" values=".72 0 0 0 0 0 .72 0 0 0 0 0 .78 0 0 0 0 0 1 0"/></filter></defs>' +
+        '<g transform="translate(-10 -5)" filter="url(#' + fid + ')">' + SHOE_SIDE[id] + '</g><g transform="translate(4 3)">' + SHOE_SIDE[id] + '</g>';
+      vb = '-26 -33 60 52';
+    }
     else if (it.slot === 'side') { inner = SIDE[id]; vb = '-32 -34 64 60'; }
     else { inner = BG[id]; vb = '0 0 200 220'; }
     vb = ITEM_VB[id] || vb;
@@ -7129,8 +7245,114 @@ const Buddy3D = (() => {
         g.add(s);
       });
       return g;
-    }
+    },
+    /* Andi's November 15 footwear (bootPair and bootBody below): white space boots with a blue stripe round them, a
+       grey sole, a light on the toe and, where there is a leg, a blue cuff; cowboy boots in the cowboy hat's brown with
+       a pointed toe, a heel, stitching on the toe and, up the leg, a gold star and pull straps; puffy purple snow boots
+       with a white fur trim, a dark rubber band, laces and a thick dark sole; and flip flops, a pink sole under each foot
+       with a yellow strap over it and a little white flower where the strap meets. A buddy with no legs to speak of
+       (the dragon, the ladybug) shows the shoe; the robot and the slug show the boot's shaft too. */
+    spaceboots: (type) => bootPair(type, (b, y, s) => {
+      const white = mat.gloss('#F4F6FB', { roughness: 0.3 }), blue = mat.gloss(C.blue, { roughness: 0.25 }), grey = mat.satin('#8A93A8', { roughness: 0.6 });
+      const o = bootBody(b, s, type, { upper: white, sole: grey, soleH: 0.06, shaftH: 0.17, low: 0.3, long: 0.16, puffy: 1.06 });
+      b.add(shoeBand(o.S, 0.3, 0.035, 0.026, blue), shoeBand(o.S, -0.12, 0.03, 0.016, mat.metal('#B8C0D4', { roughness: 0.3 })));
+      const L = o.S(0, 0.0, 1.04);
+      b.add(M(sph(0.034, 16, 12), mat.glow(C.cyan), L));
+      const halo = new T.Sprite(new T.SpriteMaterial({ map: softGlow(), color: lin(C.cyan), transparent: true, opacity: 0.75, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false }));
+      halo.scale.setScalar(0.16); halo.position.set(L[0], L[1], L[2] + 0.01); b.add(halo);
+      [-1, 1].forEach((k) => b.add(M(sph(0.016, 10, 8), mat.glow(k < 0 ? '#FF4D4D' : '#34D27B'), o.S(k * 1.02, 0.3, 0.1))));
+      if (o.shaft) b.add(M(new T.TorusGeometry(o.r * 1.04, 0.03, 12, 40), blue, [0, o.top, o.cz], [Math.PI / 2, 0, 0]));
+    }),
+    cowboyboots: (type) => bootPair(type, (b, y, s) => {
+      const leather = mat.satin(C.brown, { roughness: 0.62 }), sole = mat.satin('#5A3A1C', { roughness: 0.7 }), stitch = mat.satin('#F2C98A', { roughness: 0.6 });
+      const o = bootBody(b, s, type, { upper: leather, sole, soleH: 0.03, shaftH: 0.24, flare: 1.14, low: 0.46, long: 0.4, point: 0.62 });
+      b.add(M(rbox(s[0] * 1.3, 0.075, s[2] * 0.5, 0.016, 4), sole, [0, 0.0375, o.cz - s[2] * 0.62]));
+      [[0.62, 0.95], [0.4, 0.7]].forEach((q) => {
+        const pts = [];
+        for (let k = 0; k <= 10; k++) { const a = -q[1] + (2 * q[1] * k) / 10, c = Math.sqrt(1 - q[0] * q[0]) * 1.03; pts.push(o.S(Math.sin(a) * c, q[0] + 0.12 * Math.cos((a / q[1]) * Math.PI / 2), Math.cos(a) * c)); }
+        b.add(M(tube(pts, 0.007, 24, 6), stitch));
+      });
+      if (o.shaft) {
+        [-1, 1].forEach((k) => b.add(M(new T.TorusGeometry(0.03, 0.01, 8, 16, Math.PI), mat.satin('#7A4A20'), [k * o.r * 1.05, o.top, o.cz], [0, Math.PI / 2, 0])));
+        b.add(M(extrude(starShape(0.04, 0.018), 0.012, 0.005), mat.metal(C.gold, { roughness: 0.25 }), [0, (o.top + o.ankle) / 2, o.cz + o.r * 1.07 + 0.006]));
+      }
+    }),
+    snowboots: (type) => bootPair(type, (b, y, s) => {
+      const puff = mat.vinyl('#7B61FF', { roughness: 0.5, clearcoat: 0.3 }), rubber = mat.vinyl('#4B37B8', { roughness: 0.45 }), tread = mat.satin('#3A3550', { roughness: 0.8 });
+      const fur = mat.satin('#FFFFFF', { roughness: 0.95 }), lace = mat.satin('#FFFFFF', { roughness: 0.6 });
+      const o = bootBody(b, s, type, { upper: puff, sole: tread, soleH: 0.06, shaftH: 0.12, puffy: 1.08, low: 0.3, long: 0.12 });
+      b.add(shoeBand(o.S, -0.28, 0.04, 0.03, rubber));
+      const furAt = o.shaft ? null : 0.62;
+      if (furAt != null) {
+        b.add(shoeBand(o.S, furAt, 0.06, 0.04, fur));
+        for (let k = 0; k < 16; k++) { const a = (k / 16) * Math.PI * 2, c = Math.sqrt(1 - furAt * furAt) * 1.1; b.add(M(sph(0.036, 12, 10), fur, o.S(Math.sin(a) * c, furAt + 0.05 * (k % 2), Math.cos(a) * c))); }
+      }
+      [0.2, 0.42, 0.62].forEach((z) => {
+        const yy = (x) => Math.sqrt(Math.max(0, 1 - x * x - z * z)) * 1.04;
+        b.add(M(tube([-0.32, 0, 0.32].map((x) => o.S(x, yy(x), z)), 0.009, 10, 6), lace));
+      });
+      if (o.shaft) {
+        b.add(M(new T.TorusGeometry(o.r * 1.12, 0.045, 12, 40), fur, [0, o.top, o.cz], [Math.PI / 2, 0, 0]));
+        for (let k = 0; k < 10; k++) { const a = (k / 10) * Math.PI * 2; b.add(M(sph(0.04, 12, 10), fur, [Math.sin(a) * o.r * 1.12, o.top + 0.01 * (k % 2), o.cz + Math.cos(a) * o.r * 1.12])); }
+      }
+    }),
+    flipflops: (type) => bootPair(type, (b, y, s) => {
+      const pink = mat.vinyl('#FF6FAE', { roughness: 0.45 }), bed = mat.vinyl('#FFB3D4', { roughness: 0.55 }), strap = mat.vinyl(C.gold, { roughness: 0.35 });
+      const sole = new T.Shape(), wx = s[0] * 1.08, lz = s[2] * 1.22;
+      sole.moveTo(0, -lz); sole.bezierCurveTo(wx * 0.9, -lz, wx, -lz * 0.3, wx * 0.95, 0); sole.bezierCurveTo(wx * 1.05, lz * 0.5, wx * 0.9, lz, 0, lz);
+      sole.bezierCurveTo(-wx * 0.9, lz, -wx * 1.05, lz * 0.5, -wx * 0.95, 0); sole.bezierCurveTo(-wx, -lz * 0.3, -wx * 0.9, -lz, 0, -lz);
+      const ex = (d, k) => { const geo = new T.ExtrudeGeometry(sole, { depth: d, bevelEnabled: true, bevelThickness: 0.004, bevelSize: 0.004, bevelSegments: 2, curveSegments: 16 }); geo.rotateX(Math.PI / 2); geo.scale(k, 1, k); return geo; };
+      b.add(M(ex(0.026, 1), pink, [0, 0.03, s[2] * 0.08]));
+      b.add(M(ex(0.006, 0.9), bed, [0, 0.036, s[2] * 0.08]));
+      const post = [0, y + s[1] * 0.62, s[2] * 0.86];
+      [-1, 1].forEach((k) => b.add(M(tube([post, [k * s[0] * 0.6, y + s[1] * 0.95, s[2] * 0.1], [k * s[0] * 1.02, y + s[1] * 0.25, -s[2] * 0.1], [k * s[0] * 0.98, 0.04, -s[2] * 0.15]], 0.017, 24, 8), strap)));
+      const fl = G(post, [-0.5, 0, 0]);
+      for (let k = 0; k < 5; k++) { const a = (k / 5) * Math.PI * 2; fl.add(M(sph(0.018, 10, 8), mat.satin('#FFFFFF', { roughness: 0.5 }), [Math.sin(a) * 0.022, Math.cos(a) * 0.022, 0.006])); }
+      fl.add(M(sph(0.014, 10, 8), strap, [0, 0, 0.012]));
+      b.add(fl);
+    })
   };
+  /* A pair of shoes: one for each foot of FOOT3 (the slug's under the front of its long foot, as its flippers), toes
+     forward (+z), a little toed out. make(b, y, size) builds one on the ground at the foot, y the foot's center. */
+  function bootPair(type, make) {
+    const F = FOOT3[type] || FOOT3.ladybug, g = new T.Group();
+    F.at.forEach((p, i) => { const b = G([p[0], 0, p[2]], [0, (i ? 1 : -1) * 0.1, 0]); make(b, p[1], F.size); g.add(b); });
+    return g;
+  }
+  /* A shoe's upper: a unit sphere shaped like a shoe, its toe lower (low) and longer (long) than its heel, and for a
+     cowboy boot narrowed to a point (point), then sized (sx, sy, sz) and placed (cy, cz). S(x, y, z) takes a point of
+     the unit sphere to the same point of the shoe, so trims can follow it. */
+  function shoeShape(o) {
+    const a = o.low || 0.35, e = o.long || 0.15, p = o.point || 0;
+    const S = (x, y, z) => { const f = Math.max(0, z); return [x * (1 - p * f * f) * o.sx, (y >= 0 ? y * (1 - a * f) : y) * o.sy + o.cy, (z >= 0 ? z * (1 + e) : z) * o.sz + o.cz]; };
+    const geo = sph(1, 44, 30), q = geo.attributes.position;
+    for (let i = 0; i < q.count; i++) { const v = S(q.getX(i), q.getY(i), q.getZ(i)); q.setXYZ(i, v[0], v[1], v[2]); }
+    geo.computeVertexNormals();
+    return { geo, S };
+  }
+  /* A closed band round a shoe at the height y0 of its unit sphere, set out from it a little (lift). */
+  function shoeBand(S, y0, lift, r, m) {
+    const c = Math.sqrt(1 - y0 * y0) * (1 + lift), pts = [];
+    for (let k = 0; k < 56; k++) { const t = (k / 56) * Math.PI * 2; pts.push(V(...S(Math.sin(t) * c, y0, Math.cos(t) * c))); }
+    return M(new T.TubeGeometry(new T.CatmullRomCurve3(pts, true), 112, r, 8, true), m);
+  }
+  /* A boot over a foot of half size s: the shoe, a sole cut to the shoe's outline, and on a buddy whose legs show (the
+     robot, the slug) a shaft up the leg, wider at the top with flare. Returns where its parts are, for the trims. */
+  const BOOT_TOP = { robot: 0.33 };
+  function bootBody(b, s, type, o) {
+    const pf = o.puffy || 1, sx = s[0] * 1.04 * pf, sy = s[1] * 1.28 * pf, sz = s[2] * 1.02, soleH = o.soleH, cy = soleH + sy * 0.42, cz = s[2] * 0.02;
+    const shoe = shoeShape({ sx, sy, sz, cy, cz, low: o.low, long: o.long, point: o.point }), S = shoe.S;
+    b.add(M(shoe.geo, o.upper));
+    const outline = new T.Shape(), y0 = -0.42, c = Math.sqrt(1 - y0 * y0) * 1.07;
+    for (let k = 0; k <= 48; k++) { const t = (k / 48) * Math.PI * 2, v = S(Math.sin(t) * c, y0, Math.cos(t) * c); if (k) outline.lineTo(v[0], v[2]); else outline.moveTo(v[0], v[2]); }
+    const sg = new T.ExtrudeGeometry(outline, { depth: soleH * 0.8, bevelEnabled: true, bevelThickness: soleH * 0.1, bevelSize: soleH * 0.12, bevelSegments: 2, curveSegments: 4 });
+    sg.rotateX(Math.PI / 2);
+    b.add(M(sg, o.sole, [0, soleH * 0.9, 0]));
+    const r = Math.min(s[0], s[2]) * 0.8 * pf, ankle = cy + sy * 0.6, shaft = type === 'robot' || type === 'slug';
+    const top = Math.min(BOOT_TOP[type] || 9, cy + sy + o.shaftH), czs = cz - sz * 0.22;
+    if (shaft) b.add(M(new T.CylinderGeometry(r * (o.flare || 1), r, top - ankle, 36, 1, false), o.upper, [0, (top + ankle) / 2, czs]));
+    return { S, r, cz: czs, top, ankle, soleH, shaft };
+  }
   function cape(A) {
     const top = A.neck[1] + 0.02, bottom = 0.06, h = top - bottom;
     const geo = new T.CylinderGeometry(A.cape[0] * 0.4, A.cape[0] * 0.72, h, 40, 10, true, Math.PI / 2 + 0.25, Math.PI - 0.5);
@@ -7554,6 +7776,63 @@ const Buddy3D = (() => {
       };
       [[[-0.07, 0.1, 0.0], [0, 0, 0.35], 0.15], [[-0.015, 0.11, 0.012], [0.1, 0, 0.05], 0.17], [[0.05, 0.1, -0.008], [-0.05, 0, -0.32], 0.15], [[0.015, 0.09, 0.025], [0.25, 0, -0.12], 0.13]].forEach((q) => g.add(puff(q[0], q[1], q[2])));
       g.add(puff([0.1, -0.2, 0.09], [0, 0.4, -1.45], 0.14));
+      return g;
+    },
+    /* Andi's November 15 snacks, each a plain snack with no maker's name or markings: a blue bowl heaped with little
+       orange fish-shaped crackers (one has jumped out), two chocolate sandwich cookies with a third leaning on them, and
+       a red and white striped box of popcorn. */
+    goldfish: () => {
+      const g = G(null, [0.1, 0, 0]), rnd = seeded(23), cracker = mat.satin('#FF9E2C', { roughness: 0.72 }), eye = mat.satin('#8A4A10', { roughness: 0.6 });
+      g.add(bowl(0.2, '#4FA8E8'));
+      g.add(M(sph(0.17, 32, 16), mat.satin('#F08A1E', { roughness: 0.85 }), [0, -0.02, 0], null, [1, 0.42, 1]));
+      const tailShape = new T.Shape(); tailShape.moveTo(0, 0); tailShape.lineTo(0.034, 0.024); tailShape.quadraticCurveTo(0.028, 0, 0.034, -0.024); tailShape.closePath();
+      const fish = (p, ry, rz) => {
+        const f = G(p, [0, ry, rz]);
+        f.add(M(sph(1, 18, 12), cracker, null, null, [0.042, 0.024, 0.014]));
+        f.add(M(extrude(tailShape, 0.01, 0.004), cracker, [0.045, 0, 0]));
+        [-1, 1].forEach((k) => f.add(M(sph(0.0045, 8, 6), eye, [-0.024, 0.006, k * 0.0125])));
+        return f;
+      };
+      for (let i = 0; i < 26; i++) {
+        const a = rnd() * Math.PI * 2, rr = Math.sqrt(rnd()) * 0.15, y = 0.055 * Math.sqrt(Math.max(0, 1 - (rr / 0.17) ** 2)) + 0.005 + rnd() * 0.02;
+        g.add(fish([Math.cos(a) * rr, y, Math.sin(a) * rr], rnd() * Math.PI * 2, (rnd() - 0.5) * 0.9));
+      }
+      g.add(fish([0.17, -0.105, 0.17], 0.6, 0.1));
+      return g;
+    },
+    oreos: () => {
+      const g = G(null, [0.05, 0, 0]), choc = mat.satin('#3B2418', { roughness: 0.78 }), cream = mat.satin('#FFF8EC', { roughness: 0.55 });
+      /* a chocolate wafer with a crimped edge and a plain raised ring on its face */
+      const wafer = () => {
+        const geo = new T.CylinderGeometry(0.12, 0.12, 0.032, 72, 1), q = geo.attributes.position;
+        for (let i = 0; i < q.count; i++) { const x = q.getX(i), z = q.getZ(i), r = Math.hypot(x, z); if (r > 0.05) { const k = 1 + 0.035 * Math.cos(Math.atan2(z, x) * 30); q.setX(i, x * k); q.setZ(i, z * k); } }
+        geo.computeVertexNormals();
+        const w = G(); w.add(M(geo, choc));
+        [-1, 1].forEach((s) => w.add(M(new T.TorusGeometry(0.075, 0.006, 8, 48), mat.satin('#2E1A10', { roughness: 0.8 }), [0, s * 0.016, 0], [Math.PI / 2, 0, 0])));
+        return w;
+      };
+      const sandwich = (p, r) => { const c = G(p, r); c.add(G([0, -0.027, 0], null, null, wafer()), M(new T.CylinderGeometry(0.108, 0.108, 0.022, 48), cream), G([0, 0.027, 0], null, null, wafer())); return c; };
+      g.add(sandwich([0, -0.12, 0]), sandwich([0.012, -0.034, 0.004], [0, 0.4, 0]));
+      g.add(sandwich([0.02, 0.1, -0.1], [-1.15, 0.2, 0.08]));
+      return g;
+    },
+    popcorn: () => {
+      const g = G(null, [0.08, 0, 0]), rnd = seeded(31);
+      g.add(M(new T.CylinderGeometry(0.15, 0.11, 0.3, 40, 1, true), mat.satin('#FFFFFF', { map: rep(bands('popbox', '#FFFFFF', '#E8453C', 6, true), 1, 1), roughness: 0.55, side: T.DoubleSide }), [0, -0.08, 0]));
+      g.add(M(new T.CircleGeometry(0.11, 40), mat.satin('#E8453C'), [0, -0.229, 0], [Math.PI / 2, 0, 0]));
+      g.add(M(new T.TorusGeometry(0.15, 0.012, 10, 48), mat.gloss('#E8453C', { roughness: 0.3 }), [0, 0.07, 0], [Math.PI / 2, 0, 0]));
+      const fluff = mat.satin('#FFF6DC', { roughness: 0.75 }), hull = mat.satin('#F2C14E', { roughness: 0.6 });
+      const kernel = (p) => {
+        const k = G(p, [rnd() * 6, rnd() * 6, rnd() * 6]);
+        [[0, 0, 0, 0.026], [0.02, 0.008, 0.004, 0.021], [-0.012, 0.016, 0.012, 0.019], [0.004, -0.014, 0.018, 0.018]].forEach((q) => k.add(M(sph(q[3], 12, 10), fluff, [q[0], q[1], q[2]])));
+        k.add(M(sph(0.009, 8, 6), hull, [-0.006, -0.01, -0.016]));
+        return k;
+      };
+      for (let i = 0; i < 34; i++) {
+        const a = rnd() * Math.PI * 2, rr = Math.sqrt(rnd()) * 0.14, y = 0.06 + 0.09 * Math.sqrt(Math.max(0, 1 - (rr / 0.15) ** 2)) * (0.6 + 0.4 * rnd());
+        g.add(kernel([Math.cos(a) * rr, y, Math.sin(a) * rr]));
+      }
+      g.add(kernel([0.13, -0.21, 0.13]));
       return g;
     }
   };
@@ -9282,7 +9561,11 @@ const Buddy3D = (() => {
     else if (it.slot === 'eyes') obj = EYES[id](0.21);
     else if (it.slot === 'neck') obj = NECK[id](0.28);
     else if (it.slot === 'back') { obj = id === 'cape' ? cape(ANCHOR.ladybug) : BACK[id](true); turn = id === 'balloons' ? 0.3 : id === 'tank' ? Math.PI + 0.75 : Math.PI - 0.55; }
-    else if (it.slot === 'feet') { obj = FEET[id]('ladybug'); turn = -0.6; tilt = 0.5; }
+    else if (it.slot === 'feet') {
+      /* boots are shown as the robot wears them, shaft and all; flippers, skis and flip flops as on the ladybug */
+      const boots = !(id === 'flippers' || id === 'skis' || id === 'flipflops');
+      obj = FEET[id](boots ? 'robot' : 'ladybug'); turn = boots ? -0.95 : id === 'flipflops' ? -0.4 : -0.6; tilt = boots ? 0.28 : id === 'flipflops' ? 0.75 : 0.5;
+    }
     else if (it.slot === 'side') { obj = SIDE[id](false); turn = id === 'unicorn' || id === 'dino' ? 0.35 : id === 'peacock' ? 0.1 : -0.35; }
     if (!obj) return null;
     if (id === 'headphones') obj.position.set(0, 0.44, 0);
@@ -10315,7 +10598,7 @@ const SiteSync = (() => {
   let token = null;
   let files = lsGet(LS_FILES) || {};        // path -> { sha, doc } as last seen in the folder
   let pending = lsGet(LS_PENDING) || {};    // path -> { op: 'set' | 'delete', doc, base }
-  let refEtag = null, headSha = null, pollTimer = 0, flushing = false, lastSync = lsGet(LS_SEEN) || '', lastError = '';
+  let refEtag = null, headSha = null, pollTimer = 0, flushing = false, lastSync = lsGet(LS_SEEN) || '', lastError = '', syncedHere = '';
   const subs = {};                          // collection -> [{ cb, err }]
   const statusFns = new Set();
 
@@ -10411,7 +10694,7 @@ const SiteSync = (() => {
       if (changed.size) emit(Array.from(changed));
     } catch (e) { note('Offline. Progress is kept on this device and will sync when it is back online.'); }
   }
-  function markSynced() { lastSync = new Date().toISOString(); lsSet(LS_SEEN, lastSync); if (lastError && !Object.keys(pending).length) note(''); else statusFns.forEach((fn) => fn()); }
+  function markSynced() { lastSync = syncedHere = new Date().toISOString(); lsSet(LS_SEEN, lastSync); if (lastError && !Object.keys(pending).length) note(''); else statusFns.forEach((fn) => fn()); }
 
   /* ---------- saving ---------- */
   async function fetchOne(path) {
@@ -10529,6 +10812,8 @@ const SiteSync = (() => {
     active, start, setup, signOut, lock, unlockBlob, normPass, flush, refresh, putFile, getFile,
     get ready() { return !!(token || lsGet(LS_TOKEN)); },
     get lastSync() { return lastSync; },
+    /* the last time this page, since it opened, found the folder and this device in step (lastSync survives a reload) */
+    get syncedHere() { return syncedHere; },
     get lastError() { return lastError; },
     get pendingCount() { return Object.keys(pending).length; },
     onStatus: (fn) => { statusFns.add(fn); return () => statusFns.delete(fn); },
@@ -13116,6 +13401,8 @@ function goHome() {
   try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) { /* ignore */ }
   S.view = 'home'; S.sheet = null; S.fix = null; S.place = null; S.overlay = null;
   render(); window.scrollTo(0, 0);
+  /* a spelling score that came in while a sheet was open gives its stars now (ui-spelling.js) */
+  if (typeof spellStarsSoon === 'function') spellStarsSoon();
 }
 
 /* ---------- placement ---------- */
@@ -14802,13 +15089,17 @@ const Cere = (() => {
    many she spelled right and the words she missed, spelled right, to look at. There is no rewrite of the missed words
    (JB, Nov 13, 2026: "Forget about the re-dos. She will do the same thing every night so there is no need", then
    "Take them out and show the words"): she writes both lists every night. A word the scorer's two readings disagree on
-   waits for a grown-up in Parents → Reading, who can also score a whole test by hand. */
+   waits for a grown-up in Parents → Reading, who can also score a whole test by hand. Each list earns her buddy stars
+   (JB, Nov 15, 2026): 1 for finishing it, 3 with 90% of the words right or more, 5 with every word right. */
 
 /* The pictures go to the private folder through the website's key, so spelling runs on the kids' website, not in the
    master copy in Claude. */
 const SpellIO = {
   canUpload: () => Store.backend === 'site' && !!SiteSync.ready,
-  put: (p, b64, msg) => SiteSync.putFile(p, b64, msg)
+  put: (p, b64, msg) => SiteSync.putFile(p, b64, msg),
+  /* stars are given only from records fresh from the folder (on the website, a sync in the last minute and a half),
+     never from what an iPad kept from the day before */
+  fresh: () => Store.backend !== 'site' || (!!SiteSync.syncedHere && Date.now() - Date.parse(SiteSync.syncedHere) < 90000)
 };
 /* on for a kindergarten child and up (Andi), off for a younger one (AJ), unless a grown-up set it in Reading settings */
 const spellWanted = (l) => !!l && (l.spellOn === true || (l.spellOn !== false && GRADE_NUM[l.grade] != null && GRADE_NUM[l.grade] >= 0));
@@ -14877,10 +15168,71 @@ function spellToday(kid) {
   const tk = ENG.reading.todayKey(), today = spellTests(kid).filter((s) => ENG.reading.todayKey(new Date(s.at)) === tk);
   return Spelling.LISTS.map((L) => ({ L, s: today.find((s) => s.list === L.id) || null }));
 }
+/* ---------- stars (JB, Nov 15, 2026: "1 star if she does it. 3 stars if it's 90%. 5 stars if it's 100%.") ----------
+   Each list earns the stars its score gives (Spelling.starsFor): 1 as soon as it is sent, more when its score comes in
+   or a grown-up decides a word, and a voided list gives its stars back, as a voided sheet does (never below none).
+   Stars are given only on the iPad that sent the list (its dev; a list sent before Nov 15's update has none, and its
+   stars are given on the iPad that showed her its score), only from records fresh from the folder, never in the master
+   copy, and each list keeps on it marks of the stars it has given (Spelling.starsMove), so no list's stars are given
+   twice. They go on the buddy like any other stars. */
+let splStarsBusy = false, splStarsTimer = 0, splDev = '';
+/* this device's own name for itself, kept on the device */
+const SPELL_DEV = 'ssm.spell.device.v1';
+function spellDevice() {
+  if (splDev) return splDev;
+  try { splDev = localStorage.getItem(SPELL_DEV) || ''; if (!splDev) { splDev = Store.newId(); localStorage.setItem(SPELL_DEV, splDev); } }
+  catch (e) { splDev = splDev || Store.newId(); }
+  return splDev;
+}
+const spellStarsShown = (l, s) => (hasBuddy(l) ? Spelling.starsFor(s) : 0);
+const starWord = (n) => n + (n === 1 ? ' star' : ' stars');
+function spellStars(kid) {
+  if (splStarsBusy || !SpellIO.canUpload() || !SpellIO.fresh()) return null;
+  const l = Store.learner(kid);
+  if (!l || !hasBuddy(l) || !spellWanted(l)) return null;
+  const seen = spellSeen();
+  const moves = Store.sessionsFor(kid, 'spelling', { withVoided: true }).filter((s) => s && (s.dev ? s.dev === spellDevice() : seen.indexOf(s.id) >= 0))
+    .map((s) => ({ s, m: Spelling.starsMove(s) })).filter((x) => x.m);
+  if (!moves.length) return null;
+  splStarsBusy = true;
+  try {
+    const before = awardSnap(l);
+    let add = 0, take = 0, nb = Buddy.of(l), cr = null;
+    moves.forEach((x) => { add += x.m.add || 0; take += x.m.take || 0; });
+    if (add) { cr = Buddy.credit(nb, add, { noSheet: true, streak: bestStreak(l) }); nb = cr.buddy; }
+    if (take) nb = Object.assign({}, nb, { stars: Math.max(0, nb.stars - take) });
+    const l2 = Object.assign({}, l, { buddy: nb });
+    Store.saveLearner(l2);
+    moves.forEach((x) => Store.updateSession(kid, x.s.id, x.s.at, x.m.patch, 'spelling'));
+    return { add, take, l: l2, steps: cr && cr.steps, news: awardNews(before, l2) };
+  } finally { splStarsBusy = false; }
+}
+function spellStarsSay(r) {
+  if (!r) return;
+  const nm = r.l.name || 'her';
+  const msg = r.add && r.take ? '+' + r.add + ' and −' + r.take + ' spelling stars for ' + nm
+    : r.add ? '+' + starWord(r.add) + ' for ' + nm + ' for spelling' : starWord(r.take) + ' taken back from ' + nm + ' (a voided spelling list)';
+  const news = r.add ? newsText(r.l, r.steps, r.news) : '';
+  if (r.add) Sfx.coin();
+  toast(msg + (news ? '. ' + news : ''));
+}
+/* after any change to the records (a score coming in, a grown-up's decision, a void), on the home screen, spelling,
+   Parents or the shop: never in the middle of a sheet */
+function spellStarsSoon() {
+  if (splStarsTimer || !SpellIO.canUpload()) return;
+  splStarsTimer = setTimeout(() => {
+    splStarsTimer = 0;
+    if (['home', 'spell', 'parent', 'shop'].indexOf(S.view) < 0) return;
+    Store.learners().forEach((k) => spellStarsSay(spellStars(k.id)));
+  }, 60);
+}
+
 /* which results this device has shown (kept on the device only, so looking at a score writes nothing to the record) */
 const SPELL_SEEN = 'ssm.spell.seen.v1';
 const spellSeen = () => { try { return JSON.parse(localStorage.getItem(SPELL_SEEN) || '[]'); } catch (e) { return []; } };
-function markSpellSeen(id) { try { const a = spellSeen(); if (a.indexOf(id) < 0) localStorage.setItem(SPELL_SEEN, JSON.stringify(a.concat([id]).slice(-60))); } catch (e) { /* storage unavailable */ } }
+function markSpellSeen(id) {
+  try { const a = spellSeen(); if (a.indexOf(id) < 0) { localStorage.setItem(SPELL_SEEN, JSON.stringify(a.concat([id]).slice(-60))); spellStarsSoon(); } } catch (e) { /* storage unavailable */ }
+}
 
 /* ---------- the home tile ---------- */
 function spellTile(l) {
@@ -14973,10 +15325,12 @@ async function splSend() {
     if (S.sp === P) { P.sentN = k + 1; render(); }
   }
   Store.appendSession(P.kid, { id: sid, subject: 'spelling', kind: 'test', at: P.startAt, list: P.list, listName: Spelling.BY[P.list].name,
-    words: P.words.map((e) => e.w), secs: P.secs || null, photos: paths, sentAt: new Date().toISOString() });
-  if (S.sp !== P) return;
+    words: P.words.map((e) => e.w), secs: P.secs || null, photos: paths, sentAt: new Date().toISOString(), dev: spellDevice() });
+  /* the list is finished: its first star now, the rest when its score comes in */
+  const got = spellStars(P.kid);
+  if (S.sp !== P) { spellStarsSay(got); return; }
   P.sending = false; P.phase = 'wait'; P.waitAt = Date.now(); P.photos = [];
-  releaseScreen(); Sfx.complete(); render();
+  releaseScreen(); Sfx.complete(); render(); spellStarsSay(got);
 }
 /* the test this screen is about, as saved (the score arrives in it from the folder) */
 const splTest = () => { const P = S.sp; return P && P.sid ? spellTests(P.kid).find((s) => s.id === P.sid) || null : null; };
@@ -15010,8 +15364,9 @@ function viewSpell() {
     /* the view-only form (the master copy): today's two lists, then every earlier test, each with its pages */
     const all = spellTests(P.kid).slice().sort((a, b) => String(b.at).localeCompare(String(a.at)));
     const tk = ENG.reading.todayKey(), earlier = all.filter((s) => ENG.reading.todayKey(new Date(s.at)) !== tk);
-    const line = (s) => { const st = Spelling.status(s), t = Spelling.tally(s);
-      return st === 'checking' ? 'Claude is checking it' : st === 'error' ? 'Not scored yet: score it in Parents → Reading' : t.right + ' of ' + t.n + ' right' + (t.check ? ' · ' + t.check + ' for you to decide' : ''); };
+    const line = (s) => { const st = Spelling.status(s), t = Spelling.tally(s), n = spellStarsShown(l, s);
+      return (st === 'checking' ? 'Claude is checking it' : st === 'error' ? 'Not scored yet: score it in Parents → Reading' : t.right + ' of ' + t.n + ' right' + (t.check ? ' · ' + t.check + ' for you to decide' : '')) +
+        (n ? ' · ' + starWord(n) : ''); };
     body = '<h1 class="spl-title">Spelling</h1><p class="spl-sub">' + esc(l.name) + '’s scores and pages. The tests themselves are taken on the kids’ iPads, which send the pictures.</p><div class="spl-lists">' + spellToday(P.kid).map((d) =>
       '<section class="card spl-list' + (d.s ? ' sent' : '') + '"><div><h2>' + esc(d.L.name) + '</h2><p>' + (d.s ? esc(line(d.s)) : 'Not done yet today') + '</p></div>' +
       (d.s ? '<button class="btn btn-gold" data-act="splView" data-id="' + esc(d.s.id) + '">See it</button>' : '') + '</section>').join('') + '</div>' +
@@ -15031,13 +15386,15 @@ function viewSpell() {
       (miss ? '<p class="spl-how">Missed: ' + miss + '.</p>' : '') + (rev ? '<p class="spl-how">Right, but written backwards: ' + rev + '.</p>' : '') +
       /* said to a parent in plain words (JB, Nov 13, 2026: "talk in simple English"): the master copy is the parents' */
       (chk ? '<p class="spl-how">Claude couldn’t tell whether ' + (t.check === 1 ? 'this one was' : 'these were') + ' spelled right, so ' + (t.check === 1 ? 'it is' : 'they are') + ' for you to decide in Parents → Reading: ' + chk + '.</p>' : '') +
+      (spellStarsShown(l, s) ? '<p class="spl-how">Stars for this list: <b>' + starWord(spellStarsShown(l, s)) + '</b> (1 for finishing it, 3 with 90% of the words right or more, 5 with every word right).</p>' : '') +
       (s.photos && s.photos.length ? '<h2 class="spl-h2">' + esc(l.name) + '’s ' + (s.photos.length > 1 ? s.photos.length + ' pages' : 'page') + '</h2>' + splPagesHTML(s) : '<p class="spl-how">No picture was sent with this list.</p>') + '</section>' +
       acts('<button class="btn btn-glass" data-act="splDayBack">Back to spelling</button>');
   } else if (P.phase === 'day') {
     const seen = spellSeen();
     body = '<h1 class="spl-title">Spelling</h1><p class="spl-sub">Two lists today. Get your paper and pencil.</p><div class="spl-lists">' + spellToday(P.kid).map((d) => {
-      const s = d.s, st = s ? Spelling.status(s) : null, t = s ? Spelling.tally(s) : null;
-      const line = !s ? d.L.words.length + ' words' : st === 'checking' ? 'Claude is checking it' : st === 'error' ? 'Waiting for a grown-up to score it' : t.right + ' of ' + t.n + ' right' + (t.check ? ' · ' + t.check + ' for a grown-up to check' : '');
+      const s = d.s, st = s ? Spelling.status(s) : null, t = s ? Spelling.tally(s) : null, n = s ? spellStarsShown(l, s) : 0;
+      const line = (!s ? d.L.words.length + ' words' : st === 'checking' ? 'Claude is checking it' : st === 'error' ? 'Waiting for a grown-up to score it' : t.right + ' of ' + t.n + ' right' + (t.check ? ' · ' + t.check + ' for a grown-up to check' : '')) +
+        (n ? ' · ' + starWord(n) : '');
       const btn = !s ? '<button class="btn btn-gold btn-big" data-act="splList" data-list="' + d.L.id + '">Start</button>'
         : '<button class="btn ' + (st !== 'checking' && seen.indexOf(s.id) < 0 ? 'btn-gold' : 'spl-soft') + '" data-act="splSee" data-id="' + esc(s.id) + '">' + (st === 'checking' ? 'See' : 'See my score') + '</button>';
       return '<section class="card spl-list' + (s ? ' sent' : '') + '"><div><h2>' + esc(d.L.name) + '</h2><p>' + esc(line) + '</p></div>' + btn + '</section>';
@@ -15073,10 +15430,12 @@ function viewSpell() {
   } else if (P.phase === 'result') {
     const s = splTest();
     if (!s) { P.phase = 'day'; return viewSpell(); }
-    const t = Spelling.tally(s), all = t.done && !t.wrong;
+    const t = Spelling.tally(s), all = t.done && !t.wrong, stars = spellStarsShown(l, s);
     const rev = t.reversed.map((p) => esc(p.rev.map((r) => r.letter).join(', ')) + ' in <b>' + esc(p.w) + '</b>').join('; ');
     body = '<section class="card spl-card spl-res"><h1 class="spl-title">' + (all ? 'All right!' : t.right >= 0.8 * t.n ? 'Great spelling!' : 'Good try!') + '</h1>' +
       '<p class="spl-big">' + ICON.star + ' ' + t.right + ' / ' + t.n + '</p>' +
+      /* her stars for this list (JB, Nov 15, 2026): 1 for finishing it, 3 for 90% or more, 5 for every word */
+      (stars ? '<p class="spl-stars"><span class="star-chip">' + ICON.star + '+' + stars + '</span> ' + (stars === 5 ? 'Every word right: 5 stars!' : stars === 3 ? 'Almost every word right: 3 stars!' : '1 star for finishing!') + '</p>' : '') +
       (t.check ? '<p class="spl-how">' + t.check + (t.check === 1 ? ' word waits' : ' words wait') + ' for a grown-up to check.</p>' : '') +
       (rev ? '<p class="spl-how">Right, but written backwards: ' + rev + '.</p>' : '') +
       /* the words she missed, spelled right, to look at: nothing to write and nothing to tap through (JB, Nov 13, 2026:
@@ -15111,7 +15470,7 @@ function spellParentHTML(l) {
       '<div class="actions"><button class="btn btn-gold btn-small" data-act="splHandSave" data-kid="' + esc(l.id) + '">Save the score</button><button class="btn btn-glass btn-small" data-act="splHandCancel">Cancel</button></div></div>';
   }
   const rows = list.map((s) => {
-    const t = Spelling.tally(s), st = s.voided ? 'void' : Spelling.status(s);
+    const t = Spelling.tally(s), st = s.voided ? 'void' : Spelling.status(s), stars = spellStarsShown(l, s);
     const miss = t.misses.map((m) => esc(m.w) + (m.wrote ? ' (' + quote(m.wrote) + ')' : m.by === 'claude' ? ' (not written)' : '')).join(' · ');
     const rev = t.reversed.map((p) => esc(p.rev.map((r) => r.letter).join(', ')) + ' in ' + esc(p.w)).join(' · ');
     const stat = st === 'void' ? '<span class="chip chip-void">Voided</span>' : st === 'checking' ? '<span class="chip">Claude is checking</span>' : st === 'error' ? '<span class="chip chip-warn">Not scored</span><div class="muted">' + esc((s.scoreError && s.scoreError.why) || '') + '</div>'
@@ -15119,12 +15478,13 @@ function spellParentHTML(l) {
     const acts = s.voided ? '' : (!t.scored || st === 'error' ? '<button class="btn-link" data-act="splHand" data-id="' + esc(s.id) + '">Score by hand</button>' : '') +
       (st === 'error' ? ' <button class="btn-link" data-act="splRescore" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '">Try Claude again</button>' : '') +
       ' <button class="btn-link" data-act="splVoid" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '">Void</button>';
-    return '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '<div class="muted">' + nm(s) + '</div></td><td>' + (t.scored ? t.right + '/' + t.n : '—') + (miss ? '<div class="muted">Missed: ' + miss + '</div>' : '') + (rev ? '<div class="muted">Backwards: ' + rev + '</div>' : '') +
+    return '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '<div class="muted">' + nm(s) + '</div></td><td>' + (t.scored ? t.right + '/' + t.n : '—') + (stars ? '<div class="spl-starn">' + ICON.star + ' ' + starWord(stars) + '</div>' : '') + (miss ? '<div class="muted">Missed: ' + miss + '</div>' : '') + (rev ? '<div class="muted">Backwards: ' + rev + '</div>' : '') +
       splPagesHTML(s, true) + '</td><td>' + stat + '<div class="spl-acts">' + acts + '</div></td></tr>';
   }).join('');
   const more = every.length > 12 ? '<p><button class="btn-link" data-act="splAll">' + (S.spAll ? 'Show the 12 newest' : 'Show all ' + every.length + ' tests') + '</button></p>' : '';
   return '<section class="glass panel"><h3>Spelling</h3>' +
     '<p class="sub">Each day ' + esc(l.name) + ' writes both lists on paper and sends a picture of each. Claude reads each picture twice, separately, and a word the two readings disagree on waits for you here. A capital is never a mistake, and a letter written backwards or upside down counts as right, with a note.</p>' +
+    (hasBuddy(l) ? '<p class="sub">Each list earns ' + esc(l.name) + ' stars for her buddy: 1 for finishing it, 3 with 90% of the words right or more, 5 with every word right. A word you decide here counts once you decide it, and a voided list’s stars are taken back.</p>' : '') +
     /* in plain words (JB, Nov 13, 2026: "talk in simple English"): what these words are and what to do */
     (checks.length ? '<h4>' + checks.length + (checks.length === 1 ? ' word for you to decide' : ' words for you to decide') + '</h4>' +
       '<p class="help">Claude couldn’t tell whether ' + (checks.length === 1 ? 'this word was' : 'these words were') + ' spelled right. Look at ' + esc(l.name) + '’s picture or the paper, then tap Spelled right or Spelled wrong. The score is final once you do.</p>' + checkRows : '') + handBox +
@@ -15137,13 +15497,16 @@ function splMark(kid, id, i, v) {
   Store.updateSession(kid, id, s.at, { marks: Object.assign({}, s.marks || {}, { [i]: v }) }, 'spelling');
   Sfx.tap(); render(); toast(v === 'right' ? 'Marked right' : 'Marked wrong');
 }
-/* a test saved by mistake comes off the record; spelling moves no level and gives no stars, so nothing else changes */
+/* a test saved by mistake comes off the record; spelling moves no level, and its stars are taken back where they were
+   given (the kids' iPads: spellStars, on this device now or on the iPad the next time it opens) */
 function splVoid(kid, id) {
   const l = Store.learner(kid), s = spellTests(kid).find((x) => x.id === id);
   if (!l || !s) return;
   Sfx.tap();
+  const stars = hasBuddy(l) ? Spelling.starsGiven(s) : 0;
   openGate(() => { Store.updateSession(kid, id, s.at, { voided: true, voidedAt: new Date().toISOString() }, 'spelling'); render(); toast('Voided'); },
-    'Void ' + l.name + '’s ' + ((Spelling.BY[s.list] && Spelling.BY[s.list].short.toLowerCase()) || '') + ' spelling test from ' + fmtWhen(s.at) + '? It comes off the record. Answer to void it.');
+    'Void ' + l.name + '’s ' + ((Spelling.BY[s.list] && Spelling.BY[s.list].short.toLowerCase()) || '') + ' spelling test from ' + fmtWhen(s.at) + '? It comes off the record' +
+    (stars ? ', and its ' + starWord(stars) + ' ' + (stars === 1 ? 'is' : 'are') + ' taken back' + (SpellIO.canUpload() ? '' : ' when ' + l.name + '’s iPad next opens') : '') + '. Answer to void it.');
 }
 function splHandSave(kid) {
   const H = S.spHand, s = H && spellTests(kid).find((x) => x.id === H.id);
@@ -15769,6 +16132,8 @@ function render() {
   if (typeof Tutor !== 'undefined') Tutor.afterRender();
 }
 function onStore() {
+  /* a spelling score that came in, or a grown-up's decision, may earn stars (ui-spelling.js) */
+  if (typeof spellStarsSoon === 'function') spellStarsSoon();
   if (['home', 'parent', 'placeDone', 'between', 'shop', 'spell'].indexOf(S.view) < 0) return;
   const a = document.activeElement;
   if (a && (a.tagName === 'INPUT' || a.tagName === 'SELECT')) { S.deferRender = true; return; }
