@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261115145459";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261115153143";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -548,6 +548,9 @@ table.hist td { padding: 8px; border-bottom: 1px solid var(--glass-edge); vertic
 .lv-band { fill: rgba(255, 255, 255, 0.04); }
 .lv-grid { stroke: rgba(255, 255, 255, 0.09); stroke-width: 1; }
 .lv-ylab { fill: var(--ink-soft); font: 800 12px var(--font-ui); text-anchor: end; }
+/* a grade the app has no lessons for yet, drawn empty above the top level (JB, Nov 15, 2026: "I want to see the full spectrum") */
+.lv-empty { fill: rgba(255, 255, 255, 0.025); stroke: rgba(255, 255, 255, 0.22); stroke-width: 1; stroke-dasharray: 4 4; }
+.lv-emptylab { fill: var(--ink-soft); font: 700 11px var(--font-ui); opacity: 0.85; }
 .lv-xlab { fill: var(--ink-faint); font: 700 11px var(--font-ui); text-anchor: middle; font-variant-numeric: tabular-nums; }
 .lv-today { stroke: rgba(255, 255, 255, 0.4); stroke-width: 1; }
 .lv-todaylab { fill: var(--ink-soft); font: 800 11px var(--font-ui); }
@@ -13656,21 +13659,48 @@ function levelChartHTML(subj, E, t, sessions, l) {
   if (proj) vals.push(Math.min(N - 1, proj.i + proj.rate * ((x1 - proj.from) / DAY_MS)));
   let y0 = Math.max(0, Math.floor(Math.min.apply(null, vals)) - 2), y1 = Math.min(N - 1, Math.ceil(Math.max.apply(null, vals)) + 2);
   if (y1 - y0 < 8) { y1 = Math.min(N - 1, y0 + 8); y0 = Math.max(0, y1 - 8); }
+  /* The whole of the grade the child is working in and of the grade after it are always on show (JB, Nov 15, 2026,
+     on Andi's math chart, which stopped at grade 1: "I just want to see where she is relative to grade 2", "I want to
+     see the full spectrum"). A next grade the app has no lessons for yet (clock and reading after grade 3) is drawn
+     as an empty band above the top level, so the chart still shows where it would begin. */
+  const gNow = Math.max(-2, levelGrade(subj, t.levelId)), gEnds = GRADE_END[subj];
+  const nextHas = gEnds[gNow + 1] != null && gEnds[gNow + 1] > gEnds[gNow];
+  y1 = Math.max(y1, nextHas ? gEnds[gNow + 1] : N - 1);
+  const empty = !nextHas && gNow < 5 ? { g: gNow + 1, n: Math.max(2, Math.min(4, N - 1 - gEnds[gNow - 1])) } : null;
   const narrow = chartNarrow(), W = narrow ? 380 : 640, Ht = narrow ? 250 : 300, L = narrow ? 46 : 58, R = narrow ? 78 : 92, T = 14, B = 30, pw = W - L - R, ph = Ht - T - B;
-  const X = (d) => L + ((d - x0) / (x1 - x0)) * pw, Y = (i) => T + ph - ((i - (y0 - 0.5)) / (y1 - y0 + 1)) * ph;
+  /* the empty band at least 16 pixels tall, so its label and words have room */
+  if (empty) empty.n = Math.max(empty.n, Math.ceil((16 * (y1 - y0 + 1)) / Math.max(1, ph - 16)));
+  const yTop = y1 + (empty ? empty.n : 0);
+  const X = (d) => L + ((d - x0) / (x1 - x0)) * pw, Y = (i) => T + ph - ((i - (y0 - 0.5)) / (yTop - y0 + 1)) * ph;
   let s = '<svg viewBox="0 0 ' + W + ' ' + Ht + '" role="img" aria-label="' + esc(l.name + '’s ' + SUBJ[subj].name.toLowerCase() + ' level over time: now ' + E.BY[t.levelId].name) + '">';
   s += '<defs><clipPath id="lvClip"><rect x="' + L + '" y="' + T + '" width="' + pw + '" height="' + ph + '"/></clipPath></defs>';
   /* school-grade bands, labelled on the left (the levels each grade's content covers) */
   const groups = [];
   E.LEVELS.forEach((lv, i) => { const gg = Math.max(-2, levelGrade(subj, lv.id)), last = groups[groups.length - 1]; if (!last || last.g !== gg) groups.push({ g: gg, a: i, b: i }); else last.b = i; });
+  /* a band too thin for its own label keeps the band and leaves the label out, as on the parents' dashboard */
+  let lastLab = Infinity;
   groups.forEach((gr, gi) => {
     const a = Math.max(gr.a, y0), b = Math.min(gr.b, y1);
     if (a > b) return;
-    const top = Y(b + 0.5), bot = Y(a - 0.5);
+    const top = Y(b + 0.5), bot = Y(a - 0.5), mid = (top + bot) / 2;
     if (gi % 2 === 0) s += '<rect class="lv-band" x="' + L + '" y="' + top.toFixed(1) + '" width="' + pw + '" height="' + (bot - top).toFixed(1) + '"/>';
     s += '<line class="lv-grid" x1="' + L + '" x2="' + (L + pw) + '" y1="' + bot.toFixed(1) + '" y2="' + bot.toFixed(1) + '"/>';
-    s += '<text class="lv-ylab" x="' + (L - 10) + '" y="' + ((top + bot) / 2 + 4).toFixed(1) + '">' + esc(gradeWord(gr.g, 'band')) + '</text>';
+    if (lastLab - mid < 13) return;
+    lastLab = mid;
+    s += '<text class="lv-ylab" x="' + (L - 10) + '" y="' + (mid + 4).toFixed(1) + '">' + esc(gradeWord(gr.g, 'band')) + '</text>';
   });
+  if (empty) {
+    const eTop = Y(yTop + 0.5), eBot = Y(y1 + 0.5), mid = (eTop + eBot) / 2;
+    s += '<rect class="lv-empty" x="' + L + '" y="' + eTop.toFixed(1) + '" width="' + pw + '" height="' + (eBot - eTop).toFixed(1) + '"/>';
+    s += '<line class="lv-grid" x1="' + L + '" x2="' + (L + pw) + '" y1="' + eBot.toFixed(1) + '" y2="' + eBot.toFixed(1) + '"/>';
+    s += '<text class="lv-ylab" x="' + (L - 10) + '" y="' + (mid + 4).toFixed(1) + '">' + esc(gradeWord(empty.g, 'band')) + '</text>';
+    /* its words on whichever side of the Today line has room for them, never across it */
+    const gw = gradeWord(empty.g, 'long').toLowerCase(), tAt = X(today), cw = 6.1;
+    const room = [[L + 8, tAt - 6 - (L + 8)], [tAt + 42, L + pw - 8 - (tAt + 42)]];
+    let at = null;
+    ['No ' + gw + ' lessons in the app yet', 'No ' + gw + ' lessons yet', 'None yet'].some((w) => room.some((r) => (w.length * cw <= r[1] ? (at = [r[0], w]) : null)));
+    if (at) s += '<text class="lv-emptylab" x="' + at[0].toFixed(1) + '" y="' + (mid + 4).toFixed(1) + '">' + esc(at[1]) + '</text>';
+  }
   /* weekly ticks */
   const tick = new Date(x0); tick.setDate(tick.getDate() + ((8 - tick.getDay()) % 7));
   const step = (x1 - x0) / DAY_MS > (narrow ? 42 : 84) ? 14 : 7;
@@ -13716,7 +13746,8 @@ function levelChartHTML(subj, E, t, sessions, l) {
   const note = g != null
     ? '<p class="sub">Dashed lines show where a child in ' + esc(gradeName(g)) + ' would be by US Common Core standards, and one year ahead. Kumon’s own grade benchmark (KIS) isn’t published, so these come from the standards each level teaches.' + (proj ? ' The dashed colored line continues the last two weeks’ pace.' : '') + '</p>'
     : '<p class="sub">Set ' + esc(l.name) + '’s school grade in Settings to see the grade-level lines.</p>';
-  return head + '<div class="lvl-chart" tabindex="0" data-pts="' + esc(JSON.stringify(data)) + '">' + s + '<div class="lv-tip" hidden></div></div>' + note +
+  const emptyNote = empty ? '<p class="sub">The app’s ' + SUBJ[subj].name.toLowerCase() + ' lessons end with ' + esc(gradeWord(empty.g - 1, 'long').toLowerCase()) + ', so ' + esc(gradeWord(empty.g, 'long').toLowerCase()) + ' is drawn empty: it would begin just above the top level.</p>' : '';
+  return head + '<div class="lvl-chart" tabindex="0" data-pts="' + esc(JSON.stringify(data)) + '">' + s + '<div class="lv-tip" hidden></div></div>' + note + emptyNote +
     '<details class="lv-table"><summary>Show as a list</summary><table class="hist"><thead><tr><th>Day</th><th>Level</th><th>Work</th></tr></thead><tbody>' + rows + '</tbody></table></details></section>';
 }
 /* Crosshair and tooltip: snap to the nearest day with data. */
