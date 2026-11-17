@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261117043258";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261117054459";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -20,7 +20,7 @@
   --key: #FFFFFF; --key-2: #F1EDFC; --key-deep: #C9C1E8; --key-ink: #1E1B3A;
   --sub-math: #FFB020; --sub-read: #FF5FC8; --sub-clock: #4FE3FF;
   --hand-hour: #FF5A6E; --hand-min: #3D7BEA;
-  --eye: #FFFFFF; --pupil: #221D3E; --cheek: rgba(255, 110, 150, 0.55); --item-pink: #FF6FB5; --item-gold: #FFC531;
+  --eye: #FFFFFF; --pupil: #221D3E; --cheek: rgba(255, 140, 80, 0.5); --item-gold: #FFC531;
   --kid-teal: #16A6A8; --kid-coral: #F05A57; --kid-violet: #8B5CF6; --kid-blue: #3D7BEA; --kid-green: #2FB574; --kid-orange: #F28C28;
   --font-display: "Lilita One", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
   --font-ui: "Nunito", "Avenir Next", "Segoe UI", system-ui, sans-serif;
@@ -886,9 +886,9 @@ details.more[open] > summary h3::after { content: " −"; }
 .b-sparkle path { fill: var(--item-gold); animation: twinkle 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 .b-sparkle path:nth-child(2) { animation-delay: 0.8s; }
 .b-sparkle path:nth-child(3) { animation-delay: 1.6s; }
-.i-pink { fill: var(--item-pink); } .i-gold { fill: var(--item-gold); } .i-gold2 { fill: #FFE7A0; } .i-white { fill: #FFFFFF; }
+.i-gold { fill: var(--item-gold); } .i-gold2 { fill: #FFE7A0; } .i-white { fill: #FFFFFF; }
 .i-blue { fill: #3D7BEA; } .i-blue2 { fill: #2B5CC2; } .i-brown { fill: #A3652F; } .i-red { fill: #E8453C; } .i-red2 { fill: #B42E27; }
-.i-violet { fill: #7C4DDB; } .i-lens { fill: rgba(170, 230, 255, 0.4); stroke: var(--pupil); stroke-width: 3.5; }
+.i-lens { fill: rgba(170, 230, 255, 0.4); stroke: var(--pupil); stroke-width: 3.5; }
 .i-frame { stroke: var(--pupil); stroke-width: 3.5; fill: none; } .i-dark { fill: var(--pupil); } .i-shine { stroke: #FFFFFF; stroke-width: 2.5; fill: none; }
 .i-stripe { stroke: #FFFFFF; stroke-width: 4; } .i-green { fill: #2FB574; } .i-green2 { fill: #22905B; } .i-grey { fill: #9BA4BA; }
 .i-flame { fill: #FF8A3D; } .i-yellow { fill: var(--item-gold); } .i-orange { fill: #FF8A3D; } .i-legs { stroke: #FF8A3D; stroke-width: 3; }
@@ -1018,7 +1018,7 @@ details.more[open] > summary h3::after { content: " −"; }
 .i-neon { animation: neonCycle 2.6s linear infinite; }
 .i-neon-glow { animation: neonCycle 2.6s linear infinite; }
 .i-neon2 { animation: neonCycle 2.6s linear infinite reverse; }
-@keyframes neonCycle { 0%, 100% { stroke: #4FE3FF; } 25% { stroke: #7CFF4F; } 50% { stroke: #FFE14F; } 75% { stroke: #A86BFF; } }
+@keyframes neonCycle { 0%, 100% { stroke: #4FE3FF; } 25% { stroke: #7CFF4F; } 50% { stroke: #FFE14F; } 75% { stroke: #FF8A3D; } }
 @media (prefers-reduced-motion: reduce) { .i-neon, .i-neon-glow, .i-neon2 { animation: none; } }
 
 /* places: the 3D picture fills its card window */
@@ -1303,7 +1303,7 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
   .ex-grp.more { animation: none; background: #DDF6E8; border-color: var(--mint-deep); }
 }
 /* ---------- ceremonies: a new belt, the day's medals (ui-cere.js) ---------- */
-.cere { position: fixed; inset: 0; z-index: 80; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; background: radial-gradient(120% 80% at 50% 30%, #35217E, #0A0628 70%); color: #fff; animation: cereIn 0.35s ease-out; outline: none; overflow: hidden; }
+.cere { position: fixed; inset: 0; z-index: 80; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; background: radial-gradient(120% 80% at 50% 30%, #1B3A8C, #040A24 70%); color: #fff; animation: cereIn 0.35s ease-out; outline: none; overflow: hidden; }
 .cere.out { animation: cereOut 0.26s ease-in forwards; }
 @keyframes cereIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes cereOut { to { opacity: 0; } }
@@ -1341,7 +1341,7 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .tied .cf-rays, .cere-medals .cf-rays { opacity: 1; }
 .cf-buddy { position: relative; z-index: 2; width: min(44vw, 34vh, 300px); margin-top: -2vh; }
 .cf-buddy .buddy-svg { width: 100%; height: auto; display: block; }
-.cf-podium { position: absolute; z-index: 1; top: calc(50% + min(16vw, 13vh, 110px)); width: min(62vw, 46vh, 380px); height: min(9vw, 6vh, 46px); border-radius: 50%; background: linear-gradient(180deg, #5240B8, #2A1F6E); box-shadow: inset 0 0 0 3px #FFC531, 0 18px 40px rgba(0, 0, 0, 0.5); }
+.cf-podium { position: absolute; z-index: 1; top: calc(50% + min(16vw, 13vh, 110px)); width: min(62vw, 46vh, 380px); height: min(9vw, 6vh, 46px); border-radius: 50%; background: linear-gradient(180deg, #2B52C0, #14275E); box-shadow: inset 0 0 0 3px #FFC531, 0 18px 40px rgba(0, 0, 0, 0.5); }
 .cf-belt { position: absolute; z-index: 3; width: min(26vw, 20vh, 170px); top: 49%; animation: cfDrop 2.62s cubic-bezier(0.5, 0, 0.3, 1) both; }
 .cf-belt .belt { width: 100%; }
 .tied .cf-belt { animation: cfTie 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) both; }
@@ -5303,7 +5303,9 @@ const Buddy = (() => {
     { id: 'robot', name: 'Robot', defaultName: 'Bolt', color: 'blue' }
   ];
   const TYPE = Object.fromEntries(TYPES.map((t) => [t.id, t]));
-  const COLORS = { red: '#E8453C', orange: '#F28C28', yellow: '#F5C21B', lime: '#86C440', green: '#2FB574', teal: '#16A6A8', blue: '#3D7BEA', purple: '#8B5CF6', pink: '#EC5BA7' };
+  const COLORS = { red: '#E8453C', orange: '#F28C28', yellow: '#F5C21B', lime: '#86C440', green: '#2FB574', teal: '#16A6A8', blue: '#3D7BEA', navy: '#2E4BA8', brown: '#9A6235' };
+  /* Colors no longer offered (JB, Nov 16, 2026: no pink or purple): a buddy saved in one is drawn in the nearest one kept. */
+  const OLD_COLOR = { purple: 'navy', pink: 'red' };
   const STAGES = [{ at: 0, name: 'little', scale: 0.76 }, { at: 100, name: 'big', scale: 0.88 }, { at: 400, name: 'hero', scale: 1 }];
   const stageOf = (growth) => (growth >= STAGES[2].at ? 2 : growth >= STAGES[1].at ? 1 : 0);
   /* A buddy grows with every star earned and with the food it eats (fed). */
@@ -5416,6 +5418,16 @@ const Buddy = (() => {
     { id: 'flipflops', slot: 'feet', name: 'Flip flops', price: 4 },
     { id: 'cowboyboots', slot: 'feet', name: 'Cowboy boots', price: 8 },
     { id: 'snowboots', slot: 'feet', name: 'Snow boots', price: 8 },
+    /* JB's November 16 footwear, a pair for each place that had none: rain boots for the meadow, jet boots for the
+       rainbow sky, roller skates for Miami, sneakers for Boston, candy shoes for Candy land, bakya clogs for the
+       Philippines and knight boots for the castle */
+    { id: 'rainboots', slot: 'feet', name: 'Rain boots', price: 6 },
+    { id: 'jetboots', slot: 'feet', name: 'Jet boots', price: 12 },
+    { id: 'skates', slot: 'feet', name: 'Roller skates', price: 10 },
+    { id: 'sneakers', slot: 'feet', name: 'Sneakers', price: 6 },
+    { id: 'candyshoes', slot: 'feet', name: 'Candy shoes', price: 6 },
+    { id: 'bakya', slot: 'feet', name: 'Bakya clogs', price: 6 },
+    { id: 'knightboots', slot: 'feet', name: 'Knight boots', price: 10 },
     { id: 'chick', slot: 'side', name: 'Little chick', price: 5 },
     { id: 'bee', slot: 'side', name: 'Bumblebee', price: 8 },
     { id: 'fishbowl', slot: 'side', name: 'Goldfish', price: 10 },
@@ -5426,7 +5438,10 @@ const Buddy = (() => {
     { id: 'puppy', slot: 'side', name: 'Corgi', price: 20 },
     { id: 'kitten', slot: 'side', name: 'Kitten', price: 20 },
     { id: 'peacock', slot: 'side', name: 'Peacock', price: 25 },
+    /* JB's November 16 friends: a robot and a dragon of their own */
+    { id: 'littlerobot', slot: 'side', name: 'Little robot', price: 25 },
     { id: 'dino', slot: 'side', name: 'Dinosaur', price: 30 },
+    { id: 'babydragon', slot: 'side', name: 'Baby dragon', price: 30 },
     { id: 'unicorn', slot: 'side', name: 'Baby unicorn', price: 40 },
     { id: 'meadow', slot: 'bg', name: 'Meadow', price: 5 },
     { id: 'sky', slot: 'bg', name: 'Rainbow sky', price: 8 },
@@ -5448,9 +5463,9 @@ const Buddy = (() => {
     { id: 'gold', slot: 'paint', name: 'Solid gold', price: 40 },
     { id: 'redpaint', slot: 'paint', name: 'Red paint', price: 3 },
     { id: 'mustard', slot: 'paint', name: 'Very dark yellow', price: 3 },
-    { id: 'pdots', slot: 'paint', name: 'Purple polka dots', price: 5 },
+    { id: 'pdots', slot: 'paint', name: 'Green polka dots', price: 5 },
     { id: 'tinydots', slot: 'paint', name: 'Tiny polka dots', price: 5 },
-    { id: 'rpdots', slot: 'paint', name: 'Red with purple dots', price: 5 },
+    { id: 'rpdots', slot: 'paint', name: 'Red with blue dots', price: 5 },
     { id: 'blackpaint', slot: 'paint', name: 'Black paint', price: 3 },
     { id: 'whitegold', slot: 'paint', name: 'White with a gold belly', price: 8 },
     { id: 'ogdots', slot: 'paint', name: 'Orange with green spots', price: 5 },
@@ -5675,26 +5690,26 @@ const Buddy = (() => {
       '<ellipse cx="-15" cy="-15" rx="7" ry="4" fill="#fff" opacity=".32" transform="rotate(-35 -15 -15)"/><path d="M-12 -19 H12 Q13 -6 0 5 Q-13 -6 -12 -19 Z" fill="#FFFFFF" stroke="#1F1B2E" stroke-width="2"/>' +
       '<path d="M-1.6 -15 H2.6 V1.5 H-1.6 V-10 L-4.8 -8.4 V-12 Z" fill="#D62828"/>',
     /* mouse ears (the nose and whiskers go on the face: mouseNose) */
-    mouse: [-1, 1].map((sx) => '<circle cx="' + (sx * 30) + '" cy="-8" r="17" fill="#A9AFC0"/><circle cx="' + (sx * 30) + '" cy="-8" r="10.5" fill="#FFB3C7"/>').join(''),
+    mouse: [-1, 1].map((sx) => '<circle cx="' + (sx * 30) + '" cy="-8" r="17" fill="#A9AFC0"/><circle cx="' + (sx * 30) + '" cy="-8" r="10.5" fill="#E3C4A0"/>').join(''),
     /* the shop picture of the astronaut helmet; on a buddy it is drawn round the head (astroFlat) */
     astronaut: '',
-    /* a ski helmet: a shiny pink shell with a white stripe up the middle, vents, a darker rim and soft ear pads */
+    /* a ski helmet: a shiny red shell with a white stripe up the middle, vents, a darker rim and soft ear pads */
     skihelmet: '<rect x="-41" y="2" width="10" height="21" rx="5" fill="#2B2D42"/><rect x="31" y="2" width="10" height="21" rx="5" fill="#2B2D42"/>' +
-      '<path d="M-34 7 C-36 -35 36 -35 34 7 Z" fill="#E8408F"/><path d="M-6.5 -27.5 C-5.5 -13 -5.5 -3 -6.5 7 L6.5 7 C5.5 -3 5.5 -13 6.5 -27.5 C2 -29 -2 -29 -6.5 -27.5 Z" fill="#FFFFFF"/>' +
+      '<path d="M-34 7 C-36 -35 36 -35 34 7 Z" fill="#E8453C"/><path d="M-6.5 -27.5 C-5.5 -13 -5.5 -3 -6.5 7 L6.5 7 C5.5 -3 5.5 -13 6.5 -27.5 C2 -29 -2 -29 -6.5 -27.5 Z" fill="#FFFFFF"/>' +
       '<path d="M-21 -8 l6 -6 M21 -8 l-6 -6 M-13 -17.5 l3.5 -3.5 M13 -17.5 l-3.5 -3.5" stroke="#2B2D42" stroke-width="3" stroke-linecap="round"/>' +
-      '<path d="M-35 3 Q0 12 35 3 L35 8 Q0 17 -35 8 Z" fill="#B82E70"/><ellipse cx="-18" cy="-16" rx="8" ry="3.6" fill="#FFFFFF" opacity=".42" transform="rotate(-38 -18 -16)"/>'
+      '<path d="M-35 3 Q0 12 35 3 L35 8 Q0 17 -35 8 Z" fill="#A8231C"/><ellipse cx="-18" cy="-16" rx="8" ry="3.6" fill="#FFFFFF" opacity=".42" transform="rotate(-38 -18 -16)"/>'
   };
   /* Where a mouse nose sits on each flat buddy, and the nose with its whiskers (light whiskers on a dark face). */
   const FLAT_NOSE = { ladybug: [100, 86], slug: [150, 107], dragon: [100, 95], robot: [100, 80] };
   const mouseNose = (wc) => '<g stroke="' + wc + '" stroke-width="1.7" stroke-linecap="round" fill="none"><path d="M-7 0 L-30 -5 M-7 2.5 L-31 3 M-7 5 L-28 11 M7 0 L30 -5 M7 2.5 L31 3 M7 5 L28 11"/></g>' +
-    '<ellipse cx="0" cy="2" rx="7" ry="5.5" fill="#FF7FA8"/><ellipse cx="-2.2" cy="0" rx="2.4" ry="1.5" fill="#fff" opacity=".65"/>';
+    '<ellipse cx="0" cy="2" rx="7" ry="5.5" fill="#B86A45"/><ellipse cx="-2.2" cy="0" rx="2.4" ry="1.5" fill="#fff" opacity=".65"/>';
   /* A glass helmet round the head (center c, radius r) on a padded white collar. */
   const astroFlat = (c, r) => '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="' + r + '" fill="#DDF6FF" fill-opacity=".18" stroke="#E8FBFF" stroke-opacity=".85" stroke-width="2.5"/>' +
     '<path d="M' + (c[0] - r * 0.62) + ' ' + (c[1] - r * 0.42) + ' A' + (r * 0.78) + ' ' + (r * 0.78) + ' 0 0 1 ' + (c[0] - r * 0.12) + ' ' + (c[1] - r * 0.76) + '" fill="none" stroke="#FFFFFF" stroke-opacity=".75" stroke-width="3.5" stroke-linecap="round"/>' +
     '<ellipse cx="' + c[0] + '" cy="' + (c[1] + r * 0.74) + '" rx="' + (r * 0.72) + '" ry="' + (r * 0.17) + '" fill="#F4F6FB" stroke="#B8C0D4" stroke-width="2"/>' +
     '<circle cx="' + (c[0] - r * 0.42) + '" cy="' + (c[1] + r * 0.76) + '" r="3" fill="#FF4D4D"/><circle cx="' + (c[0] + r * 0.42) + '" cy="' + (c[1] + r * 0.76) + '" r="3" fill="#34D27B"/>';
   /* The little tree that grows from the feet in the yoga tree handstand (hidden until the trick plays). */
-  const TREE_FLAT = '<g class="b-tree"><path d="M100 204 V222" stroke="#8B5A3C" stroke-width="7" stroke-linecap="round"/><circle cx="100" cy="236" r="15" fill="#2FB574"/><circle cx="87" cy="228" r="10" fill="#34D27B"/><circle cx="113" cy="228" r="10" fill="#34D27B"/><circle cx="100" cy="246" r="9" fill="#3FCB6B"/><circle cx="94" cy="232" r="3" fill="#FF8FB1"/><circle cx="108" cy="240" r="3" fill="#FF8FB1"/></g>';
+  const TREE_FLAT = '<g class="b-tree"><path d="M100 204 V222" stroke="#8B5A3C" stroke-width="7" stroke-linecap="round"/><circle cx="100" cy="236" r="15" fill="#2FB574"/><circle cx="87" cy="228" r="10" fill="#34D27B"/><circle cx="113" cy="228" r="10" fill="#34D27B"/><circle cx="100" cy="246" r="9" fill="#3FCB6B"/><circle cx="94" cy="232" r="3" fill="#FF9F43"/><circle cx="108" cy="240" r="3" fill="#FF9F43"/></g>';
   /* The wings and tail a flat buddy grows in the Airplane trick (hidden until it plays), drawn behind it. */
   const PLANE_FLAT = '<g class="b-plane"><path d="M100 70 L92 22 Q100 14 108 22 Z" fill="var(--bc)" stroke="#221D3E" stroke-opacity=".3" stroke-width="2"/>' +
     '<rect x="72" y="58" width="56" height="10" rx="5" fill="var(--bc)" stroke="#221D3E" stroke-opacity=".3" stroke-width="2"/>' +
@@ -5747,14 +5762,14 @@ const Buddy = (() => {
         '<rect x="' + (-a + 4.5) + '" y="' + (-h + 4.5) + '" width="' + (2 * a - 9) + '" height="' + (2 * h - 9) + '" rx="8" fill="#D8F6FF" fill-opacity=".42" stroke="#0E8C99" stroke-width="1.2"/>' +
         '<path d="M' + (-a + 10) + ' -4 l7 -6 M' + (-a + 15) + ' 1 l4 -3.5" stroke="#FFFFFF" stroke-opacity=".8" stroke-width="2.4" stroke-linecap="round"/>';
     },
-    /* ski goggles: one wide mirrored lens, orange at the top and pink below, in a white frame on a purple strap */
+    /* ski goggles: one wide mirrored lens, orange at the top and red below, in a white frame on a blue strap */
     skigoggles: (s) => {
       const a = s / 2 + 19, h = 14, b = a - 4, k = h - 4;
-      return '<rect x="' + (-a - 11) + '" y="-6" width="' + (2 * a + 22) + '" height="12" rx="6" fill="#7C4DFF"/>' +
+      return '<rect x="' + (-a - 11) + '" y="-6" width="' + (2 * a + 22) + '" height="12" rx="6" fill="#2B5CC2"/>' +
         '<rect x="' + (-a) + '" y="' + (-h) + '" width="' + (2 * a) + '" height="' + (2 * h) + '" rx="12" fill="#F4F6FB" stroke="#2B2D42" stroke-opacity=".35" stroke-width="1.5"/>' +
         '<rect x="' + (-b) + '" y="' + (-k) + '" width="' + (2 * b) + '" height="' + (2 * k) + '" rx="8.5" fill="#FFAA2E"/>' +
         '<rect x="' + (-b) + '" y="-2" width="' + (2 * b) + '" height="4" fill="#FF6E5A"/>' +
-        '<path d="M' + (-b) + ' 1.5 H' + b + ' V' + (k - 8.5) + ' Q' + b + ' ' + k + ' ' + (b - 8.5) + ' ' + k + ' H' + (-b + 8.5) + ' Q' + (-b) + ' ' + k + ' ' + (-b) + ' ' + (k - 8.5) + ' Z" fill="#D9378F"/>' +
+        '<path d="M' + (-b) + ' 1.5 H' + b + ' V' + (k - 8.5) + ' Q' + b + ' ' + k + ' ' + (b - 8.5) + ' ' + k + ' H' + (-b + 8.5) + ' Q' + (-b) + ' ' + k + ' ' + (-b) + ' ' + (k - 8.5) + ' Z" fill="#C9302C"/>' +
         '<path d="M' + (-b + 7) + ' -2 l8 -6 M' + (-b + 14) + ' -1 l5 -3.8" stroke="#FFFFFF" stroke-opacity=".85" stroke-width="2.4" stroke-linecap="round"/>';
     }
   };
@@ -5807,20 +5822,50 @@ const Buddy = (() => {
       '<path d="M-5.5 -9.5 Q0 -4.5 5.5 -9.5 M-4.5 -5.5 Q0 -1.5 4.5 -5.5" stroke="#F2C98A" stroke-width="1.1" fill="none" stroke-linecap="round"/>' +
       '<path d="M-11 9 Q-11 -0.5 -4.5 -1 H4.5 Q11 -0.5 11 9 Z" fill="#A3652F"/><path d="M-4 3 Q0 0.5 4 3" stroke="#7A4A20" stroke-width="1" fill="none" stroke-linecap="round"/>' +
       '<rect x="-12" y="7.5" width="24" height="4.5" rx="1.5" fill="#5A3A1C"/>',
-    snowboots: '<rect x="-10" y="-11" width="20" height="13" rx="5" fill="#7B61FF"/>' +
+    snowboots: '<rect x="-10" y="-11" width="20" height="13" rx="5" fill="#2F6FE4"/>' +
       '<path d="M-4 -6.5 L4 -3.5 M4 -6.5 L-4 -3.5 M-4 -1.5 L4 1.5 M4 -1.5 L-4 1.5" stroke="#FFFFFF" stroke-width="1.3" stroke-linecap="round"/>' +
-      '<path d="M-13 8.5 Q-13.5 -1.5 -6 -1.5 H6 Q13.5 -1.5 13 8.5 Z" fill="#5A43D6"/>' +
+      '<path d="M-13 8.5 Q-13.5 -1.5 -6 -1.5 H6 Q13.5 -1.5 13 8.5 Z" fill="#1F4FA8"/>' +
       [-9, -4.5, 0, 4.5, 9].map((x) => '<circle cx="' + x + '" cy="-12" r="3.8" fill="#FFFFFF" stroke="#E3E6F5" stroke-width="0.8"/>').join('') +
       '<rect x="-14" y="7" width="28" height="5.5" rx="2.5" fill="#3A3550"/><path d="M-9.5 12.5 v-2 M-4.75 12.5 v-2 M0 12.5 v-2 M4.75 12.5 v-2 M9.5 12.5 v-2" stroke="#6B6885" stroke-width="1.4"/>',
-    flipflops: '<ellipse cx="0" cy="8.5" rx="13.5" ry="3.4" fill="#FF6FAE" stroke="#E0458C" stroke-width="1"/>' +
-      '<path d="M-9.5 5.5 Q-5 -1.5 0 6 Q5 -1.5 9.5 5.5" fill="none" stroke="#FFC531" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' +
-      '<g transform="translate(0 5.6)">' + [0, 72, 144, 216, 288].map((a) => '<circle cx="0" cy="-2" r="1.7" fill="#FFFFFF" transform="rotate(' + a + ')"/>').join('') + '<circle r="1.3" fill="#FFC531"/></g>'
+    flipflops: '<ellipse cx="0" cy="8.5" rx="13.5" ry="3.4" fill="#FF8A3D" stroke="#D9661F" stroke-width="1"/>' +
+      '<path d="M-9.5 5.5 Q-5 -1.5 0 6 Q5 -1.5 9.5 5.5" fill="none" stroke="#3D7BEA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<g transform="translate(0 5.6)">' + [0, 72, 144, 216, 288].map((a) => '<circle cx="0" cy="-2" r="1.7" fill="#FFFFFF" transform="rotate(' + a + ')"/>').join('') + '<circle r="1.3" fill="#FFC531"/></g>',
+    /* JB's November 16 footwear, from the front */
+    rainboots: '<rect x="-9.5" y="-15" width="19" height="17" rx="4" fill="#FFC531"/><rect x="-10.5" y="-16" width="21" height="4" rx="2" fill="#E09A0B"/>' +
+      '<path d="M-12.5 9 Q-13 -1.5 -6 -1.5 H6 Q13 -1.5 12.5 9 Z" fill="#FFC531"/><rect x="-12.5" y="4.6" width="25" height="2.8" rx="1.4" fill="#E09A0B"/>' +
+      '<rect x="-13.5" y="7.5" width="27" height="4.5" rx="2.2" fill="#2E3A2F"/><ellipse cx="-5" cy="-7" rx="1.6" ry="4.5" fill="#FFFFFF" opacity=".45"/>',
+    jetboots: '<ellipse cx="0" cy="12.5" rx="11" ry="3" fill="#FFB03A" opacity=".55"/><path d="M-6 11 L-4 16 L-2 11 Z M2 11 L4 16 L6 11 Z" fill="#FF8A3D"/>' +
+      '<rect x="-9" y="-14" width="18" height="16" rx="4.5" fill="#E3341F"/><rect x="-10" y="-15" width="20" height="4" rx="2" fill="#B8C0D4"/>' +
+      '<path d="M-12.5 9 Q-13 -1.5 -6 -1.5 H6 Q13 -1.5 12.5 9 Z" fill="#E8453C"/><path d="M1.5 -10 L-3 -3 H0.5 L-1.5 3 L3.5 -4.5 H0 Z" fill="#FFC531"/>' +
+      '<rect x="-13.5" y="7.5" width="27" height="4.5" rx="2.2" fill="#B8C0D4"/>',
+    skates: '<rect x="-9" y="-13" width="18" height="15" rx="4.5" fill="#F4F6FB" stroke="#B8C0D4" stroke-width="1.2"/>' +
+      '<path d="M-12 7 Q-12.5 -1.5 -6 -1.5 H6 Q12.5 -1.5 12 7 Z" fill="#F4F6FB" stroke="#B8C0D4" stroke-width="1.2"/>' +
+      '<rect x="-9" y="-9" width="18" height="2.6" fill="#16A6A8"/><rect x="-11.6" y="2" width="23.2" height="2.6" fill="#16A6A8"/>' +
+      '<rect x="-12.5" y="6" width="25" height="3" rx="1.5" fill="#8A93A8"/><circle cx="0" cy="8" r="2.2" fill="#E8453C"/>' +
+      [-11, 11].map((x) => '<circle cx="' + x + '" cy="10" r="3.6" fill="#FF8A3D"/><circle cx="' + x + '" cy="10" r="1.4" fill="#F4F6FB"/>').join(''),
+    sneakers: '<path d="M-6 -3 V-9 Q0 -11.5 6 -9 V-3 Z" fill="#E8453C"/><path d="M-12.5 8 Q-13 -3 -6 -3 H6 Q13 -3 12.5 8 Z" fill="#E8453C"/>' +
+      '<path d="M-4 -6.5 H4 M-4.5 -3.5 H4.5 M-5 -0.5 H5" stroke="#FFFFFF" stroke-width="1.4" stroke-linecap="round"/>' +
+      '<path d="M-9 8 Q-9 3 0 3 Q9 3 9 8 Z" fill="#FFFFFF"/><rect x="-13.5" y="6.6" width="27" height="2" fill="#2B5CC2"/>' +
+      '<rect x="-13.5" y="8.4" width="27" height="4" rx="2" fill="#FFFFFF" stroke="#D5DBE5" stroke-width="0.8"/>',
+    candyshoes: '<path d="M-13 9 Q-13.5 -4.5 0 -4.5 Q13.5 -4.5 13 9 Z" fill="#FF8A1F"/>' +
+      '<path d="M-12.4 4.5 Q0 0 12.4 4.5 M-10.2 -0.8 Q0 -4.2 10.2 -0.8" stroke="#FFD43B" stroke-width="2.8" fill="none"/><circle cx="-8" cy="2" r=".8" fill="#FFFFFF"/><circle cx="7" cy="1.5" r=".8" fill="#FFFFFF"/><circle cx="2" cy="6" r=".8" fill="#FFFFFF"/>' +
+      '<path d="M-4.6 -4.2 Q-4 -10.5 0 -10.5 Q4 -10.5 4.6 -4.2 Z" fill="#34D27B"/><circle cx="-1.5" cy="-8" r=".7" fill="#FFFFFF"/><circle cx="1.8" cy="-6.6" r=".7" fill="#FFFFFF"/>' +
+      '<rect x="-13.5" y="8" width="27" height="4" rx="2" fill="#2FB574"/>',
+    bakya: '<rect x="-13" y="6" width="26" height="6.5" rx="1.5" fill="#A3652F"/><rect x="-12.5" y="4.6" width="25" height="2.4" rx="1.2" fill="#D9A066"/>' +
+      '<path d="M-11 5.5 Q-11 -6.5 0 -6.5 Q11 -6.5 11 5.5 Z" fill="#2B5CC2" stroke="#E8453C" stroke-width="1.2"/>' +
+      '<g transform="translate(0 -1)">' + [0, 45, 90, 135, 180, 225, 270, 315].map((a) => '<circle cx="0" cy="-4.2" r=".9" fill="#FFC531" transform="rotate(' + a + ')"/>').join('') + '<circle r="2.4" fill="#FFC531"/></g>',
+    knightboots: '<rect x="-9.5" y="-15" width="19" height="17" rx="3" fill="#C3CAD8" stroke="#7E879C" stroke-width="1"/><path d="M-9.5 -9 H9.5 M-9.5 -3.5 H9.5" stroke="#7E879C" stroke-width="1.2"/>' +
+      '<rect x="-10.5" y="-16" width="21" height="3" rx="1.5" fill="#FFC531"/>' +
+      '<path d="M-12.5 9 Q-13 -1.5 -6 -1.5 H6 Q13 -1.5 12.5 9 Z" fill="#C3CAD8" stroke="#7E879C" stroke-width="1"/><path d="M-11.6 3.6 Q0 0.4 11.6 3.6" stroke="#7E879C" stroke-width="1.1" fill="none"/>' +
+      '<circle cx="-7" cy="4.4" r="1.1" fill="#FFC531"/><circle cx="7" cy="4.4" r="1.1" fill="#FFC531"/><rect x="-13" y="8" width="26" height="4" rx="1.5" fill="#7E879C"/>'
   };
   const shoes = (id) => (type) => (FOOT[type] || FOOT.ladybug).map((f) => at(f, SHOE[id])).join('');
   const FEET = {
     flippers: (type) => (FOOT[type] || FOOT.ladybug).map((f, i) => flipper(f[0], f[1], i ? -1 : 1)).join(''),
     skis: (type) => { const k = SKI[type] || SKI.ladybug; return skiPair(k[0], k[1], k[2], (FOOT[type] || FOOT.ladybug).map((f) => f[0])); },
-    spaceboots: shoes('spaceboots'), flipflops: shoes('flipflops'), cowboyboots: shoes('cowboyboots'), snowboots: shoes('snowboots')
+    spaceboots: shoes('spaceboots'), flipflops: shoes('flipflops'), cowboyboots: shoes('cowboyboots'), snowboots: shoes('snowboots'),
+    rainboots: shoes('rainboots'), jetboots: shoes('jetboots'), skates: shoes('skates'), sneakers: shoes('sneakers'), candyshoes: shoes('candyshoes'),
+    bakya: shoes('bakya'), knightboots: shoes('knightboots')
   };
   /* The same four for the shop, from the side, toes to the right (the flip flops from above): a pair, the one behind
      a little darker. */
@@ -5832,14 +5877,38 @@ const Buddy = (() => {
       '<path d="M-7 -24 Q-4.5 -29 -2 -24" stroke="#7A4A20" stroke-width="1.8" fill="none"/>' +
       '<path d="M-7 -18 Q-1 -15 3 -9 M-8 -11 Q-2 -8 1 -2" stroke="#F2C98A" stroke-width="1.2" fill="none" stroke-linecap="round"/>' +
       '<path d="M-10 7 H-2 L-3 13 H-10 Z" fill="#5A3A1C"/><path d="M-2 7 H28 Q27.5 9.5 24 9.5 H-2 Z" fill="#5A3A1C"/>',
-    snowboots: '<path d="M-11 -16 H7 V-3 Q18 -4 23 3 Q24.5 6 23.5 8 H-11 Z" fill="#7B61FF"/><path d="M8 -2.5 Q18 -3.5 23 3 Q24.5 6 23.5 8 H9 Z" fill="#5A43D6"/>' +
+    snowboots: '<path d="M-11 -16 H7 V-3 Q18 -4 23 3 Q24.5 6 23.5 8 H-11 Z" fill="#2F6FE4"/><path d="M8 -2.5 Q18 -3.5 23 3 Q24.5 6 23.5 8 H9 Z" fill="#1F4FA8"/>' +
       '<path d="M2 -12 L7 -10 M2 -8 L7 -6 M2 -4 L7 -2" stroke="#FFFFFF" stroke-width="1.4" stroke-linecap="round"/>' +
       [-10.5, -6, -1.5, 3, 7.5].map((x) => '<circle cx="' + x + '" cy="-17" r="4.2" fill="#FFFFFF" stroke="#E3E6F5" stroke-width="0.8"/>').join('') +
       '<rect x="-12.5" y="7" width="37.5" height="6" rx="2.5" fill="#3A3550"/><path d="M-8 13 v-2 M-2 13 v-2 M4 13 v-2 M10 13 v-2 M16 13 v-2 M22 13 v-2" stroke="#6B6885" stroke-width="1.4"/>',
-    flipflops: '<path d="M0 -23 C8 -23 10 -10 9 -1 C8 9 7 20 0 21 C-7 20 -8 9 -9 -1 C-10 -10 -8 -23 0 -23 Z" fill="#FF6FAE" stroke="#E0458C" stroke-width="1.2"/>' +
-      '<path d="M0 -20 C6 -20 7 -10 6.5 -2 C6 8 5 17 0 18 C-5 17 -6 8 -6.5 -2 C-7 -10 -6 -20 0 -20 Z" fill="#FFB3D4"/>' +
-      '<path d="M0 -13 Q-6 -8 -8.5 1 M0 -13 Q6 -8 8.5 1" stroke="#FFC531" stroke-width="3.2" fill="none" stroke-linecap="round"/>' +
-      '<g transform="translate(0 -13.5)">' + [0, 72, 144, 216, 288].map((a) => '<circle cx="0" cy="-2.2" r="1.9" fill="#FFFFFF" transform="rotate(' + a + ')"/>').join('') + '<circle r="1.4" fill="#FFC531"/></g>'
+    flipflops: '<path d="M0 -23 C8 -23 10 -10 9 -1 C8 9 7 20 0 21 C-7 20 -8 9 -9 -1 C-10 -10 -8 -23 0 -23 Z" fill="#FF8A3D" stroke="#D9661F" stroke-width="1.2"/>' +
+      '<path d="M0 -20 C6 -20 7 -10 6.5 -2 C6 8 5 17 0 18 C-5 17 -6 8 -6.5 -2 C-7 -10 -6 -20 0 -20 Z" fill="#FFC48A"/>' +
+      '<path d="M0 -13 Q-6 -8 -8.5 1 M0 -13 Q6 -8 8.5 1" stroke="#3D7BEA" stroke-width="3.2" fill="none" stroke-linecap="round"/>' +
+      '<g transform="translate(0 -13.5)">' + [0, 72, 144, 216, 288].map((a) => '<circle cx="0" cy="-2.2" r="1.9" fill="#FFFFFF" transform="rotate(' + a + ')"/>').join('') + '<circle r="1.4" fill="#FFC531"/></g>',
+    /* JB's November 16 footwear, from the side */
+    rainboots: '<rect x="-13" y="-25" width="3" height="7" rx="1.5" fill="#E09A0B"/><path d="M-10 -24 H6 V-3 Q16 -3 21 2 Q23 5 22.5 8 H-10 Z" fill="#FFC531"/>' +
+      '<rect x="-11" y="-25" width="18" height="4" rx="2" fill="#E09A0B"/><path d="M-10 4.2 H22.6" stroke="#E09A0B" stroke-width="2.4"/>' +
+      '<rect x="-11.5" y="7" width="35" height="5" rx="2.4" fill="#2E3A2F"/><ellipse cx="-5" cy="-12" rx="1.6" ry="6" fill="#FFFFFF" opacity=".45"/>',
+    jetboots: '<path d="M-11 1.5 L-15.5 5 L-11 6 Z" fill="#FF8A3D"/><path d="M-11 3 L-13.5 4.8 L-11 5.4 Z" fill="#FFE7A0"/><rect x="-12.5" y="0.5" width="3" height="6" rx="1" fill="#5E6478"/>' +
+      '<path d="M-10 -22 H6 V-3 Q16 -3 22 2 Q24 5 23 8 H-10 Z" fill="#E8453C"/><rect x="-11" y="-23" width="18" height="4" rx="2" fill="#B8C0D4"/>' +
+      '<path d="M-1 -16 L-5 -8 H-1.5 L-3.5 -1 L2.5 -10 H-1 Z" fill="#FFC531"/><rect x="-11.5" y="7" width="35.5" height="5" rx="2.5" fill="#B8C0D4"/>',
+    skates: '<path d="M-10 -20 H6 V-3 Q16 -3 21 1 Q23 3 22 5 H-10 Z" fill="#F4F6FB" stroke="#B8C0D4" stroke-width="1.2"/>' +
+      '<path d="M-10 -14 H6 M-10 -0.5 H18" stroke="#16A6A8" stroke-width="2.6"/><rect x="-11" y="5" width="34" height="3" rx="1.5" fill="#8A93A8"/><circle cx="23.5" cy="7" r="2.5" fill="#E8453C"/>' +
+      [-5, 16].map((x) => '<circle cx="' + x + '" cy="11" r="4" fill="#FF8A3D"/><circle cx="' + x + '" cy="11" r="1.5" fill="#F4F6FB"/>').join(''),
+    sneakers: '<path d="M-10 -10 Q-10 -14 -6 -14 H2 Q5 -14 7 -8 L9 -4 Q18 -3 22 2 Q23.5 5 23 7 H-10 Z" fill="#E8453C"/>' +
+      '<path d="M2.5 -11.5 L7 -9.5 M4.5 -8 L9 -6 M6.5 -4.5 L11 -3" stroke="#FFFFFF" stroke-width="1.4" stroke-linecap="round"/><path d="M15 -1 Q21 0 23 4 L23 7 H14 Z" fill="#FFFFFF"/>' +
+      '<path d="M-10 4.6 H23.3" stroke="#2B5CC2" stroke-width="2"/><rect x="-11.5" y="6" width="36" height="6" rx="2.6" fill="#FFFFFF" stroke="#D5DBE5" stroke-width="0.8"/>',
+    candyshoes: '<path d="M-10 -6 Q-10 -14 -2 -14 Q8 -14 12 -6 Q22 -5 23 2 L23 8 H-10 Z" fill="#FF8A1F"/>' +
+      '<path d="M-7 -8 L-4 6 M-1 -11.5 L2 6 M5 -10 L8 6 M11 -4 L14 6 M17 -2 L19.5 6" stroke="#FFD43B" stroke-width="2.8" stroke-linecap="round"/><circle cx="-6" cy="-1" r=".8" fill="#FFFFFF"/><circle cx="9" cy="-3" r=".8" fill="#FFFFFF"/><circle cx="16" cy="3" r=".8" fill="#FFFFFF"/>' +
+      '<path d="M2 -13.8 Q2.5 -20 6.5 -20 Q10.5 -20 11 -13 Z" fill="#34D27B"/><circle cx="5" cy="-17" r=".7" fill="#FFFFFF"/><circle cx="8.5" cy="-16" r=".7" fill="#FFFFFF"/>' +
+      '<rect x="-11.5" y="7" width="36" height="5" rx="2.4" fill="#2FB574"/>',
+    bakya: '<path d="M-12 4 H24 Q27 4 27 7 V9 Q27 12 24 12 H-12 Q-15 12 -15 9 V7 Q-15 4 -12 4 Z" fill="#A3652F"/><rect x="-14" y="2.6" width="40" height="2.8" rx="1.4" fill="#D9A066"/>' +
+      '<path d="M3 3.5 Q3 -11 12 -11 Q21 -11 21 3.5 Z" fill="#2B5CC2" stroke="#E8453C" stroke-width="1.2"/>' +
+      '<g transform="translate(12 -4)">' + [0, 45, 90, 135, 180, 225, 270, 315].map((a) => '<circle cx="0" cy="-4.4" r=".9" fill="#FFC531" transform="rotate(' + a + ')"/>').join('') + '<circle r="2.6" fill="#FFC531"/></g>',
+    knightboots: '<path d="M-10 -24 H6 V-4 Q14 -4 20 0 L28 6 Q28 8 25 8 H-10 Z" fill="#C3CAD8" stroke="#7E879C" stroke-width="1"/>' +
+      '<path d="M-10 -17 H6 M-10 -10 H6 M6 -4 Q2 2 2 8 M12 -2.5 Q9 3 9.5 8" stroke="#7E879C" stroke-width="1.2" fill="none"/>' +
+      '<rect x="-11" y="-25" width="18" height="3.5" rx="1.5" fill="#FFC531"/><circle cx="-6" cy="-13.5" r="1.1" fill="#FFC531"/><circle cx="2" cy="-13.5" r="1.1" fill="#FFC531"/>' +
+      '<rect x="-11" y="7" width="37" height="4.5" rx="1.5" fill="#7E879C"/>'
   };
 
   const SIDE = {
@@ -5854,7 +5923,26 @@ const Buddy = (() => {
     monster: '<path d="M-10 -14 C-12 -24 -8 -28 -4 -30 C-6 -24 -5 -19 -3 -15 Z M10 -14 C12 -24 8 -28 4 -30 C6 -24 5 -19 3 -15 Z" fill="#FFF1D6"/><ellipse cx="-7" cy="14" rx="7" ry="3.5" fill="#138A86"/><ellipse cx="7" cy="14" rx="7" ry="3.5" fill="#138A86"/><circle cx="0" cy="-1" r="16" fill="#22B8B0"/><ellipse cx="0" cy="5" rx="9" ry="7" fill="#9EF0DC"/><circle cx="11" cy="-9" r="2.6" fill="#138A86"/><circle cx="-13" cy="2" r="2.2" fill="#138A86"/><circle cx="-6" cy="-6" r="5" fill="#fff"/><circle cx="6" cy="-6" r="5" fill="#fff"/><circle cx="-7" cy="-5.5" r="2.4" fill="#221D3E"/><circle cx="5" cy="-5.5" r="2.4" fill="#221D3E"/><path d="M-7 2 Q0 8 7 2" fill="none" stroke="#221D3E" stroke-width="1.8" stroke-linecap="round"/><path d="M-4 3.6 L-3 6.5 L-2 4.6 Z M2 4.6 L3 6.5 L4 3.6 Z" fill="#fff"/>',
     turtle: '<ellipse cx="-14" cy="12" rx="5" ry="3.5" fill="#8BD45A"/><ellipse cx="12" cy="12" rx="5" ry="3.5" fill="#8BD45A"/><path d="M19 6 L26 8 L19 10 Z" fill="#8BD45A"/><circle cx="-24" cy="1" r="7" fill="#8BD45A"/><circle cx="-26" cy="-1" r="1.6" fill="#221D3E"/><path d="M-29 3 Q-26 5 -23 3" fill="none" stroke="#221D3E" stroke-width="1.2" stroke-linecap="round"/><path d="M-20 10 C-20 -14 20 -14 20 10 Z" fill="#2E9E5B"/><path d="M-8 -6 L0 -10 L8 -6 L8 2 L0 6 L-8 2 Z M-8 -6 L-16 2 M8 -6 L16 2 M-8 2 L-14 9 M8 2 L14 9 M0 6 L0 10" fill="none" stroke="#1F7A43" stroke-width="1.6"/><rect x="-21" y="8" width="42" height="4" rx="2" fill="#F2C14E"/>',
     peacock: '<g fill="#2FB574">' + [-50, -25, 0, 25, 50].map((a) => '<ellipse cx="0" cy="-26" rx="6" ry="17" transform="rotate(' + a + ' 6 4)"/>').join('') + '</g><g>' + [-50, -25, 0, 25, 50].map((a) => '<g transform="rotate(' + a + ' 6 4)"><circle cx="0" cy="-36" r="4.6" fill="#FFC531"/><circle cx="0" cy="-36" r="3" fill="#14A39A"/><circle cx="0" cy="-36" r="1.6" fill="#2448B8"/></g>').join('') + '</g><path d="M2 14 L2 7 M8 14 L8 7" stroke="#E8B04A" stroke-width="2" stroke-linecap="round"/><ellipse cx="5" cy="1" rx="8" ry="9" fill="#1F6FE0"/><path d="M-1 -3 C-4 -10 -6 -16 -6 -20" stroke="#1F6FE0" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="-7" cy="-22" r="5" fill="#1F6FE0"/><path d="M-12 -22 L-17 -21 L-12 -19 Z" fill="#E8B04A"/><circle cx="-8.5" cy="-23" r="1.3" fill="#221D3E"/><path d="M-7 -27 L-9 -32 M-6 -27 L-6 -33 M-5 -27 L-3 -32" stroke="#14A39A" stroke-width="1.2"/><circle cx="-9" cy="-32.5" r="1.4" fill="#2448B8"/><circle cx="-6" cy="-33.5" r="1.4" fill="#2448B8"/><circle cx="-3" cy="-32.5" r="1.4" fill="#2448B8"/>',
-    dino: '<path d="M12 2 C22 4 28 8 32 16 C24 12 18 10 10 10 Z" fill="#FF8A3D"/><rect x="-6" y="4" width="6" height="12" rx="3" fill="#FF8A3D"/><rect x="2" y="4" width="6" height="12" rx="3" fill="#E8642A"/><rect x="10" y="4" width="6" height="12" rx="3" fill="#FF8A3D"/><ellipse cx="4" cy="2" rx="16" ry="10" fill="#FF8A3D"/><ellipse cx="4" cy="6" rx="12" ry="5" fill="#FFE0B0"/><path d="M-8 -2 C-12 -14 -14 -26 -16 -36" stroke="#FF8A3D" stroke-width="8" fill="none" stroke-linecap="round"/><ellipse cx="-20" cy="-38" rx="8" ry="6" fill="#FF8A3D"/><circle cx="-23" cy="-40" r="1.6" fill="#221D3E"/><path d="M-27 -35 Q-24 -33 -21 -35" fill="none" stroke="#221D3E" stroke-width="1.2" stroke-linecap="round"/><circle cx="2" cy="-6" r="2.4" fill="#E8642A"/><circle cx="10" cy="-4" r="2" fill="#E8642A"/><circle cx="-4" cy="-3" r="1.8" fill="#E8642A"/>'
+    dino: '<path d="M12 2 C22 4 28 8 32 16 C24 12 18 10 10 10 Z" fill="#FF8A3D"/><rect x="-6" y="4" width="6" height="12" rx="3" fill="#FF8A3D"/><rect x="2" y="4" width="6" height="12" rx="3" fill="#E8642A"/><rect x="10" y="4" width="6" height="12" rx="3" fill="#FF8A3D"/><ellipse cx="4" cy="2" rx="16" ry="10" fill="#FF8A3D"/><ellipse cx="4" cy="6" rx="12" ry="5" fill="#FFE0B0"/><path d="M-8 -2 C-12 -14 -14 -26 -16 -36" stroke="#FF8A3D" stroke-width="8" fill="none" stroke-linecap="round"/><ellipse cx="-20" cy="-38" rx="8" ry="6" fill="#FF8A3D"/><circle cx="-23" cy="-40" r="1.6" fill="#221D3E"/><path d="M-27 -35 Q-24 -33 -21 -35" fill="none" stroke="#221D3E" stroke-width="1.2" stroke-linecap="round"/><circle cx="2" cy="-6" r="2.4" fill="#E8642A"/><circle cx="10" cy="-4" r="2" fill="#E8642A"/><circle cx="-4" cy="-3" r="1.8" fill="#E8642A"/>',
+    /* JB's November 16 friends: a round green baby dragon with a yellow belly, horns, wings and a tail, and a little
+       silver robot with a screen face, an antenna light and arms */
+    babydragon: '<path d="M10 4 C22 8 30 2 28 -8 L33 -12 L26 -12 C25 -4 20 0 12 -1 Z" fill="#34B86A"/>' +
+      '<path d="M8 -12 C16 -27 29 -27 32 -17 C26 -19 22 -15 18 -9 Z M-8 -12 C-16 -27 -29 -27 -32 -17 C-26 -19 -22 -15 -18 -9 Z" fill="#1E8F4E"/>' +
+      '<circle cx="0" cy="-2" r="14" fill="#34B86A"/><ellipse cx="0" cy="1" rx="9.5" ry="10" fill="#FFE08A"/>' +
+      '<ellipse cx="-8" cy="12" rx="6" ry="3.5" fill="#34B86A"/><ellipse cx="8" cy="12" rx="6" ry="3.5" fill="#34B86A"/>' +
+      '<path d="M-8 -33 L-11 -43 L-4 -35 Z M8 -33 L11 -43 L4 -35 Z" fill="#FFF1D6"/><circle cx="0" cy="-24" r="12.5" fill="#34B86A"/>' +
+      '<ellipse cx="0" cy="-18.5" rx="8" ry="5.5" fill="#FFE08A"/><circle cx="-5" cy="-27" r="3.5" fill="#fff"/><circle cx="5" cy="-27" r="3.5" fill="#fff"/>' +
+      '<circle cx="-4.6" cy="-26.6" r="2" fill="#221D3E"/><circle cx="5.4" cy="-26.6" r="2" fill="#221D3E"/><circle cx="-2.5" cy="-19.5" r=".9" fill="#221D3E"/><circle cx="2.5" cy="-19.5" r=".9" fill="#221D3E"/>' +
+      '<path d="M-4 -16 Q0 -13.5 4 -16" stroke="#221D3E" stroke-width="1.2" fill="none" stroke-linecap="round"/>',
+    littlerobot: '<rect x="-13" y="8" width="9" height="8" rx="2.5" fill="#5E6478"/><rect x="4" y="8" width="9" height="8" rx="2.5" fill="#5E6478"/>' +
+      '<path d="M-15 -2 L-21 6 M15 -2 L21 6" stroke="#5E6478" stroke-width="3.5" stroke-linecap="round"/><circle cx="-21.5" cy="7" r="3" fill="#C9D1DE"/><circle cx="21.5" cy="7" r="3" fill="#C9D1DE"/>' +
+      '<rect x="-15" y="-8" width="30" height="18" rx="5" fill="#C9D1DE" stroke="#8A93A8" stroke-width="1"/><rect x="-8" y="-4" width="16" height="7" rx="2" fill="#3D7BEA"/>' +
+      '<circle cx="-4" cy="-0.5" r="1.3" fill="#FF8A3D"/><circle cx="0" cy="-0.5" r="1.3" fill="#34D27B"/><circle cx="4" cy="-0.5" r="1.3" fill="#FFC531"/>' +
+      '<rect x="-15.5" y="-22" width="3" height="6" rx="1.5" fill="#5E6478"/><rect x="12.5" y="-22" width="3" height="6" rx="1.5" fill="#5E6478"/>' +
+      '<rect x="-13" y="-28" width="26" height="19" rx="5" fill="#C9D1DE" stroke="#8A93A8" stroke-width="1"/><rect x="-10" y="-25" width="20" height="12" rx="3.5" fill="#14112E"/>' +
+      '<ellipse cx="-4.5" cy="-20.5" rx="2" ry="2.6" fill="#4FE3FF"/><ellipse cx="4.5" cy="-20.5" rx="2" ry="2.6" fill="#4FE3FF"/>' +
+      '<path d="M-3.5 -16.5 Q0 -14.5 3.5 -16.5" stroke="#4FE3FF" stroke-width="1.3" fill="none" stroke-linecap="round"/>' +
+      '<path d="M0 -28 V-33" stroke="#5E6478" stroke-width="1.6"/><circle cx="0" cy="-35" r="2.6" fill="#FF8A3D"/>'
   };
   const BG = {
     meadow: '<rect class="g-sky" width="200" height="220"/><circle class="g-sun" cx="168" cy="34" r="16"/><path class="g-hill" d="M0 170 Q60 140 120 166 T200 160 L200 220 L0 220 Z"/><g class="g-flower"><circle cx="24" cy="196" r="4"/><circle cx="178" cy="190" r="4"/><circle cx="150" cy="208" r="4"/></g>',
@@ -5871,7 +5959,7 @@ const Buddy = (() => {
     boston: '<rect width="200" height="220" fill="#A9D4F5"/><g fill="#8FA9C8"><rect x="62" y="70" width="18" height="66"/><rect x="84" y="56" width="16" height="80"/><rect x="104" y="80" width="16" height="56"/></g><path d="M84 56 L92 44 L100 56 Z" fill="#7C96B8"/><rect x="18" y="108" width="40" height="28" fill="#C0603E"/><rect x="30" y="100" width="16" height="8" fill="#fff"/><path d="M28 100 A10 10 0 0 1 48 100 Z" fill="#FFC531"/><rect y="134" width="200" height="30" fill="#3C7FC4"/><path d="M0 142 q12 -4 24 0 t24 0 t24 0 t24 0 t24 0 t24 0 t24 0 t24 0 t24 0" stroke="#CFE6FA" stroke-width="2" fill="none"/><g stroke="#fff" stroke-width="3" fill="none"><path d="M140 136 L150 86 L160 136 M178 136 L188 86 L198 136"/><path d="M130 128 L200 128"/></g><g stroke="#fff" stroke-width="1" opacity=".8"><path d="M150 90 L132 128 M150 90 L142 128 M150 90 L160 128 M150 90 L170 128 M188 90 L176 128 M188 90 L196 128"/></g><rect y="162" width="200" height="58" fill="#79B95A"/><g><rect x="4" y="110" width="30" height="62" fill="#B5462E"/><rect x="34" y="104" width="30" height="68" fill="#A63F2A"/><path d="M10 120 h6 v8 h-6 Z M22 120 h6 v8 h-6 Z M10 136 h6 v8 h-6 Z M22 136 h6 v8 h-6 Z M40 116 h6 v8 h-6 Z M52 116 h6 v8 h-6 Z M40 132 h6 v8 h-6 Z M52 132 h6 v8 h-6 Z" fill="#2B2F45"/><rect x="15" y="156" width="8" height="16" fill="#1F3D2B"/><rect x="45" y="156" width="8" height="16" fill="#1F3D2B"/><rect x="2" y="106" width="64" height="4" fill="#fff"/></g><g transform="translate(110 172)"><rect x="-3" y="-30" width="6" height="30" fill="#8B5A3C"/><circle cx="0" cy="-40" r="16" fill="#E8752A"/><circle cx="-12" cy="-32" r="10" fill="#D9452B"/><circle cx="12" cy="-32" r="10" fill="#F2B33D"/></g><g fill="#E8752A"><circle cx="140" cy="190" r="2.5"/><circle cx="170" cy="200" r="2.5"/><circle cx="60" cy="196" r="2.5"/></g>'
   };
   /* Paint jobs: patterns for the flat buddy, and the color its shading is based on. */
-  const PAINT_BC = { rainbow: '#3D7BEA', galaxy: '#23408F', gold: '#E9B30C', redpaint: '#E03131', mustard: '#AD8200', pdots: '#7B4FD6', rpdots: '#E03131', blackpaint: '#2A2B31', whitegold: '#EEF0F5', ogdots: '#F28C28', firepaint: '#E0461E' };
+  const PAINT_BC = { rainbow: '#3D7BEA', galaxy: '#23408F', gold: '#E9B30C', redpaint: '#E03131', mustard: '#AD8200', pdots: '#22A35A', rpdots: '#E03131', blackpaint: '#2A2B31', whitegold: '#EEF0F5', ogdots: '#F28C28', firepaint: '#E0461E' };
   /* Paints that also set the buddy's other parts, as CSS variables on the drawing (11-buddy.css):
      shade, belly, the dragon's snout, foot and mantle, the ladybug's spots and middle line (spot, mark)
      and the slug's mouth. 'G' is the paint's own gradient: white with a gold belly draws its belly (the
@@ -5891,7 +5979,7 @@ const Buddy = (() => {
     return ['shade', 'belly', 'snout', 'foot', 'mantle', 'spot', 'mark'].filter((k) => v[k]).map((k) => ';--' + k + ':' + (v[k] === 'G' ? 'url(#' + pid + ')' : v[k])).join('') +
       (type === 'slug' && v.slugMouth ? ';--mouth:' + v.slugMouth : '');
   }
-  const RP_DOT = '#6A3BD2', OG_DOT = '#1E9E55';
+  const RP_DOT = '#2B5CC2', OG_DOT = '#1E9E55';
   function paintDefs(id, paint, base) {
     switch (paint) {
       case 'dots': return '<pattern id="' + id + '" width="18" height="18" patternUnits="userSpaceOnUse"><rect width="18" height="18" fill="' + base + '"/><circle cx="5" cy="5" r="3.2" fill="#fff" fill-opacity=".85"/><circle cx="14" cy="14" r="3.2" fill="#fff" fill-opacity=".85"/></pattern>';
@@ -5924,14 +6012,14 @@ const Buddy = (() => {
     handstand: '<g stroke="#FF8A3D" stroke-width="6" stroke-linecap="round" fill="none"><path d="M0 12 V-14 M0 8 L-20 34 M0 8 L20 34 M0 -14 L-14 -38 M0 -14 L14 -38"/></g><circle cx="0" cy="25" r="9" fill="#FF8A3D"/><path d="M-36 38 H36" stroke="#9BA4BA" stroke-width="4" stroke-linecap="round"/>',
     boo: '<path d="M-26 32 C-30 4 -30 -36 0 -36 C30 -36 30 4 26 32 Q21 24 16 31 Q11 24 6 31 Q1 24 -4 31 Q-9 24 -14 31 Q-19 24 -26 32 Z" fill="#F4F6FF" stroke="#C9CDEB" stroke-width="2"/><ellipse cx="-9" cy="-12" rx="5" ry="7.5" fill="#221D3E"/><ellipse cx="9" cy="-12" rx="5" ry="7.5" fill="#221D3E"/><ellipse cx="0" cy="8" rx="6" ry="8" fill="#221D3E"/><g transform="translate(31 31)"><ellipse rx="13" ry="10" fill="#FF8A3D"/><path d="M-4.5 -9 Q-7 0 -4.5 9 M4.5 -9 Q7 0 4.5 9" stroke="#E8642A" stroke-width="2" fill="none"/><rect x="-2" y="-15" width="4" height="6" rx="1" fill="#5B8C3A"/></g>',
     /* upside down on its head, hopping: the handstand figure up off the ground, with bounce marks */
-    handjump: '<g transform="translate(0 -9)"><g stroke="#8B5CF6" stroke-width="6" stroke-linecap="round" fill="none"><path d="M0 12 V-14 M0 8 L-20 32 M0 8 L20 32 M0 -14 L-14 -38 M0 -14 L14 -38"/></g><circle cx="0" cy="23" r="9" fill="#8B5CF6"/></g>' +
+    handjump: '<g transform="translate(0 -9)"><g stroke="#3D7BEA" stroke-width="6" stroke-linecap="round" fill="none"><path d="M0 12 V-14 M0 8 L-20 32 M0 8 L20 32 M0 -14 L-14 -38 M0 -14 L14 -38"/></g><circle cx="0" cy="23" r="9" fill="#3D7BEA"/></g>' +
       '<path d="M-36 40 H36" stroke="#9BA4BA" stroke-width="4" stroke-linecap="round"/><path d="M-11 34 L-15 30 M0 33 V28 M11 34 L15 30" stroke="#FFC531" stroke-width="3" stroke-linecap="round"/><path d="M-34 4 h-9 M-32 -8 h-9 M34 4 h9 M32 -8 h9" stroke="#9FC6FF" stroke-width="3" stroke-linecap="round"/>',
     /* a ball rolling along, then rolling back: two curling arrows */
     tumble: '<path d="M-42 36 H42" stroke="#9BA4BA" stroke-width="4" stroke-linecap="round"/><circle cx="0" cy="16" r="18" fill="#34D27B"/><path d="M-13 4 A18 18 0 0 1 13 4" stroke="#fff" stroke-opacity=".55" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="-6" cy="12" r="2.6" fill="#221D3E"/><circle cx="6" cy="12" r="2.6" fill="#221D3E"/>' +
       '<path d="M-30 -10 A30 30 0 0 1 24 -16" stroke="#FFC531" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M18 -26 L32 -14 L15 -8 Z" fill="#FFC531"/><path d="M30 -30 A34 34 0 0 0 -26 -34" stroke="#FF8A3D" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M-20 -44 L-34 -32 L-17 -26 Z" fill="#FF8A3D"/>',
     /* upside down on its head with a little leafy tree growing from its feet */
     treepose: '<g stroke="#8B5A3C" stroke-width="6" stroke-linecap="round" fill="none"><path d="M0 12 V-16 M0 8 L-20 34 M0 8 L20 34"/></g><circle cx="0" cy="25" r="9" fill="#FF8A3D"/>' +
-      '<circle cx="0" cy="-26" r="15" fill="#2FB574"/><circle cx="-15" cy="-17" r="11" fill="#34D27B"/><circle cx="15" cy="-17" r="11" fill="#34D27B"/><circle cx="0" cy="-39" r="10" fill="#3FCB6B"/><circle cx="-6" cy="-30" r="3" fill="#FF8FB1"/><circle cx="8" cy="-22" r="3" fill="#FF8FB1"/>' +
+      '<circle cx="0" cy="-26" r="15" fill="#2FB574"/><circle cx="-15" cy="-17" r="11" fill="#34D27B"/><circle cx="15" cy="-17" r="11" fill="#34D27B"/><circle cx="0" cy="-39" r="10" fill="#3FCB6B"/><circle cx="-6" cy="-30" r="3" fill="#FF9F43"/><circle cx="8" cy="-22" r="3" fill="#FF9F43"/>' +
       '<path d="M-36 38 H36" stroke="#9BA4BA" stroke-width="4" stroke-linecap="round"/>',
     /* a see-through buddy: a dashed outline with faint eyes and sparkles */
     invisible: '<path d="M-24 34 C-36 10 -32 -24 0 -28 C32 -24 36 10 24 34 Z" fill="#BFF3FF" fill-opacity=".16" stroke="#7FE7FF" stroke-width="3" stroke-dasharray="7 5" stroke-linecap="round"/>' +
@@ -5942,7 +6030,7 @@ const Buddy = (() => {
       '<path d="M-33 -6 C-35 -29 -17 -36 0 -36 C17 -36 35 -29 33 -6 C35 15 22 35 0 35 C-22 35 -35 15 -33 -6 Z" fill="#34D27B"/>' +
       '<path d="M-23 -21 L-8 -14 M23 -21 L8 -14" stroke="#1E7A48" stroke-width="4.5" stroke-linecap="round"/>' +
       '<circle cx="-12" cy="-7" r="6.5" fill="#fff"/><circle cx="12" cy="-7" r="6.5" fill="#fff"/><circle cx="-11" cy="-6" r="3.2" fill="#221D3E"/><circle cx="11" cy="-6" r="3.2" fill="#221D3E"/>' +
-      '<path d="M-18 6 Q0 1 18 6 Q17 30 0 30 Q-17 30 -18 6 Z" fill="#7A1F2B"/><ellipse cx="0" cy="24" rx="8.5" ry="4.5" fill="#E8607A"/>' +
+      '<path d="M-18 6 Q0 1 18 6 Q17 30 0 30 Q-17 30 -18 6 Z" fill="#7A1F2B"/><ellipse cx="0" cy="24" rx="8.5" ry="4.5" fill="#E8503C"/>' +
       '<path d="M-15 6.4 L-11 14 L-7 5.2 Z M7 5.2 L11 14 L15 6.4 Z M-7 29.4 L-4 23 L-1 29.9 Z M1 29.9 L4 23 L7 29.4 Z" fill="#fff"/>' +
       '<path d="M39 -10 Q46 4 39 18 M45 -17 Q55 4 45 25" stroke="#FFC531" stroke-width="3.6" fill="none" stroke-linecap="round"/>',
     gallop: '<path d="M-47 -12 h10 M-49 0 h12 M-47 12 h10" stroke="#9FC6FF" stroke-width="3" stroke-linecap="round"/>' +
@@ -5997,7 +6085,7 @@ const Buddy = (() => {
     pizza: '<path d="M-30 -26 Q0 -40 30 -26 L0 38 Z" fill="#FFC74A"/><path d="M-30 -26 Q0 -40 30 -26 L26 -18 Q0 -30 -26 -18 Z" fill="#D9883A"/><circle cx="-8" cy="-10" r="6" fill="#D9453C"/><circle cx="9" cy="-6" r="6" fill="#D9453C"/><circle cx="0" cy="12" r="5.5" fill="#D9453C"/>',
     cake: '<rect x="-34" y="0" width="68" height="30" rx="6" fill="#8B5A3C"/><rect x="-26" y="-22" width="52" height="24" rx="6" fill="#FFF1D6"/><path d="M-34 6 Q-28 14 -22 6 Q-16 14 -10 6 Q-4 14 2 6 Q8 14 14 6 Q20 14 26 6 Q32 14 34 6" stroke="#fff" stroke-width="4" fill="none"/><rect x="-12" y="-38" width="5" height="16" fill="#4FE3FF"/><rect x="6" y="-38" width="5" height="16" fill="#E8453C"/><path d="M-9.5 -40 C-13 -46 -9 -50 -9.5 -52 C-6 -48 -6 -44 -9.5 -40 Z M8.5 -40 C5 -46 9 -50 8.5 -52 C12 -48 12 -44 8.5 -40 Z" fill="#FFC531"/>',
     banana: '<path d="M-33 -20 C-31 16 2 36 36 18 C39 16 38 11 34 11 C8 21 -15 7 -23 -22 Z" fill="#FFD84A" stroke="#E2B12E" stroke-width="2" stroke-linejoin="round"/><path d="M-27 -17 C-21 7 0 21 27 18" stroke="#F0C232" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M-33 -20 L-31 -30 L-24 -29 L-23 -22 Z" fill="#6B4423"/><circle cx="36.5" cy="14.5" r="2.6" fill="#4A3020"/>',
-    grapes: '<path d="M2 -22 C3 -30 5 -35 8 -40" stroke="#6B4423" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M6 -32 C14 -44 30 -40 28 -30 C20 -26 12 -26 6 -32 Z" fill="#34D27B"/>' + [[-24, -14], [-8, -16], [8, -16], [24, -14], [-16, 0], [0, -1], [16, 0], [-8, 14], [8, 14], [0, 28]].map((q) => '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="8.6" fill="#7C4DDB" stroke="#5E35B5" stroke-width="1.2"/><circle cx="' + (q[0] - 3) + '" cy="' + (q[1] - 3) + '" r="2.4" fill="#fff" opacity=".45"/>').join(''),
+    grapes: '<path d="M2 -22 C3 -30 5 -35 8 -40" stroke="#6B4423" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M6 -32 C14 -44 30 -40 28 -30 C20 -26 12 -26 6 -32 Z" fill="#34D27B"/>' + [[-24, -14], [-8, -16], [8, -16], [24, -14], [-16, 0], [0, -1], [16, 0], [-8, 14], [8, 14], [0, 28]].map((q) => '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="8.6" fill="#A9D65B" stroke="#7AA834" stroke-width="1.2"/><circle cx="' + (q[0] - 3) + '" cy="' + (q[1] - 3) + '" r="2.4" fill="#fff" opacity=".45"/>').join(''),
     strawberry: [[-14, 4, -12, 1], [17, 9, 14, 0.85]].map((s) => '<g transform="translate(' + s[0] + ' ' + s[1] + ') rotate(' + s[2] + ') scale(' + s[3] + ')"><path d="M0 28 C-19 13 -23 -4 -17 -12 C-9 -18 9 -18 17 -12 C23 -4 19 13 0 28 Z" fill="#E8453C"/>' + [[-9, -6], [0, -9], [9, -6], [-12, 3], [-3, 1], [6, 2], [13, 5], [-7, 11], [3, 11], [-1, 19]].map((q) => '<ellipse cx="' + q[0] + '" cy="' + q[1] + '" rx="1.2" ry="2" fill="#FFE48A"/>').join('') + '<path d="M0 -12 L-14 -18 L-6 -14 L-9 -24 L-2 -15 L3 -24 L3 -14 L13 -19 L5 -11 Z" fill="#2FB574"/><path d="M1 -16 L2 -26" stroke="#2F7A3A" stroke-width="2.5" stroke-linecap="round"/></g>').join(''),
     melon: '<path d="M-40 -10 H40 A40 40 0 0 1 -40 -10 Z" fill="#C8D08A"/><path d="M-37 -10 A37 37 0 0 0 37 -10" fill="none" stroke="#A3B565" stroke-width="2.2" stroke-dasharray="3 4"/><path d="M-34 -10 H34 A34 34 0 0 1 -34 -10 Z" fill="#B5E08A"/><path d="M-31 -10 H31 A31 31 0 0 1 -31 -10 Z" fill="#FFA552"/><path d="M-20 -10 H20 A20 12 0 0 1 -20 -10 Z" fill="#FFC98A"/>' + [-13, -6.5, 0, 6.5, 13].map((x) => '<ellipse cx="' + x + '" cy="-5" rx="2" ry="3.2" fill="#FFF1D6"/>').join(''),
     watermelon: '<path d="M-43 -14 H43 A43 43 0 0 1 -43 -14 Z" fill="#2F9E44"/><path d="M-40 -14 A40 40 0 0 0 40 -14" fill="none" stroke="#237A34" stroke-width="2.4" stroke-dasharray="6 5"/><path d="M-37 -14 H37 A37 37 0 0 1 -37 -14 Z" fill="#E9F7D9"/><path d="M-33 -14 H33 A33 33 0 0 1 -33 -14 Z" fill="#F03E3E"/>' + [[-18, -5], [-6, -1], [6, -1], [18, -5], [-12, 8], [0, 12], [12, 8]].map((q) => '<ellipse cx="' + q[0] + '" cy="' + q[1] + '" rx="2" ry="3.4" fill="#221D3E"/>').join(''),
@@ -6010,21 +6098,21 @@ const Buddy = (() => {
   const at = (xy, inner) => '<g transform="translate(' + xy[0] + ' ' + xy[1] + ')">' + inner + '</g>';
   /* Flat (no 3D) drawings of forms and power-ups: the glow, ring, badge, wings or boots, helmet,
      moon, star friends and crown. The 3D buddy draws the full set (buddy3d.js). */
-  const FORM_COLOR = ['#FFD34D', '#FFD34D', '#FFD34D', '#FF7A3D', '#4FE3FF', '#A86BFF'];
+  const FORM_COLOR = ['#FFD34D', '#FFD34D', '#FFD34D', '#FF7A3D', '#4FE3FF', '#3D6BFF'];
   let auraN = 0;
   function flatAura(fc, power, form) {
     const gid = 'au' + (++auraN), r = power >= 8 ? 98 : 84;
     return '<defs><radialGradient id="' + gid + '"><stop offset="0" stop-color="' + fc + '" stop-opacity=".55"/><stop offset=".6" stop-color="' + fc + '" stop-opacity=".18"/><stop offset="1" stop-color="' + fc + '" stop-opacity="0"/></radialGradient></defs>' +
-      (form >= 5 ? '<g opacity=".7"><ellipse cx="100" cy="112" rx="96" ry="40" fill="#5B3FC4" fill-opacity=".35" transform="rotate(-18 100 112)"/><ellipse cx="100" cy="112" rx="60" ry="22" fill="#9FD3FF" fill-opacity=".35" transform="rotate(-18 100 112)"/></g>' : '') +
+      (form >= 5 ? '<g opacity=".7"><ellipse cx="100" cy="112" rx="96" ry="40" fill="#2346C8" fill-opacity=".35" transform="rotate(-18 100 112)"/><ellipse cx="100" cy="112" rx="60" ry="22" fill="#9FD3FF" fill-opacity=".35" transform="rotate(-18 100 112)"/></g>' : '') +
       (power >= 2 ? '<circle cx="100" cy="128" r="' + r + '" fill="url(#' + gid + ')"/>' : '');
   }
   const STAR5 = (r) => { let d = ''; for (let i = 0; i < 10; i++) { const a = (Math.PI / 5) * i - Math.PI / 2, q = i % 2 ? r * 0.45 : r; d += (i ? 'L' : 'M') + (Math.cos(a) * q).toFixed(1) + ' ' + (Math.sin(a) * q).toFixed(1); } return d + 'Z'; };
   function flatBadge(form) {
-    const disc = ['#2B5CC2', '#2B5CC2', '#2B5CC2', '#C9302C', '#1E2A6E', '#4B2C9E'][Math.min(form, 5)];
+    const disc = ['#2B5CC2', '#2B5CC2', '#2B5CC2', '#C9302C', '#1E2A6E', '#2340A8'][Math.min(form, 5)];
     let em;
     if (form === 3) em = '<path d="M2 -9 L-5 1 L0 1 L-2 9 L5 -1 L0 -1 Z" fill="#FFD34D"/>';
     else if (form === 4) em = '<circle r="4.5" fill="#FFB03A"/><ellipse rx="8" ry="2.6" fill="none" stroke="#FFE7A0" stroke-width="1.4" transform="rotate(-20)"/>';
-    else if (form >= 5) em = '<path d="M0 0 C3 -1 4 -4 1 -6 C-4 -7 -7 -2 -6 2 C-5 7 2 9 6 6" fill="none" stroke="#E8DDFF" stroke-width="2" stroke-linecap="round"/>';
+    else if (form >= 5) em = '<path d="M0 0 C3 -1 4 -4 1 -6 C-4 -7 -7 -2 -6 2 C-5 7 2 9 6 6" fill="none" stroke="#DDEBFF" stroke-width="2" stroke-linecap="round"/>';
     else em = '<path d="' + STAR5(7) + '" fill="#FFD34D"/>';
     return '<circle r="11" fill="' + disc + '" stroke="#FFD34D" stroke-width="2.4"/>' + em;
   }
@@ -6047,7 +6135,7 @@ const Buddy = (() => {
     return o;
   }
   let clipN = 0;
-  const colorOf = (b) => COLORS[b.color] || COLORS[(TYPE[b.type] || TYPES[0]).color];
+  const colorOf = (b) => COLORS[b.color] || COLORS[OLD_COLOR[b.color]] || COLORS[(TYPE[b.type] || TYPES[0]).color];
   /* The buddy as an SVG string. opts: { mood: 'idle' | 'cheer' | 'think', stage } */
   function svg(b, opts) {
     opts = opts || {};
@@ -6118,7 +6206,7 @@ const Buddy = (() => {
     return '<svg viewBox="0 0 200 220" aria-hidden="true"><defs><clipPath id="' + cid + '"><rect width="200" height="220" rx="26"/></clipPath></defs><g clip-path="url(#' + cid + ')">' + BG[id] + '</g></svg>';
   }
   /* One item drawn on its own, for the shop. Small items get a tighter frame so they are centered and easy to see. */
-  const ITEM_VB = { skihelmet: '-46 -36 92 64', scubamask: '-52 -58 104 88', skigoggles: '-52 -22 104 44', flower: '-24 -38.5 84 67', party: '-48 -65 96 77', crown: '-45 -50 90 72', bow: '-40 -32 80 64', hairbow: '-12 -32 72 64', horn: '-36 -50 72 60', headphones: '-56 -30 112 84', balloons: '-55 -158 110 166', beads: '-42 -14 84 34', lei: '-44 -14 88 36', bandana: '-40 -14 80 46', fishbowl: '-30 -36 60 50', unicorn: '-38 -58 76 78', kitten: '-34 -36 68 54', puppy: '-34 -34 68 52', bunny: '-28 -48 52 66', monster: '-26 -34 52 54', turtle: '-34 -18 64 36', peacock: '-36 -60 72 78', dino: '-30 -48 66 68', plume: '-50 -42 100 64' };
+  const ITEM_VB = { jetboots: '-30 -33 64 52', babydragon: '-35 -46 70 66', littlerobot: '-32 -40 64 60', skihelmet: '-46 -36 92 64', scubamask: '-52 -58 104 88', skigoggles: '-52 -22 104 44', flower: '-24 -38.5 84 67', party: '-48 -65 96 77', crown: '-45 -50 90 72', bow: '-40 -32 80 64', hairbow: '-12 -32 72 64', horn: '-36 -50 72 60', headphones: '-56 -30 112 84', balloons: '-55 -158 110 166', beads: '-42 -14 84 34', lei: '-44 -14 88 36', bandana: '-40 -14 80 46', fishbowl: '-30 -36 60 50', unicorn: '-38 -58 76 78', kitten: '-34 -36 68 54', puppy: '-34 -34 68 52', bunny: '-28 -48 52 66', monster: '-26 -34 52 54', turtle: '-34 -18 64 36', peacock: '-36 -60 72 78', dino: '-30 -48 66 68', plume: '-50 -42 100 64' };
   function itemSVG(id, color) {
     const it = ITEM[id];
     if (!it) return '';
@@ -6177,9 +6265,9 @@ const Buddy3D = (() => {
 
   /* ---------- colors ---------- */
   const C = {
-    ink: '#221D3E', white: '#FFFFFF', pink: '#FF6FB5', gold: '#FFC531', gold2: '#FFE7A0', blue: '#3D7BEA', blue2: '#2B5CC2',
-    brown: '#A3652F', red: '#E8453C', red2: '#B42E27', violet: '#7C4DDB', green: '#2FB574', green2: '#22905B', grey: '#A9B2C8',
-    orange: '#FF8A3D', cyan: '#4FE3FF', cheek: '#FF7EA6', ivory: '#FFF1D6', screen: '#14112E'
+    ink: '#221D3E', white: '#FFFFFF', gold: '#FFC531', gold2: '#FFE7A0', blue: '#3D7BEA', blue2: '#2B5CC2',
+    brown: '#A3652F', red: '#E8453C', red2: '#B42E27', green: '#2FB574', green2: '#22905B', grey: '#A9B2C8',
+    orange: '#FF8A3D', cyan: '#4FE3FF', cheek: '#FF9A5C', ivory: '#FFF1D6', screen: '#14112E'
   };
   const rgb = (h) => { h = String(h).replace('#', ''); return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)); };
   const hex = (a) => '#' + a.map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
@@ -6362,8 +6450,8 @@ const Buddy3D = (() => {
   /* Solid paints recolor the buddy itself, so the shading follows the new color. */
   const SOLID_PAINT = { redpaint: '#E03131', mustard: '#AD8200', blackpaint: '#2A2B31', whitegold: '#EEF0F5' };
   /* Patterns with a color of their own: the buddy takes that color, the pattern goes on top. */
-  const PAINT_BASE = { pdots: '#7B4FD6', rpdots: '#E03131', ogdots: '#F28C28', firepaint: '#E0461E' };
-  const RP_DOT = '#6A3BD2', OG_DOT = '#1E9E55';
+  const PAINT_BASE = { pdots: '#22A35A', rpdots: '#E03131', ogdots: '#F28C28', firepaint: '#E0461E' };
+  const RP_DOT = '#2B5CC2', OG_DOT = '#1E9E55';
   /* One flame, base at (bx, by), pointing up, s pixels per unit: the outer tongue, then its yellow heart. */
   const FLAME_OUT = [[-12, 0, -15, -10, -9, -19], [-8, -13, -4, -12, -4, -16], [-5, -25, 0, -32, 5, -38], [4, -28, 13, -22, 12, -9], [11, -2, 6, 0, 0, 0]];
   const FLAME_IN = [[-6, 0, -8, -6, -5, -11], [-4, -8, -2, -8, -2, -10], [-2, -15, 1, -19, 3, -22], [3, -16, 7, -12, 6, -6], [5, -2, 3, 0, 0, 0]];
@@ -6786,19 +6874,19 @@ const Buddy3D = (() => {
       g.add(shield);
       return g;
     },
-    /* A mouse face: round grey ears with pink insides, and a pink nose with whiskers on the face (each
+    /* A mouse face: round grey ears with tan insides, and a brown nose with whiskers on the face (each
        buddy's face is in a different place: MOUSE_AT, world coordinates, turned into hat coordinates). */
     mouse: (type) => {
       const g = new T.Group(), A = ANCHOR[type] || ANCHOR.ladybug, Q = MOUSE_AT[type] || MOUSE_AT.ladybug;
-      const fur = mat.satin('#A9AFC0', { roughness: 0.75 }), pink = mat.satin('#FFB3C7', { roughness: 0.65 });
+      const fur = mat.satin('#A9AFC0', { roughness: 0.75 }), inner = mat.satin('#E3C4A0', { roughness: 0.65 });
       [-1, 1].forEach((sx) => {
         const ear = G([sx * Q.ex, Q.ey, Q.ez], [0, -sx * 0.22, -sx * 0.3]);
         ear.add(M(sph(1, 32, 20), fur, null, null, [0.23, 0.23, 0.065]));
-        ear.add(M(sph(1, 28, 18), pink, [0, 0, 0.036], null, [0.15, 0.15, 0.036]));
+        ear.add(M(sph(1, 28, 18), inner, [0, 0, 0.036], null, [0.15, 0.15, 0.036]));
         g.add(ear);
       });
       const nose = G([(Q.nose[0] - A.hat[0]) / A.hs, (Q.nose[1] - A.hat[1]) / A.hs, (Q.nose[2] - A.hat[2]) / A.hs]);
-      nose.add(M(sph(1, 24, 18), mat.gloss('#FF7FA8', { roughness: 0.25 }), null, null, [0.075, 0.06, 0.06]));
+      nose.add(M(sph(1, 24, 18), mat.gloss('#B86A45', { roughness: 0.25 }), null, null, [0.075, 0.06, 0.06]));
       nose.add(M(sph(0.018, 10, 8), mat.glow('#FFFFFF'), [-0.026, 0.024, 0.05]));
       const wm = mat.satin(type ? Q.wc : '#3A3550', { roughness: 0.6 });
       [-1, 1].forEach((sx) => [-1, 0, 1].forEach((i) => nose.add(M(tube([[sx * 0.05, i * 0.016, 0], [sx * 0.18, i * 0.04, -0.03], [sx * 0.31, i * 0.075 + 0.01, -0.085]], 0.0075, 10, 5), wm))));
@@ -6823,14 +6911,14 @@ const Buddy3D = (() => {
       [[-0.62, '#FF4D4D'], [0.62, '#34D27B']].forEach((q) => g.add(M(sph(0.035, 14, 10), mat.glow(q[1]), [c[0] + Math.sin(q[0]) * (rr + 0.06), cy, c[2] + Math.cos(q[0]) * (rr + 0.06)])));
       return g;
     },
-    /* A ski helmet: a shiny pink shell with a white stripe from the front over to the back, dark vents each side of
+    /* A ski helmet: a shiny red shell with a white stripe from the front over to the back, dark vents each side of
        the stripe, a darker rim and soft dark ear pads (the dragon's horns go under it: build()). */
     skihelmet: () => {
       const g = G([0, -0.15, 0], [-0.06, 0, 0]), S = [1, 0.9, 1.08], R = 0.47;
-      const pink = mat.gloss('#E8408F', { roughness: 0.22 }), white = mat.gloss('#FFFFFF', { roughness: 0.25 }), dark = mat.satin('#2B2D42', { roughness: 0.75 });
-      g.add(M(new T.SphereGeometry(R, 48, 24, 0, Math.PI * 2, 0, Math.PI / 2), pink, null, null, S));
+      const shell = mat.gloss('#D42A1E', { roughness: 0.22 }), white = mat.gloss('#FFFFFF', { roughness: 0.25 }), dark = mat.satin('#2B2D42', { roughness: 0.75 });
+      g.add(M(new T.SphereGeometry(R, 48, 24, 0, Math.PI * 2, 0, Math.PI / 2), shell, null, null, S));
       [Math.PI / 2, Math.PI * 1.5].forEach((ph) => g.add(M(new T.SphereGeometry(R * 1.008, 8, 24, ph - 0.14, 0.28, 0, Math.PI / 2), white, null, null, S)));
-      g.add(M(new T.TorusGeometry(R, 0.034, 12, 56), mat.gloss('#B82E70', { roughness: 0.3 }), [0, 0.012, 0], [Math.PI / 2, 0, 0], [1, S[2], 1]));
+      g.add(M(new T.TorusGeometry(R, 0.034, 12, 56), mat.gloss('#A8231C', { roughness: 0.3 }), [0, 0.012, 0], [Math.PI / 2, 0, 0], [1, S[2], 1]));
       [[-0.36, 0.62], [0.36, 0.62], [-0.3, 1.02], [0.3, 1.02], [Math.PI - 0.36, 0.7], [Math.PI + 0.36, 0.7]].forEach((q) => {
         const d = V(Math.sin(q[0]) * Math.cos(q[1]), Math.sin(q[1]), Math.cos(q[0]) * Math.cos(q[1])), p = V(d.x * R * S[0], d.y * R * S[1], d.z * R * S[2]);
         const o = M(sph(1, 16, 10), dark, [p.x, p.y, p.z], null, [0.03, 0.085, 0.014]);
@@ -7073,24 +7161,24 @@ const Buddy3D = (() => {
       g.add(M(rbox(0.075, 0.06, 0.05, 0.015, 4), dark, [x0, 0.02, ze - 0.03]));
       return g;
     },
-    /* Ski goggles: one wide curved lens, mirrored orange at the top through coral to pink at the bottom, in a white
-       frame on a wide purple strap. */
+    /* Ski goggles: one wide curved lens, mirrored orange at the top through coral to red at the bottom, in a white
+       frame on a wide blue strap. */
     skigoggles: (gap) => {
       const g = new T.Group(), W = gap + 0.27, H = 0.17, K = 0.62;
       g.add(M(bendBack(lensRing(W, H, 0.12, 0.045, 0.07), 0.07, K), mat.gloss('#F4F6FB', { roughness: 0.3 })));
       const lg = bendBack(new T.ShapeGeometry(lensShape(W - 0.035, H - 0.035, 0.09), 18), 0.085, K), p = lg.attributes.position;
-      const top = lin('#FFB23E'), mid = lin('#FF6A5A'), bot = lin('#D9378F'), c = new T.Color(), col = [];
+      const top = lin('#FFB23E'), mid = lin('#FF6A5A'), bot = lin('#C9302C'), c = new T.Color(), col = [];
       for (let i = 0; i < p.count; i++) { const u = (p.getY(i) + H) / (2 * H); if (u > 0.5) c.copy(mid).lerp(top, (u - 0.5) * 2); else c.copy(bot).lerp(mid, u * 2); col.push(c.r, c.g, c.b); }
       lg.setAttribute('color', new T.Float32BufferAttribute(col, 3));
       g.add(M(lg, new T.MeshPhysicalMaterial({ vertexColors: true, roughness: 0.1, metalness: 0.3, clearcoat: 1, clearcoatRoughness: 0.04, envMapIntensity: TUNE.env })));
       g.add(M(tube([[-W * 0.6, H * 0.45, 0.09 - K * 0.36 * W * W], [-W * 0.42, H * 0.62, 0.092 - K * 0.18 * W * W]], 0.011, 8, 6), mat.glow('#FFFFFF', { transparent: true, opacity: 0.8 })));
-      const ze = 0.07 - K * W * W, strap = mat.satin('#7C4DFF', { roughness: 0.8 });
+      const ze = 0.07 - K * W * W, strap = mat.satin('#2B5CC2', { roughness: 0.8 });
       [-1, 1].forEach((sx) => g.add(M(tube([[sx * (W - 0.02), 0, ze], [sx * (W + 0.1), 0, -0.16], [sx * (gap + 0.33), 0, -0.45]], 0.042, 14, 8), strap, null, null, [1, 1.45, 1])));
       return g;
     }
   };
-  /* Light-up glasses colors: cyan, lime, sunny yellow and violet, blended in a loop. */
-  const NEON = ['#4FE3FF', '#7CFF4F', '#FFE14F', '#A86BFF'];
+  /* Light-up glasses colors: cyan, lime, sunny yellow and orange, blended in a loop. */
+  const NEON = ['#4FE3FF', '#7CFF4F', '#FFE14F', '#FF8A3D'];
   let NEON_LIN = null;
   function neonAt(u, out) {
     if (!NEON_LIN) NEON_LIN = NEON.map(lin);
@@ -7332,9 +7420,9 @@ const Buddy3D = (() => {
     },
     /* Andi's November 15 footwear (bootPair and bootBody below): white space boots with a blue stripe round them, a
        grey sole, a light on the toe and, where there is a leg, a blue cuff; cowboy boots in the cowboy hat's brown with
-       a pointed toe, a heel, stitching on the toe and, up the leg, a gold star and pull straps; puffy purple snow boots
-       with a white fur trim, a dark rubber band, laces and a thick dark sole; and flip flops, a pink sole under each foot
-       with a yellow strap over it and a little white flower where the strap meets. A buddy with no legs to speak of
+       a pointed toe, a heel, stitching on the toe and, up the leg, a gold star and pull straps; puffy blue snow boots
+       with a white fur trim, a dark rubber band, laces and a thick dark sole; and flip flops, an orange sole under each foot
+       with a blue strap over it and a little white flower where the strap meets. A buddy with no legs to speak of
        (the dragon, the ladybug) shows the shoe; the robot and the slug show the boot's shaft too. */
     spaceboots: (type) => bootPair(type, (b, y, s) => {
       const white = mat.gloss('#F4F6FB', { roughness: 0.3 }), blue = mat.gloss(C.blue, { roughness: 0.25 }), grey = mat.satin('#8A93A8', { roughness: 0.6 });
@@ -7362,7 +7450,7 @@ const Buddy3D = (() => {
       }
     }),
     snowboots: (type) => bootPair(type, (b, y, s) => {
-      const puff = mat.vinyl('#7B61FF', { roughness: 0.5, clearcoat: 0.3 }), rubber = mat.vinyl('#4B37B8', { roughness: 0.45 }), tread = mat.satin('#3A3550', { roughness: 0.8 });
+      const puff = mat.vinyl('#2F6FE4', { roughness: 0.5, clearcoat: 0.3 }), rubber = mat.vinyl('#1F4FA8', { roughness: 0.45 }), tread = mat.satin('#3A3550', { roughness: 0.8 });
       const fur = mat.satin('#FFFFFF', { roughness: 0.95 }), lace = mat.satin('#FFFFFF', { roughness: 0.6 });
       const o = bootBody(b, s, type, { upper: puff, sole: tread, soleH: 0.06, shaftH: 0.12, puffy: 1.08, low: 0.3, long: 0.12 });
       b.add(shoeBand(o.S, -0.28, 0.04, 0.03, rubber));
@@ -7381,19 +7469,130 @@ const Buddy3D = (() => {
       }
     }),
     flipflops: (type) => bootPair(type, (b, y, s) => {
-      const pink = mat.vinyl('#FF6FAE', { roughness: 0.45 }), bed = mat.vinyl('#FFB3D4', { roughness: 0.55 }), strap = mat.vinyl(C.gold, { roughness: 0.35 });
+      const rubber = mat.vinyl('#FF8A3D', { roughness: 0.45 }), bed = mat.vinyl('#FFC48A', { roughness: 0.55 }), strap = mat.vinyl(C.blue, { roughness: 0.35 });
       const sole = new T.Shape(), wx = s[0] * 1.08, lz = s[2] * 1.22;
       sole.moveTo(0, -lz); sole.bezierCurveTo(wx * 0.9, -lz, wx, -lz * 0.3, wx * 0.95, 0); sole.bezierCurveTo(wx * 1.05, lz * 0.5, wx * 0.9, lz, 0, lz);
       sole.bezierCurveTo(-wx * 0.9, lz, -wx * 1.05, lz * 0.5, -wx * 0.95, 0); sole.bezierCurveTo(-wx, -lz * 0.3, -wx * 0.9, -lz, 0, -lz);
       const ex = (d, k) => { const geo = new T.ExtrudeGeometry(sole, { depth: d, bevelEnabled: true, bevelThickness: 0.004, bevelSize: 0.004, bevelSegments: 2, curveSegments: 16 }); geo.rotateX(Math.PI / 2); geo.scale(k, 1, k); return geo; };
-      b.add(M(ex(0.026, 1), pink, [0, 0.03, s[2] * 0.08]));
+      b.add(M(ex(0.026, 1), rubber, [0, 0.03, s[2] * 0.08]));
       b.add(M(ex(0.006, 0.9), bed, [0, 0.036, s[2] * 0.08]));
       const post = [0, y + s[1] * 0.62, s[2] * 0.86];
       [-1, 1].forEach((k) => b.add(M(tube([post, [k * s[0] * 0.6, y + s[1] * 0.95, s[2] * 0.1], [k * s[0] * 1.02, y + s[1] * 0.25, -s[2] * 0.1], [k * s[0] * 0.98, 0.04, -s[2] * 0.15]], 0.017, 24, 8), strap)));
       const fl = G(post, [-0.5, 0, 0]);
       for (let k = 0; k < 5; k++) { const a = (k / 5) * Math.PI * 2; fl.add(M(sph(0.018, 10, 8), mat.satin('#FFFFFF', { roughness: 0.5 }), [Math.sin(a) * 0.022, Math.cos(a) * 0.022, 0.006])); }
-      fl.add(M(sph(0.014, 10, 8), strap, [0, 0, 0.012]));
+      fl.add(M(sph(0.014, 10, 8), mat.vinyl(C.gold, { roughness: 0.35 }), [0, 0, 0.012]));
       b.add(fl);
+    }),
+    /* JB's November 16 footwear, a pair for each place that had none, with no pink or purple: rain boots for the
+       meadow, jet boots for the rainbow sky, roller skates for Miami, sneakers for Boston, candy shoes for Candy land,
+       bakya (wooden clogs) for the Philippines and knight boots for the castle. As above, the robot and the slug show
+       a boot's shaft too. */
+    /* Rain boots: shiny yellow rubber, a dark sole, a darker band above it and round the top, a pull tab at the back. */
+    rainboots: (type) => bootPair(type, (b, y, s) => {
+      const rubber = mat.gloss('#FFC531', { roughness: 0.16 }), deep = mat.gloss('#E09A0B', { roughness: 0.22 }), sole = mat.satin('#2E3A2F', { roughness: 0.8 });
+      const o = bootBody(b, s, type, { upper: rubber, sole, soleH: 0.045, shaftH: 0.26, flare: 1.1, low: 0.3, long: 0.12, puffy: 1.04 });
+      b.add(shoeBand(o.S, -0.3, 0.03, 0.022, deep));
+      if (o.shaft) {
+        b.add(M(new T.TorusGeometry(o.r * 1.1, 0.024, 12, 40), deep, [0, o.top, o.cz], [Math.PI / 2, 0, 0]));
+        b.add(M(rbox(0.05, 0.07, 0.016, 0.006, 3), deep, [0, o.top + 0.02, o.cz - o.r * 1.1]));
+      } else b.add(shoeBand(o.S, 0.52, 0.02, 0.022, deep));
+    }),
+    /* Jet boots: red boots with a steel band and sole, a gold lightning bolt on each side, and a jet at the heel whose
+       flame flickers (pose() moves userData.flames, like the jet pack's) in a soft glow, with more glow under the sole. */
+    jetboots: (type) => {
+      const flames = [];
+      const g = bootPair(type, (b, y, s) => {
+        const red = mat.satin('#E3341F', { roughness: 0.38 }), steel = mat.metal('#B8C0D4', { roughness: 0.28 }), dark = mat.metal('#5E6478', { roughness: 0.35 }), gold = mat.metal(C.gold, { roughness: 0.25 });
+        const o = bootBody(b, s, type, { upper: red, sole: steel, soleH: 0.05, shaftH: 0.2, flare: 1.06, low: 0.3, long: 0.16, puffy: 1.05 });
+        b.add(shoeBand(o.S, 0.22, 0.03, 0.02, steel));
+        [-1, 1].forEach((k) => { const bolt = M(extrude(boltShape(0.75), 0.01, 0.004), gold, o.S(k * 1.04, 0.0, -0.1)); bolt.rotation.y = k * Math.PI / 2; b.add(bolt); });
+        if (o.shaft) b.add(M(new T.TorusGeometry(o.r * 1.06, 0.024, 12, 40), steel, [0, o.top, o.cz], [Math.PI / 2, 0, 0]));
+        const heel = o.S(0, -0.1, -1.04), a = 1.1;
+        b.add(M(new T.CylinderGeometry(0.034, 0.048, 0.06, 18, 1, true), dark, [heel[0], heel[1], heel[2] - 0.02], [a, 0, 0]));
+        const fl = G([heel[0], heel[1] - 0.012, heel[2] - 0.045], [a, 0, 0]);
+        fl.add(M(new T.ConeGeometry(0.042, 0.22, 18), mat.glow(C.orange, { transparent: true, opacity: 0.9, blending: T.AdditiveBlending, depthWrite: false }), [0, -0.11, 0], [Math.PI, 0, 0]));
+        fl.add(M(new T.ConeGeometry(0.022, 0.13, 12), mat.glow('#FFE7A0', { transparent: true, opacity: 0.95, blending: T.AdditiveBlending, depthWrite: false }), [0, -0.065, 0], [Math.PI, 0, 0]));
+        b.add(fl); flames.push(fl);
+        const halo = new T.Sprite(new T.SpriteMaterial({ map: softGlow(), color: lin('#FFB03A'), transparent: true, opacity: 0.55, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false }));
+        halo.scale.setScalar(0.5); halo.material.opacity = 0.7; halo.position.set(heel[0], heel[1] - 0.03, heel[2] - 0.1); b.add(halo);
+        const under = halo.clone(); under.material = halo.material.clone(); under.material.opacity = 0.5; under.scale.setScalar(0.42); under.position.set(0, 0.012, s[2] * 0.1); b.add(under);
+      });
+      g.userData.flames = flames;
+      return g;
+    },
+    /* Roller skates: white boots with two teal stripes on a steel plate, an orange wheel each side at the front and
+       the back (wider than the boot, so they show from the front), white hubs and a red toe stop. */
+    skates: (type) => bootPair(type, (b, y, s) => {
+      const white = mat.gloss('#F4F6FB', { roughness: 0.3 }), teal = mat.gloss('#16A6A8', { roughness: 0.3 }), plate = mat.metal('#8A93A8', { roughness: 0.35 });
+      const wheel = mat.gloss('#FF8A3D', { roughness: 0.3 }), hub = mat.metal('#F4F6FB', { roughness: 0.25 }), stop = mat.vinyl('#E8453C', { roughness: 0.5 });
+      const o = bootBody(b, s, type, { upper: white, sole: plate, soleH: 0.045, shaftH: 0.2, flare: 1.06, low: 0.3, long: 0.12, puffy: 1.04 });
+      b.add(shoeBand(o.S, -0.18, 0.03, 0.018, teal), shoeBand(o.S, 0.16, 0.03, 0.018, teal));
+      const R = 0.052, wx = s[0] * (type === 'slug' ? 1.14 : 1.26), wz = s[2] * 0.6;
+      [-1, 1].forEach((i) => [-1, 1].forEach((j) => {
+        const at = [i * wx, R, j * wz + s[2] * 0.04];
+        b.add(M(new T.CylinderGeometry(R, R, 0.058, 24), wheel, at, [0, 0, Math.PI / 2]), M(new T.CylinderGeometry(R * 0.42, R * 0.42, 0.062, 12), hub, at, [0, 0, Math.PI / 2]));
+      }));
+      b.add(M(sph(1, 16, 12), stop, [0, 0.035, s[2] * 1.22], null, [0.04, 0.035, 0.035]));
+      if (o.shaft) b.add(M(new T.TorusGeometry(o.r * 1.06, 0.022, 12, 40), teal, [0, o.top, o.cz], [Math.PI / 2, 0, 0]));
+    }),
+    /* Sneakers: red with a thick white sole, a white rubber toe, a blue stripe round the bottom and white laces; on a
+       leg, a high top with a white ring. */
+    sneakers: (type) => bootPair(type, (b, y, s) => {
+      const red = mat.satin('#E3341F', { roughness: 0.5 }), white = mat.satin('#FFFFFF', { roughness: 0.5 }), blue = mat.satin('#2B5CC2', { roughness: 0.5 });
+      const o = bootBody(b, s, type, { upper: red, sole: white, soleH: 0.055, shaftH: 0.14, low: 0.32, long: 0.16, puffy: 1.04 });
+      b.add(shoeBand(o.S, -0.3, 0.035, 0.02, blue));
+      b.add(M(sph(1, 24, 16), white, o.S(0, -0.3, 0.86), null, [s[0] * 0.78, s[1] * 0.5, s[2] * 0.36]));
+      [0.24, 0.44, 0.64].forEach((z) => {
+        const yy = (x) => Math.sqrt(Math.max(0, 1 - x * x - z * z)) * 1.04;
+        b.add(M(tube([-0.3, 0, 0.3].map((x) => o.S(x, yy(x), z)), 0.009, 10, 6), white));
+      });
+      if (o.shaft) b.add(M(new T.TorusGeometry(o.r * 1.05, 0.024, 12, 40), white, [0, o.top, o.cz], [Math.PI / 2, 0, 0]));
+    }),
+    /* Candy shoes: round and shiny, swirled orange and yellow like a candy with sugar dots, a green sole and a green
+       gumdrop on the toe (red and white stripes read as pink from a little way off). */
+    candyshoes: (type) => bootPair(type, (b, y, s) => {
+      const swirl = canvasTex('candyswirl', 256, 128, (x, w, h) => {
+        x.fillStyle = '#FF8A1F'; x.fillRect(0, 0, w, h);
+        x.strokeStyle = '#FFD43B'; x.lineWidth = 12;
+        for (let k = -6; k < 14; k++) { x.beginPath(); x.moveTo(k * 32, 0); x.lineTo(k * 32 + 64, h); x.stroke(); }
+        x.fillStyle = '#FFFFFF'; const r = seeded(5);
+        for (let k = 0; k < 46; k++) { x.beginPath(); x.arc(r() * w, r() * h, 1.7, 0, Math.PI * 2); x.fill(); }
+      });
+      const candy = mat.gloss('#FFFFFF', { map: swirl, roughness: 0.16 }), green = mat.gloss('#2FB574', { roughness: 0.12, clearcoat: 1 });
+      const o = bootBody(b, s, type, { upper: candy, sole: green, soleH: 0.04, shaftH: 0.12, low: 0.26, long: 0.1, puffy: 1.1 });
+      b.add(M(new T.SphereGeometry(0.056, 22, 12, 0, Math.PI * 2, 0, Math.PI / 2), green, o.S(0, 0.46, 0.8), [0.5, 0, 0]));
+      if (o.shaft) b.add(M(new T.TorusGeometry(o.r * 1.05, 0.024, 12, 40), green, [0, o.top, o.cz], [Math.PI / 2, 0, 0]));
+    }),
+    /* Bakya, wooden clogs from the Philippines: a thick wooden sole with a darker side, the foot on top, and a wide blue
+       strap over it with a yellow sun, the colors of the Philippine flag. */
+    bakya: (type) => bootPair(type, (b, y, s) => {
+      const wood = mat.satin('#D9A066', { roughness: 0.6 }), side = mat.satin('#A3652F', { roughness: 0.65 }), blue = mat.satin('#2B5CC2', { roughness: 0.55, side: T.DoubleSide });
+      const sun = mat.vinyl(C.gold, { roughness: 0.35 }), red = mat.satin('#E8453C', { roughness: 0.55 });
+      const sole = new T.Shape(), wx = s[0] * 1.08, lz = s[2] * 1.22;
+      sole.moveTo(0, -lz); sole.bezierCurveTo(wx * 0.9, -lz, wx, -lz * 0.3, wx * 0.95, 0); sole.bezierCurveTo(wx * 1.05, lz * 0.5, wx * 0.9, lz, 0, lz);
+      sole.bezierCurveTo(-wx * 0.9, lz, -wx * 1.05, lz * 0.5, -wx * 0.95, 0); sole.bezierCurveTo(-wx, -lz * 0.3, -wx * 0.9, -lz, 0, -lz);
+      const ex = (d, k) => { const geo = new T.ExtrudeGeometry(sole, { depth: d, bevelEnabled: true, bevelThickness: 0.004, bevelSize: 0.004, bevelSegments: 2, curveSegments: 16 }); geo.rotateX(Math.PI / 2); geo.scale(k, 1, k); return geo; };
+      const top = 0.062, zc = s[2] * 0.08;
+      b.add(M(ex(0.054, 1), side, [0, top - 0.004, zc]));
+      b.add(M(ex(0.006, 0.93), wood, [0, top + 0.002, zc]));
+      const R = wx * 1.1, h = Math.max(0.07, y + s[1] * 1.12 - top), zs = zc + lz * 0.3;
+      b.add(M(new T.CylinderGeometry(R, R, lz * 0.62, 36, 1, true, Math.PI / 2, Math.PI), blue, [0, top, zs], [Math.PI / 2, 0, 0], [1, 1, h / R]));
+      [-1, 1].forEach((k) => b.add(M(new T.TorusGeometry(R, 0.006, 6, 36, Math.PI), red, [0, top, zs + k * lz * 0.31], null, [1, h / R, 1])));
+      const sp = [0, top + h + 0.004, zs];
+      b.add(M(new T.CylinderGeometry(0.034, 0.034, 0.01, 24), sun, sp));
+      for (let k = 0; k < 8; k++) { const a = (k / 8) * Math.PI * 2; b.add(M(sph(0.011, 8, 6), sun, [sp[0] + Math.cos(a) * 0.052, sp[1] - 0.004, sp[2] + Math.sin(a) * 0.052])); }
+    }),
+    /* Knight boots: polished steel armor with a pointed toe, the edges of its plates in darker steel, gold rivets on the
+       sides, and on a leg a gold rim at the top. */
+    knightboots: (type) => bootPair(type, (b, y, s) => {
+      const steel = mat.metal('#C3CAD8', { roughness: 0.22 }), dark = mat.metal('#7E879C', { roughness: 0.3 }), gold = mat.metal(C.gold, { roughness: 0.25 });
+      const o = bootBody(b, s, type, { upper: steel, sole: dark, soleH: 0.03, shaftH: 0.22, flare: 1.12, low: 0.38, long: 0.3, point: 0.42 });
+      [0.04, 0.32, 0.58].forEach((yy) => b.add(shoeBand(o.S, yy, 0.03, 0.014, dark)));
+      [-1, 1].forEach((k) => [-0.25, 0.25].forEach((z) => b.add(M(sph(0.016, 10, 8), gold, o.S(k * 1.03, 0.16, z)))));
+      if (o.shaft) {
+        b.add(M(new T.TorusGeometry(o.r * 1.13, 0.022, 12, 40), gold, [0, o.top, o.cz], [Math.PI / 2, 0, 0]));
+        b.add(M(new T.TorusGeometry(o.r * 1.03, 0.014, 10, 40), dark, [0, (o.top + o.ankle) / 2, o.cz], [Math.PI / 2, 0, 0]));
+      }
     })
   };
   /* A pair of shoes: one for each foot of FOOT3 (the slug's under the front of its long foot, as its flippers), toes
@@ -7495,20 +7694,20 @@ const Buddy3D = (() => {
       return g;
     },
     bunny: () => {
-      const g = new T.Group(), fur = mat.satin('#FFFFFF', { roughness: 0.85 }), pink = mat.satin('#E3C4A0', { roughness: 0.8 }), ink = mat.gloss(C.ink);
+      const g = new T.Group(), fur = mat.satin('#FFFFFF', { roughness: 0.85 }), tan = mat.satin('#E3C4A0', { roughness: 0.8 }), ink = mat.gloss(C.ink);
       const HC = [0, 0.55, 0.06], HR = 0.17;
       g.add(M(sph(1, 32, 24), fur, [0, 0.24, -0.02], null, [0.22, 0.24, 0.24]));
       g.add(M(sph(HR, 32, 24), fur, HC));
       [-1, 1].forEach((sx) => {
         const ear = G([sx * 0.07, 0.67, 0.03], [0.12, 0, -sx * 0.2]);
         ear.add(M(sph(1, 22, 14), fur, [0, 0.16, 0], null, [0.058, 0.17, 0.036]));
-        ear.add(M(sph(1, 16, 12), pink, [0, 0.16, 0.024], null, [0.032, 0.13, 0.014]));
+        ear.add(M(sph(1, 16, 12), tan, [0, 0.16, 0.024], null, [0.032, 0.13, 0.014]));
         g.add(ear);
         g.add(M(sph(0.027, 12, 10), ink, onSphere(HC, HR, [[sx * 0.065, 0.585]], 0.004)[0].toArray()));
         g.add(M(sph(1, 16, 12), fur, [sx * 0.1, 0.03, 0.12], null, [0.07, 0.04, 0.1]));
         g.add(patch(HC, HR, sx * 0.1, 0.52, 0.03, 0.3, mat.satin('#F1E6D8', { roughness: 0.9 })));
       });
-      g.add(M(sph(0.026, 12, 10), pink, onSphere(HC, HR, [[0, 0.535]], 0.008)[0].toArray()));
+      g.add(M(sph(0.026, 12, 10), tan, onSphere(HC, HR, [[0, 0.535]], 0.008)[0].toArray()));
       g.add(M(sph(0.075, 18, 12), fur, [0, 0.2, -0.25]));
       g.userData.hop = true;
       return g;
@@ -7544,33 +7743,33 @@ const Buddy3D = (() => {
       return g;
     },
     kitten: () => {
-      const g = new T.Group(), fur = mat.satin('#F39A3D', { roughness: 0.82 }), cream = mat.satin('#FFF1D6', { roughness: 0.85 }), pink = mat.satin('#B86A45', { roughness: 0.8 }), ink = mat.gloss(C.ink);
+      const g = new T.Group(), fur = mat.satin('#F39A3D', { roughness: 0.82 }), cream = mat.satin('#FFF1D6', { roughness: 0.85 }), brown = mat.satin('#B86A45', { roughness: 0.8 }), ink = mat.gloss(C.ink);
       const HC = [0, 0.52, 0.06], HR = 0.16;
       g.add(M(sph(1, 32, 24), fur, [0, 0.24, -0.04], null, [0.18, 0.2, 0.24]));
       [[-0.09, 0.07], [0.09, 0.07], [-0.09, -0.15], [0.09, -0.15]].forEach((q) => g.add(M(new T.CylinderGeometry(0.045, 0.042, 0.16, 12), fur, [q[0], 0.08, q[1]]), M(sph(0.048, 12, 10), cream, [q[0], 0.02, q[1] + 0.02])));
       g.add(M(sph(HR, 32, 24), fur, HC));
       [-1, 1].forEach((sx) => {
         g.add(M(new T.ConeGeometry(0.06, 0.13, 16), fur, [sx * 0.09, 0.66, 0.05], [0, 0, -sx * 0.32]));
-        g.add(M(new T.ConeGeometry(0.035, 0.08, 12), pink, [sx * 0.088, 0.65, 0.075], [0, 0, -sx * 0.32]));
+        g.add(M(new T.ConeGeometry(0.035, 0.08, 12), brown, [sx * 0.088, 0.65, 0.075], [0, 0, -sx * 0.32]));
         g.add(M(sph(0.046, 14, 10), cream, onSphere(HC, HR, [[sx * 0.035, 0.475]], -0.02)[0].toArray()));
         g.add(M(sph(1, 14, 10), mat.gloss('#3DBE6B', { roughness: 0.1 }), onSphere(HC, HR, [[sx * 0.06, 0.56]], 0.0)[0].toArray(), null, [0.03, 0.036, 0.02]));
         g.add(M(sph(0.016, 8, 6), ink, onSphere(HC, HR, [[sx * 0.06, 0.56]], 0.018)[0].toArray()));
         [0.02, -0.01].forEach((dy) => g.add(M(tube([[sx * 0.06, 0.48 + dy, 0.2], [sx * 0.14, 0.49 + dy * 1.5, 0.19], [sx * 0.21, 0.5 + dy * 2.5, 0.16]], 0.004, 8, 4), mat.satin('#5A4B3A'))));
       });
-      g.add(M(sph(1, 10, 8), pink, onSphere(HC, HR, [[0, 0.5]], 0.02)[0].toArray(), null, [0.022, 0.016, 0.014]));
+      g.add(M(sph(1, 10, 8), brown, onSphere(HC, HR, [[0, 0.5]], 0.02)[0].toArray(), null, [0.022, 0.016, 0.014]));
       const tail = G([0, 0.2, -0.26]);
       tail.add(M(taper([[0, 0, 0], [0.08, 0.14, -0.08], [0.06, 0.34, -0.04], [0, 0.42, 0.04]], (u) => 0.036 * (1 - u * 0.4), 24, 10), fur));
       g.add(tail); g.userData.wag = tail;
       return g;
     },
     unicorn: (left) => {
-      const g = new T.Group(), body = G(null, [0, left ? 0.9 : -0.9, 0]), white = mat.satin('#FFFFFF', { roughness: 0.6 }), pinkM = mat.satin('#E7EAF0', { roughness: 0.7 }), gold = mat.metal(C.gold, { roughness: 0.25 }), ink = mat.gloss(C.ink);
+      const g = new T.Group(), body = G(null, [0, left ? 0.9 : -0.9, 0]), white = mat.satin('#FFFFFF', { roughness: 0.6 }), muzzle = mat.satin('#E7EAF0', { roughness: 0.7 }), gold = mat.metal(C.gold, { roughness: 0.25 }), ink = mat.gloss(C.ink);
       body.add(M(sph(1, 36, 24), white, [0, 0.46, 0], null, [0.2, 0.19, 0.3]));
       [[-0.1, 0.17], [0.1, 0.17], [-0.1, -0.17], [0.1, -0.17]].forEach((q) => body.add(M(new T.CylinderGeometry(0.048, 0.042, 0.34, 14), white, [q[0], 0.2, q[1]]), M(new T.CylinderGeometry(0.05, 0.05, 0.05, 14), gold, [q[0], 0.025, q[1]])));
       body.add(M(taper([[0, 0.5, 0.18], [0, 0.66, 0.27], [0, 0.82, 0.3]], (u) => 0.1 - u * 0.02, 16, 14), white));
       const HC = [0, 0.86, 0.36];
       body.add(M(sph(1, 30, 22), white, HC, [0.45, 0, 0], [0.12, 0.12, 0.17]));
-      body.add(M(sph(1, 22, 16), pinkM, [0, 0.8, 0.5], null, [0.09, 0.08, 0.08]));
+      body.add(M(sph(1, 22, 16), muzzle, [0, 0.8, 0.5], null, [0.09, 0.08, 0.08]));
       body.add(M(new T.ConeGeometry(0.032, 0.2, 18), gold, [0, 1.04, 0.38], [0.45, 0, 0]));
       [-1, 1].forEach((sx) => {
         body.add(M(new T.ConeGeometry(0.03, 0.08, 10), white, [sx * 0.07, 0.99, 0.3], [-0.2, 0, -sx * 0.2]));
@@ -7680,6 +7879,73 @@ const Buddy3D = (() => {
       body.add(tail);
       g.add(body); g.userData.wag = tail;
       return g;
+    },
+    /* JB's November 16 friends. A baby dragon: round and green with a sunny yellow belly and snout, ivory horns, orange
+       spikes down its back and on its tail, and little dark green wings that flap (userData.wings) while its tail wags. */
+    babydragon: (left) => {
+      const g = new T.Group(), body = G(null, [0, left ? 0.55 : -0.55, 0]);
+      const skin = mat.vinyl('#34B86A', { roughness: 0.42 }), belly = mat.vinyl('#FFE08A', { roughness: 0.5 }), spike = mat.vinyl('#FF8A3D', { roughness: 0.4 });
+      const wingM = mat.vinyl('#1E8F4E', { roughness: 0.45, side: T.DoubleSide }), horn = mat.vinyl(C.ivory, { roughness: 0.45 }), ink = mat.gloss(C.ink);
+      body.add(M(sph(1, 36, 28), skin, [0, 0.27, 0], null, [0.22, 0.25, 0.21]));
+      body.add(M(sph(1, 28, 20), belly, [0, 0.24, 0.08], null, [0.155, 0.18, 0.15]));
+      [-1, 1].forEach((sx) => {
+        body.add(M(sph(1, 16, 12), skin, [sx * 0.12, 0.04, 0.06], null, [0.075, 0.045, 0.1]));
+        body.add(M(sph(1, 14, 10), skin, [sx * 0.19, 0.3, 0.09], [0.4, 0, sx * 0.5], [0.045, 0.09, 0.045]));
+      });
+      const head = G([0, 0.62, 0.04]), HR = 0.175;
+      head.add(M(sph(HR, 32, 24), skin));
+      head.add(M(sph(1, 24, 18), belly, [0, -0.055, 0.13], null, [0.105, 0.075, 0.085]));
+      [-1, 1].forEach((sx) => {
+        const e = eye(0.058); e.position.set(sx * 0.075, 0.045, 0.135); e.rotation.y = sx * 0.22; head.add(e);
+        head.add(M(new T.ConeGeometry(0.03, 0.1, 14), horn, [sx * 0.085, 0.17, -0.03], [-0.35, 0, -sx * 0.35]));
+        head.add(M(sph(0.011, 8, 6), ink, [sx * 0.032, -0.03, 0.212]));
+      });
+      head.add(smile([0, -0.055, 0.13], 0.09, 0, -0.09, 0.08, 0.02, 0.006, ink));
+      body.add(head);
+      [[0.5, -0.12], [0.4, -0.19], [0.28, -0.22], [0.16, -0.21]].forEach((q) => body.add(M(new T.ConeGeometry(0.028, 0.07, 10), spike, [0, q[0], q[1]], [-1.0, 0, 0])));
+      const wings = [];
+      const ws = new T.Shape();
+      ws.moveTo(0, 0); ws.quadraticCurveTo(0.06, 0.14, 0.22, 0.17); ws.quadraticCurveTo(0.17, 0.1, 0.19, 0.05); ws.quadraticCurveTo(0.12, 0.05, 0.13, -0.01); ws.quadraticCurveTo(0.06, 0.0, 0, 0);
+      [-1, 1].forEach((sx) => {
+        const root = G([sx * 0.1, 0.42, -0.12], [0, sx * 0.7, 0]), flap = G();
+        flap.add(M(new T.ShapeGeometry(ws, 12), wingM, null, null, [sx, 1, 1]));
+        root.add(flap); body.add(root); flap.userData.sx = sx; wings.push(flap);
+      });
+      const tail = G([0, 0.14, -0.16]);
+      tail.add(M(taper([[0, 0, 0], [0.04, -0.05, -0.12], [0.12, -0.1, -0.22], [0.22, -0.08, -0.28]], (u) => 0.07 * (1 - u) + 0.01, 24, 12), skin));
+      tail.add(M(new T.ConeGeometry(0.035, 0.08, 4), spike, [0.24, -0.075, -0.29], [0, 0, -Math.PI / 2]));
+      body.add(tail);
+      g.add(body); g.userData.wag = tail; g.userData.wings = wings;
+      return g;
+    },
+    /* A little robot: a silver body and head, a dark screen face with two glowing cyan eyes and a smile, an antenna
+       with an orange light that blinks (userData.blink), little arms and treads; its head nods. */
+    littlerobot: (left) => {
+      const g = new T.Group(), body = G(null, [0, left ? 0.35 : -0.35, 0], 1.3);
+      const silver = mat.metal('#C9D1DE', { roughness: 0.3 }), dark = mat.metal('#5E6478', { roughness: 0.4 }), blue = mat.gloss(C.blue, { roughness: 0.3 });
+      const screen = mat.gloss(C.screen, { roughness: 0.15 }), cyan = mat.glow(C.cyan), light = mat.glow(C.orange);
+      [-1, 1].forEach((sx) => body.add(M(rbox(0.09, 0.08, 0.26, 0.03, 6), dark, [sx * 0.11, 0.04, 0])));
+      body.add(M(rbox(0.3, 0.26, 0.22, 0.06, 8), silver, [0, 0.21, 0]));
+      body.add(M(rbox(0.16, 0.1, 0.02, 0.02, 4), blue, [0, 0.22, 0.11]));
+      [[-0.04, C.orange], [0.0, '#34D27B'], [0.04, C.gold]].forEach((q) => body.add(M(sph(0.012, 10, 8), mat.glow(q[1]), [q[0], 0.225, 0.125])));
+      [-1, 1].forEach((sx) => {
+        body.add(M(new T.CylinderGeometry(0.022, 0.022, 0.12, 12), dark, [sx * 0.18, 0.2, 0.02], [0.3, 0, sx * 0.5]));
+        body.add(M(sph(0.035, 14, 10), silver, [sx * 0.21, 0.15, 0.04]));
+      });
+      const head = G([0, 0.35, 0]);
+      head.add(M(rbox(0.26, 0.2, 0.22, 0.06, 8), silver, [0, 0.1, 0]));
+      head.add(M(rbox(0.2, 0.13, 0.02, 0.04, 6), screen, [0, 0.1, 0.105]));
+      [-1, 1].forEach((sx) => {
+        head.add(M(sph(0.022, 14, 10), cyan, [sx * 0.05, 0.12, 0.118], null, [1, 1.25, 0.5]));
+        head.add(M(new T.CylinderGeometry(0.03, 0.03, 0.03, 16), dark, [sx * 0.14, 0.1, 0], [0, 0, Math.PI / 2]));
+      });
+      head.add(M(tube([[-0.035, 0.08, 0.118], [0, 0.065, 0.12], [0.035, 0.08, 0.118]], 0.006, 12, 6), cyan));
+      head.add(M(new T.CylinderGeometry(0.008, 0.008, 0.1, 8), dark, [0, 0.25, 0]));
+      const bulb = M(sph(0.026, 14, 10), light, [0, 0.31, 0]);
+      head.add(bulb);
+      body.add(head);
+      g.add(body); g.userData.nod = head; g.userData.blink = bulb;
+      return g;
     }
   };
 
@@ -7764,7 +8030,7 @@ const Buddy3D = (() => {
       return g;
     },
     grapes: () => {
-      const g = new T.Group(), gm = mat.gloss('#7C4DDB', { roughness: 0.16 }), rnd = seeded(7);
+      const g = new T.Group(), gm = mat.gloss('#A9D65B', { roughness: 0.16 }), rnd = seeded(7);
       const at = [[0, 0.13, 0]];
       [[5, 0.09, 0.12], [4, 0.075, 0.035], [3, 0.052, -0.05]].forEach((q, ri) => { for (let i = 0; i < q[0]; i++) { const a = (i / q[0]) * Math.PI * 2 + ri * 0.6; at.push([Math.cos(a) * q[1], q[2], Math.sin(a) * q[1]]); } });
       at.push([0, -0.125, 0]);
@@ -8128,7 +8394,7 @@ const Buddy3D = (() => {
       inner.add(M(new T.CylinderGeometry(0.045, 0.07, 0.3, 14), mat.satin('#8B5A3C', { roughness: 0.8 }), [0, 0.15, 0]));
       const leaf = ['#2FB574', '#3FCB6B', '#249A5A'].map((h) => mat.vinyl(h, { roughness: 0.55, clearcoat: 0.2 }));
       [[0, 0.48, 0, 0.26, 0], [-0.21, 0.4, 0.05, 0.18, 1], [0.21, 0.4, 0.04, 0.18, 1], [0, 0.68, 0.02, 0.17, 2], [-0.1, 0.58, 0.16, 0.15, 1], [0.11, 0.56, -0.14, 0.15, 2]].forEach((q) => inner.add(M(sph(q[3], 24, 18), leaf[q[4]], [q[0], q[1], q[2]])));
-      [[-0.09, 0.55, 0.24], [0.14, 0.46, 0.18], [0.02, 0.74, 0.15], [-0.19, 0.43, 0.15]].forEach((q) => inner.add(M(sph(0.032, 12, 10), mat.vinyl('#FF8FB1', { roughness: 0.4 }), q)));
+      [[-0.09, 0.55, 0.24], [0.14, 0.46, 0.18], [0.02, 0.74, 0.15], [-0.19, 0.43, 0.15]].forEach((q) => inner.add(M(sph(0.032, 12, 10), mat.vinyl('#FF9F43', { roughness: 0.4 }), q)));
       inner.scale.setScalar(0.001); tree.add(inner); P.body.add(tree);
       v.fx = { kind, tree, inner, objs: [tree] };
     } else if (kind === 'invisible') {
@@ -8713,7 +8979,7 @@ const Buddy3D = (() => {
         b.add(M(new T.BoxGeometry(0.3, 0.32, 0.02), glass, [0, 0.16, 0.455]));
         return b;
       };
-      g.add(deco(-2.75, -11.4, 1.3, 1.8, '#A8E6D9', '#FFC531', 0.15), deco(-1.45, -11.9, 1.1, 2.3, '#FFE38A', '#2FB8D0', 0.05), deco(1.5, -11.7, 1.2, 1.9, '#CDBEF5', '#FF8A3D', -0.05), deco(2.85, -11.3, 1.25, 2.5, '#9FE0F0', '#FFC531', -0.15));
+      g.add(deco(-2.75, -11.4, 1.3, 1.8, '#A8E6D9', '#FFC531', 0.15), deco(-1.45, -11.9, 1.1, 2.3, '#FFE38A', '#2FB8D0', 0.05), deco(1.5, -11.7, 1.2, 1.9, '#FFC9A0', '#2FB8D0', -0.05), deco(2.85, -11.3, 1.25, 2.5, '#9FE0F0', '#FFC531', -0.15));
       [[-0.4, -14.2, 0.8, 3.6], [0.6, -14.6, 0.7, 4.3], [3.6, -14.3, 0.8, 3.2]].forEach((q) => g.add(M(rbox(q[2], q[3], q[2], 0.05), mat.satin('#B9CCE0', { roughness: 0.35 }), [q[0], q[3] / 2, q[1]])));
       const palms = [palm(-2.3, -3.9, 0.95, 1), palm(2.8, -5.0, 1.0, -1)];
       palms.forEach((p) => g.add(p));
@@ -8841,7 +9107,7 @@ const Buddy3D = (() => {
      has (they always come in the same order), look.k its crown stars. Parts on the body move with it;
      parts that circle it hang on P.aura, which follows the hover but not the tricks. Each moving part
      adds a small function to P.fx that pose() calls every frame. */
-  const FORM_C = { 2: '#FFD34D', 3: '#FF7A3D', 4: '#4FE3FF', 5: '#A86BFF' };
+  const FORM_C = { 2: '#FFD34D', 3: '#FF7A3D', 4: '#4FE3FF', 5: '#3D6BFF' };
   const FORM_AT = {
     ladybug: { chest: [0, 0.62, 0.66], head: [0, 1.93, 0.06], hr: 0.8 },
     slug: { chest: [0.5, 0.86, 0.52], head: [0.5, 1.8, 0.12], hr: 0.74 },
@@ -8859,7 +9125,7 @@ const Buddy3D = (() => {
   });
   const galaxyTex = () => canvasTex('galaxy', 256, 256, (x, w) => {
     const c = w / 2, g = x.createRadialGradient(c, c, 0, c, c, c);
-    g.addColorStop(0, 'rgba(255,250,235,0.95)'); g.addColorStop(0.12, 'rgba(200,170,255,0.75)'); g.addColorStop(0.5, 'rgba(110,70,220,0.28)'); g.addColorStop(1, 'rgba(40,20,120,0)');
+    g.addColorStop(0, 'rgba(255,250,235,0.95)'); g.addColorStop(0.12, 'rgba(170,205,255,0.75)'); g.addColorStop(0.5, 'rgba(60,105,230,0.28)'); g.addColorStop(1, 'rgba(20,40,130,0)');
     x.fillStyle = g; x.fillRect(0, 0, w, w);
     const r = seeded(7);
     for (let arm = 0; arm < 3; arm++) for (let i = 0; i < 220; i++) {
@@ -8884,14 +9150,14 @@ const Buddy3D = (() => {
     p.lineTo(0.06 * s, 0.015 * s); p.lineTo(0.008 * s, 0.015 * s); p.closePath(); return p;
   }
   function badgeMesh(form) {
-    const g = new T.Group(), disc = { 3: '#C9302C', 4: '#1E2A6E', 5: '#4B2C9E' }[form] || '#2B5CC2';
+    const g = new T.Group(), disc = { 3: '#C9302C', 4: '#1E2A6E', 5: '#2340A8' }[form] || '#2B5CC2';
     g.add(M(new T.CylinderGeometry(0.16, 0.16, 0.035, 40), mat.gloss(disc), null, [Math.PI / 2, 0, 0]));
     g.add(M(new T.TorusGeometry(0.16, 0.022, 12, 48), goldMat()));
     if (form === 3) g.add(M(extrude(boltShape(1.25), 0.03, 0.01), goldMat(), [0, 0, 0.03]));
     else if (form === 4) { g.add(M(sph(0.065, 24, 16), mat.gloss('#FFB03A'), [0, 0, 0.04])); g.add(M(new T.TorusGeometry(0.11, 0.012, 8, 40), mat.glow('#FFE7A0'), [0, 0, 0.04], [1.2, 0.3, 0])); }
     else if (form === 5) {
       const pts = []; for (let i = 0; i <= 40; i++) { const u = i / 40, a = u * Math.PI * 3.2, r = 0.012 + u * 0.1; pts.push([Math.cos(a) * r, Math.sin(a) * r, 0.03]); }
-      g.add(M(tube(pts, 0.012, 60, 6), mat.glow('#E8DDFF')));
+      g.add(M(tube(pts, 0.012, 60, 6), mat.glow('#DDEBFF')));
     } else g.add(M(extrude(starShape(0.105, 0.045), 0.03, 0.012), goldMat(), [0, 0, 0.03]));
     return g;
   }
@@ -8961,7 +9227,7 @@ const Buddy3D = (() => {
   function auraPowers(look, type, P) {
     const f = look.f || 2, n = look.p || 0, fc = FORM_C[Math.max(2, Math.min(5, f))];
     if (f >= 5) {
-      fxSprite(P.aura, softTint(), '#5B3FC4', 3.6, [0, 1.35, -1.4], 0.55, true);
+      fxSprite(P.aura, softTint(), '#2346C8', 3.6, [0, 1.35, -1.4], 0.55, true);
       const gx = fxSprite(P.aura, galaxyTex(), '#FFFFFF', 4.1, [0, 1.35, -1.3], 1, true);
       P.fx.push((t, still) => { gx.material.rotation = still ? 0.4 : -t * 0.12; });
     }
@@ -8970,7 +9236,7 @@ const Buddy3D = (() => {
       P.fx.push((t, still) => { const k = still ? 0.5 : 0.5 + 0.5 * Math.sin(t * (big ? 2.4 : 1.6)); gl.material.opacity = (big ? 0.7 : 0.55) + 0.2 * k; gl.scale.setScalar((big ? 3.8 : 3.2) + (big ? 0.35 : 0.2) * k); });
     }
     if (n >= 13) {
-      const cols = ['#5BFFB0', '#4FE3FF', '#8F7BFF'];
+      const cols = ['#5BFFB0', '#4FE3FF', '#5B8CFF'];
       cols.forEach((c, i) => {
         const b = fxSprite(P.aura, bandTex(), c, 1, [(i - 1) * 1.0, 1.7, -1.05], 0.7, true); b.scale.set(1.1, 3.4, 1);
         P.fx.push((t, still) => { const q = still ? i : t * 0.6 + i * 2.1; b.position.x = (i - 1) * 1.0 + 0.18 * Math.sin(q); b.material.opacity = 0.5 + 0.2 * Math.sin(q * 1.3); b.material.rotation = 0.15 * Math.sin(q * 0.7); });
@@ -8986,7 +9252,7 @@ const Buddy3D = (() => {
       P.fx.push((t, still) => { ring.rotation.y = still ? 0 : t * 0.5; });
     }
     if (n >= 4) {
-      const col = f >= 5 ? '#D9C8FF' : f >= 4 ? '#BFF4FF' : '#FFE07A', rnd = seeded(31), dust = [];
+      const col = f >= 5 ? '#C8DCFF' : f >= 4 ? '#BFF4FF' : '#FFE07A', rnd = seeded(31), dust = [];
       for (let i = 0; i < 10; i++) dust.push({ s: fxSprite(P.aura, sparkTex(), col, 0.16, null, 0), a: rnd() * Math.PI * 2, r: 0.55 + rnd() * 0.5, ph: rnd(), sp: 0.18 + rnd() * 0.12 });
       P.fx.push((t, still) => dust.forEach((d) => {
         const u = (d.ph + (still ? 0.3 : t * d.sp)) % 1;
@@ -9094,7 +9360,7 @@ const Buddy3D = (() => {
       if (inner && inner.userData.flap) P.flap = inner.userData.flap;
     }
     P.fx = []; P.fly = 0;
-    if (w.feet && FEET[w.feet]) body.add(FEET[w.feet](type));
+    if (w.feet && FEET[w.feet]) { const ft = FEET[w.feet](type); body.add(ft); if (ft.userData.flames) P.flames.push.apply(P.flames, ft.userData.flames); }
     if (w.back === 'tank' && P.valveAt) tankHose(type, A, P, body, look.bg === 'ocean');
     if ((look.f || 0) >= 3 || look.p || look.k) bodyPowers(look, type, body, P);
     /* how tall the buddy is with its hat on, so a handstand lands on the top of the hat */
@@ -9108,7 +9374,7 @@ const Buddy3D = (() => {
       const slugSide = type === 'slug', left = i === 0 ? slugSide : !slugSide, pos = i === 0 ? A.side : [-A.side[0], A.side[1], A.side[2]];
       const s = SIDE[id](left), holder = G(pos, [0, left ? 0.5 : -0.5, 0], 0.9, s);
       root.add(holder);
-      P.sides.push({ holder, hover: !!s.userData.hover, hop: !!s.userData.hop, beeWings: s.userData.beeWings || [], fish: s.userData.fish || null, wag: s.userData.wag || null, nod: s.userData.nod || null, fan: s.userData.fan || null, ph: i * 1.7 });
+      P.sides.push({ holder, hover: !!s.userData.hover, hop: !!s.userData.hop, beeWings: s.userData.beeWings || [], fish: s.userData.fish || null, wag: s.userData.wag || null, nod: s.userData.nod || null, fan: s.userData.fan || null, wings: s.userData.wings || [], blink: s.userData.blink || null, ph: i * 1.7 });
     });
     const shadow = M(new T.PlaneGeometry(1, 1), new T.MeshBasicMaterial({ map: softDot(), transparent: true, depthWrite: false, toneMapped: false }), [type === 'slug' ? -0.3 : 0, 0.004, 0], [-Math.PI / 2, 0, 0], [type === 'slug' ? 2.9 : 2.1, type === 'slug' ? 1.3 : 1.1, 1]);
     root.add(shadow); P.shadow = shadow;
@@ -9547,6 +9813,8 @@ const Buddy3D = (() => {
       if (f.wag) f.wag.rotation.y = mood === 'still' ? 0 : 0.5 * Math.sin(tt * 9);
       if (f.nod) f.nod.rotation.x = mood === 'still' ? 0 : 0.16 * Math.sin(tt * 2.2);
       if (f.fan) { const k = mood === 'still' ? 0 : Math.sin(tt * 1.7); f.fan.scale.set(1 + 0.07 * k, 1 + 0.03 * k, 1); }
+      f.wings.forEach((w) => { w.rotation.z = w.userData.sx * (mood === 'still' ? 0.15 : 0.15 + 0.32 * Math.sin(tt * 8.5)); });
+      if (f.blink) f.blink.scale.setScalar(mood === 'still' || Math.sin(tt * 2.6) > -0.6 ? 1 : 0.5);
     });
     P.flames.forEach((f, i) => { f.scale.set(1, 0.75 + 0.35 * Math.abs(Math.sin(t * 21 + i * 1.7)), 1); });
     if (P.sway) P.sway.rotation.z = mood === 'still' ? 0 : 0.06 * Math.sin(t * 1.3);
@@ -9646,11 +9914,11 @@ const Buddy3D = (() => {
     else if (it.slot === 'neck') obj = NECK[id](0.28);
     else if (it.slot === 'back') { obj = id === 'cape' ? cape(ANCHOR.ladybug) : BACK[id](true); turn = id === 'balloons' ? 0.3 : id === 'tank' ? Math.PI + 0.75 : Math.PI - 0.55; }
     else if (it.slot === 'feet') {
-      /* boots are shown as the robot wears them, shaft and all; flippers, skis and flip flops as on the ladybug */
-      const boots = !(id === 'flippers' || id === 'skis' || id === 'flipflops');
-      obj = FEET[id](boots ? 'robot' : 'ladybug'); turn = boots ? -0.95 : id === 'flipflops' ? -0.4 : -0.6; tilt = boots ? 0.28 : id === 'flipflops' ? 0.75 : 0.5;
+      /* boots are shown as the robot wears them, shaft and all; flippers, skis, flip flops and bakya as on the ladybug */
+      const open = id === 'flipflops' || id === 'bakya', boots = !(open || id === 'flippers' || id === 'skis');
+      obj = FEET[id](boots ? 'robot' : 'ladybug'); turn = boots ? -0.95 : open ? -0.4 : -0.6; tilt = boots ? 0.28 : open ? 0.75 : 0.5;
     }
-    else if (it.slot === 'side') { obj = SIDE[id](false); turn = id === 'unicorn' || id === 'dino' ? 0.35 : id === 'peacock' ? 0.1 : -0.35; }
+    else if (it.slot === 'side') { obj = SIDE[id](false); turn = id === 'unicorn' || id === 'dino' ? 0.35 : id === 'peacock' ? 0.1 : id === 'babydragon' || id === 'littlerobot' ? 0.1 : -0.35; }
     if (!obj) return null;
     if (id === 'headphones') obj.position.set(0, 0.44, 0);
     if (id === 'flower') { obj.position.set(0, 0, 0); obj.rotation.set(-0.2, 0.25, 0); }
@@ -9765,9 +10033,9 @@ const Buddy3D = (() => {
     robot: { cx: 0, y: 1.03, z: [0.48, 0.49, 0.48], dx: 0.33, neck: [0, 1.31, 0.27] },
     slug: { cx: 0.47, y: 0.97, z: [0.5, 0.58, 0.5], dx: 0.28, neck: [0.5, 1.22, 0.34] }
   };
-  /* the subjects' lanyard colors (yellow, pink, blue), a shade deeper than on the page so they keep their
-     color under the stage lights */
-  const SUBJ_HUE = { math: '#F29A00', reading: '#E8389E', clock: '#16B4D8' };
+  /* the subjects' lanyard colors (yellow, green, blue), a shade deeper than on the page so they keep their
+     color under the stage lights; reading's is green, not the page's pink (JB, Nov 16, 2026: no pink or purple on the buddy) */
+  const SUBJ_HUE = { math: '#F29A00', reading: '#1FA35B', clock: '#16B4D8' };
   const MEDAL_C = { gold: '#FFC64E', silver: '#F2F4F7', bronze: '#D0885A' };
   const ease3 = (q) => (q < 0.5 ? 4 * q * q * q : 1 - Math.pow(-2 * q + 2, 3) / 2);
   const outBack = (q) => 1 + 2.70158 * Math.pow(q - 1, 3) + 1.70158 * Math.pow(q - 1, 2);
@@ -9920,7 +10188,7 @@ const Buddy3D = (() => {
     if (!cereEnv) cereEnv = makeEnv();
     s.environment = cereEnv;
     const geo = new T.SphereGeometry(40, 48, 24), p = geo.attributes.position, cols = [];
-    const top = lin('#0A0628'), hor = lin('#35217E'), bot = lin('#05031A'), glow = lin('#7B3FD0');
+    const top = lin('#040A24'), hor = lin('#1B3A8C'), bot = lin('#020615'), glow = lin('#2F6FE0');
     for (let i = 0; i < p.count; i++) {
       const y = p.getY(i) / 40, z = p.getZ(i) / 40;
       const k = y > 0 ? hor.clone().lerp(top, Math.pow(y, 0.6)) : hor.clone().lerp(bot, Math.pow(-y, 0.4));
@@ -9929,12 +10197,12 @@ const Buddy3D = (() => {
     }
     geo.setAttribute('color', new T.Float32BufferAttribute(cols, 3));
     s.add(new T.Mesh(geo, new T.MeshBasicMaterial({ vertexColors: true, side: T.BackSide, depthWrite: false, toneMapped: false })));
-    s.add(M(new T.CircleGeometry(16, 72), new T.MeshStandardMaterial({ color: lin('#140D38'), roughness: 0.55, metalness: 0, envMapIntensity: 0.18 }), [0, 0, 0], [-Math.PI / 2, 0, 0]));
+    s.add(M(new T.CircleGeometry(16, 72), new T.MeshStandardMaterial({ color: lin('#0B1638'), roughness: 0.55, metalness: 0, envMapIntensity: 0.18 }), [0, 0, 0], [-Math.PI / 2, 0, 0]));
     const add = (h, op) => new T.MeshBasicMaterial({ map: glowDot(), color: lin(h), transparent: true, opacity: op, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false });
-    s.add(M(new T.PlaneGeometry(10, 10), add('#9B6BFF', 0.42), [0, 0.006, 0], [-Math.PI / 2, 0, 0]));
+    s.add(M(new T.PlaneGeometry(10, 10), add('#5B9BFF', 0.42), [0, 0.006, 0], [-Math.PI / 2, 0, 0]));
     const trim = goldMat();
-    s.add(M(new T.CylinderGeometry(1.5, 1.58, 0.16, 72), mat.vinyl('#211858', { roughness: 0.35 }), [0, 0.08, 0]));
-    s.add(M(new T.CylinderGeometry(1.24, 1.3, 0.3, 72), mat.vinyl('#3A2B8C', { roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.12 }), [0, 0.31, 0]));
+    s.add(M(new T.CylinderGeometry(1.5, 1.58, 0.16, 72), mat.vinyl('#14275E', { roughness: 0.35 }), [0, 0.08, 0]));
+    s.add(M(new T.CylinderGeometry(1.24, 1.3, 0.3, 72), mat.vinyl('#22409A', { roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.12 }), [0, 0.31, 0]));
     s.add(M(new T.TorusGeometry(1.24, 0.03, 10, 96), trim, [0, 0.46, 0], [Math.PI / 2, 0, 0]));
     s.add(M(new T.TorusGeometry(1.52, 0.022, 8, 96), trim, [0, 0.16, 0], [Math.PI / 2, 0, 0]));
     s.add(M(extrude(starShape(0.13, 0.058, 5), 0.03, 0.012), trim, [0, 0.31, 1.3]));
@@ -9947,7 +10215,7 @@ const Buddy3D = (() => {
       transparent: true, blending: T.AdditiveBlending, depthWrite: false
     }), [0, 0.46 + 3.6, 0]);
     s.add(beam);
-    const hues = ['#FF5FC8', '#4FE3FF', '#FFC531', '#8B5CF6', '#FF8A3D', '#7FE7FF'], bokeh = [];
+    const hues = ['#FF8A3D', '#4FE3FF', '#FFC531', '#3D7BEA', '#34D27B', '#7FE7FF'], bokeh = [];
     const rnd = seeded(7);
     for (let i = 0; i < 34; i++) {
       const sp = new T.Sprite(new T.SpriteMaterial({ map: glowDot(), color: lin(hues[i % hues.length]), transparent: true, opacity: 0.3, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false }));
@@ -9958,15 +10226,15 @@ const Buddy3D = (() => {
     rays.position.set(0, 1.75, -1.6); rays.scale.setScalar(8.5); s.add(rays);
     const flash = new T.Sprite(new T.SpriteMaterial({ map: glowDot(), color: lin('#FFF6D8'), transparent: true, opacity: 0, depthWrite: false, depthTest: false, blending: T.AdditiveBlending, toneMapped: false }));
     s.add(flash);
-    s.add(new T.HemisphereLight(lin('#D9D2FF'), lin('#1A1240'), 0.5));
+    s.add(new T.HemisphereLight(lin('#D2E2FF'), lin('#0E1A40'), 0.5));
     const spot = new T.SpotLight(lin('#FFF3DC'), 2.3, 40, 0.42, 0.6, 1); spot.position.set(0, 9.5, 3.2); spot.target.position.set(0, 1.0, 0); s.add(spot, spot.target);
     const key = new T.DirectionalLight(0xffffff, 0.7); key.position.set(-3.5, 5, 7); s.add(key);
     const rimC = new T.DirectionalLight(lin('#8FF3FF'), 1.0); rimC.position.set(4.5, 3, -4); s.add(rimC);
-    const rimP = new T.DirectionalLight(lin('#FF9AD8'), 0.85); rimP.position.set(-4.5, 2.5, -4); s.add(rimP);
+    const rimP = new T.DirectionalLight(lin('#FFB070'), 0.85); rimP.position.set(-4.5, 2.5, -4); s.add(rimP);
     /* confetti: one instanced mesh, pieces dropped in from above at a burst */
     const n = 240, im = new T.InstancedMesh(new T.PlaneGeometry(0.075, 0.13), new T.MeshBasicMaterial({ side: T.DoubleSide, toneMapped: false }), n);
     im.frustumCulled = false;
-    const cc = ['#FFC531', '#FF5FC8', '#4FE3FF', '#34D27B', '#8B5CF6', '#FF8A3D', '#FFFFFF'], bits = [];
+    const cc = ['#FFC531', '#E8453C', '#4FE3FF', '#34D27B', '#3D7BEA', '#FF8A3D', '#FFFFFF'], bits = [];
     for (let i = 0; i < n; i++) { im.setColorAt(i, lin(cc[i % cc.length])); bits.push({ p: V(0, -9, 0), v: V(0, 0, 0), ax: V(rnd() - 0.5, rnd() - 0.5, rnd() - 0.5).normalize(), a: rnd() * 6, w: 4 + rnd() * 6, ph: rnd() * 6, on: false }); }
     if (im.instanceColor) im.instanceColor.needsUpdate = true;
     s.add(im);
@@ -14852,7 +15120,8 @@ function trophyArt(id, color, empty, tier) {
 /* ---------- the day's medals ---------- */
 const MEDAL_WORD = { gold: 'Gold', silver: 'Silver', bronze: 'Bronze', ribbon: 'Try-again ribbon' };
 /* 'all' is the all-subjects medal of the all-time count: a white lanyard and a star */
-const MEDAL_HUE = { math: '#FFB020', reading: '#FF5FC8', clock: '#3FD2F0', all: '#EEF1F8' };
+/* the medals' ribbon colors; reading's is green, not the Reading tile's pink (JB, Nov 16, 2026: no pink or purple on the buddy's things) */
+const MEDAL_HUE = { math: '#FFB020', reading: '#2FB574', clock: '#3FD2F0', all: '#EEF1F8' };
 const MEDAL_ICON = {
   all: '<path d="M0 -10 L2.47 -3.4 L9.51 -3.09 L3.99 1.3 L5.88 8.09 L0 4.2 L-5.88 8.09 L-3.99 1.3 L-9.51 -3.09 L-2.47 -3.4 Z" fill="none" stroke-width="2.4" stroke-linejoin="round"/>',
   math: '<path d="M-9 0 H9 M0 -9 V9" fill="none" stroke-width="4.6" stroke-linecap="round"/>',
