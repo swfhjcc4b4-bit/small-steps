@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261117030732";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261117043258";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1719,9 +1719,10 @@ function makeEngine(C) {
      rather than going to next level 100%", "level 1 —> level 1.5 —> level 2". After a move up (after 4 passes in
      a row, or a passed level test) the first sheets on the new level mix in the level just left: half and half until
      a mixed sheet passes, then three new questions in four until another passes. Going back up after a step back for
-     review is a return, not a move up, and stays as it was: JB has not decided it. Only then do sheets count toward the 4 passes in a row, so the bar to move up is unchanged. A
-     failed mixed sheet keeps the mix where it is; the step back works as before. Each question keeps its own
-     level's time, so a mixed sheet's target is the mix of the two. The track holds `bridge: { from, step }`
+     review gets the same, mixed with the level the child was sent back to (JB, the same night: "Mix up the return
+     too"). Only then do sheets count toward the 4 passes in a row, so the bar to move up is unchanged. A failed
+     mixed sheet keeps the mix where it is; the step back works as before and ends the mix. Each question keeps its
+     own level's time, so a mixed sheet's target is the mix of the two. The track holds `bridge: { from, step }`
      while it lasts. The rule is played only for sheets made by a build that has it (`bridgeRule` on the result,
      recorded on each sheet), so sheets done before it are played again as they were done. */
   const BRIDGE_NEW = [0.5, 0.75];   /* share of new questions on the 1st and 2nd mixed sheet */
@@ -1954,6 +1955,7 @@ function makeEngine(C) {
           if (L2.runDays.length >= MIN_DAYS) {
             L2.levelId = learner.backFrom; L2.backFrom = ''; resetRun();
             ev.returned = true; ev.to = L2.levelId;
+            bridgeIn(learner.levelId);
           } else ev.waitDay = true;
         } else if (learner.testFor) {
           L2.testWait = false; ev.testReady = true;
@@ -14405,7 +14407,7 @@ function guideHTML() {
     li('<b>A sheet is one Kumon worksheet.</b> In math that is about 20 problems. Answers are checked at the end, and every mistake gets fixed before the sheet counts.') +
     li('<b>Target times are Kumon’s.</b> From Kumon 3A in math the timer uses Kumon’s target time for each sheet. The earliest levels are untimed, as in Kumon.') +
     li('<b>Moving up takes passes on at least two different days.</b> Each Kumon level ends with a level test, like Kumon’s Achievement Test.') +
-    li('<b>A move up comes in two smaller steps.</b> The first sheets on a new level mix in the level just left: half of each sheet until a mixed sheet passes, then a quarter until another passes. The passes in a row toward the next move count after that.') +
+    li('<b>A move up comes in two smaller steps.</b> The first sheets on a new level mix in the level just left: half of each sheet until a mixed sheet passes, then a quarter until another passes. The passes in a row toward the next move count after that. Going back up after a step back for review works the same way.') +
     li('<b>New levels start with a worked example.</b> Kumon sheets introduce each new step with an example. The “?” on a sheet shows it again.') +
     li('<b>Reading follows Kumon’s order.</b> Pictures and rhymes, then letter sounds, words, sentences and stories. From Kumon 2A the sheets cover naming, action and describing words, word order and riddles; at AI, stories with several questions each; at AII, the order of events.') +
     '</ul></section></div><div class="panels"><section class="glass panel guide"><h3>Your part, about 5 minutes a day</h3><ol>' +
@@ -15995,7 +15997,7 @@ function settingsHTML(l, E, t, subj) {
       (subj === 'reading' ? '<p class="help">The story levels (Kumon AI and AII) stop at 6 problems a sheet, because each one comes with a story to read.</p>' : '') + '</div>' +
     '<div class="field"><label for="f-allowed">Misses allowed to pass</label><select id="f-allowed" data-set="allowed">' + [0, 1, 2, 3].map((v) => opt(v, (v === 0 ? 'None' : String(v)) + ' (' + Math.round(100 * (s.sheetLen - v) / s.sheetLen) + '% to pass)', s.allowed)).join('') + '</select></div>' +
     '<div class="field"><label for="f-adv">Passed sheets to move up</label><select id="f-adv" data-set="toAdvance">' + [1, 2, 3, 4, 5].map((v) => opt(v, String(v), s.toAdvance)).join('') + '</select>' +
-      '<p class="help">Passes must be in a row and come from at least two different days. Every pass counts once, however fast. After a move up, the first sheets mix in the level just left: half and half until a mixed sheet passes, then a quarter until another passes. The passes in a row count after that.</p></div>' +
+      '<p class="help">Passes must be in a row and come from at least two different days. Every pass counts once, however fast. After a move up, and after going back up from a step back for review, the first sheets mix in the level just left: half and half until a mixed sheet passes, then a quarter until another passes. The passes in a row count after that.</p></div>' +
     '<div class="field"><label for="f-pace">Target time</label><select id="f-pace" data-set="pace">' + opt('relaxed', 'Relaxed (1.5× standard)', s.pace) + opt('standard', 'Standard', s.pace) + opt('brisk', 'Brisk (0.8× standard)', s.pace) + '</select>' +
       '<p class="help">' + (subj === 'clock' ? 'Pre-K and grade 1 clock levels are untimed.' : subj === 'reading' ? 'Reading is untimed until Kumon 2A, the first level Kumon times.' : 'The earliest levels are untimed, as in Kumon.') + '</p></div>' +
     '<div class="field"><label for="f-timer">Show the timer</label><select id="f-timer" data-set="showTimer">' + opt('1', 'On', s.showTimer ? '1' : '0') + opt('0', 'Off', s.showTimer ? '1' : '0') + '</select>' +
