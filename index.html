@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261117184753";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261117220751";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1328,8 +1328,9 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .trophy b { font-family: var(--font-display); font-weight: 400; font-size: 17px; line-height: 1.1; color: #fff; }
 .trophy.none b { color: var(--ink-soft); }
 .trophy small { font-size: 11px; color: var(--ink-faint); font-weight: 700; }
-.t-stars { color: var(--gold-hi); font-size: 15px; line-height: 1; letter-spacing: 1px; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3); }
-.t-stars.none { color: var(--ink-faint); }
+/* a diamond trophy's stars (ui-awards.js): "★ 2 stars", or "No stars yet" */
+.t-stars { color: var(--gold-hi); font-size: 13px; font-weight: 900; line-height: 1.1; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3); }
+.t-stars.none { color: var(--ink-faint); font-size: 12px; font-weight: 800; }
 .t-bar { width: 84%; height: 7px; border-radius: 999px; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
 .t-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #FFC531, #FF8A3D); }
 .shelf-help { margin: 0; font-size: 13px; line-height: 1.45; font-weight: 700; color: var(--ink-soft); }
@@ -1500,6 +1501,36 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .t-next { font-size: 12px; font-weight: 800; line-height: 1.25; color: var(--ink-soft); }
 .t-next i { font-style: normal; font-weight: 900; }
 .trophy .tw0 { color: #F0A46A; } .trophy .tw1 { color: #B9C1CD; } .trophy .tw2 { color: #FFD65A; } .trophy .tw3 { color: #FFFFFF; text-shadow: 0 0 6px rgba(200, 215, 255, 0.9); } .trophy .tw4 { color: #9EDCFF; text-shadow: 0 0 6px rgba(140, 210, 255, 0.8); }
+/* ---------- diamond stars (JB, Nov 17, 2026: "Diamond stars.") ----------
+   A diamond trophy sits in a taller box with room above it for its stars, so it keeps its size. A star won
+   comes as a card: the trophy with the newest star bursting in, or five stars flying together into a big one
+   (ui-awards.js starsLayer); after a sheet it sits in the news, after a read, a book, spelling or food it pops
+   up at the top of the screen for a few seconds (#startoast). */
+.t-art.st { width: 84px; height: 94px; margin: -12px 0 -4px; }
+.news-art.st { width: 118px; height: 132px; flex: none; margin: -14px 0 -6px; }
+.news.star-news { border-radius: 26px; padding: 6px 24px 6px 10px; gap: 14px; }
+.star-news .sn-words { display: grid; gap: 3px; text-align: left; }
+.star-news .sn-words b { font-size: 27px; line-height: 1.05; }
+.star-news.join-big .sn-words b, .star-news.join-giant .sn-words b { font-size: 28px; }
+.star-news .sn-words small { font-size: 16px; font-weight: 800; line-height: 1.15; color: #9EDCFF; }
+.tart .st-new, .tart .st-rays, .tart .st-fly { transform-box: fill-box; transform-origin: center; }
+.tart .st-flyers { display: none; }
+.play .tart .st-flyers { display: inline; }
+.play .tart .st-new { animation: stPop 0.8s cubic-bezier(0.3, 1.6, 0.5, 1) both; }
+.play .tart .st-rays { animation: stRays 1.4s ease-out both; }
+.play .tart .st-big .st-new, .play .tart .st-giant .st-new, .play .tart .st-big .st-rays, .play .tart .st-giant .st-rays { animation-delay: 1.25s; }
+.play .tart .st-fly { animation: stFly 1.3s ease-in both; }
+.play .tart .st-fly.st-fifth { animation-name: stArriveFly; }
+@keyframes stPop { 0% { transform: scale(0); opacity: 0; } 55% { transform: scale(1.45); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes stRays { 0% { transform: scale(0.3) rotate(0deg); opacity: 0; } 35% { opacity: 1; } 100% { transform: scale(1) rotate(22.5deg); opacity: 0.85; } }
+@keyframes stFly { 0%, 45% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0.5); opacity: 0; } }
+@keyframes stArriveFly { 0% { transform: scale(0); opacity: 0; } 22% { transform: scale(1.35); opacity: 1; } 32%, 45% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0.5); opacity: 0; } }
+#startoast { position: fixed; left: 50%; top: calc(12px + env(safe-area-inset-top, 0px)); z-index: 79; display: grid; justify-items: center; gap: 4px; max-width: calc(100% - 24px); transform: translate(-50%, -150%); opacity: 0; pointer-events: none; transition: transform 0.45s var(--spring), opacity 0.3s ease; }
+#startoast.on { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+#startoast .star-news { background: linear-gradient(90deg, rgba(24, 58, 128, 0.97), rgba(12, 40, 96, 0.97)); box-shadow: 0 16px 40px rgba(0, 8, 40, 0.55), 0 0 26px rgba(255, 197, 49, 0.35); }
+#startoast .st-more { color: #fff; font-weight: 800; font-size: 13px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); }
+@media (prefers-reduced-motion: reduce) { .play .tart .st-new, .play .tart .st-rays, .play .tart .st-fly, .play .tart .st-fly.st-fifth { animation: none; } .play .tart .st-flyers { display: none; } }
+@media (max-width: 460px) { .t-art.st { width: 68px; height: 76px; margin: -10px 0 -3px; } .news-art.st { width: 92px; height: 103px; margin: -10px 0 -4px; } .news.star-news { gap: 10px; padding: 4px 16px 4px 6px; } .star-news .sn-words b { font-size: 22px; } .star-news .sn-words small { font-size: 14px; } }
 @media (max-width: 460px) { .t-art { width: 52px; height: 58px; } .t-word { display: none; } .shelf-medals { grid-template-columns: auto repeat(3, minmax(46px, max-content)); column-gap: 8px; padding: 8px 10px; } .smw { min-width: 34px; font-size: 15px; } .sm-tot { font-size: 22px; } .sm-tot i { font-size: 16px; } .sma { gap: 2px; font-size: 18px; } .sma .medal { width: 20px; } }
 /* Celestina, the tutor (tutor.js) */
 .tutor { position: fixed; z-index: 40; pointer-events: none; display: flex; align-items: flex-end; gap: 4px; }
@@ -5427,8 +5458,14 @@ const Buddy = (() => {
     { at: 900, id: 'orbit', name: 'Star friend', icon: '💫' },
     { at: 1200, id: 'sparks', name: 'Lightning sparks', icon: '⚡' }, { at: 1400, id: 'orbit2', name: 'Second star friend', icon: '🌟' },
     { at: 1600, id: 'glow2', name: 'Super glow', icon: '☀️' }, { at: 1800, id: 'streaks', name: 'Speed streaks', icon: '💨' },
-    { at: 2400, id: 'satellite', name: 'Satellite', icon: '🛰️' }, { at: 2800, id: 'saturn', name: 'Planet ring', icon: '🪐' },
-    { at: 3200, id: 'comet', name: 'Comet', icon: '☄️' }, { at: 3600, id: 'aurora', name: 'Aurora glow', icon: '🌌' }
+    /* from Space hero to Galaxy hero a power-up every 200, as from Superhero to Space hero (JB, Nov 17, 2026:
+       "Fill the buddy gap"): shooting stars, the Earth, an asteroid belt, a star map and a sun came in between
+       the satellite, the planet ring, the comet and the aurora */
+    { at: 2200, id: 'shooting', name: 'Shooting stars', icon: '🌠' }, { at: 2400, id: 'satellite', name: 'Satellite', icon: '🛰️' },
+    { at: 2600, id: 'earth', name: 'Earth friend', icon: '🌍' }, { at: 2800, id: 'saturn', name: 'Planet ring', icon: '🪐' },
+    { at: 3000, id: 'asteroids', name: 'Asteroid belt', icon: '🪨' }, { at: 3200, id: 'comet', name: 'Comet', icon: '☄️' },
+    { at: 3400, id: 'starmap', name: 'Star map', icon: '⭐' }, { at: 3600, id: 'aurora', name: 'Aurora glow', icon: '🌌' },
+    { at: 3800, id: 'sun', name: 'Sun friend', icon: '🌞' }
   ];
   const FORM_ICON = { little: '🥚', big: '🌱', hero: '🦸', super: '⚡', space: '🚀', galaxy: '🌌' };
   const CROWN_AT = 4000, CROWN_STEP = 400;
@@ -10715,6 +10752,10 @@ const Buddy3D = (() => {
      parts that circle it hang on P.aura, which follows the hover but not the tricks. Each moving part
      adds a small function to P.fx that pose() calls every frame. */
   const FORM_C = { 2: '#FFD34D', 3: '#FF7A3D', 4: '#4FE3FF', 5: '#3D6BFF' };
+  /* look.p counts power-ups in Buddy.POWERUPS' order; each is drawn by its id, so a power-up added in between
+     (Nov 17, 2026: five from Space hero to Galaxy hero) never moves another */
+  const PW_ORDER = ['badge', 'glow', 'ring', 'dust', 'orbit', 'sparks', 'orbit2', 'glow2', 'streaks', 'shooting', 'satellite', 'earth', 'saturn', 'asteroids', 'comet', 'starmap', 'aurora', 'sun'];
+  const pwHas = (look) => { const ids = typeof Buddy !== 'undefined' && Buddy.POWERUPS ? Buddy.POWERUPS.map((x) => x.id) : PW_ORDER, n = look.p || 0; return (id) => { const i = ids.indexOf(id); return i >= 0 && i < n; }; };
   const FORM_AT = {
     ladybug: { chest: [0, 0.62, 0.66], head: [0, 1.93, 0.06], hr: 0.8 },
     slug: { chest: [0.5, 0.86, 0.52], head: [0.5, 1.8, 0.12], hr: 0.74 },
@@ -10787,6 +10828,30 @@ const Buddy3D = (() => {
     if (ring) g.add(M(new T.TorusGeometry(0.19, 0.016, 8, 40), mat.glow(ring), null, [1.25, 0.2, 0]));
     return g;
   }
+  /* the Earth friend (2,600): blue seas, green land and white clouds; the sun friend (3,800): a warm glowing sun with rays */
+  const earthTex = () => canvasTex('earth', 256, 128, (x, w, h) => {
+    x.fillStyle = '#2C6FD6'; x.fillRect(0, 0, w, h);
+    const r = seeded(19);
+    x.fillStyle = '#3FB45A';
+    [[40, 50, 34, 26], [70, 80, 22, 30], [130, 40, 40, 22], [150, 78, 26, 20], [205, 60, 30, 34], [230, 30, 18, 12]].forEach((q) => { x.beginPath(); x.ellipse(q[0], q[1], q[2], q[3], r() * 3, 0, Math.PI * 2); x.fill(); });
+    x.fillStyle = '#E9F4FF'; x.fillRect(0, 0, w, 9); x.fillRect(0, h - 9, w, 9);
+    x.fillStyle = 'rgba(255,255,255,0.75)';
+    for (let i = 0; i < 9; i++) { x.beginPath(); x.ellipse(r() * w, 18 + r() * (h - 36), 14 + r() * 22, 4 + r() * 4, 0, 0, Math.PI * 2); x.fill(); }
+  });
+  function earthMesh() {
+    const g = new T.Group(), e = M(sph(0.18, 36, 28), mat.satin('#FFFFFF', { map: earthTex(), roughness: 0.55, emissive: lin('#1B3E7A'), emissiveIntensity: 0.2 }));
+    g.add(e); g.add(M(sph(0.194, 28, 20), mat.glass('#BFE6FF', { opacity: 0.2 }))); fxSprite(g, softGlow(), '#8FD0FF', 0.6, null, 0.45);
+    return g;
+  }
+  function sunMesh() {
+    const g = new T.Group(), rays = G();
+    g.add(M(sph(0.15, 32, 24), mat.glow('#FFB03A')));
+    g.add(M(sph(0.11, 24, 16), mat.glow('#FFE68A'), [0.02, 0.02, 0.06]));
+    for (let i = 0; i < 10; i++) { const a = (i / 10) * Math.PI * 2; rays.add(M(new T.ConeGeometry(0.035, 0.12, 10), mat.glow(i % 2 ? '#FFD34D' : '#FF9A3D'), [Math.cos(a) * 0.21, Math.sin(a) * 0.21, 0], [0, 0, a - Math.PI / 2])); }
+    g.add(rays); fxSprite(g, softGlow(), '#FFB03A', 0.85, null, 0.75);
+    g.userData.rays = rays;
+    return g;
+  }
   /* An orbit around the buddy: radius r, height y, tilt, seconds per turn, starting angle. */
   function orbit(P, obj, r, y, tilt, secs, a0, rz) {
     P.aura.add(obj);
@@ -10796,7 +10861,7 @@ const Buddy3D = (() => {
     });
   }
   function bodyPowers(look, type, body, P) {
-    const f = look.f || 2, n = look.p || 0, F = FORM_AT[type] || FORM_AT.ladybug;
+    const f = look.f || 2, has = pwHas(look), F = FORM_AT[type] || FORM_AT.ladybug;
     if (f >= 3) {
       P.fly = 0.2;
       if (type === 'dragon' && P.wings) P.wings.forEach((w, i) => { const sx = i ? 1 : -1; w.scale.setScalar(1.55); w.rotation.z += sx * 0.32; w.position.y += 0.12; w.userData.baseY = w.rotation.y = -sx * 0.4; P.bigWings = true; });
@@ -10819,7 +10884,7 @@ const Buddy3D = (() => {
         body.add(cl); P.cloud = cl;
       }
     }
-    if (n >= 1) { const bd = badgeMesh(f); bd.position.set(F.chest[0], F.chest[1], F.chest[2]); body.add(bd); }
+    if (has('badge')) { const bd = badgeMesh(f); bd.position.set(F.chest[0], F.chest[1], F.chest[2]); body.add(bd); }
     if (f >= 4 && !(look.w && look.w.head === 'astronaut')) {
       const hc = F.head;
       body.add(M(sph(F.hr, 48, 32), mat.glass('#DDF6FF', { opacity: 0.2, clearcoatRoughness: 0.02 }), hc));
@@ -10832,24 +10897,24 @@ const Buddy3D = (() => {
     }
   }
   function auraPowers(look, type, P) {
-    const f = look.f || 2, n = look.p || 0, fc = FORM_C[Math.max(2, Math.min(5, f))];
+    const f = look.f || 2, has = pwHas(look), fc = FORM_C[Math.max(2, Math.min(5, f))];
     if (f >= 5) {
       fxSprite(P.aura, softTint(), '#2346C8', 3.6, [0, 1.35, -1.4], 0.55, true);
       const gx = fxSprite(P.aura, galaxyTex(), '#FFFFFF', 4.1, [0, 1.35, -1.3], 1, true);
       P.fx.push((t, still) => { gx.material.rotation = still ? 0.4 : -t * 0.12; });
     }
-    if (n >= 2) {
-      const big = n >= 8, gl = fxSprite(P.aura, softTint(), fc, big ? 3.9 : 3.3, [0, 1.3, -0.9], 0.6, true);
+    if (has('glow')) {
+      const big = has('glow2'), gl = fxSprite(P.aura, softTint(), fc, big ? 3.9 : 3.3, [0, 1.3, -0.9], 0.6, true);
       P.fx.push((t, still) => { const k = still ? 0.5 : 0.5 + 0.5 * Math.sin(t * (big ? 2.4 : 1.6)); gl.material.opacity = (big ? 0.7 : 0.55) + 0.2 * k; gl.scale.setScalar((big ? 3.8 : 3.2) + (big ? 0.35 : 0.2) * k); });
     }
-    if (n >= 13) {
+    if (has('aurora')) {
       const cols = ['#5BFFB0', '#4FE3FF', '#5B8CFF'];
       cols.forEach((c, i) => {
-        const b = fxSprite(P.aura, bandTex(), c, 1, [(i - 1) * 1.0, 1.7, -1.05], 0.7, true); b.scale.set(1.1, 3.4, 1);
+        const b = fxSprite(P.aura, bandTex(), c, 1, [(i - 1) * 1.0, 1.7, -1.05], 0.7, true); b.scale.set(1.1, 3.4, 1); b.name = 'pw-aurora';
         P.fx.push((t, still) => { const q = still ? i : t * 0.6 + i * 2.1; b.position.x = (i - 1) * 1.0 + 0.18 * Math.sin(q); b.material.opacity = 0.5 + 0.2 * Math.sin(q * 1.3); b.material.rotation = 0.15 * Math.sin(q * 0.7); });
       });
     }
-    if (n >= 3) {
+    if (has('ring')) {
       const ring = G([0, 0.03, 0]);
       ring.add(M(new T.TorusGeometry(1.02, 0.026, 10, 80), mat.glow(fc, { transparent: true, opacity: 0.9 }), null, [Math.PI / 2, 0, 0]));
       const lights = [];
@@ -10858,7 +10923,7 @@ const Buddy3D = (() => {
       P.root.add(ring);
       P.fx.push((t, still) => { ring.rotation.y = still ? 0 : t * 0.5; });
     }
-    if (n >= 4) {
+    if (has('dust')) {
       const col = f >= 5 ? '#C8DCFF' : f >= 4 ? '#BFF4FF' : '#FFE07A', rnd = seeded(31), dust = [];
       for (let i = 0; i < 10; i++) dust.push({ s: fxSprite(P.aura, sparkTex(), col, 0.16, null, 0), a: rnd() * Math.PI * 2, r: 0.55 + rnd() * 0.5, ph: rnd(), sp: 0.18 + rnd() * 0.12 });
       P.fx.push((t, still) => dust.forEach((d) => {
@@ -10867,12 +10932,12 @@ const Buddy3D = (() => {
         d.s.material.opacity = Math.sin(Math.PI * u) * 0.95; d.s.scale.setScalar(0.1 + 0.12 * Math.sin(Math.PI * u));
       }));
     }
-    if (n >= 5) {
+    if (has('orbit')) {
       const friend = (i) => (f >= 5 ? planetMesh(i ? '#3EC7B5' : '#FF8A5B', i ? '#BDF7EE' : null) : (() => { const st = new T.Group(); st.add(M(extrude(starShape(0.12, 0.052), 0.05, 0.02), goldMat())); fxSprite(st, softGlow(), '#FFE14F', 0.55, null, 0.55); return st; })());
       orbit(P, friend(0), 1.18, 1.55, 0.22, 7.5, 0);
-      if (n >= 7) orbit(P, friend(1), 1.18, 1.55, 0.22, 7.5, Math.PI);
+      if (has('orbit2')) orbit(P, friend(1), 1.18, 1.55, 0.22, 7.5, Math.PI);
     }
-    if (n >= 6) {
+    if (has('sparks')) {
       const sparks = [], rnd = seeded(77);
       for (let i = 0; i < 5; i++) {
         const pts = []; let x = 0, y = 0;
@@ -10886,24 +10951,74 @@ const Buddy3D = (() => {
         if (on) { const a = r() * Math.PI * 2; s.g.position.set(Math.cos(a) * (0.75 + r() * 0.25), 0.5 + r() * 1.9, Math.sin(a) * 0.5 + 0.2); s.g.rotation.z = (r() - 0.5) * 1.2; }
       }));
     }
-    if (n >= 9 && f >= 3) {
+    if (has('streaks') && f >= 3) {
       const rnd = seeded(5), lines = [];
       for (let i = 0; i < 7; i++) { const s = fxSprite(P.aura, streakTex(), '#FFFFFF', 1, null, 0.6, true); s.scale.set(0.05, 0.55, 1); lines.push({ s, x: (rnd() - 0.5) * 1.3, z: (rnd() - 0.5) * 0.6, ph: rnd() }); }
       P.fx.push((t, still) => lines.forEach((l) => { const u = (l.ph + (still ? 0.4 : t * 1.4)) % 1; l.s.position.set(l.x, 0.6 - u * 1.0, l.z); l.s.material.opacity = 0.55 * Math.sin(Math.PI * u); }));
     }
-    if (n >= 10) orbit(P, satelliteMesh(), 1.0, 0.85, 0.35, 6, 1.2);
-    if (n >= 11) {
-      const sat = G([0, 1.12, 0], [0.32, 0, -0.18]);
+    if (has('satellite')) { const st = satelliteMesh(); st.name = 'pw-satellite'; orbit(P, st, 1.0, 0.85, 0.35, 6, 1.2); }
+    if (has('saturn')) {
+      const sat = G([0, 1.12, 0], [0.32, 0, -0.18]); sat.name = 'pw-saturn';
       sat.add(M(new T.RingGeometry(0.98, 1.16, 72), mat.satin('#F2D58A', { transparent: true, opacity: 0.62, side: T.DoubleSide, emissive: lin('#8A6A2A'), emissiveIntensity: 0.3 }), null, [-Math.PI / 2, 0, 0]));
       sat.add(M(new T.RingGeometry(1.2, 1.3, 72), mat.satin('#CFE3FF', { transparent: true, opacity: 0.45, side: T.DoubleSide }), null, [-Math.PI / 2, 0, 0]));
       P.aura.add(sat); P.fx.push((t, still) => { sat.rotation.y = still ? 0 : t * 0.25; });
     }
-    if (n >= 12) {
-      const head = G(); head.add(M(sph(0.06, 16, 12), mat.glow('#FFFFFF'))); fxSprite(head, softGlow(), '#BFF4FF', 0.36, null, 0.6);
+    if (has('comet')) {
+      const head = G(); head.name = 'pw-comet'; head.add(M(sph(0.06, 16, 12), mat.glow('#FFFFFF'))); fxSprite(head, softGlow(), '#BFF4FF', 0.36, null, 0.6);
       const tail = []; for (let i = 0; i < 7; i++) tail.push(fxSprite(P.aura, softGlow(), '#9FE6FF', 0.3 - i * 0.03, null, 0.45 - i * 0.055));
       P.aura.add(head);
       const at = (a) => [Math.cos(a) * 1.32, 1.9 + Math.sin(a) * 0.45, Math.sin(a) * 0.85];
       P.fx.push((t, still) => { const a = 2.2 + (still ? 0 : (t * Math.PI * 2) / 9); const q = at(a); head.position.set(q[0], q[1], q[2]); tail.forEach((s, i) => { const p = at(a - 0.09 * (i + 1)); s.position.set(p[0], p[1], p[2]); }); });
+    }
+    if (has('shooting')) {
+      /* shooting stars: now and then a bright star streaks across the sky behind the buddy with a glowing tail */
+      const rnd = seeded(23), shots = [];
+      for (let i = 0; i < 3; i++) {
+        const g = G(), dir = i % 2 ? -1 : 1, ux = dir * 0.939, uy = -0.343; g.name = 'pw-shooting';
+        const tail = fxSprite(g, streakTex(), '#FFE7A0', 1, null, 0.9); tail.scale.set(0.09, 1.05, 1); tail.material.rotation = Math.atan2(uy, ux) + Math.PI / 2;
+        const glow = fxSprite(g, softGlow(), '#FFE7A0', 0.55, null, 0.8), head = fxSprite(g, sparkTex(), '#FFFBE8', 0.5, null, 1);
+        P.aura.add(g);
+        shots.push({ g, head, glow, tail, ux, uy, ph: i / 3 + rnd() * 0.1, x0: dir * (-1.75 + rnd() * 0.3), y0: 2.8 + rnd() * 0.4, z: -1.3 - rnd() * 0.25 });
+      }
+      P.fx.push((t, still) => shots.forEach((s, i) => {
+        const c = still ? 0.1 + i * 0.1 : (t / 2.6 + s.ph) % 1, u = c / 0.32;
+        s.g.visible = c < 0.32;
+        if (!s.g.visible) return;
+        const x = s.x0 + s.ux * 2.8 * u, y = s.y0 + s.uy * 2.8 * u, k = Math.sin(Math.PI * Math.min(1, u * 1.15));
+        s.head.position.set(x, y, s.z); s.glow.position.set(x, y, s.z); s.tail.position.set(x - s.ux * 0.5, y - s.uy * 0.5, s.z);
+        s.head.material.opacity = 0.4 + 0.6 * k; s.glow.material.opacity = 0.75 * k; s.tail.material.opacity = 0.9 * k;
+      }));
+    }
+    if (has('earth')) { const e = earthMesh(); e.name = 'pw-earth'; orbit(P, e, 1.22, 1.42, 0.16, 9.5, 3.4); }
+    if (has('asteroids')) {
+      /* an asteroid belt: a tilted ring of little rocks circling the buddy's middle */
+      const belt = G([0, 0.55, 0], [0.32, 0, 0.12]); belt.name = 'pw-asteroids';
+      const rnd = seeded(41), rock = [mat.satin('#8C8173', { roughness: 0.95 }), mat.satin('#A89A86', { roughness: 0.9 }), mat.satin('#6E655B', { roughness: 0.95 })];
+      for (let i = 0; i < 16; i++) {
+        const a = (i / 16) * Math.PI * 2 + rnd() * 0.2, r = 1.16 + (rnd() - 0.5) * 0.14, sz = 0.045 + rnd() * 0.05;
+        belt.add(M(new T.DodecahedronGeometry(sz, 0), rock[i % 3], [Math.cos(a) * r, (rnd() - 0.5) * 0.08, Math.sin(a) * r], [rnd() * 3, rnd() * 3, rnd() * 3], [1, 0.7 + rnd() * 0.5, 0.8 + rnd() * 0.4]));
+      }
+      P.aura.add(belt); P.fx.push((t, still) => { belt.rotation.y = still ? 0.4 : t * 0.3; });
+    }
+    if (has('starmap')) {
+      /* a star map: three groups of stars joined by thin glowing lines, twinkling in the sky behind the buddy */
+      const sky = G([0, 0, -1.5]); sky.name = 'pw-starmap';
+      const lines = mat.glow('#9FD8FF', { transparent: true, opacity: 0.55, depthWrite: false }), twinkle = [];
+      [[[-1.75, 2.55], [-1.42, 2.78], [-1.08, 2.66], [-0.86, 2.4], [-0.98, 2.1], [-0.6, 2.02], [-0.5, 2.36]],
+       [[0.62, 3.02], [0.92, 3.12], [1.22, 3.22], [0.78, 2.66], [1.38, 2.74]],
+       [[1.28, 1.5], [1.6, 1.78], [1.9, 2.06], [1.3, 2.04], [1.88, 1.5]]].forEach((pts, k) => {
+        const path = k === 0 ? pts : k === 1 ? [pts[3], pts[0], pts[1], pts[2], pts[4]] : [pts[0], pts[1], pts[2], pts[1], pts[3], pts[1], pts[4]];
+        for (let i = 1; i < path.length; i++) sky.add(M(tube([[path[i - 1][0], path[i - 1][1], 0], [path[i][0], path[i][1], 0]], 0.008, 2, 4), lines));
+        pts.forEach((q, i) => twinkle.push({ s: fxSprite(sky, sparkTex(), i % 3 ? '#FFFFFF' : '#FFE7A0', 0.26 + (i % 2) * 0.08, [q[0], q[1], 0.01], 0.95), ph: k * 1.7 + i * 0.9 }));
+      });
+      P.aura.add(sky);
+      P.fx.push((t, still) => twinkle.forEach((w) => { const k = still ? 0.75 : 0.65 + 0.35 * Math.sin(t * 2.3 + w.ph); w.s.material.opacity = k; }));
+    }
+    if (has('sun')) {
+      /* the sun friend: a little sun circling high on the far side from the moon, its rays turning */
+      const sun = sunMesh(); sun.name = 'pw-sun';
+      orbit(P, sun, 1.24, 2.42, -0.1, 15, 2.4 + Math.PI);
+      P.fx.push((t, still) => { sun.userData.rays.rotation.z = still ? 0.2 : t * 0.6; });
     }
     if (f >= 4) orbit(P, moonMesh(), 1.3, 2.05, -0.18, 11, 2.4);
   }
@@ -12188,12 +12303,39 @@ const Awards = (() => {
     { id: 'buddy', name: 'Buddy', kid: 'Buddy Power', icon: '🦸', steps: [100, 500, 1000, 1600, 2000], unit: ['', ''], label: (n) => FORM_NAME[n] || n + ' grow points', count: (v) => plural(v, 'grow point', 'grow points'), status: (n) => BUDDY_IS[n] || '',
       say: (v, nx) => (nx ? (nx.at - v) + ' more to ' + BUDDY_GOAL[nx.at] + ' and win ' + nx.tier.toLowerCase() + '!' : 'Your buddy is a space hero! That is diamond!') }
   ];
+  /* ---------- diamond stars ----------
+     A trophy does not end at diamond (JB, Nov 17, 2026: "Diamond stars."). After diamond each further step
+     earns a gold star, set so that every trophy gives about one a week at the children's own pace: Sheet
+     Star every 60 sheets, On Fire every full week of practice in a row (on any run after diamond, so a
+     missed day starts only that week over, never the trophy), Level Up every 5 new levels, Read Aloud every
+     7 read-alouds, Bookworm every 5 books, Buddy Power every 400 grow points (each step the buddy takes
+     after Space hero). Five little stars join into one big star and five big stars into one giant star, so
+     a trophy never gets crowded and has no last star. */
+  const STAR_STEP = { sheets: 60, streak: 7, levels: 5, reads: 7, books: 5, buddy: 400 };
+  const STAR_UNIT = { sheets: ['sheet', 'sheets'], streak: ['day in a row', 'days in a row'], levels: ['level', 'levels'], reads: ['read-aloud', 'read-alouds'], books: ['book', 'books'], buddy: ['', ''] };
+  const starShape = (n) => ({ n, giant: Math.floor(n / 25), big: Math.floor((n % 25) / 5), little: n % 5 });
+  const buddyIs = (v) => (v >= 4000 ? 'is a galaxy hero' : BUDDY_IS[2000]);
+  /* A diamond trophy's stars: how many so far (and as little, big and giant stars), what the next one
+     needs and how far its bar is; null before diamond. c: the counts (On Fire reads its weeks there). */
+  function starOf(S, value, c) {
+    const step = STAR_STEP[S.id], D = S.steps[S.steps.length - 1];
+    if (!step || value < D) return null;
+    let n, done, alive = true, label = S.label(value);
+    if (S.id === 'streak') {
+      const f = (c && c.fire) || {};
+      n = f.stars || 0; done = f.week || 0; alive = !!f.alive; label = plural(f.run || 0, 'day', 'days') + ' in a row';
+    } else { n = Math.floor((value - D) / step); done = value - D - n * step; }
+    const left = step - done, u = STAR_UNIT[S.id], to = n ? 'the next star' : 'a star';
+    const words = S.id === 'streak' && !alive ? 'Practice ' + step + ' days in a row for ' + to : left + ' more' + (u[0] ? ' ' + (left === 1 ? u[0] : u[1]) : '') + ' to ' + to;
+    return Object.assign(starShape(n), { step, left, pct: done / step, alive, label, words });
+  }
   const SUBJ = ['math', 'reading', 'clock'];
   const localDay = (iso) => { const d = new Date(iso); return isNaN(d) ? '' : d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
   const nextDay = (k) => { const p = k.split('-').map(Number), d = new Date(p[0], p[1] - 1, p[2] + 1, 12); return localDay(d.toISOString()); };
   /* The counts behind every series. logs: { math, reading, clock: sessions; reads; books } (voided left out).
-     belts: groups passed in all subjects; growth: the buddy's growth. */
-  function counts(logs, belts, growth) {
+     belts: groups passed in all subjects; growth: the buddy's growth; today: the day it is (a local day,
+     YYYY-MM-DD; now when left out), which tells whether a run of days in a row is still going. */
+  function counts(logs, belts, growth, today) {
     const sheets = [], days = new Set(), perDay = {};
     SUBJ.forEach((sj) => (logs[sj] || []).forEach((s) => {
       if (!s || (s.kind !== 'sheet' && s.kind !== 'test')) return;
@@ -12208,14 +12350,23 @@ const Awards = (() => {
     reads.concat(books).forEach((s) => days.add(localDay(s.at)));
     days.delete('');
     const sorted = Array.from(days).sort();
-    let best = 0, run = 0, prev = '';
-    sorted.forEach((k) => { run = prev && nextDay(prev) === k ? run + 1 : 1; best = Math.max(best, run); prev = k; });
+    /* the best run of days in a row; and On Fire's stars after its diamond: every full week in a row, on
+       any run (a missed day starts that week over) */
+    const fireAt = SERIES[1].steps[SERIES[1].steps.length - 1];
+    let best = 0, run = 0, prev = '', won = false, week = 0, fire = 0;
+    sorted.forEach((k) => {
+      run = prev && nextDay(prev) === k ? run + 1 : 1; best = Math.max(best, run); prev = k;
+      if (won) { week = run === 1 ? 1 : week + 1; if (week === STAR_STEP.streak) { fire++; week = 0; } }
+      else if (best >= fireAt) won = true;
+    });
+    const now = today || localDay(new Date().toISOString()), alive = !!prev && (prev === now || nextDay(prev) === now);
     /* a full day: every subject's sheets for the day done (older logs without the day's plan: 3 sheets) */
     const full = Object.values(perDay).filter((d) => SUBJ.every((sj) => d[sj] && (d[sj].done || d[sj].n >= 3))).length;
     const ups = sheets.concat(reads).filter((s) => s.change === 'up' && !s.undoneAt).length;
     return {
       sheets: sheets.length, streak: best, days: days.size, levels: ups, tests: sheets.filter((s) => s.kind === 'test' && s.pass).length,
-      full, reads: reads.length, books: books.length, belts: belts || 0, buddy: growth || 0
+      full, reads: reads.length, books: books.length, belts: belts || 0, buddy: growth || 0,
+      fire: { stars: fire, week: alive ? week : 0, alive, run: alive ? run : 0 }
     };
   }
   /* total: tiers won in all; won: trophies on the shelf (any tier) */
@@ -12224,22 +12375,34 @@ const Awards = (() => {
     const series = SERIES.map((S) => {
       const value = c[S.id] || 0, got = S.steps.filter((n) => value >= n), next = S.steps.find((n) => value < n), k = got.length;
       total += k; if (k) won++;
-      const prevAt = k ? got[k - 1] : 0;
+      const prevAt = k ? got[k - 1] : 0, star = starOf(S, value, c);
+      const status = S.status ? (S.id === 'buddy' && star ? buddyIs(value) : S.status(prevAt)) : '';
+      /* at diamond: what was said, then the star to come ("You finished 460 sheets. 20 more sheets to the next star!") */
+      const say = !star ? S.say(value, next != null ? { at: next, tier: TIER_NAME[k] } : null)
+        : (S.id === 'buddy' ? 'Your buddy ' + status + '!' : S.say(value, null).replace(' You won diamond!', star.n ? '' : ' You won diamond!')) + ' ' + star.words + '!';
       return {
         id: S.id, name: S.name, kid: S.kid, icon: S.icon, unit: S.unit, value, countText: S.count(value), earned: k, of: S.steps.length,
-        best: k ? { at: prevAt, label: S.label(prevAt), tier: k - 1, tierName: TIER_NAME[k - 1], color: TIERS[k - 1], status: S.status ? S.status(prevAt) : '' } : null,
+        best: k ? { at: prevAt, label: S.label(prevAt), tier: k - 1, tierName: TIER_NAME[k - 1], color: TIERS[k - 1], status } : null,
         next: next != null ? { at: next, label: S.label(next), tier: k, tierName: TIER_NAME[k], left: next - value, pct: Math.max(0, Math.min(1, (value - prevAt) / (next - prevAt))) } : null,
-        say: S.say(value, next != null ? { at: next, tier: TIER_NAME[k] } : null)
+        star, say
       };
     });
     return { total, won, series };
   }
-  /* Trophies earned between two snapshots, oldest goal first. */
+  /* Trophies earned between two snapshots, oldest goal first; then the diamond stars won, one item per
+     trophy (star: true, n: its stars now, join: 'big' when five little stars joined into a big one,
+     'giant' when five big stars joined into a giant one, '' for a new little star). */
   function newOnes(before, after) {
     const out = [];
     after.series.forEach((s, i) => {
       const b = before.series[i], S = SERIES[i];
       S.steps.forEach((n, k) => { if (k >= b.earned && k < s.earned) out.push({ series: s.id, icon: s.icon, kid: S.kid, label: S.label(n), tier: k, tierName: TIER_NAME[k], color: TIERS[k] }); });
+    });
+    after.series.forEach((s, i) => {
+      const a = before.series[i].star ? before.series[i].star.n : 0, z = s.star ? s.star.n : 0;
+      if (z <= a) return;
+      const join = Math.floor(z / 25) > Math.floor(a / 25) ? 'giant' : Math.floor(z / 5) > Math.floor(a / 5) ? 'big' : '';
+      out.push({ series: s.id, icon: s.icon, kid: SERIES[i].kid, label: s.star.label, tier: 4, tierName: TIER_NAME[4], color: TIERS[4], star: true, n: z, join });
     });
     return out;
   }
@@ -12303,7 +12466,7 @@ const Awards = (() => {
     const left = r.plan - r.done, best = medalOf(r.passed + left, r.plan, r.plan), next = medalOf(r.passed + 1, r.done + 1, r.plan);
     return { next: next && next !== r.medal ? next : '', best, left };
   }
-  return { BELTS, levelsPassed, beltN, beltNeeds, beltAt, beltOf, beltLadder, toNextBelt, sameBelt, FORM_NAME, TIERS, TIER_NAME, SERIES, counts, trophies, newOnes, localDay,
+  return { BELTS, levelsPassed, beltN, beltNeeds, beltAt, beltOf, beltLadder, toNextBelt, sameBelt, FORM_NAME, TIERS, TIER_NAME, SERIES, STAR_STEP, starShape, counts, trophies, newOnes, localDay,
     MEDALS, medalOf, dayResult, medalsOn, medalTally, medalsWon, weekStart, nextMedal, opts };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = Awards;
@@ -15450,21 +15613,32 @@ function beltCeremony(R) {
   return !!(a && b && b.n > a.n && Cere.belt(l, R.sh.subj, a, b, R.sh.speak));
 }
 function goBetween() {
+  const R = S.result, first = !!(R && !R.celebrated);
+  /* a diamond star won with this sheet bursts in on the screen's first showing (starsNow) */
+  if (first) R.starPlay = true;
   S.view = 'between'; render(); window.scrollTo(0, 0);
-  const R = S.result;
-  if (R && !R.celebrated) {
+  if (R) R.starPlay = false;
+  if (first) {
     R.celebrated = true;
     const l = Store.learner(R.sh.kid), plan = ENG[R.sh.subj].todayPlan(trackOf(l, R.sh.subj));
+    const stars = starItems(awardNews(R.awardsBefore, l));
+    /* when a ceremony covers the screen, the star's moment plays once it closes */
+    const starsNow = (replay) => {
+      if (!stars.length || S.view !== 'between' || S.result !== R) return;
+      if (replay) { R.starPlay = true; render(); R.starPlay = false; }
+      starCheer(starPick(stars), R.sh.speak, document.querySelector('.star-news'));
+    };
     if (plan.left === 0 && R.dayGoal) {
       /* the last sheet of the day in every subject: the medal ceremony; otherwise this subject's medal */
       const all = SUBJECTS.every((s) => ENG[s.key].todayPlan(trackOf(l, s.key)).left === 0);
-      if (all && typeof Cere !== 'undefined' && Cere.medals(l, kidMedals(l), R.sh.speak)) return;
+      if (all && typeof Cere !== 'undefined' && Cere.medals(l, kidMedals(l), R.sh.speak)) { if (stars.length) Cere.whenClosed(() => starsNow(true)); return; }
       const m = kidMedals(l)[R.sh.subj].medal;
       if (m === 'gold') { Sfx.complete(); Sfx.sparkle(0.3); after(120, () => Confetti.party()); }
       else if (m === 'silver' || m === 'bronze') { Sfx.complete(); after(120, () => Confetti.fromEl(document.querySelector('.medal-big'), 50)); }
       else Sfx.aww();
     }
     else if ((R.credit && (R.credit.grew || R.credit.unlocked.length || (R.credit.steps || []).length)) || awardNews(R.awardsBefore, l).length) { Sfx.fanfare(); after(120, () => Confetti.fromEl(document.querySelector('.stage-buddy'), 70)); }
+    starsNow(false);
   }
 }
 function viewLevelUp() {
@@ -15497,7 +15671,7 @@ function viewBetween() {
   const l = Store.learner(kid) || {}, E = ENG[subj], t = trackOf(l, subj), plan = E.todayPlan(t);
   const testNext = !!(t.testFor && !t.testWait);
   const credit = R && R.credit;
-  const extras = newsHTML(l, credit && credit.steps, R && awardNews(R.awardsBefore, l)) +
+  const extras = newsHTML(l, credit && credit.steps, R && awardNews(R.awardsBefore, l), R && R.starPlay) +
     (credit && credit.unlocked.length ? '<div class="chips">' + credit.unlocked.map((id) => '<span class="chip chip-warn">New: ' + esc(Buddy.ITEM[id].name) + '</span>').join('') + '</div>' : '');
   const ring = '<div class="ring-big">' + ringSVG(plan.done, plan.total, 70) + '<b>' + plan.done + '/' + plan.total + '</b></div>';
   const mr = l.id ? kidMedals(l)[subj] : null, mline = mr ? medalLine(mr, SUBJ[subj].name) : '';
@@ -16631,9 +16805,10 @@ function bookQuickSave() {
     l2 = Object.assign({}, l, { buddy: cr.buddy }); Store.saveLearner(l2);
     msg += ' · +' + BOOK_STARS + ' stars for ' + l.name;
   }
-  const news = newsText(l2, cr && cr.steps, awardNews(before, l2));
+  const all = awardNews(before, l2), news = newsText(l2, cr && cr.steps, all);
   S.overlay = null; Sfx.coin(); render(); toast(msg + (news ? '. ' + news : ''));
   if (news) after(150, () => Confetti.party());
+  after(450, () => starToast(all, kidSpeaks(l2)));
 }
 
 /* ---------- actions ---------- */
@@ -16664,8 +16839,10 @@ function bookRead(id) {
     l2 = Object.assign({}, l, { buddy: cr.buddy }); Store.saveLearner(l2);
     msg += ' · +' + BOOK_STARS + ' stars for ' + l.name;
   }
-  const news = newsText(l2, cr && cr.steps, awardNews(before, l2));
+  const all = awardNews(before, l2), news = newsText(l2, cr && cr.steps, all);
   Sfx.coin(); render(); toast(msg + (news ? '. ' + news : ''));
+  /* logged in Parents: the star's card and sounds, without the words read out */
+  after(450, () => starToast(all, false));
 }
 function bookUndo(sessionId, at) {
   const l = Store.learner(S.parentKid);
@@ -16755,9 +16932,15 @@ function awardNews(before, l) {
     const a = before.belts[s.key], b = now.belts[s.key];
     if (b.n > a.n) out.push({ kind: 'belt', subj: s.key, belt: b, text: 'New belt in ' + s.name.toLowerCase() + ': ' + b.name + '!' });
   });
-  Awards.newOnes(before.trophies, now.trophies).forEach((t) => out.push({ kind: 'trophy', t, text: 'New trophy: ' + t.tierName + ' ' + t.kid + '! ' + t.label }));
+  Awards.newOnes(before.trophies, now.trophies).forEach((t) => out.push({ kind: 'trophy', t, text: t.star ? starLine(t) : 'New trophy: ' + t.tierName + ' ' + t.kid + '! ' + t.label }));
   return out;
 }
+/* a diamond star won, in words: "New star on Read Aloud! 37 read-alouds" */
+const starTitle = (t) => (t.join === 'giant' ? 'Five big stars made a giant star!' : t.join === 'big' ? 'Five stars made a big star!' : 'New star!');
+const starLine = (t) => (t.join === 'giant' ? 'Five big stars made a giant star on ' + t.kid + '!' : t.join === 'big' ? 'Five stars made a big star on ' + t.kid + '!' : 'New star on ' + t.kid + '!') + ' ' + t.label;
+const starItems = (news) => (news || []).filter((n) => n.kind === 'trophy' && n.t.star);
+/* the one to show when more than one came at once: a giant star, then a big one, then a new little one */
+const starPick = (items) => items.slice().sort((a, b) => ['', 'big', 'giant'].indexOf(b.t.join) - ['', 'big', 'giant'].indexOf(a.t.join))[0];
 /* ---------- trophies, drawn ---------- */
 /* Each trophy has a shape of its own (a star bursting out of a worksheet, a torch, a rocket, a
    microphone, a book, a shield) on the same base, in the tier won so far: bronze, silver, gold, platinum
@@ -16846,10 +17029,73 @@ const TROPHY_METAL = [
   { hi: '#FFFFFF', lt: '#FAFCFF', base: '#E4EAF7', mid: '#AEB9D6', dk: '#5D6888', ln: '#3D4766' },
   { hi: '#FFFFFF', lt: '#D8F7FF', base: '#8FD6FF', mid: '#7E8CF0', dk: '#2F5DB0', ln: '#244A8E' }
 ];
+/* ---------- diamond stars, drawn ----------
+   A diamond trophy gathers gold stars in an arc over it (awards.js gives one about every week): little
+   stars at the two ends, big stars (five little ones joined) inside them and giant stars (five big ones
+   joined, with a diamond-blue edge) at the top. When there are many, they are drawn a little smaller so
+   the arc stays over the trophy. A diamond trophy sits in a taller box (viewBox -10 -20 84 94), so it
+   keeps its size from diamond on, with room above it for the stars. */
+const STAR_R = { l: 7.6, b: 11, g: 14 }, STAR_W = { l: 28, b: 40, g: 50 };
+function starLayout(giant, big, little) {
+  const rep = (t, n) => Array.from({ length: Math.max(0, n) }, () => t), lL = Math.floor(little / 2), bL = Math.floor(big / 2);
+  const items = [].concat(rep('l', lL), rep('b', bL), rep('g', Math.min(giant, 4)), rep('b', big - bL), rep('l', little - lL));
+  const total = items.reduce((a, t) => a + STAR_W[t], 0), f = total > 220 ? 220 / total : 1;
+  let at = (-total * f) / 2;
+  return items.map((t) => {
+    const w = STAR_W[t] * f, th = ((at + w / 2) * Math.PI) / 180;
+    at += w;
+    /* kept inside the trophy's box (-10 -20 84 94): with many big stars the ones at the ends come in a little */
+    const R = +(STAR_R[t] * Math.max(f, 0.72)).toFixed(2), cl = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+    return { t, x: +cl(32 + 34 * Math.sin(th), -9.6 + R, 73.6 - R).toFixed(2), y: +cl(29 - 33 * Math.cos(th), -19.6 + R, 73.6 - R).toFixed(2), R };
+  });
+}
+/* the newest star of a kind: the outer one on the right for an odd count, on the left for an even one */
+function starNewest(L, t, count) {
+  const idx = L.map((p, i) => (p.t === t ? i : -1)).filter((i) => i >= 0);
+  return idx.length ? (t === 'g' || count % 2 ? idx[idx.length - 1] : idx[0]) : -1;
+}
+/* one polished gold star: lit facets at the top left; big and giant stars carry a glow and a glint */
+function dStarSVG(p, gid, glow) {
+  const x = p.x, y = p.y, R = p.R, big = p.t !== 'l', f = (v) => (+v).toFixed(2);
+  let s = big || glow ? '<circle cx="' + x + '" cy="' + y + '" r="' + f(R * (glow ? 2.3 : p.t === 'g' ? 2.1 : 1.9)) + '" fill="url(#' + gid + 'g)"/>' : '';
+  s += '<path d="' + starPath(x, y, R, R * 0.47) + '" fill="url(#' + gid + ')" stroke="' + (p.t === 'g' ? '#2F5DB0' : '#6B4200') + '" stroke-width="' + f(R * (p.t === 'g' ? 0.16 : 0.13)) + '" stroke-linejoin="round"/>';
+  s += '<path d="M' + starPt(x, y, 0, R * 0.9) + ' L' + x + ' ' + y + ' L' + starPt(x, y, 8, R * 0.9) + ' L' + starPt(x, y, 9, R * 0.42) + ' Z" fill="#FFFFFF" opacity=".42"/>';
+  if (big) s += '<g fill="#FFFFFF">' + glint(x + R * 0.62, y - R * 0.95, R * 0.34) + (p.t === 'g' ? glint(x - R * 0.85, y + R * 0.2, R * 0.22) : '') + '</g>';
+  return s;
+}
+function starRays(p) {
+  let s = '';
+  for (let k = 0; k < 8; k++) {
+    const a = (k * Math.PI) / 4, r1 = p.R * 1.25, r2 = p.R * (k % 2 ? 1.75 : 2.2);
+    s += '<path d="M' + (p.x + Math.cos(a) * r1).toFixed(2) + ' ' + (p.y + Math.sin(a) * r1).toFixed(2) + ' L' + (p.x + Math.cos(a) * r2).toFixed(2) + ' ' + (p.y + Math.sin(a) * r2).toFixed(2) + '" stroke="#FFF1A8" stroke-width="' + (p.R * 0.16).toFixed(2) + '" stroke-linecap="round"/>';
+  }
+  return s;
+}
+const starDefs = (gid) => '<linearGradient id="' + gid + '" x1=".2" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="#FFFBE0"/><stop offset=".28" stop-color="#FFE27C"/><stop offset=".6" stop-color="#ECB22A"/><stop offset="1" stop-color="#B07608"/></linearGradient>' +
+  '<radialGradient id="' + gid + 'g" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FFF6C8" stop-opacity=".95"/><stop offset=".45" stop-color="#FFD84A" stop-opacity=".45"/><stop offset="1" stop-color="#FFD84A" stop-opacity="0"/></radialGradient>';
+/* n stars over the trophy. fx: { kind } for the moment one is won: 'new' (the newest little star bursts
+   in), 'big' (five little stars fly together and a big star bursts in where they meet) or 'giant' (five
+   big stars do the same). The animations are in 14-cere.css. */
+function starsLayer(n, gid, fx) {
+  const sh = Awards.starShape(n), L = starLayout(sh.giant, sh.big, sh.little), kind = fx && fx.kind;
+  const nw = kind === 'new' ? starNewest(L, 'l', sh.little) : kind === 'big' ? starNewest(L, 'b', sh.big) : kind === 'giant' ? starNewest(L, 'g', sh.giant) : -1;
+  let s = '<g class="st-all">' + L.map((p, i) => (i === nw ? '' : dStarSVG(p, gid, false))).join('');
+  if (sh.giant > 4) { const g = L.filter((p) => p.t === 'g').pop(); s += '<text x="' + g.x + '" y="' + (g.y + g.R * 0.32).toFixed(2) + '" text-anchor="middle" font-size="' + (g.R * 0.7).toFixed(2) + '" font-weight="900" fill="#5A3700">' + sh.giant + '</text>'; }
+  s += '</g>';
+  if (nw < 0) return s;
+  const p = L[nw];
+  if (kind !== 'new') {
+    const pre = kind === 'big' ? starLayout(sh.giant, sh.big - 1, 5) : starLayout(sh.giant - 1, 5, sh.little), from = pre.filter((q) => q.t === (kind === 'big' ? 'l' : 'b'));
+    s += '<g class="st-flyers">' + from.map((q, k) => '<g class="st-fly' + (k === from.length - 1 ? ' st-fifth' : '') + '" style="--dx:' + (p.x - q.x).toFixed(2) + 'px;--dy:' + (p.y - q.y).toFixed(2) + 'px">' + dStarSVG(q, gid, false) + '</g>').join('') + '</g>';
+  }
+  return s + '<g class="st-burst st-' + kind + '"><g class="st-rays">' + starRays(p) + '</g><g class="st-new">' + dStarSVG(p, gid, true) + '</g></g>';
+}
 /* A trophy as a real one looks: the figure in polished metal (bands of reflection, beveled edges lit from
    the top left, a sheen and a glint), on a metal step and a black lacquer plinth with a metal plate.
-   tier: 0 bronze … 4 diamond (platinum gets a second glint, diamond three sparkles). */
-function trophyArt(id, color, empty, tier) {
+   tier: 0 bronze … 4 diamond (platinum gets a second glint, diamond three sparkles). stars: a diamond
+   trophy's stars (a number draws it in the taller box with them; its two top sparkles give way once it
+   has one); fx: the moment a star is won (starsLayer). */
+function trophyArt(id, color, empty, tier, stars, fx) {
   const A = ART[id] || ART.sheets;
   if (empty || !color) return '<svg class="tart tart-none" viewBox="0 0 64 72" aria-hidden="true"><g fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.55)" stroke-width="1.6" stroke-dasharray="3 2.5" stroke-linejoin="round">' + (A.ghost || '') + A.body + ART_BASE + '<rect x="15" y="59" width="34" height="10" rx="2.5"/></g></svg>';
   const t = tier >= 0 && tier < TROPHY_METAL.length ? tier : Math.max(0, Awards.TIERS.indexOf(color)), P = TROPHY_METAL[t], g = 'ta' + (++artN), dia = t === 4;
@@ -16864,8 +17110,9 @@ function trophyArt(id, color, empty, tier) {
     '<filter id="' + g + 'b" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceAlpha" stdDeviation="0.8" result="b"/>' +
     '<feSpecularLighting in="b" surfaceScale="2.4" specularConstant="1" specularExponent="20" lighting-color="#FFFFFF" result="s"><feDistantLight azimuth="225" elevation="40"/></feSpecularLighting>' +
     '<feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/><feComposite in="SourceGraphic" in2="s2" operator="arithmetic" k1="0" k2="1" k3="' + (dia ? 0.9 : 0.7) + '" k4="0"/></filter></defs>';
-  const sparkle = dia ? glint(12.5, 10.5, 4.8) + glint(52, 8, 3.8) + glint(50.5, 41, 3.2) : t === 3 ? glint(51, 10, 4.4) + glint(14, 30, 2.6) : glint(46, 9, 3.2);
-  return '<svg class="tart" viewBox="0 0 64 72" aria-hidden="true">' + defs +
+  const st = dia && typeof stars === 'number', n = st ? stars : 0;
+  const sparkle = dia ? (n ? '' : glint(12.5, 10.5, 4.8) + glint(52, 8, 3.8)) + glint(50.5, 41, 3.2) : t === 3 ? glint(51, 10, 4.4) + glint(14, 30, 2.6) : glint(46, 9, 3.2);
+  return '<svg class="tart' + (st ? ' tart-st' : '') + '" viewBox="' + (st ? '-10 -20 84 94' : '0 0 64 72') + '" aria-hidden="true">' + (st ? defs.replace('<defs>', '<defs>' + starDefs(g + 'st')) : defs) +
     '<rect x="15" y="59" width="34" height="10" rx="2.2" fill="url(#' + g + 'p)" stroke="#0A0B10" stroke-width="1"/>' +
     '<path d="M17 60.2 H47" stroke="#FFFFFF" stroke-opacity=".28" stroke-width=".9" stroke-linecap="round"/>' +
     '<rect x="24" y="62" width="16" height="4.6" rx="1" fill="url(#' + g + 'h)" stroke="' + P.ln + '" stroke-width=".6"/>' +
@@ -16874,7 +17121,7 @@ function trophyArt(id, color, empty, tier) {
     (A.light ? '<g fill="#FFFFFF" opacity=".5">' + A.light + '</g>' : '') +
     (A.dark ? '<g fill="none" stroke="' + P.dk + '" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round">' + A.dark + '</g>' : '') +
     '<g clip-path="url(#' + g + 'c)"><ellipse cx="25" cy="14" rx="9" ry="5" transform="rotate(-35 25 14)" fill="url(#' + g + 's)"/></g>' +
-    (A.extra ? A.extra(color, P.ln, P.lt, g) : '') + '<g fill="#FFFFFF">' + sparkle + '</g></svg>';
+    (A.extra ? A.extra(color, P.ln, P.lt, g) : '') + '<g fill="#FFFFFF">' + sparkle + '</g>' + (st && (n || fx) ? starsLayer(n, g + 'st', fx) : '') + '</svg>';
 }
 
 /* ---------- the day's medals ---------- */
@@ -16990,15 +17237,20 @@ function medalInfo(kidId, subj) {
 /* One trophy for a 4- or 5-year-old: its own drawn shape in the tier won, its name, which trophy it is
    ("Bronze trophy", in the tier's color), the count so far ("101 sheets"), a bar that fills toward the
    next tier and how many more that needs ("24 more sheets to silver"). Tapping it reads it aloud. */
+const starsWord = (n) => n + (n === 1 ? ' star' : ' stars');
 function trophyTile(l, s) {
-  const got = s.best, nx = s.next;
+  const got = s.best, nx = s.next, st = s.star;
   const tier = got ? '<span class="t-tier tw' + got.tier + '">' + esc(got.tierName) + '<span class="t-word"> trophy</span></span>' : '<span class="t-tier none">No trophy yet</span>';
   const unit = nx ? (nx.left === 1 ? s.unit[0] : s.unit[1]) : '';
-  const next = nx ? esc(nx.left + (s.value ? ' more' : '') + (unit ? ' ' + unit : '') + ' to ') + '<i class="tw' + nx.tier + '">' + esc(nx.tierName.toLowerCase()) + '</i>' : '<i class="tw4">Top trophy!</i>';
-  return '<button class="trophy' + (got ? '' : ' none') + '" data-act="trophy" data-kid="' + esc(l.id) + '" data-s="' + s.id + '" aria-label="' + esc(s.kid + ': ' + (got ? got.tierName + ' trophy' : 'no trophy yet') + ', ' + s.countText + (nx ? '. ' + nx.left + ' more to ' + nx.tierName.toLowerCase() : '')) + '">' +
-    '<span class="t-art">' + trophyArt(s.id, got ? got.color : '', !got, got ? got.tier : -1) + '</span>' +
-    '<b>' + esc(s.kid) + '</b>' + tier + '<span class="t-val">' + esc(s.countText) + '</span>' +
-    (nx ? '<span class="t-bar"><i style="width:' + Math.round(nx.pct * 100) + '%"></i></span>' : '') +
+  /* past diamond: its stars ("★ 2 stars"), and the bar and the words for the next star ("6 more read-alouds to the next star") */
+  const next = nx ? esc(nx.left + (s.value ? ' more' : '') + (unit ? ' ' + unit : '') + ' to ') + '<i class="tw' + nx.tier + '">' + esc(nx.tierName.toLowerCase()) + '</i>'
+    : st ? esc(st.words).replace(/(a star|the next star)$/, '<i class="tw4">$1</i>') : '<i class="tw4">Top trophy!</i>';
+  const bar = nx ? nx.pct : st ? st.pct : null;
+  return '<button class="trophy' + (got ? '' : ' none') + (st ? ' has-stars' : '') + '" data-act="trophy" data-kid="' + esc(l.id) + '" data-s="' + s.id + '" aria-label="' + esc(s.kid + ': ' + (got ? got.tierName + ' trophy' : 'no trophy yet') + (st ? ' with ' + starsWord(st.n) : '') + ', ' + s.countText + (nx ? '. ' + nx.left + ' more to ' + nx.tierName.toLowerCase() : st ? '. ' + st.words : '')) + '">' +
+    '<span class="t-art' + (st ? ' st' : '') + '">' + trophyArt(s.id, got ? got.color : '', !got, got ? got.tier : -1, st ? st.n : undefined) + '</span>' +
+    '<b>' + esc(s.kid) + '</b>' + tier + (st ? '<span class="t-stars' + (st.n ? '' : ' none') + '">' + (st.n ? '★ ' + starsWord(st.n) : 'No stars yet') + '</span>' : '') +
+    '<span class="t-val">' + esc(s.countText) + '</span>' +
+    (bar != null ? '<span class="t-bar"><i style="width:' + Math.round(bar * 100) + '%"></i></span>' : '') +
     '<small class="t-next">' + next + '</small></button>';
 }
 /* Each subject's belts in one row, white to black: the ones earned in full color, the one now ringed in
@@ -17030,8 +17282,9 @@ function shelfHTML(kids) {
 function trophyInfo(kidId, sid) {
   const l = Store.learner(kidId); if (!l) return;
   const s = kidTrophies(l).series.find((x) => x.id === sid); if (!s) return;
-  const form = s.best && s.best.status ? buddyName(l) + ' ' + s.best.status + '. ' : '';
-  const msg = s.kid + (s.best ? ', ' + s.best.tierName.toLowerCase() : '') + '! ' + (s.id === 'buddy' && hasBuddy(l) ? form + s.say.replace('Your buddy', buddyName(l)) : s.say);
+  /* "Read Aloud, diamond, with 2 stars! You read to a grown-up 54 times. 6 more read-alouds to the next star!" */
+  const form = s.best && s.best.status && !s.star ? buddyName(l) + ' ' + s.best.status + '. ' : '';
+  const msg = s.kid + (s.best ? ', ' + s.best.tierName.toLowerCase() + (s.star && s.star.n ? ', with ' + starsWord(s.star.n) : '') : '') + '! ' + (s.id === 'buddy' && hasBuddy(l) ? form + s.say.replace('Your buddy', buddyName(l)) : s.say);
   Sfx.pick(); toast(msg); Speech.say(msg);
 }
 function beltInfo(kidId, subj) {
@@ -17083,18 +17336,66 @@ function stepLine(name, s) {
   if (s.kind === 'power') return name + ' got a power-up: ' + s.name + '!';
   return name + ' got crown star ' + s.n + '!';
 }
-/* Celebration lines (buddy steps first, then belts, then trophies), at most four shown. */
-function newsHTML(l, steps, news) {
+/* Celebration lines (buddy steps first, then belts, then trophies), at most four shown. A diamond star won
+   comes as a card of its own with the trophy and its stars; play: the newest star bursts in (or five join),
+   on the first showing only. */
+function newsHTML(l, steps, news, play) {
   const name = buddyName(l), lines = [];
   (steps || []).slice(-2).forEach((s) => lines.push('<div class="news' + (s.kind === 'form' ? ' big' : '') + '"><i aria-hidden="true">' + s.icon + '</i><b>' + esc(stepLine(name, s)) + '</b></div>'));
-  (news || []).forEach((n) => lines.push('<div class="news' + (n.kind === 'belt' ? ' belt-news' : '') + '">' + (n.kind === 'belt' ? beltSVG(n.belt) : '<span class="news-art">' + trophyArt(n.t.series, n.t.color, false, n.t.tier) + '</span>') + '<b>' + esc(n.text) + '</b></div>'));
+  (news || []).forEach((n) => lines.push(n.kind === 'trophy' && n.t.star ? starCardHTML(n, play) : '<div class="news' + (n.kind === 'belt' ? ' belt-news' : '') + '">' + (n.kind === 'belt' ? beltSVG(n.belt) : '<span class="news-art">' + trophyArt(n.t.series, n.t.color, false, n.t.tier) + '</span>') + '<b>' + esc(n.text) + '</b></div>'));
   return lines.length ? '<div class="news-list">' + lines.slice(0, 4).join('') + '</div>' : '';
 }
-/* One line for a toast after a read, a book or food. */
+/* One line for a toast after a read, a book or food (a diamond star has its own card: starToast). */
 function newsText(l, steps, news) {
-  const name = buddyName(l), parts = (steps || []).slice(-1).map((s) => stepLine(name, s)).concat((news || []).slice(0, 1).map((n) => n.text));
+  const name = buddyName(l), parts = (steps || []).slice(-1).map((s) => stepLine(name, s)).concat((news || []).filter((n) => !(n.kind === 'trophy' && n.t.star)).slice(0, 1).map((n) => n.text));
   return parts.join(' ');
 }
+
+/* ---------- the moment a diamond star is won ----------
+   A card with the trophy and its stars: "New star!" with the newest star bursting in, or "Five stars made
+   a big star!" with the five flying together (14-cere.css), the fanfare and confetti of a new trophy, and
+   the line read out loud (JB, Nov 17, 2026: "Diamond stars."). After a sheet it sits in the screen's news;
+   after a read, a book, spelling stars or food it pops up over the screen for a few seconds (starToast). */
+function starCardHTML(n, play) {
+  const t = n.t;
+  return '<div class="news star-news' + (t.join ? ' join-' + t.join : '') + (play ? ' play' : '') + '"><span class="news-art st">' + trophyArt(t.series, t.color, false, 4, t.n, play ? { kind: t.join || 'new' } : null) + '</span>' +
+    '<span class="sn-words"><b>' + esc(starTitle(t)) + '</b><small>' + esc(t.kid + ' · ' + t.label) + '</small></span></div>';
+}
+/* the sound, confetti and words of a star won: a little chime for a new star, a bigger one when stars join */
+function starCheer(n, speak, el) {
+  const j = !!n.t.join;
+  Sfx.sparkle(0.15); Sfx.clink(j ? 1.2 : 0.35);
+  if (j) { Sfx.ta(1.35); Sfx.applause(1.5, 1.6); }
+  after(j ? 1450 : 450, () => { const a = el && el.isConnected && el.querySelector('.news-art'); if (a) Confetti.fromEl(a, j ? 80 : 45); });
+  if (speak !== false) after(j ? 1700 : 900, () => Speech.say(n.text));
+}
+let starToastT = 0;
+function starToast(news, speak) {
+  const items = starItems(news);
+  if (!items.length || typeof document === 'undefined') return false;
+  const n = starPick(items);
+  let el = document.getElementById('startoast');
+  if (!el) {
+    el = document.createElement('div'); el.id = 'startoast'; el.setAttribute('role', 'status');
+    el.addEventListener('click', () => el.classList.remove('on'));
+    document.body.appendChild(el);
+  }
+  el.innerHTML = starCardHTML(n, true) + (items.length > 1 ? '<small class="st-more">+ ' + starsWord(items.length - 1).replace('star', 'more star') + '</small>' : '');
+  el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
+  clearTimeout(starToastT); starToastT = setTimeout(() => el.classList.remove('on'), n.t.join ? 7000 : 5500);
+  starCheer(n, speak, el);
+  return true;
+}
+/* Read to me's Save: raSave (ui-steps.js) is in the list of JB's rules and stays as approved, so the star a read
+   won pops up from here, after it (its toast line leaves the star out: newsText) */
+function raSaveStars() {
+  const kid = S.ra && S.ra.kid, l0 = kid ? Store.learner(kid) : null, before = l0 ? awardSnap(l0) : null;
+  raSave();
+  const l2 = kid ? Store.learner(kid) : null, news = before && l2 ? awardNews(before, l2) : [];
+  if (starItems(news).length) after(1100, () => starToast(news, kidSpeaks(l2)));
+}
+/* whether a child hears the app's words (the reading track's setting; on for a pre-K child) */
+const kidSpeaks = (l) => !!l && ENG.reading.speaks(ENG.reading.settingsOf(trackOf(l, 'reading')).speak);
 /* Small Steps: the belt and medal ceremonies. A full-screen layer over the app, outside #app so a
    render underneath leaves it alone: the 3D stage from buddy3d.js (the child's buddy on a podium),
    with the words, the belt ladder or the day's medal row, sounds, speech and Continue. Without
@@ -17234,7 +17535,13 @@ const Cere = (() => {
       say: (won ? name + ' won ' + won + ' today!' : name + ' won no medals today.') + (ribTxt ? ' ' + ribTxt : '')
     };
   }
-  return { belt, medals, close, medalSummary, get isOpen() { return !!cur; } };
+  /* fn once the ceremony on screen closes (at once when none is open): a diamond star's moment waits for it */
+  function whenClosed(fn) {
+    if (!cur) { fn(); return; }
+    const c = cur, prev = c.onClose;
+    c.onClose = () => { if (prev) prev(); setTimeout(fn, 300); };
+  }
+  return { belt, medals, close, medalSummary, whenClosed, get isOpen() { return !!cur; } };
 })();
 /* Small Steps: spelling, the screens (JB, Nov 12, 2026; the lists and rules are in spelling.js, and the data repo's
    tools/spelling/score.js reads the pictures).
@@ -17370,6 +17677,7 @@ function spellStarsSay(r) {
   const news = r.add ? newsText(r.l, r.steps, r.news) : '';
   if (r.add) Sfx.coin();
   toast(msg + (news ? '. ' + news : ''));
+  if (r.add) after(450, () => starToast(r.news, kidSpeaks(r.l)));
 }
 /* after any change to the records (a score coming in, a grown-up's decision, a void), on the home screen, spelling,
    Parents or the shop: never in the middle of a sheet */
@@ -17857,9 +18165,12 @@ function tapItem(id) {
     if (S.eating && Date.now() - S.eating < 2700) return;
     const nb = Buddy.feed(b, id);
     if (!nb) { Sfx.wrong(); shakeCard(id); sayItem(it, b); return; }
-    const steps = Buddy.stepsBetween(Buddy.growthOf(b), Buddy.growthOf(nb)), fav = Buddy.favoriteOf(nb);
+    const steps = Buddy.stepsBetween(Buddy.growthOf(b), Buddy.growthOf(nb)), fav = Buddy.favoriteOf(nb), before = awardSnap(l);
     S.tryOn = null;
     Store.saveLearner(Object.assign({}, l, { buddy: nb }));
+    /* food that takes Buddy Power to its next diamond star: the star's moment after the buddy's own */
+    const l2 = Store.learner(l.id), starNews = l2 ? starItems(awardNews(before, l2)) : [];
+    if (starNews.length) after(steps.length ? 3300 : 1200, () => starToast(starNews, kidSpeaks(l2)));
     render(); S.eating = Date.now();
     const ate = typeof Buddy3D !== 'undefined' && Buddy3D.feed(id);
     Sfx.coin(); Sfx.chomp();
@@ -18326,7 +18637,7 @@ document.addEventListener('click', (e) => {
     case 'raDone': raDone(); break;
     case 'raWord': raWord(Number(t.getAttribute('data-i'))); break;
     case 'raQ': if (S.ra) { S.ra.q = t.getAttribute('data-v') === '1'; Sfx.tap(); render(); } break;
-    case 'raSave': raSave(); break;
+    case 'raSave': raSaveStars(); break;
     case 'raSkip': raSkip(); break;
     case 'raAgain': if (S.ra) { S.ra.miss = {}; S.ra.q = null; S.ra.phase = S.ra.item.mode === 'read' ? 'ready' : 'reading'; S.ra.start = Date.now(); Sfx.tap(); render(); } break;
     case 'raQuit': clearInterval(raTimer); releaseScreen(); S.ra = null; Sfx.tap(); goHome(); break;
