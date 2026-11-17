@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261115153143";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#1A1564"><script>window.SITE_BUILD="20261117030732";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1713,12 +1713,65 @@ function makeEngine(C) {
   /* Some reading levels are long (a story to read for each problem), so a level can cap the
      problems on its sheet below the parent's setting. */
   const lenFor = (levelId, n) => (BY[levelId] && BY[levelId].len ? Math.min(n, BY[levelId].len) : n);
+
+  /* ---------- The bridge (JB, Nov 16, 2026: "Build the bridge") ----------
+     JB's idea: "if they pass a level, the next level gets incorporated in at some ratio (eg 50/50, 60/40 etc)
+     rather than going to next level 100%", "level 1 —> level 1.5 —> level 2". After a move up (after 4 passes in
+     a row, or a passed level test) the first sheets on the new level mix in the level just left: half and half until
+     a mixed sheet passes, then three new questions in four until another passes. Going back up after a step back for
+     review is a return, not a move up, and stays as it was: JB has not decided it. Only then do sheets count toward the 4 passes in a row, so the bar to move up is unchanged. A
+     failed mixed sheet keeps the mix where it is; the step back works as before. Each question keeps its own
+     level's time, so a mixed sheet's target is the mix of the two. The track holds `bridge: { from, step }`
+     while it lasts. The rule is played only for sheets made by a build that has it (`bridgeRule` on the result,
+     recorded on each sheet), so sheets done before it are played again as they were done. */
+  const BRIDGE_NEW = [0.5, 0.75];   /* share of new questions on the 1st and 2nd mixed sheet */
+  function bridgeOf(t, levelId) {
+    const b = t && t.bridge;
+    if (!b || !b.from || !BY[b.from] || t.backFrom || t.testFor || (t.passes || 0) > 0) return null;
+    const id = canon(levelId || t.levelId), from = canon(b.from), step = b.step | 0;
+    if (from === id || levelIndex(from) < 0 || levelIndex(from) >= levelIndex(id) || step < 0 || step >= BRIDGE_NEW.length) return null;
+    return { from, step, share: BRIDGE_NEW[step] };
+  }
+  /* problems of one level, keeping runs that belong together (one story and its questions); `chunks` holds
+     each run (or each single problem) as one piece, so a mixed sheet can lay the two levels out without
+     cutting a story in two */
+  function genFor(id, count, seen) {
+    const lv = BY[id], chunks = [];
+    let got = 0;
+    if (lv.multi) {
+      for (let tries = 0; got < count && tries < 60; tries++) {
+        const run = [];
+        lv.multi().forEach((p) => { if (got < count && !seen.has(p.key)) { seen.add(p.key); p.lv = id; run.push(p); got++; } });
+        if (run.length) chunks.push(run);
+      }
+    }
+    for (; got < count; got++) {
+      let p = lv.gen(), t = 0;
+      while (seen.has(p.key) && t++ < 40) p = lv.gen();
+      seen.add(p.key);
+      p.lv = id;
+      chunks.push([p]);
+    }
+    return chunks;
+  }
   function makeSheet(levelId, n, learner) {
     const lv = BY[levelId];
     const rev = reviewPick(learner, levelId, Math.floor(n * REVIEW_SHARE));
     const seen = new Set(rev.map((p) => p.key));
-    const out = [];
-    if (lv.multi) {
+    let out = [];
+    const br = bridgeOf(learner, levelId), m = n - rev.length;
+    if (br && m >= 2) {
+      /* a mixed sheet: the new level's share (rounded up) and the rest from the level just left, laid out evenly */
+      const newN = Math.min(m - 1, Math.ceil(m * br.share)), oldN = m - newN;
+      const nw = genFor(levelId, newN, seen), od = genFor(br.from, oldN, seen);
+      od.forEach((c) => c.forEach((p) => { p.bridge = true; }));
+      const total = nw.length + od.length;
+      let ni = 0, oi = 0;
+      for (let k = 0; k < total; k++) {
+        const oldTurn = Math.floor(((k + 1) * od.length) / total) > oi;
+        out = out.concat((oldTurn && oi < od.length) || ni >= nw.length ? od[oi++] : nw[ni++]);
+      }
+    } else if (lv.multi) {
       /* runs of problems that belong together, such as one story and all its questions */
       for (let tries = 0; out.length < n - rev.length && tries < 60; tries++) {
         lv.multi().forEach((p) => { if (out.length < n - rev.length && !seen.has(p.key)) { seen.add(p.key); p.lv = levelId; out.push(p); } });
@@ -1737,10 +1790,21 @@ function makeEngine(C) {
     });
     for (let i = 1; i < out.length; i++) {
       for (let t = 0; t < 20 && out[i].key === out[i - 1].key; t++) {
-        const g = BY[out[i].lv].gen(); g.lv = out[i].lv; out[i] = g;
+        const g = BY[out[i].lv].gen(); g.lv = out[i].lv; if (out[i].bridge) g.bridge = true; out[i] = g;
       }
     }
     return out;
+  }
+  /* A sheet's target time. A mixed sheet of the bridge gives each question its own level's time (the review
+     questions, as on any sheet, the time of the level the child is on); any other sheet is as it always was. */
+  function sheetTarget(problems, levelId, n, pace, speak) {
+    if (!problems || !problems.some((p) => p && p.bridge)) return targetSeconds(levelId, n, pace, speak);
+    let t = 0;
+    problems.forEach((p) => {
+      const id = p.bridge && BY[p.lv] ? p.lv : levelId, lv = BY[id];
+      t += perProblem(lv) * (PACE[pace] || 1) + (!lv.sct && speaks(speak) && SAYS[canon(id)] ? 1 : 0);
+    });
+    return Math.max(10, Math.round(t));
   }
   /* One more problem that exercises the same skill as p. */
   function similar(p) {
@@ -1855,9 +1919,17 @@ function makeEngine(C) {
     const firstDay = !!learner.levelSince && learner.levelSince === tk;
     const i = levelIndex(learner.levelId);
     const resetRun = () => { L2.passes = 0; L2.runDays = []; L2.lastBoost = false; };
+    /* the bridge: played only for sheets made by a build that has it (see bridgeOf) */
+    const bridgeRule = !!r.bridgeRule;
+    const br = bridgeRule && !isTest && r.levelId === learner.levelId ? bridgeOf(learner, learner.levelId) : null;
+    ev.bridge = br ? { from: br.from, step: br.step } : null;
+    /* a bridge that no longer applies (its passes already count, a step back, a level set by hand) is cleared by the
+       next sheet on the child's level, so it cannot come back after a failed sheet */
+    if (bridgeRule && learner.bridge && !br && r.levelId === learner.levelId) L2.bridge = null;
+    const bridgeIn = (from) => { if (bridgeRule) { L2.bridge = { from, step: 0 }; ev.bridgeStart = true; } };
     const advance = () => {
       resetRun(); L2.lowRun = 0;
-      if (i < LEVELS.length - 1) { L2.levelId = LEVELS[i + 1].id; ev.levelUp = true; ev.to = L2.levelId; }
+      if (i < LEVELS.length - 1) { L2.levelId = LEVELS[i + 1].id; ev.levelUp = true; ev.to = L2.levelId; bridgeIn(learner.levelId); }
       else { ev.top = true; L2.top = true; }
     };
 
@@ -1867,7 +1939,13 @@ function makeEngine(C) {
         else { L2.testWait = true; ev.testFailed = true; }
       }
     } else if (r.levelId === learner.levelId) {
-      if (pass) {
+      if (pass && br) {
+        /* a mixed sheet passed: the next one has more of the new level, and after the last mixed sheet the 4
+           passes in a row start counting. The pass itself is not one of the 4. */
+        L2.lowRun = 0;
+        const step = br.step + 1;
+        if (step >= BRIDGE_NEW.length) { L2.bridge = null; ev.bridgeDone = true; } else L2.bridge = { from: br.from, step };
+      } else if (pass) {
         L2.lowRun = 0;
         if (learner.backFrom && BY[learner.backFrom]) {
           /* review after a step back: back up once passes in a row reach two different days */
@@ -1903,6 +1981,7 @@ function makeEngine(C) {
         if (s.autoBack && L2.lowRun >= 2 && i > 0 && !learner.backFrom) {
           L2.backFrom = learner.levelId; L2.levelId = LEVELS[i - 1].id; L2.lowRun = 0;
           ev.stepBack = true; ev.to = L2.levelId;
+          if (bridgeRule) L2.bridge = null;
         }
       }
     }
@@ -1978,7 +2057,7 @@ function makeEngine(C) {
   return {
     C, LEVELS, BY, STAGES, STAGE_NAME, TIPS: C.tips, CODE_LABEL: C.codeLabels, DEFAULTS, PACE, tipFor,
     PROBE_N, PROBE_ALLOWED, PROBE_STEP, GROUPS, TEST_N, TEST_ALLOWED, testNOf, testAllowedOf, MIN_DAYS,
-    levelIndex, settingsOf, targetSeconds, makeSheet, similar, grade, diagnose, updateReview, applyResult,
+    levelIndex, settingsOf, targetSeconds, sheetTarget, bridgeOf, BRIDGE_NEW, makeSheet, similar, grade, diagnose, updateReview, applyResult,
     todayKey, dayDiff, currentStreak, doneToday, placementInit, placementStep, probeOutcome,
     groupOf, kumonOf: groupOf, isTimed, groupTimed, groupLevels, groupLabel, sheetsPerDay, todayPlan, makeTest, testTarget,
     problemText: C.problemText, levelExample: C.levelExample || ((id) => C.problemText(BY[id].gen())), fmtTime, specOf, fromSpec, speaks,
@@ -12834,7 +12913,7 @@ function bestStreak(l) { return Math.max.apply(null, SUBJECTS.map((s) => ENG[s.k
 /* Undo: each sheet or read saves how its subject stood before it (level, passes, the day's count, and
    the review-deck entries it changed), so a parent can void the newest one and have it done again.
    The last few are kept; a level a parent sets by hand clears them. */
-const LV_FIELDS = ['levelId', 'levelSince', 'top', 'passes', 'runDays', 'lastBoost', 'lowRun', 'backFrom', 'testFor', 'testWait', 'sheets', 'passed', 'dayStreak', 'planDay', 'planSheets', 'dayCount', 'lastDay', 'lastAt', 'raGate', 'raDay', 'raCount', 'raTier', 'raSince'];
+const LV_FIELDS = ['levelId', 'levelSince', 'top', 'passes', 'runDays', 'lastBoost', 'lowRun', 'backFrom', 'testFor', 'testWait', 'sheets', 'passed', 'dayStreak', 'planDay', 'planSheets', 'dayCount', 'lastDay', 'lastAt', 'raGate', 'raDay', 'raCount', 'raTier', 'raSince', 'bridge'];
 const UNDO_KEEP = 5;
 function snapOf(t) { const o = {}; LV_FIELDS.forEach((k) => { o[k] = t[k] === undefined ? null : t[k]; }); return JSON.parse(JSON.stringify(o)); }
 function revDiff(before, after) {
@@ -12998,13 +13077,15 @@ function startSheet(kidId, subj, opts) {
   /* the first sheet of a new level opens with its worked example */
   if (!test && !(opts && opts.skipEx) && !exSeen(t, t.levelId) && openExample(kidId, subj, t.levelId, 'intro')) return;
   let problems, target, timed;
+  /* the bridge: the first sheets after a move up mix in the level just left (JB, Nov 16, 2026: "Build the bridge") */
+  const bridge = test ? null : E.bridgeOf(t, t.levelId);
   if (test) { problems = E.makeTest(t.testFor, E.testNOf(t.testFor)); target = E.testTarget(problems, s.pace, s.speak); timed = E.groupTimed(t.testFor); }
-  else { const n = E.lenFor(t.levelId, s.sheetLen); problems = E.makeSheet(t.levelId, n, t); target = E.targetSeconds(t.levelId, n, s.pace, s.speak); timed = E.isTimed(t.levelId); }
+  else { const n = E.lenFor(t.levelId, s.sheetLen); problems = E.makeSheet(t.levelId, n, t); target = E.sheetTarget(problems, t.levelId, n, s.pace, s.speak); timed = E.isTimed(t.levelId); }
   const plan = E.todayPlan(t);
   S.kid = kidId; S.subj = subj; S.result = null; S.fix = null;
   S.sheet = {
     kid: kidId, subj, kind: test ? 'test' : 'sheet', group: test ? t.testFor : E.groupOf(t.levelId), levelId: t.levelId,
-    problems, answers: new Array(problems.length).fill(null), idx: 0, input: '', marks: {}, built: [], setH: 12, setM: 0, hand: 'hour',
+    bridge: bridge && problems.some((p) => p.bridge) ? bridge : null, problems, answers: new Array(problems.length).fill(null), idx: 0, input: '', marks: {}, built: [], setH: 12, setM: 0, hand: 'hour',
     start: Date.now(), paused: 0, locked: false, target, timed, speak: E.speaks(s.speak), showTimer: s.showTimer !== false && timed,
     dayNo: plan.done + 1, dayTotal: Math.max(plan.total, plan.done + 1),
     /* seconds spent on each problem, for the parents' fatigue view (long pauses, slowing down) */
@@ -13066,7 +13147,8 @@ function viewSheet() {
   const p = sh.problems[sh.idx], lv = E.BY[sh.levelId];
   const ctx = { input: sh.input, marks: sh.marks, built: sh.built || [], numbered: false, setH: sh.setH, setM: sh.setM, hand: sh.hand };
   const left = Math.max(0, 1 - ((Date.now() - sh.start - sh.paused) / 1000) / sh.target);
-  const sub = sh.trial ? 'Trial · ' + (sh.kind === 'test' ? 'level test' : lv.name) : (sh.kind === 'test' ? 'Level test' : lv.name) + ' · sheet ' + sh.dayNo + ' of ' + sh.dayTotal;
+  const lvName = lv.name + (sh.bridge && E.BY[sh.bridge.from] ? ' · mixed with ' + E.BY[sh.bridge.from].short : '');
+  const sub = sh.trial ? 'Trial · ' + (sh.kind === 'test' ? 'level test' : lvName) : (sh.kind === 'test' ? 'Level test' : lvName) + ' · sheet ' + sh.dayNo + ' of ' + sh.dayTotal;
   const help = sh.kind !== 'test' && E.example((p && p.lv) || sh.levelId) ? '<button class="icon-btn help-btn" data-act="exPeek" aria-label="Show me how">?</button>' : '';
   return '<div class="screen fill">' + hudHTML(l, sh.subj, sh.trial ? 'Parent trial' : l.name, sub, sh.problems.length, sh.idx, help) +
     (sh.showTimer ? '<div class="energy-row"><div class="energy' + (left < 0.25 ? ' low' : '') + '" id="energy" aria-hidden="true"><b id="energyFill" style="width:' + (left * 100).toFixed(1) + '%"></b></div><span class="clock-text" id="clock"></span></div>' : '') +
@@ -13092,7 +13174,7 @@ function finishSheet() {
      step back, and the buddy asks for slowing down. (The same rule marks it on the dashboard.) */
   const prior = Store.sessionsFor(sh.kid, sh.subj).filter((x) => (x.kind === 'sheet' || x.kind === 'test') && x.n > 0 && x.levelId === sh.levelId).reverse();
   const rush = Metrics.rushOf({ n: sh.problems.length, wrong: g.wrong, items }, prior), rushed = !!(rush && rush.rushed);
-  let out = E.applyResult(t, { kind: sh.kind, timed: sh.timed, levelId: sh.levelId, n: sh.problems.length, wrong: g.wrong, secs, target: sh.target, problems: sh.problems, res: g.res, rushed }, now);
+  let out = E.applyResult(t, { kind: sh.kind, timed: sh.timed, levelId: sh.levelId, n: sh.problems.length, wrong: g.wrong, secs, target: sh.target, problems: sh.problems, res: g.res, rushed, bridgeRule: true }, now);
   if (sh.subj === 'reading' && sh.kind !== 'test') out = readGate(sh.kid, t, out);
   /* a sheet under 70% on the first day of a new level brings its worked example back before the next sheet */
   if (out.ev.exampleAgain && out.learner.exSeen) {
@@ -13115,8 +13197,10 @@ function finishSheet() {
     missed: sh.problems.filter((p, i) => !g.res[i].ok).slice(0, 12).map((p) => E.problemText(p)),
     reviewItems: sh.problems.filter((p) => p.review).length, stars: credit ? award.total : 0, items,
     change: ev.levelUp ? 'up' : ev.stepBack ? 'back' : ev.returned ? 'return' : ev.testReady ? 'test' : ev.readGate ? 'readFirst' : '', to: ev.to,
-    day: sh.dayNo, plan: sh.dayTotal
+    day: sh.dayNo, plan: sh.dayTotal, bridgeRule: 1
   };
+  /* a mixed sheet of the bridge: the level it mixed in, its step, and which questions came from that level */
+  if (ev.bridge) session.bridge = { from: ev.bridge.from, step: ev.bridge.step, at: sh.problems.map((p, i) => (p.bridge ? i : -1)).filter((i) => i >= 0) };
   if (rushed) session.rushed = true;
   Store.saveLearner(l2);
   Store.appendSession(sh.kid, session);
@@ -13192,6 +13276,14 @@ function viewResults() {
   else if (ev.returned) progress = '<p class="res-line"><b>Back to:</b> ' + esc(E.BY[ev.to].name) + '</p>';
   else if (ev.stepBack) progress = '<p class="res-line"><b>Next:</b> a little review on ' + esc(E.BY[ev.to].name) + '</p>';
   else if (t.backFrom && E.BY[t.backFrom] && ev.pass) progress = '<p class="res-line"><b>Next:</b> pass one on another day to go back to ' + esc(E.BY[t.backFrom].name) + '</p>';
+  else if (ev.bridge || E.bridgeOf(t, t.levelId)) {
+    /* the bridge: mixed sheets first, then the 4 passes in a row */
+    const nb = E.bridgeOf(t, t.levelId), done = nb ? nb.step : E.BRIDGE_NEW.length, all = E.BRIDGE_NEW.length;
+    let dots = '';
+    for (let i = 0; i < all; i++) dots += '<i class="' + (i < done ? 'on' : '') + '"></i>';
+    progress = '<div class="kid-row"><span class="meter" aria-label="' + done + ' of ' + all + ' mixed sheets">' + dots + '</span><span class="res-line">' +
+      (nb ? done + ' of ' + all + ' mixed sheets passed. Next: ' + (ev.bridge && nb.step === ev.bridge.step ? 'the same mix again' : 'more new questions') : 'Mixed sheets done! Now ' + s.toAdvance + ' passes to move up') + '</span></div>';
+  }
   else if (!t.backFrom && !t.testFor) {
     const need = s.toAdvance, have = Math.min(need, t.passes || 0);
     let dots = '';
@@ -13444,7 +13536,7 @@ function finishCheck() {
   releaseScreen();
   if (!l) return goHome();
   const E = ENG[P.subj], rec = E.LEVELS[P.st.result];
-  const t = Object.assign({}, trackOf(l, P.subj), { levelId: rec.id, top: false, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', placeNext: false, placedAt: new Date().toISOString(), undo: [], levelSince: E.todayKey() });
+  const t = Object.assign({}, trackOf(l, P.subj), { levelId: rec.id, top: false, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', placeNext: false, placedAt: new Date().toISOString(), undo: [], levelSince: E.todayKey(), bridge: null });
   let l2 = putTrack(l, P.subj, t);
   const before = Buddy.of(l2).stars;
   let credit = null;
@@ -13531,7 +13623,7 @@ function usePlacement() {
   const P = S.place, l = Store.learner(P.kid);
   if (!l) return;
   const E = ENG[P.subj], rec = E.LEVELS[P.st.result];
-  const t = Object.assign({}, trackOf(l, P.subj), { levelId: rec.id, top: false, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', placeNext: false, placedAt: new Date().toISOString(), undo: [], levelSince: E.todayKey() });
+  const t = Object.assign({}, trackOf(l, P.subj), { levelId: rec.id, top: false, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', placeNext: false, placedAt: new Date().toISOString(), undo: [], levelSince: E.todayKey(), bridge: null });
   Store.saveLearner(putTrack(l, P.subj, t));
   Store.appendSession(l.id, { id: Store.newId(), at: new Date().toISOString(), subject: P.subj, kind: 'placement', levelId: rec.id, n: P.st.probes, from: P.fromLevel });
   S.parentKid = l.id; S.parentSubj = P.subj; S.place = null; S.view = 'parent'; render(); toast(l.name + ' now starts ' + SUBJ[P.subj].name.toLowerCase() + ' at ' + rec.short);
@@ -14313,6 +14405,7 @@ function guideHTML() {
     li('<b>A sheet is one Kumon worksheet.</b> In math that is about 20 problems. Answers are checked at the end, and every mistake gets fixed before the sheet counts.') +
     li('<b>Target times are Kumon’s.</b> From Kumon 3A in math the timer uses Kumon’s target time for each sheet. The earliest levels are untimed, as in Kumon.') +
     li('<b>Moving up takes passes on at least two different days.</b> Each Kumon level ends with a level test, like Kumon’s Achievement Test.') +
+    li('<b>A move up comes in two smaller steps.</b> The first sheets on a new level mix in the level just left: half of each sheet until a mixed sheet passes, then a quarter until another passes. The passes in a row toward the next move count after that.') +
     li('<b>New levels start with a worked example.</b> Kumon sheets introduce each new step with an example. The “?” on a sheet shows it again.') +
     li('<b>Reading follows Kumon’s order.</b> Pictures and rhymes, then letter sounds, words, sentences and stories. From Kumon 2A the sheets cover naming, action and describing words, word order and riddles; at AI, stories with several questions each; at AII, the order of events.') +
     '</ul></section></div><div class="panels"><section class="glass panel guide"><h3>Your part, about 5 minutes a day</h3><ol>' +
@@ -15902,7 +15995,7 @@ function settingsHTML(l, E, t, subj) {
       (subj === 'reading' ? '<p class="help">The story levels (Kumon AI and AII) stop at 6 problems a sheet, because each one comes with a story to read.</p>' : '') + '</div>' +
     '<div class="field"><label for="f-allowed">Misses allowed to pass</label><select id="f-allowed" data-set="allowed">' + [0, 1, 2, 3].map((v) => opt(v, (v === 0 ? 'None' : String(v)) + ' (' + Math.round(100 * (s.sheetLen - v) / s.sheetLen) + '% to pass)', s.allowed)).join('') + '</select></div>' +
     '<div class="field"><label for="f-adv">Passed sheets to move up</label><select id="f-adv" data-set="toAdvance">' + [1, 2, 3, 4, 5].map((v) => opt(v, String(v), s.toAdvance)).join('') + '</select>' +
-      '<p class="help">Passes must be in a row and come from at least two different days. Every pass counts once, however fast.</p></div>' +
+      '<p class="help">Passes must be in a row and come from at least two different days. Every pass counts once, however fast. After a move up, the first sheets mix in the level just left: half and half until a mixed sheet passes, then a quarter until another passes. The passes in a row count after that.</p></div>' +
     '<div class="field"><label for="f-pace">Target time</label><select id="f-pace" data-set="pace">' + opt('relaxed', 'Relaxed (1.5× standard)', s.pace) + opt('standard', 'Standard', s.pace) + opt('brisk', 'Brisk (0.8× standard)', s.pace) + '</select>' +
       '<p class="help">' + (subj === 'clock' ? 'Pre-K and grade 1 clock levels are untimed.' : subj === 'reading' ? 'Reading is untimed until Kumon 2A, the first level Kumon times.' : 'The earliest levels are untimed, as in Kumon.') + '</p></div>' +
     '<div class="field"><label for="f-timer">Show the timer</label><select id="f-timer" data-set="showTimer">' + opt('1', 'On', s.showTimer ? '1' : '0') + opt('0', 'Off', s.showTimer ? '1' : '0') + '</select>' +
@@ -15951,10 +16044,13 @@ function viewParent() {
     const seg = '<div class="seg">' + SUBJECTS.map((x) => '<button class="' + (x.key === subj ? 'on' : '') + '" style="--acc:' + x.acc + '" data-act="psub" data-subj="' + x.key + '">' + x.name + '</button>').join('') + '</div>';
     const flags = [];
     if (t.testFor) flags.push('<span class="chip chip-warn">' + (t.testWait ? 'Level test missed: one practice sheet, then retake' : esc(groupGradeLabel(subj, t.testFor)) + ' level test is next') + '</span>');
+    /* the bridge (JB, Nov 16, 2026: "Build the bridge"): mixed sheets first, then the 4 passes in a row */
+    const br = E.bridgeOf(t, t.levelId);
+    if (br) flags.push('<span class="chip chip-wrap">Mixed sheets: ' + (br.step === 0 ? 'half' : 'a quarter') + ' of each sheet comes from ‘' + esc(E.BY[br.from].name) + '’ until a mixed sheet passes' + (br.step === 0 ? ', then a quarter until another passes' : '') + '. The ' + s.toAdvance + ' passes in a row count after that.</span>');
     if (t.backFrom && E.BY[t.backFrom]) flags.push('<span class="chip chip-warn chip-wrap">Reviewing ' + esc(lv.short) + '. Back to ' + esc(E.BY[t.backFrom].short) + ' after passes on two different days (' + Math.min(2, (t.runDays || []).length) + ' of 2)</span>');
     else if ((t.lowRun || 0) >= 1) flags.push('<span class="chip chip-bad">Last sheet under 70%</span>');
     const overview = '<section class="glass panel" style="--acc:' + SUBJ[subj].acc + '"><div class="kid-row" style="justify-content:space-between"><h3>' + esc(lv.name) + '</h3><span class="sub-chip">' + SUBJ[subj].name + '</span></div>' +
-      '<p class="sub">Level ' + (E.levelIndex(lv.id) + 1) + ' of ' + E.LEVELS.length + ' · ' + esc(E.STAGE_NAME[lv.stage]) + ' · ' + esc(gradeLabel(subj, lv.id)) + (lv.timed ? '' : ' · untimed') + (t.backFrom ? '' : ' · ' + Math.min(t.passes || 0, s.toAdvance) + ' of ' + s.toAdvance + ' passes to move up') + '</p>' +
+      '<p class="sub">Level ' + (E.levelIndex(lv.id) + 1) + ' of ' + E.LEVELS.length + ' · ' + esc(E.STAGE_NAME[lv.stage]) + ' · ' + esc(gradeLabel(subj, lv.id)) + (lv.timed ? '' : ' · untimed') + (t.backFrom ? '' : br ? ' · ' + br.step + ' of ' + E.BRIDGE_NEW.length + ' mixed sheets passed, then ' + s.toAdvance + ' passes to move up' : ' · ' + Math.min(t.passes || 0, s.toAdvance) + ' of ' + s.toAdvance + ' passes to move up') + '</p>' +
       (flags.length ? '<div class="chips">' + flags.join('') + '</div>' : '') + statsHTML(E, t, sessions) + ladderHTML(E, t) + '</section>';
     const level = '<section class="glass panel"><h3>Level</h3><div class="form"><div class="field"><label for="f-level">Current level</label><select id="f-level" data-set="levelId">' + levelOptions(E, t.levelId) + '</select></div></div>' +
       '<p class="sub">Changing the level resets passes at that level. The placement check takes about 5–8 minutes and suggests a start just below what your child can already do, as Kumon does.</p>' +
@@ -15990,7 +16086,7 @@ function setLearnerField(key, raw) {
   else {
     const subj = S.parentSubj, E = ENG[subj], t = trackOf(l, subj), s = E.settingsOf(t);
     const nt = Object.assign({}, t, { settings: Object.assign({}, s) });
-    if (key === 'levelId') { if (!E.BY[raw]) return; Object.assign(nt, { levelId: raw, levelSince: E.todayKey(), top: false, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', raGate: null, undo: [] }); }
+    if (key === 'levelId') { if (!E.BY[raw]) return; Object.assign(nt, { levelId: raw, levelSince: E.todayKey(), top: false, passes: 0, lowRun: 0, backFrom: '', testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', raGate: null, undo: [], bridge: null }); }
     else if (key === 'sheetLen') {
       /* a new sheet length keeps the same pass bar: 100% stays 100%, 90% stays about 90% */
       const n = parseInt(raw, 10), share = s.sheetLen ? (s.allowed || 0) / s.sheetLen : 0;
@@ -16129,7 +16225,7 @@ function doUndoChange(kidId, kind, sid) {
   if (!l) return;
   const c = levelChanges(l).find((x) => x.s.id === sid && x.kind === kind);
   if (!c || !c.canUndo) { render(); return; }
-  const t = trackOf(l, c.subj), run = { passes: 0, runDays: [], lastBoost: false, lowRun: 0, undo: [], levelSince: '' };
+  const t = trackOf(l, c.subj), run = { passes: 0, runDays: [], lastBoost: false, lowRun: 0, undo: [], levelSince: '', bridge: null };
   let nt;
   if (c.change === 'up') nt = Object.assign({}, t, run, { levelId: c.from, top: false, testFor: '', testWait: false, backFrom: '', raGate: null });
   else if (c.change === 'back') nt = Object.assign({}, t, run, { levelId: c.from, backFrom: '' });
@@ -16308,7 +16404,7 @@ document.addEventListener('click', (e) => {
       const l = Store.learner(S.parentKid), subj = S.parentSubj, E = ENG[subj];
       if (l) confirmBox('Reset ' + l.name + '’s ' + SUBJ[subj].name.toLowerCase() + '?', 'The level goes back to the start of its stage; passes and the review deck clear. History, stars and buddy stay.', 'Reset', () => {
         const t2 = trackOf(l, subj), first = E.LEVELS.find((x) => x.stage === (E.BY[t2.levelId] || E.LEVELS[0]).stage);
-        Store.saveLearner(putTrack(l, subj, Object.assign({}, t2, { levelId: first.id, levelSince: E.todayKey(), top: false, passes: 0, lowRun: 0, backFrom: '', review: {}, testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', raGate: null, undo: [] }))); render(); toast('Progress reset');
+        Store.saveLearner(putTrack(l, subj, Object.assign({}, t2, { levelId: first.id, levelSince: E.todayKey(), top: false, passes: 0, lowRun: 0, backFrom: '', review: {}, testFor: '', testWait: false, runDays: [], lastBoost: false, planDay: '', raGate: null, undo: [], bridge: null }))); render(); toast('Progress reset');
       }, true);
       break;
     }
