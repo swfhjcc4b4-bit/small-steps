@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261117170552";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261117184753";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -6115,6 +6115,8 @@ const Buddy = (() => {
   }).join('') + feet.map((f) => '<rect x="' + (f - 10) + '" y="' + (y - 5) + '" width="20" height="6" rx="2" fill="#3A3550"/><rect x="' + (f + 6) + '" y="' + (y - 7) + '" width="6" height="4" rx="1.5" fill="#E8453C"/>').join('');
   /* Andi's November 15 footwear, seen from the front on each foot (x, y as for the flippers): a boot's shaft round the
      leg, its toe and its sole; the flip flops are a sole under the foot and a strap over it. */
+  /* the jet boots' flames, kept apart so that a ride with no jets can take them out (JB, Nov 17, 2026) */
+  const JETFLAME = '<g class="b-jetflame"><ellipse cx="0" cy="12.5" rx="11" ry="3" fill="#FFB03A" opacity=".55"/><path d="M-6 11 L-4 16 L-2 11 Z M2 11 L4 16 L6 11 Z" fill="#FF8A3D"/></g>';
   const SHOE = {
     spaceboots: '<rect x="-9" y="-13" width="18" height="15" rx="5" fill="#F4F6FB" stroke="#B8C0D4" stroke-width="1.2"/>' +
       '<path d="M-12.5 9 Q-13 -1.5 -6 -1.5 H6 Q13 -1.5 12.5 9 Z" fill="#F4F6FB" stroke="#B8C0D4" stroke-width="1.2"/>' +
@@ -6136,7 +6138,7 @@ const Buddy = (() => {
     rainboots: '<rect x="-9.5" y="-15" width="19" height="17" rx="4" fill="#FFC531"/><rect x="-10.5" y="-16" width="21" height="4" rx="2" fill="#E09A0B"/>' +
       '<path d="M-12.5 9 Q-13 -1.5 -6 -1.5 H6 Q13 -1.5 12.5 9 Z" fill="#FFC531"/><rect x="-12.5" y="4.6" width="25" height="2.8" rx="1.4" fill="#E09A0B"/>' +
       '<rect x="-13.5" y="7.5" width="27" height="4.5" rx="2.2" fill="#2E3A2F"/><ellipse cx="-5" cy="-7" rx="1.6" ry="4.5" fill="#FFFFFF" opacity=".45"/>',
-    jetboots: '<ellipse cx="0" cy="12.5" rx="11" ry="3" fill="#FFB03A" opacity=".55"/><path d="M-6 11 L-4 16 L-2 11 Z M2 11 L4 16 L6 11 Z" fill="#FF8A3D"/>' +
+    jetboots: JETFLAME +
       '<rect x="-9" y="-14" width="18" height="16" rx="4.5" fill="#E3341F"/><rect x="-10" y="-15" width="20" height="4" rx="2" fill="#B8C0D4"/>' +
       '<path d="M-12.5 9 Q-13 -1.5 -6 -1.5 H6 Q13 -1.5 12.5 9 Z" fill="#E8453C"/><path d="M1.5 -10 L-3 -3 H0.5 L-1.5 3 L3.5 -4.5 H0 Z" fill="#FFC531"/>' +
       '<rect x="-13.5" y="7.5" width="27" height="4.5" rx="2.2" fill="#B8C0D4"/>',
@@ -6189,7 +6191,9 @@ const Buddy = (() => {
   };
   /* JB's November 17 rides (the Rides shelf), under each flat buddy: the buddy stands lift higher, on the ride. back is
      drawn behind the buddy (the board under its feet), front in front of it (the scooter's handlebar at its side); vb
-     frames it for the shop. The hoverboard bobs and the magic carpet floats (11-buddy.css). */
+     frames it for the shop. The hoverboard bobs and the magic carpet floats (11-buddy.css). floats: a flying (Superhero)
+     buddy stays up on it, where on the other rides it stands on the ground; jets: the robot's flames and the jet boots'
+     keep firing (the hoverboard only; JB, Nov 17, 2026, "Go", on riding a ride the way a kid would). */
   const wheelPair = (xs, y, r, tyre, hub) => xs.map((x) => '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + tyre + '"/><circle cx="' + x + '" cy="' + y + '" r="' + (r * 0.36).toFixed(1) + '" fill="' + hub + '"/>').join('');
   const RIDE = {
     skateboard: { lift: 12, vb: '30 176 140 40',
@@ -6202,7 +6206,7 @@ const Buddy = (() => {
       front: '<path d="M150 199 L158 118" stroke="#C9D1DE" stroke-width="5" stroke-linecap="round"/><path d="M151.5 199 L159.5 118" stroke="#8A93A8" stroke-width="1.2" stroke-linecap="round"/>' +
         '<rect x="151.5" y="158" width="8" height="7" rx="1.5" fill="#E8453C" transform="rotate(6 155.5 161.5)"/>' +
         '<path d="M146 117 H170" stroke="#8A93A8" stroke-width="4" stroke-linecap="round"/><path d="M146 117 H151 M165 117 H170" stroke="#2A2540" stroke-width="5.4" stroke-linecap="round"/>' },
-    hoverboard: { lift: 16, vb: '34 172 132 44', bob: true,
+    hoverboard: { lift: 16, vb: '34 172 132 44', bob: true, floats: true, jets: true,
       back: '<ellipse class="b-hoverglow" cx="100" cy="206" rx="56" ry="6" fill="#4FE3FF" opacity=".3"/><g class="b-hover">' +
         '<path d="M48 190 Q42 190 42 194.5 Q42 199 48 199 H152 Q158 199 158 194.5 Q158 190 152 190 Z" fill="#2B3A55" stroke="#1E2A40" stroke-width="1.2"/>' +
         '<path d="M50 191.2 H150" stroke="#13203A" stroke-width="1.6"/><path d="M46 196.6 H154" stroke="#4FE3FF" stroke-width="2" stroke-linecap="round"/>' +
@@ -6215,7 +6219,7 @@ const Buddy = (() => {
       back: '<rect x="48" y="193" width="104" height="6.5" rx="2" fill="#C17F45" stroke="#8A5A2B" stroke-width="1.1"/><path d="M74 193 V199.5 M100 193 V199.5 M126 193 V199.5" stroke="#8A5A2B" stroke-width="1"/>' +
         '<path d="M62 199.5 V205 M138 199.5 V205" stroke="#8A93A8" stroke-width="2.6"/><path d="M46 206 H150 Q162 206 162 196 Q162 191 157 191" stroke="#8A93A8" stroke-width="3" fill="none" stroke-linecap="round"/>' +
         '<path d="M152 195 Q166 186 170 176" stroke="#E8453C" stroke-width="2" fill="none" stroke-linecap="round"/>' },
-    carpet: { lift: 18, vb: '26 176 148 32', bob: true,
+    carpet: { lift: 18, vb: '26 176 148 32', bob: true, floats: true,
       back: '<g class="b-carpet"><path d="M36 188 Q68 184 100 188 T164 188 L166 198 Q134 202 100 198 T34 198 Z" fill="#2B5CC2" stroke="#FFC531" stroke-width="2" stroke-linejoin="round"/>' +
         '<path d="M44 192.6 Q72 189.6 100 192.6 T156 192.6" stroke="#FF8A3D" stroke-width="1.6" fill="none"/>' +
         [70, 100, 130].map((x) => '<path d="M' + x + ' ' + (x === 100 ? 189.6 : 190.6) + ' l3 3 -3 3 -3 -3 Z" fill="#FFC531"/>').join('') +
@@ -6687,11 +6691,16 @@ const Buddy = (() => {
     const fc = FORM_COLOR[Math.min(form, 5)] || FORM_COLOR[2], fly = form >= 3;
     if (power >= 2 || form >= 5) out += flatAura(fc, power, form);
     if (power >= 3) out += '<ellipse cx="100" cy="207" rx="70" ry="10" fill="none" stroke="' + fc + '" stroke-width="3" stroke-dasharray="10 6" opacity=".85"/>';
-    out += '<g class="buddy-body" style="transform-origin:100px 206px;transform:' + (fly ? 'translateY(-12px) ' : '') + 'scale(' + (fly ? stage.scale * 0.94 : stage.scale) + ')">';
+    /* on a ride a flying buddy floats only on the hoverboard and the magic carpet; the robot's flames fire only on the
+       hoverboard, from under the board; a slug rides the ride, not its cloud (JB, Nov 17, 2026) */
+    const R = ride ? RIDE[ride] : null, hover = fly && (!R || R.floats), flyArt = fly ? flatFly(type, fc) : '';
+    const flyUnder = R && R.jets && type === 'robot' ? flyArt : '', flyOn = R && (type === 'robot' || type === 'slug') ? '' : flyArt;
+    out += '<g class="buddy-body" style="transform-origin:100px 206px;transform:' + (hover ? 'translateY(-12px) ' : '') + 'scale(' + (fly ? stage.scale * 0.94 : stage.scale) + ')">';
+    if (flyUnder) out += '<g transform="translate(0 -' + R.lift + ')"><g class="b-ride-bob">' + flyUnder + '</g></g>';
     /* a ride goes under the buddy, which stands on it */
-    if (ride) out += '<g class="b-ride">' + RIDE[ride].back + '</g><g transform="translate(0 -' + RIDE[ride].lift + ')"><g' + (RIDE[ride].bob ? ' class="b-ride-bob"' : '') + '>';
+    if (ride) out += '<g class="b-ride">' + R.back + '</g><g transform="translate(0 -' + R.lift + ')"><g' + (R.bob ? ' class="b-ride-bob"' : '') + '>';
     out += '<g class="buddy-anim">';
-    if (fly) out += flatFly(type, fc);
+    out += flyOn;
     if (w.back && BACK[w.back] && !A.backFront) out += at(A.back, BACK[w.back]);
     if (trick === 'airplane') out += PLANE_FLAT;
     if (trick === 'rocket') out += ROCKET_FLAT;
@@ -6699,7 +6708,7 @@ const Buddy = (() => {
     if (trick === 'trexroar') out += at(A.head, TREX_SPIKES);
     out += paint && !(pv && pv.def) ? BODY[type].replace(/class="b-body"/g, 'class="b-body" style="fill:url(#' + pid + ')"') : BODY[type];
     if (w.back && BACK[w.back] && A.backFront) out += at(A.back, '<g transform="scale(0.72)">' + (w.back === 'tank' ? '<g transform="translate(-46 8)">' + BACK.tank + '</g>' : BACK[w.back]) + '</g>');
-    if (w.feet && FEET[w.feet]) out += FEET[w.feet](type);
+    if (w.feet && FEET[w.feet]) out += R && !R.jets ? FEET[w.feet](type).split(JETFLAME).join('') : FEET[w.feet](type);
     if (waist) out += flatBelt.apply(null, FLAT_BELT[type].concat([waist]));
     if (w.neck && NECK[w.neck] && ITEM[w.neck] && ITEM[w.neck].slot === 'neck') out += at(A.neck, NECK[w.neck]);
     if (w.back === 'tank') {
@@ -7945,11 +7954,12 @@ const Buddy3D = (() => {
   };
   /* JB's November 17 Rides shelf: each ride under the buddy, across the picture (RIDE_FIT: where it sits and how long it
      is for each buddy), with the buddy standing userData.h higher, on top. The hoverboard and the magic carpet float and
-     bob (userData.bob); the carpet ripples (userData.wave). Each is built along z and turned to run along x. */
+     bob (userData.bob, userData.floats); the carpet ripples (userData.wave). Only the hoverboard lets the robot's
+     boosters and the jet boots keep firing (userData.jets). Each is built along z and turned to run along x. */
   const RIDE_FIT = { ladybug: { cx: 0, cz: 0.12, len: 1.8 }, dragon: { cx: 0, cz: 0.12, len: 1.85 }, robot: { cx: 0, cz: 0.05, len: 1.6 }, slug: { cx: -0.3, cz: 0.1, len: 2.8 } };
-  function rideHolder(type, h, bob) {
+  function rideHolder(type, h, bob, jets) {
     const F = RIDE_FIT[type] || RIDE_FIT.ladybug, g = G([F.cx, 0, F.cz]), along = G(null, [0, Math.PI / 2, 0]);
-    g.add(along); g.userData = { h, bob: bob || 0 };
+    g.add(along); g.userData = { h, bob: bob || 0, floats: !!bob, jets: !!jets };
     return { g, along, L: F.len };
   }
   const rideWheel = (r, w, tyre, hub, p) => G(p, null, null, M(new T.CylinderGeometry(r, r, w, 28), tyre, null, [0, 0, Math.PI / 2]), M(new T.CylinderGeometry(r * 0.45, r * 0.45, w * 1.05, 18), hub, null, [0, 0, Math.PI / 2]));
@@ -7985,7 +7995,7 @@ const Buddy3D = (() => {
     },
     /* a dark hoverboard with a glowing blue edge and two glowing pads underneath, floating and bobbing */
     hoverboard: (type) => {
-      const R = rideHolder(type, 0.26, 0.03), L = R.L;
+      const R = rideHolder(type, 0.26, 0.03, true), L = R.L;
       R.along.add(M(rbox(0.62, 0.07, L * 0.9, 0.035, 6), mat.satin('#2B3A55', { roughness: 0.4 }), [0, 0.2, 0]));
       R.along.add(M(rbox(0.6, 0.006, L * 0.86, 0.003, 2), mat.satin('#13203A', { roughness: 0.7 }), [0, 0.237, 0]));
       R.along.add(M(rbox(0.645, 0.016, L * 0.92, 0.008, 3), mat.glow('#4FE3FF'), [0, 0.183, 0]));
@@ -10796,7 +10806,7 @@ const Buddy3D = (() => {
         fl.add(M(new T.ConeGeometry(0.11, 0.34, 20), mat.glow('#FF8A3D', { transparent: true, opacity: 0.92 }), [0, -0.17, 0], [Math.PI, 0, 0]));
         fl.add(M(new T.ConeGeometry(0.06, 0.22, 16), mat.glow('#FFE14F'), [0, -0.11, 0], [Math.PI, 0, 0]));
         fxSprite(fl, softGlow(), '#FF9A3D', 0.5, [0, -0.15, 0], 0.7);
-        body.add(fl); P.flames.push(fl);
+        body.add(fl); P.flames.push(fl); P.footFlames.push(fl);
       });
       if (type === 'ladybug') [-1, 1].forEach((sx) => {
         const w = G([sx * 0.42, 1.36, -0.42], [0.2, sx * 0.5, sx * 0.55]);
@@ -10806,7 +10816,7 @@ const Buddy3D = (() => {
       if (type === 'slug') {
         const cl = G([-0.35, -0.04, -0.15], [0, -0.36, 0]), wm = mat.satin('#FFFFFF', { roughness: 0.9, emissive: lin('#DCE6FF'), emissiveIntensity: 0.35 });
         [[-0.95, 0, 0, 0.28], [-0.55, 0.04, 0.12, 0.32], [-0.12, 0.02, 0.08, 0.34], [0.32, 0.03, 0.1, 0.3], [0.7, 0, 0, 0.24], [-0.3, 0.02, -0.18, 0.3], [0.2, 0, -0.16, 0.26]].forEach((q) => cl.add(M(sph(q[3], 20, 14), wm, [q[0], q[1], q[2]], null, [1, 0.62, 0.8])));
-        body.add(cl);
+        body.add(cl); P.cloud = cl;
       }
     }
     if (n >= 1) { const bd = badgeMesh(f); bd.position.set(F.chest[0], F.chest[1], F.chest[2]); body.add(bd); }
@@ -10958,8 +10968,8 @@ const Buddy3D = (() => {
       if (inner && inner.userData.sway) P.sway = inner.userData.sway;
       if (inner && inner.userData.flap) P.flap = inner.userData.flap;
     }
-    P.fx = []; P.fly = 0;
-    if (w.feet && FEET[w.feet]) { const ft = FEET[w.feet](type); body.add(ft); if (ft.userData.flames) P.flames.push.apply(P.flames, ft.userData.flames); }
+    P.fx = []; P.fly = 0; P.footFlames = [];
+    if (w.feet && FEET[w.feet]) { const ft = FEET[w.feet](type); body.add(ft); if (ft.userData.flames) { P.flames.push.apply(P.flames, ft.userData.flames); P.footFlames.push.apply(P.footFlames, ft.userData.flames); } }
     if (w.back === 'tank' && P.valveAt) tankHose(type, A, P, body, look.bg === 'ocean');
     if ((look.f || 0) >= 3 || look.p || look.k) bodyPowers(look, type, body, P);
     /* how tall the buddy is with its hat on, so a handstand lands on the top of the hat */
@@ -10969,6 +10979,15 @@ const Buddy3D = (() => {
     /* a ride under the buddy, which stands on it (pose() lifts the buddy by its height) */
     P.rideH = 0;
     if (w.ride && RIDE3[w.ride]) { const rd = RIDE3[w.ride](type); root.add(rd); P.ride = rd; P.rideH = rd.userData.h || 0; P.top = (P.top || 2.4) + P.rideH; }
+    /* JB, Nov 17, 2026 ("Go", on riding a ride the way a kid would): a skateboard, scooter, surfboard or sled stays on the
+       ground, and a flying (Superhero) buddy rides it there; the hoverboard and the magic carpet float with it. Only on
+       the hoverboard do the robot's boosters and the jet boots keep firing, and a slug rides the ride, not its cloud. */
+    if (P.ride) {
+      const RU = P.ride.userData;
+      if (!RU.floats) P.fly = 0;
+      if (!RU.jets) P.footFlames.forEach((f) => { f.visible = false; });
+      if (P.cloud) P.cloud.visible = false;
+    }
     /* Friends: the first stands at the buddy's own side spot, the second mirrored on the other side. */
     P.sides = [];
     [w.side, w.side2].forEach((id, i) => {
