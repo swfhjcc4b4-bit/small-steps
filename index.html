@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261118014008";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261118032859";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -16143,7 +16143,7 @@ function sheetInfoHTML(kidId, id) {
     '<p class="sub">' + esc(when) + ' · ' + SUBJ[subj].name + '</p>' +
     '<div class="stats"><div class="stat"><b>' + pct + '%</b><span>' + (s.n - s.wrong) + ' of ' + s.n + ' right first time</span></div><div class="stat"><b>' + E.fmtTime(s.secs) + '</b><span>' + (s.timed === false ? 'no time limit' : 'target ' + E.fmtTime(s.target)) + '</span></div><div class="stat"><b>' + (s.pass ? 'Passed ✓' : 'Repeat') + '</b><span>' + (s.wrong ? (s.fixed ? 'corrected in ' + E.fmtTime(s.fixSecs || 0) : 'not corrected') : 'nothing to fix') + '</span></div></div>' + items +
     '<div class="actions"><button class="btn btn-glass btn-small" data-act="voidAsk" data-kid="' + esc(kidId) + '" data-subj="' + subj + '" data-id="' + esc(s.id) + '">Void this sheet</button></div>' +
-    '<p class="sub">Void a sheet finished by mistake: it comes off the record and is done again. It asks your × question first.</p></div></div>';
+    '<p class="sub">Void a sheet finished by mistake: it comes off the record and is done again. It asks your ÷ question first.</p></div></div>';
 }
 
 /* ---------- study calendar ---------- */
@@ -16467,7 +16467,7 @@ function startRead(kidId) {
   Sfx.unlock(); Sfx.pick(); render(); window.scrollTo(0, 0); holdScreen();
 }
 function raStart() { const R = S.ra; if (!R) return; R.phase = 'reading'; R.start = Date.now(); Sfx.tap(); render(); clearInterval(raTimer); raTimer = setInterval(raTick, 500); }
-/* Done and Too hard each ask the grown-up's × question first, so a stray tap can't end a reading.
+/* Done and Too hard each ask the grown-up's ÷ question first, so a stray tap can't end a reading.
    The reading time stops at the tap on Done, not when the question is answered. */
 function raDone() {
   const R = S.ra;
@@ -16608,7 +16608,7 @@ function readAloudHTML(l) {
     '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '</td><td>' + (s.words - s.missed) + '/' + s.words + (s.missedWords && s.missedWords.length ? '<div class="muted">' + esc(s.missedWords.slice(0, 5).join(' · ')) + '</div>' : '') + '</td><td>' +
     (s.secs ? ENG.math.fmtTime(s.secs) + (s.wpm ? ' · ' + s.wpm + ' wpm' : '') : '—') + '</td><td>' + (s.q == null ? '—' : s.q ? '<span class="chip chip-ok">Knew it</span>' : '<span class="chip">Not yet</span>') + (s.goalMet ? ' <span class="chip chip-ok">Goal</span>' : '') + end(s) + '</td></tr>')).join('');
   const level = '<p class="sub"><b>' + esc(raStandingText(l)) + '</b></p>';
-  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. Read to me has its own level, apart from the reading sheets: 4 reads in a row with at least 95% of the words right, over at least 2 days, move it up one set. On every timed set (the ones your child reads alone, single words included) each of those reads also has to be at the pace bar or faster: ' + raPaceWords() + '. The reading sheets move up on their own and never wait for a read. “Too hard for now” is the grown-up’s own choice: it saves the read as too hard, and the next one comes from an easier set, once; the level itself stays where it is. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute. Done and Too hard ask a grown-up’s × question first. A read saved by mistake can be voided: it comes off the record and the next read is picked as if it never happened.</p>' + level +
+  return '<section class="glass panel"><h3>Reading aloud</h3><p class="sub">After the day’s reading sheets, the reading tile says “Read to me.” At Short a words and Short vowels it is single words to sound out; sentences start at Sight words 1. Read to me has its own level, apart from the reading sheets: 4 reads in a row with at least 95% of the words right, over at least 2 days, move it up one set. On every timed set (the ones your child reads alone, single words included) each of those reads also has to be at the pace bar or faster: ' + raPaceWords() + '. The reading sheets move up on their own and never wait for a read. “Too hard for now” is the grown-up’s own choice: it saves the read as too hard, and the next one comes from an easier set, once; the level itself stays where it is. Kumon’s 2A goal is a passage of about 50 words read aloud within a minute. Done and Too hard ask a grown-up’s ÷ question first. A read saved by mistake can be voided: it comes off the record and the next read is picked as if it never happened.</p>' + level +
     (rows ? '<div class="table-wrap"><table class="hist"><thead><tr><th>When</th><th>Words right</th><th>Time</th><th>Question</th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="sub">Nothing read aloud yet.</p>') +
     '<div class="actions"><button class="btn btn-glass btn-small" data-act="raNow" data-kid="' + esc(l.id) + '">Start a read-aloud now</button></div></section>';
 }
@@ -16625,10 +16625,10 @@ function guideHTML() {
     li('<b>Reading follows Kumon’s order.</b> Pictures and rhymes, then letter sounds, words, sentences and stories. From Kumon 2A the sheets cover naming, action and describing words, word order and riddles; at AI, stories with several questions each; at AII, the order of events.') +
     '</ul></section></div><div class="panels"><section class="glass panel guide"><h3>Your part, about 5 minutes a day</h3><ol>' +
     li('<b>Sit nearby.</b> At the earliest levels the example screen tells you what to show first.') +
-    li('<b>Listen to the read-aloud.</b> After the reading sheets, tap Start as they begin, tap any word they misread, skip or need help with, then tap Done and answer the × question. Ask the question at the end.') +
-    li('<b>Read a book together every day.</b> After reading any book, tap “We read a book” on your child’s card and answer the × question (+2 stars). Parents → Reading → Books has suggestions for each Kumon level and this week’s count.') +
+    li('<b>Listen to the read-aloud.</b> After the reading sheets, tap Start as they begin, tap any word they misread, skip or need help with, then tap Done and answer the ÷ question. Ask the question at the end.') +
+    li('<b>Read a book together every day.</b> After reading any book, tap “We read a book” on your child’s card and answer the ÷ question (+2 stars). Parents → Reading → Books has suggestions for each Kumon level and this week’s count.') +
     li('<b>Keep the paper handwriting.</b> The app uses a number pad, so writing numbers (Kumon 4A) and letters stays on paper.') +
-    li('<b>Check Progress now and then.</b> Trouble spots shows the facts that keep coming back. The app moves levels by itself, and Level changes lists each move with Undo. A sheet or read saved by mistake can be voided after your × question, and it is done again.') +
+    li('<b>Check Progress now and then.</b> Trouble spots shows the facts that keep coming back. The app moves levels by itself, and Level changes lists each move with Undo. A sheet or read saved by mistake can be voided after your ÷ question, and it is done again.') +
     '</ol></section></div></div>';
 }
 
@@ -16776,7 +16776,7 @@ function booksHTML(l) {
 }
 
 /* ---------- "We read a book" on each child's card ----------
-   Any book read with the child counts, not only the shelf's: after the grown-up's × question, an
+   Any book read with the child counts, not only the shelf's: after the grown-up's ÷ question, an
    optional title and who read it, then +2 stars. It is logged like a shelf read (the child's 'books'
    log, marked quick), so it shows in the week's count here and on the dashboard, and the × in this
    page's list takes it back. */
@@ -18230,11 +18230,18 @@ function confirmBuy() {
 }
 
 /* ---------- overlays ---------- */
-/* The grown-ups' × question: opens Parents, and stands in front of anything a stray tap shouldn't do
-   (finishing a reading, voiding a sheet). `why` says what answering does. */
+/* The grown-ups' ÷ question: opens Parents, and stands in front of anything a stray tap shouldn't do
+   (finishing a reading, voiding a sheet). `why` says what answering does. It is a division whose answer is a
+   two-digit number from 11 to 19, such as 84 ÷ 7 = 12 (JB, Nov 17, 2026: "Change the parent questions to division.
+   Andi is catching onto the multiplication problems."): the × question it replaces (6 to 9 times 6 to 9) was one of
+   16 facts Andi was learning, and a two-digit answer cannot be found by trying 6, 7, 8 and 9. A wrong answer brings
+   a new question. */
+function gateQ() {
+  const d = 3 + Math.floor(Math.random() * 7), ans = 11 + Math.floor(Math.random() * 9);
+  return { n: d * ans, d, ans };
+}
 function openGate(then, why) {
-  const a = 6 + Math.floor(Math.random() * 4), b = 6 + Math.floor(Math.random() * 4);
-  S.overlay = { type: 'gate', a, b, input: '', then, msg: '', why: why || 'Answer to open Parents.' };
+  S.overlay = Object.assign({ type: 'gate', input: '', then, msg: '', why: why || 'Answer to open Parents.' }, gateQ());
   render();
 }
 function gateKey(k) {
@@ -18243,8 +18250,8 @@ function gateKey(k) {
   Sfx.key();
   if (k === 'back') o.input = o.input.slice(0, -1);
   else if (k === 'ok') {
-    if (parseInt(o.input, 10) === o.a * o.b) { const then = o.then; S.overlay = null; then(); return; }
-    o.a = 6 + Math.floor(Math.random() * 4); o.b = 6 + Math.floor(Math.random() * 4); o.input = ''; o.msg = 'Not quite. Here is another one.';
+    if (parseInt(o.input, 10) === o.ans) { const then = o.then; S.overlay = null; then(); return; }
+    Object.assign(o, gateQ()); o.input = ''; o.msg = 'Not quite. Here is another one.';
   } else if (/^\d$/.test(k) && o.input.length < 3) o.input += k;
   render();
 }
@@ -18257,7 +18264,7 @@ function overlayHTML() {
     for (let i = 1; i <= 9; i++) keys += '<button class="key" data-act="gkey" data-k="' + i + '">' + i + '</button>';
     keys += '<button class="key" data-act="gkey" data-k="back" aria-label="Delete">' + ICON.del + '</button><button class="key" data-act="gkey" data-k="0">0</button><button class="key key-ok" data-act="gkey" data-k="ok">Enter</button>';
     return '<div class="overlay" role="dialog" aria-modal="true" aria-labelledby="gateTitle"><div class="dialog glass"><h2 id="gateTitle">For grown-ups</h2>' +
-      '<p>' + esc(o.why || 'Answer to open Parents.') + (o.msg ? ' ' + esc(o.msg) : '') + '</p><div class="gate-q">' + o.a + ' × ' + o.b + ' = ?</div>' +
+      '<p>' + esc(o.why || 'Answer to open Parents.') + (o.msg ? ' ' + esc(o.msg) : '') + '</p><div class="gate-q">' + o.n + ' ÷ ' + o.d + ' = ?</div>' +
       '<div class="gate-ans" aria-live="polite">' + esc(o.input) + '</div><div class="keypad">' + keys + '</div><button class="btn btn-glass" data-act="closeOverlay">Cancel</button></div></div>';
   }
   if (o.type === 'buy') {
