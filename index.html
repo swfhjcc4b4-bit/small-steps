@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261117220751";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261118014008";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1812,7 +1812,10 @@ function makeEngine(C) {
   /* ---------- Specs: a stored copy of a problem, for the review deck ---------- */
   function specOf(p) {
     const s = Object.assign({}, p);
-    delete s.review; delete s.lv;
+    /* the mixed-in mark (bridge) belongs to the sheet a question was made for, never to the question: a missed
+       question from the level just left comes back as a review question like any other (JB, Nov 17, 2026; see the
+       bridge below) */
+    delete s.review; delete s.lv; delete s.bridge;
     return JSON.parse(JSON.stringify(s));
   }
   function fromSpec(s) {
@@ -1833,10 +1836,12 @@ function makeEngine(C) {
     const items = Object.entries(R).filter(([, r]) => r && r.spec && levelIndex(r.lv) >= 0 && levelIndex(r.lv) <= cur);
     items.sort(([, x], [, y]) => (y.miss - x.miss) || String(x.at).localeCompare(String(y.at)));
     return items.slice(0, max).map(([key, r]) => {
+      /* a review question is never part of a mix, even when a deck saved by an older build kept the mark */
       const orig = Object.assign(fromSpec(r.spec), { review: true, lv: r.lv });
+      delete orig.bridge;
       if (r.sib) {
         const s = similar(orig);
-        if (s && s.key !== orig.key) return Object.assign(s, { review: true, lv: r.lv, sibOf: key });
+        if (s && s.key !== orig.key) { delete s.bridge; return Object.assign(s, { review: true, lv: r.lv, sibOf: key }); }
       }
       return orig;
     });
@@ -1853,7 +1858,13 @@ function makeEngine(C) {
      review gets the same, mixed with the level the child was sent back to (JB, the same night: "Mix up the return
      too"). Only then do sheets count toward the 4 passes in a row, so the bar to move up is unchanged. A failed
      mixed sheet keeps the mix where it is; the step back works as before and ends the mix. Each question keeps its
-     own level's time, so a mixed sheet's target is the mix of the two. The track holds `bridge: { from, step }`
+     own level's time, so a mixed sheet's target is the mix of the two. Review questions (the app shows them as
+     "Practice again") are apart from the mix, as on every sheet: the half and the quarter are of the other questions,
+     a review question is never marked as mixed in, even when it was first missed as a mixed-in question, and it has
+     the time of the level the child is on (JB, Nov 17, 2026, asked "Do you want me to fix the app so that a
+     practice-again question is never recorded as a mixed-in question? After the fix, a practice-again question would
+     always get the time limit of the level the child is on, as on every other sheet.": "Yes"; Rule alarms
+     690b833c42c90840 and 257d733fb9d18d12, Andi's math, Nov 17). The track holds `bridge: { from, step }`
      while it lasts. The rule is played only for sheets made by a build that has it (`bridgeRule` on the result,
      recorded on each sheet), so sheets done before it are played again as they were done. */
   const BRIDGE_NEW = [0.5, 0.75];   /* share of new questions on the 1st and 2nd mixed sheet */
