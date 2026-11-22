@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261120220026";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261122150551";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -2152,11 +2152,13 @@ function makeEngine(C) {
         }
       } else {
         resetRun();
-        /* a rushed sheet (much faster than usual and 70% or less) says nothing about the level,
-           so it neither counts toward a step back nor clears the count */
-        const low = acc < 0.7;
-        L2.lowRun = r.rushed ? (learner.lowRun || 0) : low ? (learner.lowRun || 0) + (firstDay ? 0 : 1) : 0;
-        if (low && firstDay && !r.rushed) ev.exampleAgain = true;
+        /* a rushed sheet counts like any other (JB, Nov 22, 2026, on the rule that a rushed sheet did not count toward
+           a step back: "Nope that's the dumbest rule", then "Make that goddamn change now before she starts doing
+           her iPad today"). A sheet from a build before that change (no rushRule on it) is played as it was then:
+           rushed, it neither counted nor cleared the count. */
+        const low = acc < 0.7, skip = r.rushed && !r.rushRule;
+        L2.lowRun = skip ? (learner.lowRun || 0) : low ? (learner.lowRun || 0) + (firstDay ? 0 : 1) : 0;
+        if (low && firstDay && !skip) ev.exampleAgain = true;
         if (s.autoBack && L2.lowRun >= 2 && i > 0 && !learner.backFrom) {
           L2.backFrom = learner.levelId; L2.levelId = LEVELS[i - 1].id; L2.lowRun = 0;
           ev.stepBack = true; ev.to = L2.levelId;
@@ -16111,7 +16113,7 @@ function finishSheet() {
      step back, and the buddy asks for slowing down. (The same rule marks it on the dashboard.) */
   const prior = Store.sessionsFor(sh.kid, sh.subj).filter((x) => (x.kind === 'sheet' || x.kind === 'test') && x.n > 0 && x.levelId === sh.levelId).reverse();
   const rush = Metrics.rushOf({ n: sh.problems.length, wrong: g.wrong, items }, prior), rushed = !!(rush && rush.rushed);
-  let out = E.applyResult(t, { kind: sh.kind, timed: sh.timed, levelId: sh.levelId, n: sh.problems.length, wrong: g.wrong, secs, target: sh.target, problems: sh.problems, res: g.res, rushed, bridgeRule: true }, now);
+  let out = E.applyResult(t, { kind: sh.kind, timed: sh.timed, levelId: sh.levelId, n: sh.problems.length, wrong: g.wrong, secs, target: sh.target, problems: sh.problems, res: g.res, rushed, bridgeRule: true, rushRule: true }, now);
   if (sh.subj === 'reading' && sh.kind !== 'test') out = readGate(sh.kid, t, out);
   /* a sheet under 70% on the first day of a new level brings its worked example back before the next sheet */
   if (out.ev.exampleAgain && out.learner.exSeen) {
@@ -16134,7 +16136,7 @@ function finishSheet() {
     missed: sh.problems.filter((p, i) => !g.res[i].ok).slice(0, 12).map((p) => E.problemText(p)),
     reviewItems: sh.problems.filter((p) => p.review).length, stars: credit ? award.total : 0, items,
     change: ev.levelUp ? 'up' : ev.stepBack ? 'back' : ev.returned ? 'return' : ev.testReady ? 'test' : ev.readGate ? 'readFirst' : '', to: ev.to,
-    day: sh.dayNo, plan: sh.dayTotal, bridgeRule: 1
+    day: sh.dayNo, plan: sh.dayTotal, bridgeRule: 1, rushRule: 1
   };
   /* a mixed sheet of the bridge: the level it mixed in, its step, and which questions came from that level */
   if (ev.bridge) session.bridge = { from: ev.bridge.from, step: ev.bridge.step, at: sh.problems.map((p, i) => (p.bridge ? i : -1)).filter((i) => i >= 0) };
@@ -19094,7 +19096,7 @@ function settingsHTML(l, E, t, subj) {
     '<div class="field"><label for="f-timer">Show the timer</label><select id="f-timer" data-set="showTimer">' + opt('1', 'On', s.showTimer ? '1' : '0') + opt('0', 'Off', s.showTimer ? '1' : '0') + '</select>' +
       '<p class="help">Off hides the timer bar from the child. Time is still measured and still counts toward passing.</p></div>' + speakRow +
     '<div class="field"><label for="f-back">Step back after two weak sheets</label><select id="f-back" data-set="autoBack">' + opt('1', 'On', s.autoBack ? '1' : '0') + opt('0', 'Off', s.autoBack ? '1' : '0') + '</select>' +
-      '<p class="help">Below 70% on two sheets in a row moves to the level before for review. Passes there on two different days move back up. The first day on a new level is for learning it: a sheet under 70% that day doesn’t count, and the worked example comes back before the next sheet. A rushed sheet (much faster than usual and 70% or less) doesn’t count toward a step back either.</p></div>' +
+      '<p class="help">Below 70% on two sheets in a row moves to the level before for review. Passes there on two different days move back up. The first day on a new level is for learning it: a sheet under 70% that day doesn’t count, and the worked example comes back before the next sheet.</p></div>' +
     '</div></section>';
 }
 function buddyPanelHTML(l) {
