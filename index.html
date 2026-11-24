@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261124195234";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261124201454";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -312,6 +312,11 @@ button { cursor: pointer; touch-action: manipulation; border: 0; background: non
 .two-times { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; justify-content: center; }
 .two-times small { display: block; text-align: center; font-weight: 900; color: var(--card-soft); font-size: 15px; margin-bottom: 6px; }
 .two-times .arrow { font-family: var(--font-display); font-size: 40px; color: #7186AE; }
+.two-clocks { display: flex; align-items: center; justify-content: center; gap: 8px 14px; width: 100%; }
+.two-clocks .tc { display: flex; flex-direction: column; align-items: center; width: min(300px, calc((100% - 72px) / 2), calc(100vh - 470px)); width: min(300px, calc((100% - 72px) / 2), calc(100dvh - 470px)); min-width: 120px; }
+.two-clocks small { display: block; text-align: center; font-weight: 900; color: var(--card-soft); font-size: clamp(15px, 2vw, 20px); margin-bottom: 4px; }
+.two-clocks .arrow { font-family: var(--font-display); font-size: clamp(28px, 4vw, 44px); color: #7186AE; flex: 0 0 auto; }
+.card.m-keypad .two-clocks .clock-wrap, .two-clocks .clock-wrap { width: 100%; }
 .ask-time { font-family: var(--font-read); font-weight: 700; font-size: clamp(24px, 3.6vw, 32px); color: #1D4FA8; text-align: center; }
 
 /* ---------- answer pad ---------- */
@@ -4753,7 +4758,10 @@ const TimeCurriculum = (() => {
     { id: 'minutes', name: 'Minutes and time passing' }
   ];
   const LEVELS = [];
-  const L = (id, stage, group, name, short, sec) => { LEVELS.push({ id, stage, group, name, short, sec, gen: G[id] }); };
+  /* step: a level put in between two levels later on (JB's four of Nov 24, 2026). It is a level like any other for
+     sheets, passes and moving up, but the belts count only the other levels, so adding steps never takes a belt
+     away from anyone (Andi's clock belt went from brown to red when the four came in). */
+  const L = (id, stage, group, name, short, sec, o) => { LEVELS.push(Object.assign({ id, stage, group, name, short, sec, gen: G[id] }, o || {})); };
   L('cDay', 'ready', 'PK', 'Morning, afternoon or night?', 'Times of day', 7);
   L('cNum', 'ready', 'PK', 'Find the numbers on a clock', 'Clock numbers', 6);
   L('cMiss', 'ready', 'PK', 'Which number is missing?', 'Missing number', 7);
@@ -4772,10 +4780,10 @@ const TimeCurriculum = (() => {
   L('ampm', 'fives', 'G2', 'Morning or evening: a.m. and p.m.', 'a.m. and p.m.', 6);
   L('m1Type', 'minutes', 'G3', 'Read the time to the minute', 'To the minute', 14);
   L('later', 'minutes', 'G3', 'What time will it be?', 'Time later', 16);
-  L('sameHour', 'minutes', 'G3', 'Minutes in the same hour', 'Same hour', 14);
-  L('toHour', 'minutes', 'G3', 'Minutes to the next hour', 'To the hour', 16);
-  L('acrossUnder', 'minutes', 'G3', 'Across the hour, under an hour', 'Across the hour', 18);
-  L('hourPlus', 'minutes', 'G3', 'An hour or more', 'An hour or more', 18);
+  L('sameHour', 'minutes', 'G3', 'Minutes in the same hour', 'Same hour', 14, { step: true });
+  L('toHour', 'minutes', 'G3', 'Minutes to the next hour', 'To the hour', 16, { step: true });
+  L('acrossUnder', 'minutes', 'G3', 'Across the hour, under an hour', 'Across the hour', 18, { step: true });
+  L('hourPlus', 'minutes', 'G3', 'An hour or more', 'An hour or more', 18, { step: true });
   L('interval', 'minutes', 'G3', 'How many minutes?', 'Minutes between', 18);
 
   const TIPS = {
@@ -4881,11 +4889,11 @@ const TimeCurriculum = (() => {
     ampm: { show: { type: 'big', text: '🌅 7:00 a.m.   🌙 7:00 p.m.' }, steps: ['a.m. is from midnight to noon: the morning.', 'p.m. is from noon to midnight: the afternoon and evening.'] },
     m1Type: { show: { type: 'clock', v: 437 }, steps: ['The long hand is two little marks past 7.', 'Count by 5s to 35, then by 1s: 36, 37.', 'The short hand is past 4, so write 4:37.'] },
     later: { show: { type: 'big', text: '1:50  + 15 minutes' }, steps: ['Count on 10 minutes to get to 2:00.', 'Then 5 more minutes: 2:05.'] },
-    sameHour: { show: { type: 'big', text: '1:15 → 1:45' }, steps: ['At 1:15 the long hand is on the 3. At 1:45 it is on the 9.', 'Count by 5s for each number it moves past: 5, 10, 15, 20, 25, 30.', 'From 1:15 to 1:45 is 30 minutes.'] },
-    toHour: { show: { type: 'big', text: '1:15 → 2:00' }, steps: ['At 1:15 the long hand is on the 3.', 'To get to 2:00, it moves round to the 12.', 'Count by 5s for each number it passes: 5, 10, 15, 20, 25, 30, 35, 40, 45.', 'From 1:15 to 2:00 is 45 minutes.'] },
-    acrossUnder: { show: { type: 'big', text: '1:40 → 2:10' }, steps: ['First, up to the hour: from 1:40 to 2:00 is 20 minutes.', 'Then the extra minutes: from 2:00 to 2:10 is 10 more.', '20 + 10 = 30 minutes.'] },
-    hourPlus: { show: { type: 'big', text: '1:15 → 2:45' }, steps: ['First, up to the hour: from 1:15 to 2:00 is 45 minutes.', 'Then the extra minutes: from 2:00 to 2:45 is 45 more.', '45 + 45 = 90 minutes.', 'A whole hour is 60 minutes, so from 2:15 to 3:15 is 60 minutes.'] },
-    interval: { show: { type: 'big', text: '5:00 → 6:20' }, steps: ['From 5:00 to 6:00 is 60 minutes.', 'From 6:00 to 6:20 is 20 more.', '60 + 20 = 80 minutes.'] }
+    sameHour: { show: { type: 'two', from: 115, to: 145 }, steps: ['At 1:15 the long hand is on the 3. At 1:45 it is on the 9.', 'Count by 5s for each number it moves past: 5, 10, 15, 20, 25, 30.', 'From 1:15 to 1:45 is 30 minutes.'] },
+    toHour: { show: { type: 'two', from: 115, to: 200 }, steps: ['At 1:15 the long hand is on the 3.', 'To get to 2:00, it moves round to the 12.', 'Count by 5s for each number it passes: 5, 10, 15, 20, 25, 30, 35, 40, 45.', 'From 1:15 to 2:00 is 45 minutes.'] },
+    acrossUnder: { show: { type: 'two', from: 140, to: 210 }, steps: ['First, up to the hour: from 1:40 to 2:00 is 20 minutes.', 'Then the extra minutes: from 2:00 to 2:10 is 10 more.', '20 + 10 = 30 minutes.'] },
+    hourPlus: { show: { type: 'two', from: 115, to: 245 }, steps: ['First, up to the hour: from 1:15 to 2:00 is 45 minutes.', 'Then the extra minutes: from 2:00 to 2:45 is 45 more.', '45 + 45 = 90 minutes.', 'A whole hour is 60 minutes, so from 2:15 to 3:15 is 60 minutes.'] },
+    interval: { show: { type: 'two', from: 500, to: 620 }, steps: ['From 5:00 to 6:00 is 60 minutes.', 'From 6:00 to 6:20 is 20 more.', '60 + 20 = 80 minutes.'] }
   };
   function example(levelId) {
     const lv = LEVELS.find((l) => l.id === levelId), e = EX[levelId];
@@ -13019,9 +13027,20 @@ const Awards = (() => {
     if (t.top && idx === E.LEVELS.length - 1 && !t.testFor) return E.LEVELS.length;
     return idx;
   }
-  /* The belt for a number of levels passed, and the levels a belt needs. */
-  const beltN = (E, passed) => (passed >= E.LEVELS.length ? TOP : Math.min(TOP - 1, Math.round((TOP * passed) / E.LEVELS.length)));
-  const beltNeeds = (E, n) => (n <= 0 ? 0 : n >= TOP ? E.LEVELS.length : Math.ceil(((n - 0.5) * E.LEVELS.length) / TOP));
+  /* The belt for a number of levels passed, and the levels a belt needs. The shares are of the levels that count for
+     belts: every level but a step put in between two levels later on (a level with step: true, such as the four clock
+     levels of Nov 24, 2026), so adding steps never takes a belt away from anyone. Steps still count as levels passed
+     on the way to a belt, and black still means every level, steps included, is done. */
+  const beltLevels = (E) => E.LEVELS.reduce((k, l) => k + (l.step ? 0 : 1), 0);
+  const beltCount = (E, passed) => E.LEVELS.slice(0, Math.max(0, passed)).reduce((k, l) => k + (l.step ? 0 : 1), 0);
+  const beltN = (E, passed) => (passed >= E.LEVELS.length ? TOP : Math.min(TOP - 1, Math.round((TOP * beltCount(E, passed)) / beltLevels(E))));
+  function beltNeeds(E, n) {
+    if (n <= 0) return 0;
+    if (n >= TOP) return E.LEVELS.length;
+    const want = Math.ceil(((n - 0.5) * beltLevels(E)) / TOP);
+    for (let i = 0, k = 0; i < E.LEVELS.length; i++) if (!E.LEVELS[i].step && ++k === want) return i + 1;
+    return E.LEVELS.length;
+  }
   function beltAt(subj, E, n) {
     const B = BELTS[n];
     return { n, of: TOP, i: n, stripes: 0, id: B.id, c: B.c, d: B.d, name: B.name + ' belt' };
@@ -13236,7 +13255,7 @@ const Awards = (() => {
     const left = r.plan - r.done, best = medalOf(r.passed + left, r.plan, r.plan), next = medalOf(r.passed + 1, r.done + 1, r.plan);
     return { next: next && next !== r.medal ? next : '', best, left };
   }
-  return { BELTS, levelsPassed, beltN, beltNeeds, beltAt, beltOf, beltLadder, toNextBelt, sameBelt, FORM_NAME, TIERS, TIER_NAME, SERIES, STAR_STEP, starShape, counts, trophies, newOnes, localDay,
+  return { BELTS, levelsPassed, beltLevels, beltN, beltNeeds, beltAt, beltOf, beltLadder, toNextBelt, sameBelt, FORM_NAME, TIERS, TIER_NAME, SERIES, STAR_STEP, starShape, counts, trophies, newOnes, localDay,
     MEDALS, medalOf, dayResult, medalsOn, medalTally, medalsWon, weekStart, nextMedal, opts };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = Awards;
@@ -14578,7 +14597,7 @@ function clockSVG(v, o) {
   const ticks = !o.mini;
   const h = Math.floor(v / 100), m = v % 100;
   const ha = ((h % 12) + m / 60) * 30, ma = m * 6;
-  let s = '<svg viewBox="-120 -120 240 240"' + (o.mini ? ' aria-hidden="true" class="mini-clock"' : ' role="img" aria-label="' + (o.minuteOnly ? 'Clock with the long hand' : 'Clock') + '"' + (o.setting ? ' class="setting"' : '')) + '>';
+  let s = '<svg viewBox="-120 -120 240 240"' + (o.mini ? ' aria-hidden="true" class="mini-clock"' : ' role="img" aria-label="' + (o.label || (o.minuteOnly ? 'Clock with the long hand' : 'Clock')) + '"' + (o.setting ? ' class="setting"' : '')) + '>';
   s += '<circle class="cf-rim" r="116"/><circle class="cf-face" r="104"/>';
   for (let i = 0; i < 60; i++) {
     if (!ticks && i % 5) continue;
@@ -14601,6 +14620,9 @@ function clockSVG(v, o) {
   return s;
 }
 const fmtTime = (v) => TimeCurriculum.fmt(v);
+/* "How many minutes?" and the four levels before it: the start and the end as two clock faces side by side */
+const twoClocks = (from, to, cls) => '<div class="two-clocks' + (cls ? ' ' + cls : '') + '"><div class="tc"><small>Start</small><div class="clock-wrap">' + clockSVG(from, { label: 'Start clock' }) + '</div></div>' +
+  '<span class="arrow" aria-hidden="true">→</span><div class="tc"><small>End</small><div class="clock-wrap">' + clockSVG(to, { label: 'End clock' }) + '</div></div></div>';
 const timeInputFmt = (s) => (s.length >= 3 ? s.slice(0, -2) + ':' + s.slice(-2) : s);
 function clockPrompt(p, ctx) {
   const pr = p.prompt || {};
@@ -14619,7 +14641,10 @@ function clockPrompt(p, ctx) {
     case 'words': return '<div class="prompt">' + sayBtn + '<span>Which clock says</span></div><div class="words-big">' + esc(pr.text) + '?</div>';
     case 'digital': return '<div class="prompt">' + sayBtn + '<span>Which clock shows</span></div><div class="digital digital-big">' + esc(fmtTime(pr.v)) + '</div>';
     case 'scene': return '<div class="scene"><div class="icon" aria-hidden="true">' + pr.icon + '</div><p>' + esc(pr.text) + '</p><div class="digital">' + esc(fmtTime(pr.v)) + '</div></div><div class="ask-time">a.m. or p.m.?</div>';
-    case 'two': return '<div class="prompt">' + sayBtn + '<span>How many minutes?</span></div><div class="two-times"><div><small>Start</small><div class="digital">' + esc(fmtTime(pr.from)) + '</div></div><span class="arrow">→</span><div><small>End</small><div class="digital">' + esc(fmtTime(pr.to)) + '</div></div></div>' + ans;
+    /* the start and end times as two clock faces, never digital numbers (JB, Nov 24, 2026: "You should show an analog
+       clock not a ... digital clock. She's going from analog this entire time to digital ... Put the analog clock
+       back. That way it's easier for her.") */
+    case 'two': return '<div class="prompt">' + sayBtn + '<span>How many minutes?</span></div>' + twoClocks(pr.from, pr.to) + ans;
     default: return '';
   }
 }
@@ -17173,6 +17198,7 @@ function exVisual(show) {
       return '<div class="ex-sentence">' + (show.pic ? '<span class="e" aria-hidden="true">' + show.pic + '</span>' : '') + '<p>' + t + '</p>' + (show.q ? '<p class="q">' + esc(show.q) + ' <span class="ex-fill">' + esc(show.fill) + '</span></p>' : '') + '</div>';
     }
     case 'clock': return '<div class="clock-wrap ex-clock">' + clockSVG(show.v, { noHands: show.noHands, handOnly: show.handOnly, minuteOnly: show.minuteOnly }) + '</div>';
+    case 'two': return twoClocks(show.from, show.to, 'ex-two');
     case 'jobs': return '<div class="ex-jobs">' + show.words.map((w, i) => '<span class="ex-job' + (w[1] ? ' j-' + w[1] : '') + '" style="animation-delay:' + (0.3 + i * 0.45).toFixed(2) + 's"><b>' + esc(w[0]) + '</b><small>' + (w[1] ? esc(w[2] || w[1]) : '&nbsp;') + '</small></span>').join('') + '</div>';
     case 'order': return '<div class="ex-order">' + (show.pic ? '<span class="e" aria-hidden="true">' + show.pic + '</span>' : '') + '<p class="ok">✓ ' + esc(show.right) + '</p><p class="no">✗ ' + esc(show.wrong) + '</p></div>';
     case 'seq3': return '<div class="ex-seq3"><p class="txt">' + esc(show.text) + '</p><ol>' + show.items.map((it, i) => '<li style="animation-delay:' + (0.5 + i * 0.6).toFixed(2) + 's"><i>' + esc(it[0]) + '</i><span>' + esc(it[1]) + '</span></li>').join('') + '</ol></div>';
@@ -18067,7 +18093,7 @@ function shelfHTML(kids) {
       medalRowHTML(l) + beltLadderHTML(l) + '<div class="trophies">' + T.series.map((s) => trophyTile(l, s)).join('') + '</div></div>';
   }).join('');
   return '<section class="glass shelf"><h2 class="shelf-title">Trophy shelf</h2><div class="shelf-kids">' + cols + '</div>' +
-    '<p class="shelf-help">Medals each day in each subject: bronze for 1 sheet passed, silver for 2, gold for all 3. A gray try-again ribbon means all 3 done but none passed; ribbons are not counted with the medals. A medal’s lanyard shows its subject: yellow math, green reading, blue clock. Belts: the same nine in every subject, left to right, white to black. Each subject’s levels are split into eight equal shares, and each share finished earns the next belt; the gold ring is the belt now; black means every level in that subject is done. Trophies: each goes bronze, silver, gold, platinum and diamond at its own numbers; under each, the trophy it is now, the count so far and how many more the next one needs. By each name: 🏆 how many trophies are on the shelf, and 🏅 every medal won so far. Under This week, the week’s medals in all, starting again each Monday; All time keeps every gold, silver and bronze ever won (white lanyards with a star: all subjects). Ribbons are not counted in either. Tap a medal, a count, a belt row or a trophy to hear it.</p></section>';
+    '<p class="shelf-help">Medals each day in each subject: bronze for 1 sheet passed, silver for 2, gold for all 3. A gray try-again ribbon means all 3 done but none passed; ribbons are not counted with the medals. A medal’s lanyard shows its subject: yellow math, green reading, blue clock. Belts: the same nine in every subject, left to right, white to black. Each subject’s levels are split into eight equal shares, and each share finished earns the next belt (a level added later in between two levels counts toward moving up but not toward belts, so a new level never takes a belt away); the gold ring is the belt now; black means every level in that subject is done. Trophies: each goes bronze, silver, gold, platinum and diamond at its own numbers; under each, the trophy it is now, the count so far and how many more the next one needs. By each name: 🏆 how many trophies are on the shelf, and 🏅 every medal won so far. Under This week, the week’s medals in all, starting again each Monday; All time keeps every gold, silver and bronze ever won (white lanyards with a star: all subjects). Ribbons are not counted in either. Tap a medal, a count, a belt row or a trophy to hear it.</p></section>';
 }
 function trophyInfo(kidId, sid) {
   const l = Store.learner(kidId); if (!l) return;
