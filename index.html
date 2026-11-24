@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261122150551";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261124195234";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -4710,6 +4710,35 @@ const TimeCurriculum = (() => {
       return mk('later', 'keypad', v, { t: 'clock', v: start, text: 'What time will it be in ' + words + '?' }, 'What time will it be in ' + words + '?',
         'lt:' + start + '+' + d, 'later' + (d >= 60 ? 'h' : 'm'), { input: 'time', data: { answer: v, start, d, words } });
     },
+    /* JB, Nov 24, 2026: "How many minutes?" was too big a leap after "What time will it be?" ("You're jumping at
+       least three concepts before you get to this level"), so four levels come between them, from the easiest kind of
+       its questions to the hardest: two times in the same hour; a time to the next o'clock; across the hour with less
+       than an hour between; and across the hour with an hour or more between (where "there are 60 minutes in 1 hour"
+       is used). They ask the way "How many minutes?" asks, with the start and end times side by side. */
+    sameHour() {
+      const m = ri(0, 9) * 5, e = m + ri(2, (55 - m) / 5) * 5, h = ri(1, 12), start = V(h, m), end = V(h, e), d = e - m;
+      return mk('sameHour', 'keypad', d, { t: 'two', from: start, to: end }, 'How many minutes from ' + SPOKEN_TIME(start) + ' to ' + SPOKEN_TIME(end) + '?',
+        'sh:' + start + '-' + end, 'sameHour' + (m === 0 ? 'o' : ''), { input: 'min', data: { answer: d, start, end } });
+    },
+    toHour() {
+      const m = ri(1, 11) * 5, h = ri(1, 11), start = V(h, m), end = V(h + 1, 0), d = 60 - m;
+      return mk('toHour', 'keypad', d, { t: 'two', from: start, to: end }, 'How many minutes from ' + SPOKEN_TIME(start) + ' to ' + SPOKEN_TIME(end) + '?',
+        'th:' + start + '-' + end, 'toHour' + (m < 30 ? 'a' : 'b'), { input: 'min', data: { answer: d, start, end } });
+    },
+    acrossUnder() {
+      let m, e;
+      do { m = ri(1, 11) * 5; e = ri(1, 11) * 5; } while (e >= m);
+      const h = ri(1, 11), start = V(h, m), end = V(h + 1, e), d = 60 - m + e;
+      return mk('acrossUnder', 'keypad', d, { t: 'two', from: start, to: end }, 'How many minutes from ' + SPOKEN_TIME(start) + ' to ' + SPOKEN_TIME(end) + '?',
+        'au:' + start + '-' + end, 'acrossUnder', { input: 'min', data: { answer: d, start, end, toHour: 60 - m, after: e } });
+    },
+    hourPlus() {
+      let m, e;
+      if (ri(1, 4) === 1) { m = 0; e = ri(0, 6) * 5; } else { do { m = ri(1, 11) * 5; e = m + ri(0, 6) * 5; } while (e > 55); }
+      const h = ri(1, 11), start = V(h, m), end = V(h + 1, e), d = 60 - m + e;
+      return mk('hourPlus', 'keypad', d, { t: 'two', from: start, to: end }, 'How many minutes from ' + SPOKEN_TIME(start) + ' to ' + SPOKEN_TIME(end) + '?',
+        'hp:' + start + '-' + end, 'hourPlus' + (m === 0 ? 'o' : e === m ? 'h' : ''), { input: 'min', data: { answer: d, start, end, toHour: 60 - m, after: e } });
+    },
     interval() {
       const start = V(ri(1, 11), ri(0, 11) * 5), d = ri(2, 18) * 5, end = addMin(start, d);
       return mk('interval', 'keypad', d, { t: 'two', from: start, to: end }, 'How many minutes from ' + SPOKEN_TIME(start) + ' to ' + SPOKEN_TIME(end) + '?',
@@ -4743,6 +4772,10 @@ const TimeCurriculum = (() => {
   L('ampm', 'fives', 'G2', 'Morning or evening: a.m. and p.m.', 'a.m. and p.m.', 6);
   L('m1Type', 'minutes', 'G3', 'Read the time to the minute', 'To the minute', 14);
   L('later', 'minutes', 'G3', 'What time will it be?', 'Time later', 16);
+  L('sameHour', 'minutes', 'G3', 'Minutes in the same hour', 'Same hour', 14);
+  L('toHour', 'minutes', 'G3', 'Minutes to the next hour', 'To the hour', 16);
+  L('acrossUnder', 'minutes', 'G3', 'Across the hour, under an hour', 'Across the hour', 18);
+  L('hourPlus', 'minutes', 'G3', 'An hour or more', 'An hour or more', 18);
   L('interval', 'minutes', 'G3', 'How many minutes?', 'Minutes between', 18);
 
   const TIPS = {
@@ -4757,6 +4790,9 @@ const TimeCurriculum = (() => {
     addTime: 'Move the hands forward on the clock, then read the new time.',
     countHours: 'Count the hours on the clock, one number at a time.',
     countMinutes: 'Count on from the start: up to the next hour first, then the extra minutes.',
+    sameHour: 'Count by 5s for each number the long hand moves past, from the start time to the end time.',
+    toHour: 'Count by 5s for each number the long hand passes on its way round to the 12.',
+    hourMore: 'Count up to the next hour first, then add the extra minutes. A whole hour is 60 minutes.',
     dayPart: 'Morning is when we wake up and eat breakfast. Afternoon comes after lunch. Night is when it is dark and we go to sleep.',
     findNum: 'The numbers go around the clock in order, like a circle: 1, 2, 3, all the way to 12.',
     order: 'Count around the clock: 1, 2, 3. After 12 comes 1 again.',
@@ -4765,7 +4801,7 @@ const TimeCurriculum = (() => {
   const CODE_LABEL = {
     hands: 'Mixed up the hands', byFives: 'Counting by fives', nextHour: 'Hour hand near the next number', hourHand: 'Reading the hour',
     minuteHand: 'Reading the minutes', quarterTo: 'Quarter to', halfPast: 'Half past', ampm: 'a.m. and p.m.', addTime: 'Time later',
-    countHours: 'Counting hours', countMinutes: 'Minutes between times', dayPart: 'Times of day', findNum: 'Finding numbers on the clock', order: 'Clock number order', other: 'Other slips'
+    countHours: 'Counting hours', countMinutes: 'Minutes between times', sameHour: 'Minutes in the same hour', toHour: 'Minutes to the next hour', hourMore: 'An hour or more', dayPart: 'Times of day', findNum: 'Finding numbers on the clock', order: 'Clock number order', other: 'Other slips'
   };
   function readCode(ans, g) {
     if (typeof g !== 'number') return 'other';
@@ -4787,6 +4823,10 @@ const TimeCurriculum = (() => {
       case 'ampm': return 'ampm';
       case 'fives': return 'byFives';
       case 'interval': return 'countMinutes';
+      case 'sameHour': return 'sameHour';
+      case 'toHour': return 'toHour';
+      case 'acrossUnder': return 'countMinutes';
+      case 'hourPlus': return 'hourMore';
       case 'later': {
         if (given === d.start) return 'addTime';
         if (typeof given === 'number' && mOf(given) === mOf(p.answer)) return 'countHours';
@@ -4814,7 +4854,7 @@ const TimeCurriculum = (() => {
       case 'fives': return 'long hand on ' + d.n;
       case 'ampm': return d.text + ' (' + fmt(d.v) + ')';
       case 'later': return fmt(d.start) + ' + ' + d.words;
-      case 'interval': return fmt(d.start) + ' to ' + fmt(d.end);
+      case 'interval': case 'sameHour': case 'toHour': case 'acrossUnder': case 'hourPlus': return fmt(d.start) + ' to ' + fmt(d.end);
       default: return 'clock at ' + fmt(pr.v);
     }
   }
@@ -4841,6 +4881,10 @@ const TimeCurriculum = (() => {
     ampm: { show: { type: 'big', text: '🌅 7:00 a.m.   🌙 7:00 p.m.' }, steps: ['a.m. is from midnight to noon: the morning.', 'p.m. is from noon to midnight: the afternoon and evening.'] },
     m1Type: { show: { type: 'clock', v: 437 }, steps: ['The long hand is two little marks past 7.', 'Count by 5s to 35, then by 1s: 36, 37.', 'The short hand is past 4, so write 4:37.'] },
     later: { show: { type: 'big', text: '1:50  + 15 minutes' }, steps: ['Count on 10 minutes to get to 2:00.', 'Then 5 more minutes: 2:05.'] },
+    sameHour: { show: { type: 'big', text: '1:15 → 1:45' }, steps: ['At 1:15 the long hand is on the 3. At 1:45 it is on the 9.', 'Count by 5s for each number it moves past: 5, 10, 15, 20, 25, 30.', 'From 1:15 to 1:45 is 30 minutes.'] },
+    toHour: { show: { type: 'big', text: '1:15 → 2:00' }, steps: ['At 1:15 the long hand is on the 3.', 'To get to 2:00, it moves round to the 12.', 'Count by 5s for each number it passes: 5, 10, 15, 20, 25, 30, 35, 40, 45.', 'From 1:15 to 2:00 is 45 minutes.'] },
+    acrossUnder: { show: { type: 'big', text: '1:40 → 2:10' }, steps: ['First, up to the hour: from 1:40 to 2:00 is 20 minutes.', 'Then the extra minutes: from 2:00 to 2:10 is 10 more.', '20 + 10 = 30 minutes.'] },
+    hourPlus: { show: { type: 'big', text: '1:15 → 2:45' }, steps: ['First, up to the hour: from 1:15 to 2:00 is 45 minutes.', 'Then the extra minutes: from 2:00 to 2:45 is 45 more.', '45 + 45 = 90 minutes.', 'A whole hour is 60 minutes, so from 2:15 to 3:15 is 60 minutes.'] },
     interval: { show: { type: 'big', text: '5:00 → 6:20' }, steps: ['From 5:00 to 6:00 is 60 minutes.', 'From 6:00 to 6:20 is 20 more.', '60 + 20 = 80 minutes.'] }
   };
   function example(levelId) {
