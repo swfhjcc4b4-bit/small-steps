@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261124201454";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261124221207";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1142,6 +1142,39 @@ details.more[open] > summary h3::after { content: " −"; }
 .buddy-svg.do-bunnyhop .b-yum { animation: trYum 5.2s ease-out; transform-origin: 140px 48px; }
 @keyframes trYum { 0%, 50% { opacity: 0; transform: scale(0.3); } 54% { opacity: 1; transform: scale(1.12); } 57%, 84% { opacity: 1; transform: scale(1); } 88%, 100% { opacity: 0; transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { .buddy-svg .b-batwing { animation: none !important; } }
+/* Falling leaf (Andi's November 24 trick): a big maple leaf behind it, it blows up high with a spin, sways from side
+   to side all the way down to the ground, and little leaves fall all around (WHEE!) */
+.b-leaf, .b-leaves, .b-whee, .b-hop, .b-ask, .b-sure, .b-boing { opacity: 0; }
+.buddy-svg.do-leaf .buddy-anim { animation: trLeaf 6.4s ease-in-out; transform-origin: 100px 140px; }
+@keyframes trLeaf { 0% { transform: translate(0, 0) rotate(0) scale(1, 1); } 5% { transform: translate(0, -14px) rotate(-8deg) scale(1, 1); } 10% { transform: translate(0, 0) rotate(0) scale(1.06, 0.92); }
+  20% { transform: translate(0, -70px) rotate(360deg) scale(0.7, 0.7); } 32% { transform: translate(44px, -60px) rotate(380deg) scale(0.7, 0.7); } 44% { transform: translate(-44px, -46px) rotate(340deg) scale(0.7, 0.7); }
+  56% { transform: translate(40px, -38px) rotate(378deg) scale(0.72, 0.72); } 68% { transform: translate(-34px, -20px) rotate(344deg) scale(0.75, 0.75); } 80%, 88% { transform: translate(0, 0) rotate(360deg) scale(0.8, 0.8); }
+  94% { transform: translate(0, -8px) rotate(360deg) scale(1, 1); } 100% { transform: translate(0, 0) rotate(360deg) scale(1, 1); } }
+.buddy-svg.do-leaf .b-leaf, .buddy-svg.do-leaf .b-leaves { animation: trParts 6.4s ease-in-out; }
+.b-lf { transform-box: fill-box; transform-origin: center; }
+.buddy-svg.do-leaf .b-lf { animation: lfFall 2.4s ease-in-out infinite; }
+.buddy-svg.do-leaf .b-lf2 { animation-delay: -0.5s; } .buddy-svg.do-leaf .b-lf3 { animation-delay: -1s; } .buddy-svg.do-leaf .b-lf4 { animation-delay: -1.5s; } .buddy-svg.do-leaf .b-lf5 { animation-delay: -1.9s; }
+@keyframes lfFall { 0% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(10px, 50px) rotate(40deg); } 50% { transform: translate(-8px, 100px) rotate(-20deg); } 75% { transform: translate(10px, 150px) rotate(30deg); } 100% { transform: translate(0, 196px) rotate(0); } }
+.buddy-svg.do-leaf .b-whee { animation: trWhee 6.4s ease-out; transform-origin: 140px 48px; }
+@keyframes trWhee { 0%, 28% { opacity: 0; transform: scale(0.3); } 32% { opacity: 1; transform: scale(1.12); } 35%, 52% { opacity: 1; transform: scale(1); } 57%, 100% { opacity: 0; transform: scale(1); } }
+/* Grasshopper jump (Andi's November 24 trick: "Do you want to turn into a grasshopper?" "Sure."): it asks (?), answers
+   SURE! with a bounce, grows antennae and big back legs, and makes three big jumps, the last one with a flip (BOING!) */
+.buddy-svg.do-grasshopper .buddy-anim { animation: trHopper 8s ease-in-out; transform-origin: 100px 140px; }
+@keyframes trHopper { 0% { transform: translate(0, 0) rotate(0) scale(1, 1); } 6% { transform: translate(0, -3px) rotate(-4deg) scale(1, 1); } 12% { transform: translate(0, 0) rotate(4deg) scale(1, 1); }
+  18% { transform: translate(0, -3px) rotate(-4deg) scale(1, 1); } 24% { transform: translate(0, 0) rotate(3deg) scale(1, 1); } 29% { transform: translate(0, 0) rotate(0) scale(1, 1); }
+  32% { transform: translate(0, -16px) rotate(0) scale(1, 1); } 35% { transform: translate(0, 0) rotate(0) scale(1.08, 0.9); } 44% { transform: translate(0, 4px) rotate(0) scale(1.1, 0.86); }
+  50% { transform: translate(30px, -48px) rotate(10deg) scale(0.95, 1.05); } 56% { transform: translate(55px, 4px) rotate(0) scale(1.1, 0.86); } 64% { transform: translate(5px, -58px) rotate(-12deg) scale(0.95, 1.05); }
+  71% { transform: translate(-45px, 4px) rotate(0) scale(1.1, 0.86); } 79% { transform: translate(-22px, -62px) rotate(-180deg) scale(0.85, 0.85); } 87% { transform: translate(0, 4px) rotate(-360deg) scale(1.1, 0.86); }
+  93% { transform: translate(0, -8px) rotate(-360deg) scale(1, 1); } 100% { transform: translate(0, 0) rotate(-360deg) scale(1, 1); } }
+.buddy-svg.do-grasshopper .b-hop { animation: trHopParts 8s ease-in-out; }
+@keyframes trHopParts { 0%, 33% { opacity: 0; } 37%, 90% { opacity: 1; } 94%, 100% { opacity: 0; } }
+.buddy-svg.do-grasshopper .b-ask { animation: trAsk 8s ease-out; transform-origin: 140px 48px; }
+@keyframes trAsk { 0%, 2% { opacity: 0; transform: scale(0.3); } 5% { opacity: 1; transform: scale(1.12); } 8%, 26% { opacity: 1; transform: scale(1); } 29%, 100% { opacity: 0; transform: scale(1); } }
+.buddy-svg.do-grasshopper .b-sure { animation: trSure 8s ease-out; transform-origin: 140px 48px; }
+@keyframes trSure { 0%, 29% { opacity: 0; transform: scale(0.3); } 31% { opacity: 1; transform: scale(1.12); } 33%, 37% { opacity: 1; transform: scale(1); } 40%, 100% { opacity: 0; transform: scale(1); } }
+.buddy-svg.do-grasshopper .b-boing { animation: trBoing 8s ease-out; transform-origin: 140px 48px; }
+@keyframes trBoing { 0%, 57% { opacity: 0; transform: scale(0.3); } 60% { opacity: 1; transform: scale(1.12); } 62%, 68% { opacity: 1; transform: scale(1); } 71%, 100% { opacity: 0; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .buddy-svg .b-lf { animation: none !important; } }
 /* light-up glasses, flat: the frames change color */
 .i-neon { animation: neonCycle 2.6s linear infinite; }
 .i-neon-glow { animation: neonCycle 2.6s linear infinite; }
@@ -5806,6 +5839,12 @@ const Buddy = (() => {
        carrot and eats it ("Yum, yum, yum, yum, yum") */
     { id: 'bat', slot: 'trick', name: 'Flying bat', price: 15 },
     { id: 'bunnyhop', slot: 'trick', name: 'Bunny hop', price: 12 },
+    /* Andi's November 24 tricks (JB, Nov 24, 2026: "Andi wants a leaf trick, a falling leaf trick, so turn into a maple
+       leaf or something and then just fall on the ground. Also a grasshopper jump trick: "Do you want to turn into a
+       grasshopper?" "Sure." Turn into a grasshopper and do the grasshopper jump. I don't know what that means. Just make
+       it cool") */
+    { id: 'leaf', slot: 'trick', name: 'Falling leaf', price: 12 },
+    { id: 'grasshopper', slot: 'trick', name: 'Grasshopper jump', price: 12 },
     /* Treats are eaten, so they can be bought again and again. Each one helps the buddy grow
        (grow points count toward Big and Hero like stars); fruit helps twice as much. */
     { id: 'apple', slot: 'treat', name: 'Apple', price: 1, use: true, grow: 2, fruit: true },
@@ -6074,7 +6113,29 @@ const Buddy = (() => {
      own color, as the plane and the rocket are, and the buddy rides in them. */
   const wheel = (x, y, r, hub) => '<g class="b-wheel"><circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#2A2540"/><circle cx="' + x + '" cy="' + y + '" r="' + (r * 0.42) + '" fill="' + (hub || '#C9D1DE') + '"/><path d="M' + x + ' ' + (y - r + 2) + ' V' + (y + r - 2) + ' M' + (x - r + 2) + ' ' + y + ' H' + (x + r - 2) + '" stroke="#8A93A8" stroke-width="1.8"/></g>';
   const FLAT_LINE = ' stroke="#221D3E" stroke-opacity=".32" stroke-width="2"';
+  /* a maple leaf as a path, centered at cx, cy, k pixels to a unit (the same leaf as buddy3d.js MAPLE) */
+  const MAPLE = [[0, -0.38], [0.1, -0.4], [0.3, -0.5], [0.26, -0.3], [0.56, -0.26], [0.46, -0.12], [0.66, 0.06], [0.46, 0.1], [0.5, 0.28], [0.32, 0.22], [0.26, 0.4], [0.14, 0.3], [0, 0.62]];
+  const mapleD = (cx, cy, k) => 'M' + MAPLE.concat(MAPLE.slice(1, -1).reverse().map((q) => [-q[0], q[1]])).map((q) => (cx + q[0] * k).toFixed(1) + ' ' + (cy - q[1] * k).toFixed(1)).join(' L') + ' Z';
+  const leafVeins = (cx, cy, k, w) => [[0, 0.56], [0.6, 0.05], [-0.6, 0.05], [0.5, -0.24], [-0.5, -0.24]].map((q) => 'M' + cx + ' ' + (cy + 0.36 * k).toFixed(1) + ' L' + (cx + q[0] * 0.9 * k).toFixed(1) + ' ' + (cy - q[1] * 0.9 * k).toFixed(1)).join(' ');
+  const flatLeaf = (cx, cy, k, fill) => '<path d="' + mapleD(cx, cy, k) + '" fill="' + fill + '" stroke="#221D3E" stroke-opacity=".25" stroke-width="' + (k / 60).toFixed(1) + '" stroke-linejoin="round"/>' +
+    '<path d="' + leafVeins(cx, cy, k) + '" stroke="#FFC531" stroke-width="' + (k / 55).toFixed(1) + '" stroke-linecap="round" fill="none"/><path d="M' + cx + ' ' + (cy + 0.36 * k).toFixed(1) + ' Q' + (cx + 0.03 * k).toFixed(1) + ' ' + (cy + 0.52 * k).toFixed(1) + ' ' + (cx + 0.08 * k).toFixed(1) + ' ' + (cy + 0.66 * k).toFixed(1) + '" stroke="#B4561C" stroke-width="' + (k / 40).toFixed(1) + '" stroke-linecap="round" fill="none"/>';
+  /* a speech bubble at the top right, as the bunny hop's YUM! */
+  const skyBubble = (cls, word, fill, size) => '<g class="' + cls + '"><path d="M126 4 H196 V38 H152 L140 50 L143 38 H126 Z" fill="#FFFFFF" stroke="#221D3E" stroke-width="2.5" stroke-linejoin="round"/>' +
+    '<text x="161" y="' + (size > 20 ? 31 : 28.5) + '" text-anchor="middle" font-size="' + size + '" font-weight="900" fill="' + fill + '" font-family="system-ui, sans-serif">' + word + '</text></g>';
+  /* the grasshopper's antennae, drawn at its head */
+  const HOPPER_ANTS = '<g class="b-hop"><path d="M-8 -6 Q-14 -34 -36 -48 M8 -6 Q14 -34 36 -48" stroke="#2E8B2E" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="-36" cy="-48" r="5" fill="#2E8B2E"/><circle cx="36" cy="-48" r="5" fill="#2E8B2E"/></g>';
+  /* Andi's November 24 tricks outside the buddy, so they stay put as the buddy moves: the falling leaf's WHEE! and the
+     little leaves falling all around; the grasshopper's question, its "SURE!" and its BOING! */
+  const FLAT_SKY = {
+    leaf: skyBubble('b-whee', 'WHEE!', '#FF8A1F', 17) + '<g class="b-leaves">' + [[22, '#FFC531'], [58, '#E8453C'], [150, '#FF8A1F'], [182, '#F2B21B'], [118, '#E8453C']].map((q, i) => '<g class="b-lf b-lf' + (i + 1) + '">' + flatLeaf(q[0], 14, 16, q[1]) + '</g>').join('') + '</g>',
+    grasshopper: skyBubble('b-ask', '?', '#3D7BEA', 28) + skyBubble('b-sure', 'SURE!', '#2FB574', 17) + skyBubble('b-boing', 'BOING!', '#FF8A1F', 15)
+  };
   const FLAT_BACK = {
+    /* Andi's November 24 tricks: a big orange maple leaf behind the buddy as it becomes the leaf, and the grasshopper's
+       two big back legs, their knees up above its back */
+    leaf: '<g class="b-leaf">' + flatLeaf(100, 122, 150, '#F26A1B') + '</g>',
+    grasshopper: '<g class="b-hop">' + [-1, 1].map((d) => '<path d="M' + (100 + d * 34) + ' 172 L' + (100 + d * 66) + ' 112" stroke="#2E8B2E" stroke-width="17" stroke-linecap="round"/><path d="M' + (100 + d * 34) + ' 172 L' + (100 + d * 66) + ' 112" stroke="#5BC236" stroke-width="12" stroke-linecap="round"/>' +
+      '<path d="M' + (100 + d * 66) + ' 112 L' + (100 + d * 74) + ' 204" stroke="#2E8B2E" stroke-width="6" stroke-linecap="round"/><ellipse cx="' + (100 + d * 78) + '" cy="205" rx="9" ry="3.5" fill="#2E8B2E"/>').join('') + '</g>',
     /* the light beam under the saucer */
     saucer: '<g class="b-beam"><path d="M64 194 L40 236 H160 L136 194 Z" fill="#9FF3FF" opacity=".42"/></g>',
     /* a red cape from the shoulders, with a gold clasp */
@@ -6931,6 +6992,21 @@ const Buddy = (() => {
       '<path d="M34 -4 C36 -15 42 -17 44 -13 C40 -11 38 -7 36 -3 Z M35 -1 C42 -7 48 -5 48 -1 C44 0 40 0 36 1 Z" fill="#34B86A"/>' +
       '<path d="M5 7 L33 -6 Q38 -1 35 5 Z" fill="#FF8A1F"/><path d="M13 5 l2 3 M20 2 l2 3 M27 -1 l2 3" stroke="#D9661F" stroke-width="1.3" stroke-linecap="round"/>' +
       '<path d="M-7 6 Q-2 10 4 7" stroke="#221D3E" stroke-width="1.5" fill="none" stroke-linecap="round"/>',
+    /* Andi's November 24 tricks: an orange maple leaf with the buddy's eyes and a smile, falling, with two little leaves;
+       and a green grasshopper mid-jump, its big back leg kicked out */
+    leaf: '<path d="M-38 40 Q-24 28 -12 40 Q0 28 12 40" stroke="#9FC6FF" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="3 5"/>' +
+      flatLeaf(-36, -30, 15, '#FFC531') + flatLeaf(37, 18, 13, '#E8453C') + flatLeaf(0, -6, 64, '#F26A1B') +
+      '<circle cx="-7.5" cy="-9" r="5.5" fill="#FFFFFF"/><circle cx="7.5" cy="-9" r="5.5" fill="#FFFFFF"/><circle cx="-6.8" cy="-8.3" r="3" fill="#221D3E"/><circle cx="8.2" cy="-8.3" r="3" fill="#221D3E"/>' +
+      '<path d="M-5.5 1.5 Q0 6 5.5 1.5" stroke="#221D3E" stroke-width="2" fill="none" stroke-linecap="round"/>',
+    grasshopper: '<path d="M-46 -12 Q-36 -42 -16 -30" stroke="#9FC6FF" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="3 5"/>' +
+      '<path d="M-2 10 L-20 -12 L-28 28" stroke="#2E8B2E" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>' +
+      '<ellipse cx="-10" cy="12" rx="27" ry="11" fill="#5BC236"/><ellipse cx="-8" cy="16.5" rx="20" ry="5.5" fill="#B6E35A"/><ellipse cx="-12" cy="5" rx="22" ry="4" fill="#2E8B2E"/>' +
+      '<ellipse cx="16" cy="8" rx="11" ry="10" fill="#5BC236"/><path d="M14 16 L18 32 M21 15 L27 31 M7 18 L7 32" stroke="#2E8B2E" stroke-width="3" stroke-linecap="round"/>' +
+      '<path d="M27 -12 Q29 -30 40 -41 M31 -12 Q37 -28 49 -34" stroke="#2E8B2E" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="40" cy="-41" r="2.6" fill="#2E8B2E"/><circle cx="49" cy="-34" r="2.6" fill="#2E8B2E"/>' +
+      '<circle cx="30" cy="-2" r="12.5" fill="#5BC236"/><circle cx="33" cy="-5" r="5.8" fill="#FFFFFF"/><circle cx="34.6" cy="-4.4" r="3.2" fill="#221D3E"/><circle cx="35.6" cy="-5.6" r="1" fill="#FFFFFF"/>' +
+      '<path d="M33 4.5 Q37.5 7.5 41 3.5" stroke="#221D3E" stroke-width="1.7" fill="none" stroke-linecap="round"/>' +
+      '<path d="M-4 8 L-24 -16" stroke="#2E8B2E" stroke-width="12" stroke-linecap="round"/><path d="M-4 8 L-24 -16" stroke="#5BC236" stroke-width="8" stroke-linecap="round"/>' +
+      '<path d="M-24 -16 L-30 30" stroke="#2E8B2E" stroke-width="4" stroke-linecap="round"/><ellipse cx="-31" cy="31" rx="6" ry="2.5" fill="#2E8B2E"/>',
     /* an original snack bag of cheese puffs: a blue bag, open at the top, a yellow burst with a cheese wedge, puffs peeking out */
     cheesepuffs: '<g transform="rotate(-8)">' + [[-12, -36, -22], [0, -40, 4], [12, -35, 24]].map((q) => '<rect x="' + (q[0] - 5) + '" y="' + q[1] + '" width="10" height="22" rx="5" fill="#FF9E2C" stroke="#E8781A" stroke-width="1.4" transform="rotate(' + q[2] + ' ' + q[0] + ' ' + (q[1] + 11) + ')"/>').join('') +
       '<path d="M-27 -24 Q-14 -30 0 -25 Q14 -30 27 -24 Q33 6 28 36 Q0 42 -28 36 Q-33 6 -27 -24 Z" fill="#2E86DE"/><path d="M-27 -24 Q-14 -30 0 -25 Q14 -30 27 -24 Q14 -20 0 -21 Q-14 -20 -27 -24 Z" fill="#1F5FA8"/>' +
@@ -7077,10 +7153,12 @@ const Buddy = (() => {
     if (FLAT_FRONT[trick]) out += FLAT_FRONT[trick];
     if (trick === 'bat') out += at(A.head, BAT_EARS);
     if (trick === 'bunnyhop') out += at(A.head, BUNNY_EARS) + carrotFlat(FLAT_MOUTH[type]);
+    if (trick === 'grasshopper') out += at(A.head, HOPPER_ANTS);
     out += '</g>' + (ride ? '</g></g>' + (RIDE[ride].front ? '<g class="b-ride">' + RIDE[ride].front + '</g>' : '') : '') + '</g>' + flatOrbit(power, form, crown, A, fc);
     if (trick === 'rocket') out += ROCKET_SKY;
     if (trick === 'trexroar') out += TREX_SKY;
     if (trick === 'bunnyhop') out += YUM_SKY;
+    if (FLAT_SKY[trick]) out += FLAT_SKY[trick];
     friends.forEach((f, i) => {
       if (!SIDE[f]) return;
       out += i === 0 ? '<g class="b-side">' + at(A.side, SIDE[f]) + '</g>'
@@ -9979,7 +10057,7 @@ const Buddy3D = (() => {
      the poofs, pops the toy in and out and moves the shadow; each trick's move(q, k, now) places the toy (q goes from
      0 to 1 while the toy is out, k over the whole trick) and runs its moving parts. The flying hero is the buddy
      itself in a cape (pose()). */
-  const TOY_TRICKS = ['saucer', 'racecar', 'firetruck', 'submarine', 'train', 'trexroar', 'bat'];
+  const TOY_TRICKS = ['saucer', 'racecar', 'firetruck', 'submarine', 'train', 'trexroar', 'bat', 'leaf', 'grasshopper'];
   /* the fire truck's red, whatever the buddy's color or paint (JB, Nov 17, 2026: "Always red"); the shop's picture
      and the flat fire truck (buddy.js) are the same red */
   const FIRE_RED = '#E8453C';
@@ -10195,9 +10273,74 @@ const Buddy3D = (() => {
     const s = G(null, null, 1, g); s.rotation.order = 'YXZ'; s.userData = { wings };
     return s;
   }
+  /* Andi's November 24 tricks (JB, Nov 24, 2026: "Andi wants a leaf trick, a falling leaf trick, so turn into a maple
+     leaf or something and then just fall on the ground. Also a grasshopper jump trick ... Just make it cool").
+     A maple leaf: five pointed lobes, outlined from the stem up the right side to the top, then mirrored. */
+  const MAPLE = [[0, -0.38], [0.1, -0.4], [0.3, -0.5], [0.26, -0.3], [0.56, -0.26], [0.46, -0.12], [0.66, 0.06], [0.46, 0.1], [0.5, 0.28], [0.32, 0.22], [0.26, 0.4], [0.14, 0.3], [0, 0.62]];
+  function mapleShape(k) {
+    const sh = new T.Shape(), pts = MAPLE.concat(MAPLE.slice(1, -1).reverse().map((q) => [-q[0], q[1]]));
+    pts.forEach((q, i) => { if (i) sh.lineTo(q[0] * k, q[1] * k); else sh.moveTo(q[0] * k, q[1] * k); });
+    sh.closePath();
+    return sh;
+  }
+  const LEAF_ORANGE = '#F26A1B', LEAF_GOLD = '#FFC531', LEAF_STEM = '#B4561C';
+  /* the falling leaf: a big autumn maple leaf in orange with gold veins and a brown stem, the buddy's eyes and a smile,
+     facing the camera (+z), centered at y = 0 */
+  function toyLeaf() {
+    const g = new T.Group(), skin = mat.vinyl(LEAF_ORANGE, { roughness: 0.42, clearcoat: 0.5, side: T.DoubleSide }), vein = mat.vinyl(LEAF_GOLD, { roughness: 0.35 });
+    const geo = new T.ExtrudeGeometry(mapleShape(1), { depth: 0.04, bevelEnabled: true, bevelThickness: 0.012, bevelSize: 0.012, bevelSegments: 2, curveSegments: 4 });
+    geo.translate(0, 0, -0.02);
+    g.add(M(geo, skin));
+    [[0, 0.56], [0.6, 0.05], [-0.6, 0.05], [0.5, -0.24], [-0.5, -0.24]].forEach((q) => g.add(M(tube([[0, -0.36, 0.034], [q[0] * 0.45, -0.36 + (q[1] + 0.36) * 0.5, 0.04], [q[0] * 0.92, q[1] * 0.92, 0.034]], 0.011, 14, 6), vein)));
+    g.add(M(tube([[0, -0.36, 0], [0.02, -0.5, 0], [0.07, -0.66, 0]], 0.022, 10, 8), mat.vinyl(LEAF_STEM, { roughness: 0.5 })));
+    g.add(eyePair([0, 0.1, 0.07], 0.085, 0.21, 0));
+    g.add(M(new T.TorusGeometry(0.075, 0.014, 8, 20, Math.PI), mat.gloss(C.ink), [0, -0.06, 0.05], [0, 0, Math.PI]));
+    const s = G(null, null, 1.3, g); s.rotation.order = 'YXZ';
+    return s;
+  }
+  const HOP_GREEN = '#5BC236', HOP_LIGHT = '#B6E35A', HOP_DARK = '#2E8B2E';
+  /* the grasshopper: a green body with a yellow-green belly and dark folded wings, a round head with the buddy's eyes
+     and a smile, two long antennae (userData.ants), four little front legs and two big back legs whose knees stand up
+     above its back (userData.hinds: the hip and the knee, which kick out for each jump). It faces +x with its feet
+     on the ground (y = 0). */
+  function toyHopper() {
+    const g = new T.Group(), skin = mat.vinyl(HOP_GREEN, { roughness: 0.35, clearcoat: 0.7 }), light = mat.vinyl(HOP_LIGHT, { roughness: 0.4 }), dark = mat.vinyl(HOP_DARK, { roughness: 0.45, clearcoat: 0.4 });
+    g.add(M(sph(1, 32, 22), skin, [-0.3, 0.52, 0], [0, 0, 0.12], [0.55, 0.21, 0.22]));
+    g.add(M(sph(1, 24, 16), light, [-0.28, 0.44, 0], [0, 0, 0.12], [0.48, 0.13, 0.19]));
+    g.add(M(sph(1, 28, 20), skin, [0.2, 0.6, 0], null, [0.24, 0.22, 0.22]));
+    g.add(M(sph(1, 24, 14), dark, [-0.26, 0.7, 0], [0, 0, 0.14], [0.52, 0.06, 0.16]));
+    [[0.28, 1], [0.28, -1], [0.08, 1], [0.08, -1]].forEach((q) => g.add(M(tube([[q[0], 0.5, q[1] * 0.14], [q[0] + 0.06, 0.28, q[1] * 0.24], [q[0] + 0.1, 0.02, q[1] * 0.26]], 0.025, 10, 6), dark)));
+    const hinds = [-1, 1].map((sz) => {
+      const hip = G([-0.05, 0.55, sz * 0.22]);
+      hip.add(M(taper([[0, 0, 0], [-0.25, 0.25, sz * 0.02], [-0.5, 0.42, sz * 0.04]], (u) => 0.08 - u * 0.035, 16, 10), skin));
+      const knee = G([-0.5, 0.42, sz * 0.04]);
+      knee.add(M(sph(0.05, 12, 10), dark));
+      knee.add(M(tube([[0, 0, 0], [-0.06, -0.45, sz * 0.02], [-0.04, -0.92, sz * 0.03]], 0.022, 12, 6), dark));
+      knee.add(M(sph(1, 10, 8), dark, [-0.01, -0.95, sz * 0.03], null, [0.09, 0.025, 0.045]));
+      hip.add(knee); g.add(hip);
+      return { hip, knee };
+    });
+    const head = G([0.5, 0.78, 0]);
+    head.add(M(sph(1, 30, 22), skin, [0, 0, 0], null, [0.25, 0.27, 0.23]));
+    [-1, 1].forEach((sz) => { const e = eye(0.11); e.position.set(0.12, 0.09, sz * 0.15); e.rotation.y = sz > 0 ? 0.65 : Math.PI - 0.65; head.add(e); });
+    head.add(M(new T.TorusGeometry(0.06, 0.013, 8, 16, Math.PI), mat.gloss(C.ink), [0.235, -0.08, 0], [0, Math.PI / 2, Math.PI]));
+    const ants = [-1, 1].map((sz) => {
+      const a = G([0.1, 0.22, sz * 0.08]);
+      a.add(M(tube([[0, 0, 0], [0.1, 0.28, sz * 0.05], [0.3, 0.5, sz * 0.14], [0.52, 0.6, sz * 0.2]], 0.014, 16, 6), dark));
+      a.add(M(sph(0.035, 12, 10), dark, [0.52, 0.6, sz * 0.2]));
+      head.add(a);
+      return a;
+    });
+    g.add(head);
+    const s = G(null, null, 0.95, g); s.rotation.order = 'YZX'; s.userData = { hinds, ants, head };
+    return s;
+  }
   /* The puffs, the pop in and out and the shadow of a toy trick. move(q, k, now) returns { at, yaw, roll, pitch,
      hide, shadow }; extra objects (a beam, a track, smoke) go in objs. */
-  function toyFx(v, kind, toy, move, objs, cleanup) {
+  function toyFx(v, kind, toy, move, objs, cleanup, opt) {
+    /* inAt: when the poof turns the buddy into the toy (the grasshopper asks first); pre(k, now): the buddy's own
+       moves before that */
+    const inAt = (opt && opt.inAt) || 0.065, a0 = inAt + 0.02, a1 = inAt + 0.055;
     const P = v.P, puffs = [], rnd = seeded(kind.length * 13 + 5);
     toy.visible = false; P.root.add(toy);
     const cloud = () => new T.Sprite(new T.SpriteMaterial({ map: puffTex('cloud', '252,252,255', '226,230,245'), transparent: true, depthWrite: false, toneMapped: false }));
@@ -10210,17 +10353,17 @@ const Buddy3D = (() => {
       s.visible = true; s.position.set(o[0] * (0.55 + 0.6 * a), o[1] * 0.8, o[2]); s.scale.setScalar((0.5 + 0.75 * a) * (0.9 + 0.2 * o[3])); s.material.opacity = 1 - a * a;
     });
     const fx = {
-      kind, toy, objs: [toy].concat(puffs, objs || []), startle: 0,
+      kind, toy, objs: [toy].concat(puffs, objs || []), startle: 0, inAt, pre: opt && opt.pre,
       fly(k, now) {
         puffs.forEach((s) => { s.visible = false; });
-        if (k > 0.065 && k < 0.15) burst(k, 0.065);
+        if (k > inAt && k < inAt + 0.085) burst(k, inAt);
         if (k > 0.895 && k < 0.98) burst(k, 0.895);
         fx.startle = 0;
-        if (k < 0.085 || k > 0.92) { toy.visible = false; move(-1, k, now); reset(); return 1; }
+        if (k < a0 || k > 0.92) { toy.visible = false; move(-1, k, now); reset(); return 1; }
         let s = 1;
-        if (k < 0.12) { const e = es01(cl01((k - 0.085) / 0.035)); s = e * (1 + 0.2 * Math.sin(Math.PI * e)); }
+        if (k < a1) { const e = es01(cl01((k - a0) / 0.035)); s = e * (1 + 0.2 * Math.sin(Math.PI * e)); }
         else if (k > 0.9) s = 1 - es01(cl01((k - 0.9) / 0.02));
-        const r = move(cl01((k - 0.12) / 0.78), k, now) || {}, at = r.at || [0, 0, 0];
+        const r = move(cl01((k - a1) / (0.9 - a1)), k, now) || {}, at = r.at || [0, 0, 0];
         toy.visible = s > 0.002 && !r.hide;
         toy.position.set(at[0], at[1], at[2]); toy.rotation.set(r.roll || 0, r.yaw || 0, r.pitch || 0); toy.scale.setScalar(S0 * Math.max(0.001, s));
         sh.position.x = at[0]; sh.position.z = at[2]; sh.scale.set(sh0.s.x * (r.wide || 1), sh0.s.y, sh0.s.z * (r.deep || 1));
@@ -10456,6 +10599,76 @@ const Buddy3D = (() => {
         return { at: [at.x, at.y + 0.04 * flap, at.z], yaw: 0.6 * dx, roll: -0.25 * dy, pitch: -0.3 * dx, shadow: cl01(1 - (at.y - 0.45) * 0.35) };
       };
       return toyFx(v, 'bat', toy, move, [moon]);
+    },
+    /* Falling leaf (Andi's November 24 trick): the leaf blows up high with a spin, then falls the way a leaf falls,
+       swaying from side to side and tipping into each swing, while little red, orange and gold leaves come down all
+       around, and lands on the ground, lying back */
+    leaf(v) {
+      const P = v.P, toy = toyLeaf(), rnd = seeded(41), bubble = wordBubble('WHEE!', '#FF8A1F', P), minis = [];
+      P.root.add(bubble);
+      const COLORS = ['#FFC531', '#E8453C', '#FF8A1F', '#F2B21B'];
+      for (let i = 0; i < 8; i++) {
+        const geo = new T.ExtrudeGeometry(mapleShape(0.22), { depth: 0.012, bevelEnabled: false, curveSegments: 2 }); geo.translate(0, 0, -0.006);
+        const m = M(geo, mat.vinyl(COLORS[i % 4], { roughness: 0.45, side: T.DoubleSide }));
+        m.rotation.order = 'YXZ'; m.renderOrder = 3;
+        m.userData = { x: (rnd() - 0.5) * 4.4, z: -1.7 + rnd() * 2.1, t0: 0.12 + rnd() * 0.3, sp: 0.75 + rnd() * 0.6, ph: rnd() * 6.28, top: 3.6 + rnd() * 0.8 };
+        m.visible = false; P.root.add(m); minis.push(m);
+      }
+      const move = (q, k, now) => {
+        minis.forEach((m) => {
+          const o = m.userData, f = cl01((k - o.t0) / (0.6 * o.sp)), ph = o.ph + f * 9;
+          m.visible = k > o.t0 && k < 0.93;
+          if (!m.visible) return;
+          m.position.set(o.x + 0.35 * Math.sin(ph) * (1 - f), Math.max(0.03, o.top * (1 - f)), o.z);
+          if (f >= 1) m.rotation.set(-1.45, o.ph, 0); else m.rotation.set(0.5 * Math.cos(ph), ph * 0.3, 0.6 * Math.sin(ph));
+        });
+        if (q < 0) { bubble.visible = false; return null; }
+        popBubble(bubble, k, 0.3, 0.52);
+        let x = 0, y, yaw = 0, roll = 0, pitch = 0;
+        if (q < 0.14) { const u = es01(q / 0.14); y = 0.7 + 1.8 * u; yaw = u * Math.PI * 2; }
+        else if (q < 0.86) {
+          const u = (q - 0.14) / 0.72, ph = u * Math.PI * 3, sn = Math.sin(ph);
+          x = 1.0 * sn; y = 2.5 - 2.15 * u + 0.16 * sn * sn; pitch = -0.55 * Math.cos(ph); yaw = 0.25 * Math.sin(ph * 0.5); roll = -0.15 * sn * sn;
+        } else { const u = es01((q - 0.86) / 0.14); y = 0.35 - 0.01 * u; pitch = 0.55 * (1 - u); roll = -1.15 * u; }
+        return { at: [x, y, 0.1], yaw, roll, pitch, shadow: cl01(1.15 - (y - 0.3) * 0.28) };
+      };
+      return toyFx(v, 'leaf', toy, move, [bubble].concat(minis), () => { bubble.visible = false; minis.forEach((m) => { m.visible = false; }); });
+    },
+    /* Grasshopper jump (Andi's November 24 trick: "Do you want to turn into a grasshopper?" "Sure."): the buddy asks,
+       answers "Sure!" with a bounce, and turns into a grasshopper, which chirps, makes a big jump to the right, turns,
+       makes a bigger one back to the left, and a last one home with a backflip, its back legs kicking out each time */
+    grasshopper(v) {
+      const P = v.P, toy = toyHopper(), U = toy.userData;
+      const ask = wordBubble('?', '#3D7BEA', P), sure = wordBubble('SURE!', '#2FB574', P), boing = wordBubble('BOING!', '#FF8A1F', P);
+      [ask, sure, boing].forEach((b) => P.root.add(b));
+      /* each jump: [from q, to q, from x, to x, how high, flips] */
+      const JUMPS = [[0.1, 0.32, 0, 0.95, 1.4, 0], [0.37, 0.6, 0.95, -0.95, 1.8, 0], [0.65, 0.9, -0.95, 0, 2.1, 1]];
+      const CHIRP = [[0.02, 0.09], [0.32, 0.37], [0.6, 0.65]];
+      const pre = (k, now) => (k < 0.29 ? { y: 0.03 * Math.abs(Math.sin(now / 130)), roll: 0.07 * Math.sin(now / 160) } : { y: 0.16 * Math.sin(Math.PI * cl01((k - 0.3) / 0.035)) });
+      const move = (q, k, now) => {
+        popBubble(ask, k, 0.03, 0.27); popBubble(sure, k, 0.3, 0.37);
+        if (q < 0) { boing.visible = false; return null; }
+        let x = 0, y = 0, yaw = -0.45, pitch = 0, kick = 0;
+        const J = JUMPS.find((j) => q >= j[0] && q < j[1]);
+        if (J) {
+          const u = (q - J[0]) / (J[1] - J[0]), dir = J[3] > J[2] ? 1 : -1;
+          x = J[2] + (J[3] - J[2]) * es01(u); y = J[4] * 4 * u * (1 - u);
+          yaw = dir > 0 ? -0.35 : Math.PI + 0.35;
+          pitch = 0.35 * (1 - 2 * u) + (J[5] ? u * Math.PI * 2 : 0);
+          kick = u < 0.2 ? u / 0.2 : Math.max(0, 1 - (u - 0.2) / 0.3);
+        } else {
+          const last = JUMPS.filter((j) => q >= j[1]).pop(), next = JUMPS.find((j) => q < j[0]);
+          x = last ? last[3] : 0;
+          yaw = next ? (next[3] > next[2] ? -0.35 : Math.PI + 0.35) : -0.6;
+          kick = next ? -0.35 * cl01(1 - (next[0] - q) / 0.035) : 0;
+        }
+        const chirp = CHIRP.some((c) => q >= c[0] && q < c[1]);
+        U.hinds.forEach((h, i) => { h.hip.rotation.z = 0.5 * kick + (chirp ? 0.14 * Math.sin(now / 22 + i * Math.PI) : 0); h.knee.rotation.z = -0.85 * Math.max(0, kick); });
+        U.ants.forEach((a, i) => { a.rotation.z = 0.14 * Math.sin(now / 95 + i * 1.7) - (J ? 0.25 : 0); });
+        popBubble(boing, k, 0.455 + 0.445 * 0.38, 0.455 + 0.445 * 0.52);
+        return { at: [x, y, 0.15], yaw, pitch, shadow: cl01(1 - y * 0.3), wide: 1.3 };
+      };
+      return toyFx(v, 'grasshopper', toy, move, [ask, sure, boing], () => { [ask, sure, boing].forEach((b) => { b.visible = false; }); }, { inAt: 0.4, pre });
     }
   };
   /* The flying hero's props: a cape (its own, if it wears one; else one just for the trick, and whatever is on its
@@ -11983,7 +12196,7 @@ const Buddy3D = (() => {
     v.canvas.addEventListener('pointercancel', () => { down = false; });
   }
   const TRICK_MS = { bounce: 1000, twirl: 950, wiggle: 1300, jelly: 1000, flip: 950, tornado: 1500, freeze: 2000, wigglejump: 1300, handstand: 2300, boo: 2900, ants: 4000, tumble: 2400, handjump: 2800, treepose: 3600, invisible: 3400, grumble: 3300, gallop: 3600, airplane: 5600, rocket: 8000,
-    saucer: 6000, herofly: 5200, trexroar: 4600, racecar: 5600, firetruck: 6800, submarine: 6400, train: 6600, bat: 6000, bunnyhop: 5200 };
+    saucer: 6000, herofly: 5200, trexroar: 4600, racecar: 5600, firetruck: 6800, submarine: 6400, train: 6600, bat: 6000, bunnyhop: 5200, leaf: 6400, grasshopper: 8000 };
   /* tricks that bring props of their own (trickFx) */
   const PROP_TRICKS = ['boo', 'ants', 'treepose', 'invisible', 'grumble', 'gallop', 'airplane', 'rocket', 'herofly', 'bunnyhop'].concat(TOY_TRICKS);
   const tmpC = T ? new T.Color() : null;
@@ -12260,8 +12473,11 @@ const Buddy3D = (() => {
         /* JB's November 17 toy tricks (TOYS): a hop and spin, a poof, the toy does its trick (FX.fly moves it, its parts
            and the shadow), a poof and a little hop back */
         else if (TOY_TRICKS.indexOf(P.trick) >= 0) {
-          if (k < 0.065) { const e = Math.sin((Math.PI * k) / 0.065); y = 0.34 * e; yaw += ease(k / 0.065) * Math.PI * 2; sy = 1 + 0.06 * e; sx = 1 - 0.04 * e; }
-          const gone = ease(Math.min(1, Math.max(0, (k - 0.07) / 0.03))), back = ease(Math.min(1, Math.max(0, (k - 0.905) / 0.035)));
+          /* the hop and spin just before the poof, whenever it comes (FX.inAt), and the buddy's own moves before that */
+          const k0 = (FX && FX.inAt) || 0.065, h0 = k0 - 0.065;
+          if (k < h0 && FX && FX.pre) { const r = FX.pre(k, now) || {}; y += r.y || 0; roll += r.roll || 0; }
+          else if (k < k0) { const e = Math.sin((Math.PI * (k - h0)) / 0.065); y = 0.34 * e; yaw += ease((k - h0) / 0.065) * Math.PI * 2; sy = 1 + 0.06 * e; sx = 1 - 0.04 * e; }
+          const gone = ease(Math.min(1, Math.max(0, (k - k0 - 0.005) / 0.03))), back = ease(Math.min(1, Math.max(0, (k - 0.905) / 0.035)));
           planeHide = gone * (1 - back);
           if (k > 0.95) { const e = Math.sin((Math.PI * (k - 0.95)) / 0.05); y = 0.22 * e; sy = 1 + 0.07 * e; sx = 1 - 0.04 * e; }
           if (FX && FX.fly) { shadowK = FX.fly(k, now); startle = FX.startle || 0; }
@@ -14180,7 +14396,10 @@ const Sfx = (() => {
         saucer: ['Beep boop!', 650, { pitch: 1.5 }], herofly: ['To the rescue!', 250], trexroar: ['Roar!', 2420, { pitch: 0.4, rate: 0.7 }], racecar: ['Vroom vroom!', 800],
         firetruck: ['Fire truck!', 500], submarine: ['Dive, dive!', 1000], train: [['All aboard!', 700], ['Choo choo!', 5450, { pitch: 1.3 }]],
         /* Andi's November 20 tricks: the bat squeaks in a high voice, and the bunny says yum at each of its five bites */
-        bat: ['Squeak squeak!', 1300, { pitch: 1.8, rate: 1.15 }], bunnyhop: ['Yum, yum, yum, yum, yum!', 2600, { rate: 1.05 }] }[trick];
+        bat: ['Squeak squeak!', 1300, { pitch: 1.8, rate: 1.15 }], bunnyhop: ['Yum, yum, yum, yum, yum!', 2600, { rate: 1.05 }],
+        /* Andi's November 24 tricks: the leaf says "Falling leaf!" and "Whee!" as it falls; the buddy asks "Do you want to
+           turn into a grasshopper?" and answers "Sure!" (Andi's words) */
+        leaf: [['Falling leaf!', 450], ['Whee!', 2050, { pitch: 1.3 }]], grasshopper: [['Do you want to turn into a grasshopper?', 150, { rate: 1.1 }], ['Sure!', 2500, { pitch: 1.4 }]] }[trick];
       if (w) (Array.isArray(w[0]) ? w : [w]).forEach((x) => setTimeout(() => Speech.say(x[0], x[2]), (delay || 0) + x[1]));
     },
     /* Monster grumble: two grumbles while it crouches and shakes, then a big ROAR (timed to the trick). Pitched
@@ -14303,6 +14522,26 @@ const Sfx = (() => {
         [1.25, 2.45, 3.65, 4.6].forEach((t) => { note(2400, d + t, 0.06, { type: 'sine', vol: 0.06, to: 3300 }); note(2700, d + t + 0.11, 0.06, { type: 'sine', vol: 0.05, to: 3500 }); });
         noise(d + 1.55, 0.6, { freq: 600, to: 2400, q: 0.7, vol: 0.06, attack: 0.1 }); noise(d + 2.85, 0.75, { freq: 2200, to: 700, q: 0.7, vol: 0.06, attack: 0.1 }); noise(d + 4.05, 0.6, { freq: 700, to: 2300, q: 0.7, vol: 0.05, attack: 0.1 });
         api.thud(d + 5.2); poof(d + 5.37); api.sparkle(d + 5.45);
+      },
+      /* Falling leaf (Andi's November 24 trick): a poof, the wind lifting it up, a soft swish at each turn of its swaying
+         fall, a rustle as it lands and a poof back (all above the iPad speaker's lowest notes) */
+      leaf(d) {
+        poof(d + 0.42); api.sparkle(d + 0.5);
+        noise(d + 0.55, 0.9, { freq: 500, to: 2600, q: 0.6, vol: 0.07, attack: 0.15 });
+        [1.55, 2.3, 3.05, 3.8, 4.55].forEach((t, i) => noise(d + t, 0.45, { freq: i % 2 ? 1500 : 1100, to: i % 2 ? 900 : 1700, q: 0.8, vol: 0.045, attack: 0.12 }));
+        for (let i = 0; i < 6; i++) noise(d + 5.15 + i * 0.05, 0.06, { type: 'highpass', freq: 3200, vol: 0.05, attack: 0.004 });
+        poof(d + 5.75); api.sparkle(d + 5.83);
+      },
+      /* Grasshopper jump (Andi's November 24 trick): after the question and "Sure!", a poof, a chirp, a boing for each
+         jump and a little thud as it lands, chirps between, and a poof back */
+      grasshopper(d) {
+        const chirp = (t) => { for (let i = 0; i < 6; i++) note(4200, t + i * 0.055, 0.035, { type: 'sine', vol: 0.05, to: 4600 }); };
+        poof(d + 3.2); api.sparkle(d + 3.28);
+        chirp(d + 3.7);
+        [[4.0, 260, 620], [4.95, 240, 700], [5.9, 220, 780]].forEach((j) => { note(j[1], d + j[0], 0.36, { type: 'sine', vol: 0.1, to: j[2] }); note(j[1] * 2, d + j[0], 0.26, { type: 'triangle', vol: 0.04, to: j[2] * 2 }); });
+        [4.79, 5.73, 6.84].forEach((t) => noise(d + t, 0.08, { type: 'bandpass', freq: 900, q: 1, vol: 0.08, attack: 0.003 }));
+        chirp(d + 4.85); chirp(d + 5.78);
+        api.sparkle(d + 6.6); poof(d + 7.16); api.sparkle(d + 7.24);
       },
       /* Bunny hop (Andi's November 20 trick): a sparkle as its ears pop on, a boing on each of three hops, a pop as the
          carrot comes up out of the ground and a zip as it jumps to the mouth, five crunchy bites, and a happy boing */
@@ -19021,7 +19260,7 @@ function buyNow(id) {
 function playFlatTrick(svgEl, trick) {
   const cls = 'do-' + (trick || 'hop');
   svgEl.classList.remove(cls); void svgEl.getBoundingClientRect(); svgEl.classList.add(cls);
-  setTimeout(() => svgEl.classList.remove(cls), { freeze: 2100, handstand: 2400, boo: 3000, ants: 4100, handjump: 2900, tumble: 2500, treepose: 3700, invisible: 3500, grumble: 3400, gallop: 3700, airplane: 5700, rocket: 8100, saucer: 6100, herofly: 5300, trexroar: 4700, racecar: 5700, firetruck: 6900, submarine: 6500, train: 6700, bat: 6100, bunnyhop: 5300 }[trick] || 1400);
+  setTimeout(() => svgEl.classList.remove(cls), { freeze: 2100, handstand: 2400, boo: 3000, ants: 4100, handjump: 2900, tumble: 2500, treepose: 3700, invisible: 3500, grumble: 3400, gallop: 3700, airplane: 5700, rocket: 8100, saucer: 6100, herofly: 5300, trexroar: 4700, racecar: 5700, firetruck: 6900, submarine: 6500, train: 6700, bat: 6100, bunnyhop: 5300, leaf: 6500, grasshopper: 8100 }[trick] || 1400);
 }
 function confirmBuy() {
   const id = S.overlay && S.overlay.id, l = Store.learner(S.shopKid);
