@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261124221207";</script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Small Steps"><meta name="theme-color" content="#0C2C66"><script>window.SITE_BUILD="20261127071841";</script></head><body>
 <title>Small Steps | App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -1698,10 +1698,46 @@ body.tutor-on #app .screen:not(.fill) { padding-bottom: 210px; }
 /* and in Parents, under the score */
 .spl-starn { display: flex; align-items: center; gap: 4px; margin-top: 2px; color: var(--gold-hi); font-weight: 700; font-size: 13px; }
 .spl-starn svg { width: 14px; height: 14px; }
-/* the words she missed, spelled right, on the screen with her score (JB, Nov 13, 2026: "Take them out and show the
-   words"): to look at only, each word whole in the reading font */
-.spl-missed { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 12px; max-width: 100%; }
-.spl-missed li { font-family: var(--font-read); font-weight: 700; font-size: clamp(24px, 3.4vw, 34px); line-height: 1.15; letter-spacing: 0.04em; color: #14213A; padding: 6px 16px 8px; border-radius: 14px; background: #EAF8F0; border: 2px solid #C5EBD5; white-space: nowrap; }
+/* the words in two groups on the score screens (JB, Nov 26, 2026: "break down correctly spelled words and incorrectly
+   spelled words into two columns or groups"): side by side where there is room, one above the other on a narrow screen,
+   each word whole in the reading font; each missed word is shown spelled right (Nov 13: "Take them out and show the
+   words"). While a grown-up is fixing the score, each word is a button (a dashed edge) */
+.spl-groups { width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; align-items: start; }
+.spl-g { border-radius: 18px; padding: 12px 14px 14px; text-align: left; border: 2px solid; min-width: 0; }
+.spl-g.ok { background: #EAF8F0; border-color: #BFE7CF; --gc: #1B7A45; }
+.spl-g.miss { background: #FFF3E2; border-color: #F5CB92; --gc: #A4520A; }
+.spl-g.chk { background: #EAF1FB; border-color: #BCD1F0; --gc: #1D4E9E; grid-column: 1 / -1; }
+.spl-g h2 { margin: 0; display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: clamp(19px, 2.5vw, 24px); color: var(--gc); }
+.spl-g h2 b { margin-left: auto; min-width: 2em; text-align: center; padding: 1px 10px; border-radius: 999px; background: var(--gc); color: #fff; font-size: 0.85em; }
+.spl-sign { display: inline-grid; place-items: center; width: 1.35em; height: 1.35em; border-radius: 50%; background: var(--gc); color: #fff; font-size: 0.8em; flex: none; }
+.spl-gnote { margin: 4px 0 0; font-size: 14px; line-height: 1.35; color: var(--gc); }
+.spl-gnone { margin: 8px 0 0; color: var(--card-soft); }
+.spl-g ul { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.spl-g li { display: flex; max-width: 100%; }
+.spl-w { display: inline-flex; flex-direction: column; align-items: flex-start; max-width: 100%; font-family: var(--font-read); font-weight: 700; font-size: clamp(22px, 2.6vw, 26px); line-height: 1.15; letter-spacing: 0.03em; color: #14213A; background: #fff; border: 2px solid color-mix(in srgb, var(--gc) 30%, #fff); border-radius: 12px; padding: 4px 12px 6px; white-space: nowrap; text-align: left; }
+.spl-w small { font-size: 13px; font-weight: 600; letter-spacing: 0; color: var(--gc); white-space: normal; }
+button.spl-w { cursor: pointer; border-style: dashed; border-color: var(--gc); box-shadow: 0 2px 0 color-mix(in srgb, var(--gc) 35%, #fff); }
+button.spl-w:active { transform: translateY(2px); box-shadow: none; }
+.spl-w.own { border-style: solid; border-color: #1D4E9E; box-shadow: 0 0 0 2px #CFE0F7; }
+.spl-pen { font-style: normal; margin-left: 6px; color: #1D4E9E; font-size: 0.8em; }
+.spl-gkey { margin: -6px 0 0; font-size: 14px; color: #1D4E9E; align-self: flex-start; }
+/* fixing the score: the band at the top of the card, the quiet button under Done, and the card for one word */
+.spl-fixing { width: 100%; display: grid; gap: 2px; text-align: left; padding: 10px 14px; border-radius: 14px; background: #FFF4CC; border: 2px solid #F2C744; color: #6B4A00; font-size: 15px; line-height: 1.35; }
+.spl-fixing b { display: flex; align-items: center; gap: 6px; font-family: var(--font-display); font-size: 19px; }
+.spl-fixing svg { width: 18px; height: 18px; flex: none; }
+.spl-fixbtn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.06); color: var(--ink-soft); font: inherit; font-size: 15px; cursor: pointer; }
+.spl-fixbtn svg, .spl-ctl .btn svg { width: 16px; height: 16px; }
+.spl-fixdlg { width: min(560px, 100%); text-align: center; justify-items: center; max-height: calc(100dvh - 24px); overflow: auto; }
+.spl-fixdlg p { margin: 0; }
+.spl-fixk { font-size: 15px; }
+.spl-fixdlg .spl-fixw { margin: -6px 0 0; font-family: var(--font-read); font-size: clamp(36px, 9vw, 46px); letter-spacing: 0.04em; color: #fff; overflow-wrap: anywhere; }
+.spl-fixdlg .spl-pages { margin-top: 2px; }
+.spl-fixdlg .spl-page { width: min(480px, 78vw); color: var(--ink-soft); }
+.spl-fixtip { font-size: 14px; margin-top: -6px !important; }
+/* her paper, cut out of the picture and drawn upright */
+canvas.spl-paper { display: block; width: 100%; height: auto; border-radius: 12px; border: 2px solid var(--card-line); background: #F4F1EA; }
+.spl-light canvas { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; border-radius: 8px; background: #fff; cursor: zoom-in; }
+.spl-light.zoom canvas { max-width: none; max-height: none; height: auto; border-radius: 0; cursor: zoom-out; }
 /* Parents */
 .spl-check { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid rgba(255, 255, 255, 0.12); }
 .spl-check .help { margin: 4px 0 0; }
@@ -5369,22 +5405,75 @@ const Spelling = (() => {
   /* a backwards letter in words: "b written backwards (it looks like d)" */
   const revText = (r) => (r.looks ? r.letter + ' written backwards (it looks like ' + r.looks + ')' : r.letter + ' written backwards');
 
+  /* ---------- a grown-up's fixes (JB, Nov 26, 2026) ----------
+     "I want to be able to click on each of those words and correct the scoring if I believe it is incorrectly scored ...
+     Obviously you need to put a defense mechanism where any changes need to be first multi-factor authenticated by
+     division problem." Each change a grown-up makes to how a word counts is a field of its own on the test,
+     fix_<id> = { i, v: 'right' | 'wrong', at, was }, written once and never changed. The copies of a month's lists (the
+     iPad's, the progress folder's and the master copy's) are merged field by field, and a copy that never had a field
+     leaves it alone, so an older copy saved later cannot undo a fix (one object of decisions changed in place could come
+     back old). The newest fix of a word wins over everything else, so a fix can be changed back by another. A grown-up's
+     marks (the decisions saved before fixes, Nov 13 to 26, and a record repair at JB's word) count where a word has none. */
+  const FIX = 'fix_';
+  function fixesOf(s) {
+    const out = {};
+    if (!s || typeof s !== 'object') return out;
+    Object.keys(s).forEach((k) => {
+      if (k.slice(0, FIX.length) !== FIX) return;
+      const f = s[k], i = f && typeof f === 'object' ? Number(f.i) : NaN;
+      if (!Number.isInteger(i) || i < 0 || (f.v !== 'right' && f.v !== 'wrong')) return;
+      const at = String(f.at || ''), cur = out[i];
+      if (!cur || at > cur.at || (at === cur.at && k > cur.key)) out[i] = { i, v: f.v, at, was: f.was || null, key: k };
+    });
+    return out;
+  }
+  /* a new fix of word i: the field to add to the test (rnd keeps two fixes made in the same millisecond apart) */
+  function newFix(s, i, v, at, rnd) {
+    const t = tally(s), p = t.per[i];
+    if (!p || (v !== 'right' && v !== 'wrong')) return null;
+    const when = at || new Date().toISOString();
+    const key = FIX + Date.parse(when).toString(36) + String(rnd == null ? Math.random().toString(36).slice(2, 6) : rnd);
+    return { key, patch: { [key]: { i, v, at: when, was: p.v } } };
+  }
+  /* every word a grown-up decided on a test, as { i: 'right' | 'wrong' }: its newest fix, or else its mark */
+  function decisions(s) {
+    const out = {}, marks = (s && s.marks) || {}, fx = fixesOf(s);
+    Object.keys(marks).forEach((k) => { const i = Number(k); if (Number.isInteger(i) && i >= 0 && (marks[k] === 'right' || marks[k] === 'wrong')) out[i] = marks[k]; });
+    Object.keys(fx).forEach((i) => { out[i] = fx[i].v; });
+    return out;
+  }
+  /* where the paper is in a page's picture (the scorer finds it before reading the page; Nov 27, 2026):
+     { box: [left, top, width, height] as shares of the picture, up: the edge her writing's tops point to, w, h: the
+     picture's size }, or null */
+  function paperOf(s, k) {
+    const all = (s && Array.isArray(s.paper) && s.paper) || (s && s.score && Array.isArray(s.score.paper) && s.score.paper) || [];
+    const p = all[k];
+    if (!p || !Array.isArray(p.box) || p.box.length !== 4 || p.box.some((x) => typeof x !== 'number' || !isFinite(x))) return null;
+    const [x, y, w, h] = p.box;
+    if (x < 0 || y < 0 || w <= 0 || h <= 0 || x + w > 1.0001 || y + h > 1.0001) return null;
+    return { box: [x, y, w, h], up: ['top', 'right', 'bottom', 'left'].indexOf(p.up) >= 0 ? p.up : 'top', w: Number(p.w) || 0, h: Number(p.h) || 0 };
+  }
+
   /* ---------- a test, tallied ----------
      A test is one list said once, in order (a session with subject 'spelling' in the child's log). The scorer adds
-     score.words[i] = { v: 'right' | 'wrong' | 'check', wrote, wrote2, rev, why } and never writes anything else; a
-     grown-up's marks[i] = 'right' | 'wrong' settle a word the scorer left to check, or overrule it; a test scored by
-     hand (hand: true) counts every word not marked wrong as right. Nothing here is written by both. */
+     score.words[i] = { v: 'right' | 'wrong' | 'check', wrote, wrote2, rev, why } and never changes it; a grown-up's fix
+     (above) or mark settles a word the scorer left to check, or overrules it; a test scored by hand (hand: true) counts
+     every word not marked wrong as right. Nothing here is written by both. claude is the scorer's own verdict, kept
+     whatever a grown-up decided; changed lists the words a grown-up turned from Claude's right to missed or back. */
   function tally(s) {
-    const words = (s && s.words) || [], n = words.length, marks = (s && s.marks) || {};
+    const words = (s && s.words) || [], n = words.length, marks = (s && s.marks) || {}, fx = fixesOf(s);
     const sc = s && s.score && Array.isArray(s.score.words) ? s.score.words : null;
     const per = words.map((w, i) => {
-      const m = marks[i] || marks[String(i)], x = sc ? sc[i] || null : null;
+      const f = fx[i], m = marks[i] || marks[String(i)], x = sc ? sc[i] || null : null;
+      const claude = x && (x.v === 'right' || x.v === 'wrong' || x.v === 'check') ? x.v : null;
       let v;
-      if (m === 'right' || m === 'wrong') v = m;
-      else if (x && (x.v === 'right' || x.v === 'wrong' || x.v === 'check')) v = x.v;
+      if (f) v = f.v;
+      else if (m === 'right' || m === 'wrong') v = m;
+      else if (claude) v = claude;
       else if (s.hand) v = 'right';
       else v = 'wait';
-      return { i, w, v, by: m === 'right' || m === 'wrong' ? 'parent' : x ? 'claude' : s.hand ? 'hand' : null,
+      return { i, w, v, by: f ? 'fix' : m === 'right' || m === 'wrong' ? 'parent' : x ? 'claude' : s.hand ? 'hand' : null, claude,
+        fixed: f ? { at: f.at, was: f.was } : null,
         wrote: x && x.wrote != null ? x.wrote : null, wrote2: x && x.wrote2 != null ? x.wrote2 : null, rev: (x && x.rev) || [], why: (x && x.why) || '' };
     });
     const count = (k) => per.filter((p) => p.v === k).length;
@@ -5394,7 +5483,8 @@ const Spelling = (() => {
       scored: !!sc || !!(s && s.hand),
       done: n > 0 && check === 0 && wait === 0,
       misses: per.filter((p) => p.v === 'wrong'),
-      reversed: per.filter((p) => p.v === 'right' && p.rev && p.rev.length)
+      reversed: per.filter((p) => p.v === 'right' && p.rev && p.rev.length),
+      changed: per.filter((p) => (p.by === 'fix' || p.by === 'parent') && (p.claude === 'right' || p.claude === 'wrong') && p.v !== p.claude)
     };
   }
   /* where a test stands: 'checking' (sent, the scorer has not answered), 'error' (the scorer could not score it; a
@@ -5442,7 +5532,8 @@ const Spelling = (() => {
     STEPS.forEach((st) => { if (st[0] <= due && !s[st[1]]) patch[st[1]] = true; });
     return { add: due - top, patch };
   }
-  return { LISTS, BY, ready, sayText, norm, compare, revText, tally, status, starsFor, starsGiven, starsMove, STARS_FROM, MIRROR, INVERSIONS, inverted };
+  return { LISTS, BY, ready, sayText, norm, compare, revText, tally, status, starsFor, starsGiven, starsMove, STARS_FROM, MIRROR, INVERSIONS, inverted,
+    FIX, fixesOf, newFix, decisions, paperOf };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = Spelling;
 /* Small Steps: the book shelf. Picture books and early readers for each Kumon reading level,
@@ -18607,7 +18698,9 @@ const Cere = (() => {
    (JB, Nov 13, 2026: "Forget about the re-dos. She will do the same thing every night so there is no need", then
    "Take them out and show the words"): she writes both lists every night. A word the scorer's two readings disagree on
    waits for a grown-up in Parents → Reading, who can also score a whole test by hand. Each list earns her buddy stars
-   (JB, Nov 15, 2026): 1 for finishing it, 3 with 90% of the words right or more, 5 with every word right. */
+   (JB, Nov 15, 2026): 1 for finishing it, 3 with 90% of the words right or more, 5 with every word right. Her score
+   screen shows the words she spelled right and the words she missed in two groups, and a grown-up can change how any
+   word counts after the grown-ups' ÷ question (JB, Nov 26, 2026; "Fix the score", below). */
 
 /* The pictures go to the private folder through the website's key, so spelling runs on the kids' website, not in the
    master copy in Claude. */
@@ -18659,26 +18752,87 @@ function splPagesHTML(s, small) {
   }).join('') + '</div>';
 }
 /* a page, whole, over everything. A tap on the page zooms in where it was tapped (two and a half times, to read her
-   letters on a phone) and out again; a tap beside it, the X or Escape closes it. */
-function splPicOpen(src) {
+   letters on a phone) and out again; a tap beside it, the X or Escape closes it. With pp (where the paper is in the
+   picture), just her paper, turned so that her writing is upright. */
+function splPicOpen(src, pp) {
   const old = document.getElementById('splLight'); if (old) old.remove();
   const el = document.createElement('div');
-  el.id = 'splLight'; el.className = 'spl-light'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'The page, whole');
-  el.innerHTML = '<div class="spl-light-in"><img alt="The page, whole"></div><button class="icon-btn spl-light-x" aria-label="Close">' + ICON.close + '</button>' +
-    '<p class="spl-light-tip">Tap the page to zoom in or out.</p>';
-  const img = el.querySelector('img'), box = el.querySelector('.spl-light-in');
-  img.src = src;
+  el.id = 'splLight'; el.className = 'spl-light'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', pp ? 'The paper, whole' : 'The page, whole');
+  el.innerHTML = '<div class="spl-light-in">' + (pp ? '<canvas class="spl-light-paper" role="img" aria-label="The paper, whole"></canvas>' : '<img alt="The page, whole">') + '</div>' +
+    '<button class="icon-btn spl-light-x" aria-label="Close">' + ICON.close + '</button><p class="spl-light-tip">Tap the page to zoom in or out.</p>';
+  const pic = el.querySelector('img, canvas'), box = el.querySelector('.spl-light-in');
+  if (pp) { const z = splPaperSize(pp, SPL_PAPER_BIG); pic.width = z.w; pic.height = z.h; splPaperImg(src, (img) => splPaperDraw(pic, img, pp, SPL_PAPER_BIG)); }
+  else pic.src = src;
   const close = () => { el.remove(); document.removeEventListener('keydown', key); };
   const key = (e) => { if (e.key === 'Escape') close(); };
   el.addEventListener('click', (e) => {
-    if (e.target !== img) return close();
-    if (el.classList.contains('zoom')) { el.classList.remove('zoom'); img.style.width = ''; return; }
-    const r = img.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
-    el.classList.add('zoom'); img.style.width = Math.round(r.width * 2.5) + 'px';
-    box.scrollLeft = fx * img.offsetWidth - e.clientX; box.scrollTop = fy * img.offsetHeight - e.clientY;
+    if (e.target !== pic) return close();
+    if (el.classList.contains('zoom')) { el.classList.remove('zoom'); pic.style.width = ''; return; }
+    const r = pic.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+    el.classList.add('zoom'); pic.style.width = Math.round(r.width * 2.5) + 'px';
+    box.scrollLeft = fx * pic.offsetWidth - e.clientX; box.scrollTop = fy * pic.offsetHeight - e.clientY;
   });
   document.addEventListener('keydown', key);
   document.body.appendChild(el);
+}
+
+/* ---------- her paper, cut out of the picture (Nov 27, 2026) ----------
+   The scorer finds the paper in each picture before it reads the page, and keeps where it found it (Spelling.paperOf).
+   Where it has, the fix card shows just her paper, turned so that her writing is upright, and a tap opens it whole over
+   the screen; where it has not (a page it could not find), the whole picture. Drawn on a canvas once the picture is in;
+   a picture that cannot be drawn leaves the plain picture. */
+const SPL_TURN = { top: 0, right: 270, bottom: 180, left: 90 }, SPL_PAPER_SMALL = 1400, SPL_PAPER_BIG = 2400;
+const splPaperImgs = {};
+function splPaperImg(url, then) {
+  let e = splPaperImgs[url];
+  if (!e) {
+    const img = new Image();
+    e = splPaperImgs[url] = { img, ok: false, wait: [] };
+    img.onload = () => { e.ok = true; const w = e.wait; e.wait = []; w.forEach((f) => f(img)); };
+    img.onerror = () => { e.wait = []; };
+    img.src = url;
+  }
+  if (e.ok) then(e.img); else e.wait.push(then);
+}
+/* the paper's size as drawn, upright, its long side at most max pixels */
+function splPaperSize(pp, max) {
+  const W = pp.w || 1500, H = pp.h || 2000, sw = pp.box[2] * W, sh = pp.box[3] * H, turn = SPL_TURN[pp.up] || 0, side = turn === 90 || turn === 270;
+  const k = Math.min(1, max / Math.max(sw, sh));
+  return { w: Math.max(1, Math.round((side ? sh : sw) * k)), h: Math.max(1, Math.round((side ? sw : sh) * k)) };
+}
+function splPaperDraw(cv, img, pp, max) {
+  const W = img.naturalWidth, H = img.naturalHeight, sx = pp.box[0] * W, sy = pp.box[1] * H, sw = pp.box[2] * W, sh = pp.box[3] * H;
+  const turn = SPL_TURN[pp.up] || 0, side = turn === 90 || turn === 270, k = Math.min(1, max / Math.max(sw, sh));
+  cv.width = Math.max(1, Math.round((side ? sh : sw) * k)); cv.height = Math.max(1, Math.round((side ? sw : sh) * k));
+  const g = cv.getContext('2d');
+  g.save(); g.translate(cv.width / 2, cv.height / 2); g.rotate((turn * Math.PI) / 180);
+  g.drawImage(img, sx, sy, sw, sh, (-sw * k) / 2, (-sh * k) / 2, sw * k, sh * k);
+  g.restore();
+  cv.setAttribute('data-drawn', '1');
+}
+/* the pages of a test for the fix card: her paper where the scorer found it, else the picture */
+function splPaperHTML(s) {
+  const ps = (s && Array.isArray(s.photos)) ? s.photos : [];
+  if (!ps.length) return '';
+  return '<div class="spl-pages spl-papers">' + ps.map((p, k) => {
+    const x = SpellPics.want(p), pp = Spelling.paperOf(s, k), name = 'Page ' + (k + 1);
+    if (x.state !== 'ok') {
+      const why = x.state === 'loading' ? 'Loading…' : x.state === 'failed' ? 'Couldn’t load it. Check the internet.' : 'It comes with the next sync.';
+      return '<div class="spl-page none"><b>' + name + '</b><small>' + why + '</small></div>';
+    }
+    if (!pp) return '<button class="spl-page" data-act="splPic" data-src="' + esc(x.url) + '" aria-label="' + name + ', bigger"><img src="' + esc(x.url) + '" alt="' + name + '"><span>' + name + '</span></button>';
+    const z = splPaperSize(pp, SPL_PAPER_SMALL);
+    return '<button class="spl-page spl-paperbtn" data-act="splPaperOpen" data-src="' + esc(x.url) + '" data-paper="' + esc(JSON.stringify(pp)) + '" aria-label="' + name + ', her paper, bigger">' +
+      '<canvas class="spl-paper" data-paper="' + esc(JSON.stringify(pp)) + '" data-src="' + esc(x.url) + '" width="' + z.w + '" height="' + z.h + '" role="img" aria-label="' + name + ', her paper"></canvas><span>' + name + ', her paper</span></button>';
+  }).join('') + '</div>';
+}
+/* after each redraw: draw her paper into each new canvas */
+function splAfterRender(root) {
+  (root || document).querySelectorAll('canvas.spl-paper[data-paper]:not([data-drawn])').forEach((cv) => {
+    let pp = null;
+    try { pp = JSON.parse(cv.getAttribute('data-paper')); } catch (e) { return; }
+    splPaperImg(cv.getAttribute('data-src'), (img) => { if (cv.isConnected) splPaperDraw(cv, img, pp, SPL_PAPER_SMALL); });
+  });
 }
 const spellTests = (kid) => Store.sessionsFor(kid, 'spelling').filter((s) => s && s.kind === 'test');
 function spellToday(kid) {
@@ -18869,6 +19023,126 @@ function splQuit() {
   S.sp = null; releaseScreen(); Sfx.tap(); goHome();
 }
 
+/* ---------- the words in two groups, and a grown-up's fixes (JB, Nov 26, 2026; built on his "Go" of Nov 27) ----------
+   "For spelling, on the See My Score page, where you list all of the incorrect words, we should also list words that
+   are correct. I want you to break down correctly spelled words and incorrectly spelled words into two columns or
+   groups. Then I want to be able to click on each of those words and correct the scoring if I believe it is
+   incorrectly scored ... Obviously you need to put a defense mechanism where any changes need to be first
+   multi-factor authenticated by division problem." The score screens show Spelled right and Missed side by side (one
+   above the other on a narrow screen), each missed word spelled right, and the words Claude left for a grown-up as a
+   third group. "Fix the score" asks the grown-ups' ÷ question once (JB agreed to one per list, Nov 27: "Agree with
+   you"); fixing stays open until the grown-up leaves the screen, taps Done fixing, or 2 minutes pass without a tap.
+   While it is open each word is a button: a tap opens a card with how the word counts now, what Claude read and her
+   paper, and Count it right or Count it missed saves a fix (Spelling.newFix). From Parents → Reading, already behind
+   the ÷ question, Fix the score opens straight into fixing. */
+const FIX_IDLE = 120000;
+let splFixTimer = 0;
+function splFixing(P) {
+  if (P && P.fix && Date.now() - P.fix.at > FIX_IDLE) P.fix = null;
+  return !!(P && P.fix);
+}
+/* a tap while fixing keeps it open for 2 more minutes; a tap after 2 quiet minutes finds it closed */
+function splFixTouch() {
+  const P = S.sp;
+  if (!P || !P.fix) return;
+  if (Date.now() - P.fix.at > FIX_IDLE) { splFixIdle(); return; }
+  P.fix.at = Date.now();
+  clearTimeout(splFixTimer);
+  splFixTimer = setTimeout(splFixIdle, FIX_IDLE + 100);
+}
+function splFixIdle() {
+  const P = S.sp;
+  clearTimeout(splFixTimer); splFixTimer = 0;
+  if (!P || !P.fix) return;
+  const quiet = Date.now() - P.fix.at;
+  if (quiet < FIX_IDLE) { splFixTimer = setTimeout(splFixIdle, FIX_IDLE - quiet + 100); return; }
+  P.fix = null;
+  if (S.overlay && S.overlay.type === 'splFix') S.overlay = null;
+  const light = document.getElementById('splLight'); if (light) light.remove();
+  if (S.view === 'spell') { render(); toast('Fixing closed after 2 minutes without a tap'); }
+}
+document.addEventListener('pointerdown', () => { if (S.sp && S.sp.fix) splFixTouch(); }, true);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && S.sp && S.sp.fix && Date.now() - S.sp.fix.at > FIX_IDLE) splFixIdle(); });
+const splSaid = (x) => '“' + esc(x) + '”';
+/* grown: the parents' view (each missed word with what Claude read under it); fixing: each word is a button */
+function splGroupsHTML(t, fixing, grown) {
+  const word = (p, cls) => {
+    const sub = grown && p.v === 'wrong' && p.wrote && p.wrote !== p.w ? '<small>wrote ' + splSaid(p.wrote) + '</small>' : '';
+    const own = p.by === 'fix' || p.by === 'parent';
+    const inner = '<span>' + esc(p.w) + (own ? '<i class="spl-pen" aria-label="decided by a grown-up">✎</i>' : '') + '</span>' + sub;
+    const c = 'spl-w ' + cls + (own ? ' own' : '');
+    return fixing ? '<li><button class="' + c + '" data-act="splFixWord" data-i="' + p.i + '" aria-label="' + esc(p.w) + ', change how it counts">' + inner + '</button></li>' : '<li class="' + c + '">' + inner + '</li>';
+  };
+  const right = t.per.filter((p) => p.v === 'right'), miss = t.per.filter((p) => p.v === 'wrong'), chk = t.per.filter((p) => p.v === 'check');
+  const group = (cls, sign, title, note, ps) => '<section class="spl-g ' + cls + '"><h2><span class="spl-sign" aria-hidden="true">' + sign + '</span>' + title + '<b>' + ps.length + '</b></h2>' +
+    (note && ps.length ? '<p class="spl-gnote">' + note + '</p>' : '') + (ps.length ? '<ul>' + ps.map((p) => word(p, cls)).join('') + '</ul>' : '<p class="spl-gnone">None</p>') + '</section>';
+  return '<div class="spl-groups">' + group('ok', '✓', 'Spelled right', '', right) +
+    group('miss', '✗', 'Missed', grown ? 'Each shown spelled right, with what Claude read.' : 'Each shown spelled right.', miss) +
+    (chk.length ? group('chk', '?', 'For a grown-up to check', grown ? 'Claude couldn’t tell. ' + (fixing ? 'Tap each one to decide it.' : 'Tap Fix the score to decide them.') : '', chk) : '') + '</div>' +
+    (t.per.some((p) => p.by === 'fix' || p.by === 'parent') ? '<p class="spl-gkey">✎ Decided by a grown-up</p>' : '');
+}
+const splFixBanner = () => '<div class="spl-fixing" role="status"><b>' + ICON.lock + ' Fixing the score</b><span>Tap any word that was counted wrong. Fixing closes when you leave this screen, or after 2 minutes without a tap.</span></div>';
+/* the ÷ question first (the grown-ups' question), then fixing is open for this list */
+function splFixOpen() {
+  const P = S.sp, s = P && splShown(), l = P && Store.learner(P.kid);
+  if (!s || !l || s.voided) return;
+  Sfx.tap();
+  openGate(() => { if (S.sp !== P) return; P.fix = { at: Date.now() }; splFixTouch(); S.anim = false; render(); toast('Tap a word to change how it counts'); },
+    'Fix the score of ' + l.name + '’s ' + (((Spelling.BY[s.list] && Spelling.BY[s.list].short) || '') + ' words').trim() + ' from ' + fmtWhen(s.at) + '? Answer to change it.');
+}
+/* from Parents → Reading, which is behind the ÷ question already: straight into fixing */
+function splFixFromParents(kid, id) {
+  const s = spellTests(kid).find((x) => x.id === id);
+  if (!s || s.voided) return;
+  S.sp = { kid, phase: 'view', look: spellLook(), sid: id, from: 'parent', fix: { at: Date.now() } };
+  S.view = 'spell'; S.anim = true; Sfx.tap(); splFixTouch(); render(); window.scrollTo(0, 0);
+}
+/* the test on the screen: her score screen's, or the one opened from the list */
+function splShown() { const P = S.sp; return P && P.sid ? spellTests(P.kid).find((x) => x.id === P.sid) || null : null; }
+function splFixWord(i) {
+  const P = S.sp, s = splShown();
+  if (!s || !splFixing(P)) return render();
+  S.overlay = { type: 'splFix', kid: P.kid, id: s.id, i }; Sfx.tap(); render();
+}
+function splFixHTML(o) {
+  const l = Store.learner(o.kid), s = spellTests(o.kid).find((x) => x.id === o.id);
+  if (!s || !l) return '';
+  const t = Spelling.tally(s), p = t.per[o.i];
+  if (!p) return '';
+  const now = p.v === 'right' ? 'Spelled right' : p.v === 'wrong' ? 'Missed' : 'Not decided yet';
+  const read = p.wrote2 != null ? 'Claude read it as ' + splSaid(p.wrote) + ' one time and ' + splSaid(p.wrote2) + ' the other.'
+    : p.wrote && Spelling.norm(p.wrote) !== Spelling.norm(p.w) ? 'Claude read it as ' + splSaid(p.wrote) + '.' : p.claude === 'right' ? 'Claude read it as spelled right.' : p.claude === 'wrong' ? 'Claude found it not written.' : '';
+  const who = p.by === 'fix' ? ' A grown-up set it on ' + esc(fmtWhen(p.fixed.at)) + '.' : p.by === 'parent' ? ' A grown-up decided it.' : '';
+  const btn = (v, label, gold) => '<button class="btn ' + (gold ? 'btn-gold' : 'btn-glass') + '" data-act="splFixSet" data-v="' + v + '">' + label + '</button>';
+  const acts = p.v === 'wrong' ? btn('right', 'Count it right', true) + btn('keep', 'Keep it missed')
+    : p.v === 'right' ? btn('wrong', 'Count it missed', true) + btn('keep', 'Keep it right')
+    : btn('right', 'Spelled right', true) + btn('wrong', 'Spelled wrong', true) + btn('keep', 'Not now');
+  return '<div class="overlay" role="dialog" aria-modal="true" aria-labelledby="fixTitle"><div class="dialog glass spl-fixdlg">' +
+    '<p class="spl-fixk">Word ' + (o.i + 1) + ' of ' + s.words.length + ' on ' + esc(l.name) + '’s page</p><h2 id="fixTitle" class="spl-fixw">' + esc(p.w) + '</h2>' +
+    '<p>Counted now: <b>' + now + '</b>. ' + read + who + '</p>' + splPaperHTML(s) +
+    '<p class="spl-fixtip">Tap the page to see it whole, then tap again to zoom in.</p>' +
+    '<div class="actions center">' + acts + '</div></div></div>';
+}
+function splFixSet(v) {
+  const o = S.overlay, P = S.sp;
+  if (!o || o.type !== 'splFix') return;
+  S.overlay = null;
+  const s = spellTests(o.kid).find((x) => x.id === o.id);
+  if (!s || v === 'keep' || !splFixing(P)) { Sfx.tap(); render(); if (s && v !== 'keep' && !splFixing(P)) toast('Fixing closed after 2 minutes without a tap. Nothing was changed.'); return; }
+  const p = Spelling.tally(s).per[o.i], f = Spelling.newFix(s, o.i, v);
+  if (!p || !f || p.v === v) { Sfx.tap(); return render(); }
+  Store.updateSession(o.kid, s.id, s.at, f.patch, 'spelling');
+  Sfx.tap(); render(); toast('“' + p.w + '” now counts as ' + (v === 'right' ? 'spelled right' : 'missed'));
+}
+function splFixDone() {
+  const P = S.sp;
+  if (!P) return;
+  P.fix = null; clearTimeout(splFixTimer); splFixTimer = 0;
+  Sfx.tap();
+  if (P.from === 'parent') { S.sp = null; S.view = 'parent'; render(); return; }
+  render(); toast('Fixing is closed');
+}
+
 /* ---------- the screens ---------- */
 function viewSpell() {
   const P = S.sp, l = (P && Store.learner(P.kid)) || { name: '' };
@@ -18893,20 +19167,20 @@ function viewSpell() {
       acts('<button class="btn btn-glass" data-act="splQuit">Back home</button>');
   } else if (P.phase === 'view') {
     const s = spellTests(P.kid).find((x) => x.id === P.sid);
-    if (!s) { P.phase = 'day'; return viewSpell(); }
-    const t = Spelling.tally(s), st = Spelling.status(s);
-    const said = (x) => '“' + esc(x) + '”';
-    const miss = t.misses.map((m) => '<b>' + esc(m.w) + '</b>' + (m.wrote ? ' (wrote ' + said(m.wrote) + ')' : m.by === 'claude' ? ' (not written)' : '')).join(', ');
+    if (!s) { if (P.from === 'parent') { S.sp = null; S.view = 'parent'; return viewParent(); } P.phase = 'day'; return viewSpell(); }
+    const t = Spelling.tally(s), st = Spelling.status(s), fixing = splFixing(P) && !s.voided;
     const rev = t.reversed.map((p) => esc(p.rev.map((r) => r.letter).join(', ')) + ' in <b>' + esc(p.w) + '</b>').join('; ');
-    const chk = t.per.filter((p) => p.v === 'check').map((p) => '<b>' + esc(p.w) + '</b>').join(', ');
-    body = '<section class="card spl-card spl-view"><h1 class="spl-title">' + esc((Spelling.BY[s.list] && Spelling.BY[s.list].name) || s.listName || s.list) + '</h1><p class="spl-how">' + esc(fmtWhen(s.at)) + '</p>' +
+    const back = P.from === 'parent' ? '<button class="btn btn-glass" data-act="splFixDone">Back to Parents</button>' : '<button class="btn btn-glass" data-act="splDayBack">Back to spelling</button>';
+    body = '<section class="card spl-card spl-view">' + (fixing ? splFixBanner() : '') +
+      '<h1 class="spl-title">' + esc((Spelling.BY[s.list] && Spelling.BY[s.list].name) || s.listName || s.list) + '</h1><p class="spl-how">' + esc(fmtWhen(s.at)) + '</p>' +
+      (s.voided ? '<p class="spl-how">This list was voided: it is off the record.</p>' : '') +
       (t.scored ? '<p class="spl-big">' + ICON.star + ' ' + t.right + ' / ' + t.n + '</p>' : '<p class="spl-how">' + (st === 'error' ? 'Not scored yet. Score it in Parents → Reading.' : 'Claude is checking it.') + '</p>') +
-      (miss ? '<p class="spl-how">Missed: ' + miss + '.</p>' : '') + (rev ? '<p class="spl-how">Right, but written backwards: ' + rev + '.</p>' : '') +
       /* said to a parent in plain words (JB, Nov 13, 2026: "talk in simple English"): the master copy is the parents' */
-      (chk ? '<p class="spl-how">Claude couldn’t tell whether ' + (t.check === 1 ? 'this one was' : 'these were') + ' spelled right, so ' + (t.check === 1 ? 'it is' : 'they are') + ' for you to decide in Parents → Reading: ' + chk + '.</p>' : '') +
+      (t.check && !fixing && !s.voided ? '<p class="spl-how">Claude couldn’t tell whether ' + (t.check === 1 ? 'this one was' : 'these were') + ' spelled right, so ' + (t.check === 1 ? 'it is' : 'they are') + ' for you to decide: tap Fix the score, then ' + (t.check === 1 ? 'the word' : 'each word') + '.</p>' : '') +
+      (t.scored ? splGroupsHTML(t, fixing, true) : '') + (rev ? '<p class="spl-how">Right, but written backwards: ' + rev + '.</p>' : '') +
       (spellStarsShown(l, s) ? '<p class="spl-how">Stars for this list: <b>' + starWord(spellStarsShown(l, s)) + '</b> (1 for finishing it, 3 with 90% of the words right or more, 5 with every word right).</p>' : '') +
       (s.photos && s.photos.length ? '<h2 class="spl-h2">' + esc(l.name) + '’s ' + (s.photos.length > 1 ? s.photos.length + ' pages' : 'page') + '</h2>' + splPagesHTML(s) : '<p class="spl-how">No picture was sent with this list.</p>') + '</section>' +
-      acts('<button class="btn btn-glass" data-act="splDayBack">Back to spelling</button>');
+      acts(fixing ? '<button class="btn btn-gold btn-big" data-act="splFixDone">Done fixing</button>' : (t.scored && !s.voided ? '<button class="btn btn-glass" data-act="splFixOpen">' + ICON.lock + ' Fix the score</button>' : '') + back);
   } else if (P.phase === 'day') {
     const seen = spellSeen();
     body = '<h1 class="spl-title">Spelling</h1><p class="spl-sub">Two lists today. Get your paper and pencil.</p><div class="spl-lists">' + spellToday(P.kid).map((d) => {
@@ -18948,19 +19222,20 @@ function viewSpell() {
   } else if (P.phase === 'result') {
     const s = splTest();
     if (!s) { P.phase = 'day'; return viewSpell(); }
-    const t = Spelling.tally(s), all = t.done && !t.wrong, stars = spellStarsShown(l, s);
+    const t = Spelling.tally(s), all = t.done && !t.wrong, stars = spellStarsShown(l, s), fixing = splFixing(P) && !s.voided;
     const rev = t.reversed.map((p) => esc(p.rev.map((r) => r.letter).join(', ')) + ' in <b>' + esc(p.w) + '</b>').join('; ');
-    body = '<section class="card spl-card spl-res"><h1 class="spl-title">' + (all ? 'All right!' : t.right >= 0.8 * t.n ? 'Great spelling!' : 'Good try!') + '</h1>' +
+    body = '<section class="card spl-card spl-res">' + (fixing ? splFixBanner() : '') +
+      '<h1 class="spl-title">' + (all ? 'All right!' : t.right >= 0.8 * t.n ? 'Great spelling!' : 'Good try!') + '</h1>' +
       '<p class="spl-big">' + ICON.star + ' ' + t.right + ' / ' + t.n + '</p>' +
       /* her stars for this list (JB, Nov 15, 2026): 1 for finishing it, 3 for 90% or more, 5 for every word */
       (stars ? '<p class="spl-stars"><span class="star-chip">' + ICON.star + '+' + stars + '</span> ' + (stars === 5 ? 'Every word right: 5 stars!' : stars === 3 ? 'Almost every word right: 3 stars!' : '1 star for finishing!') + '</p>' : '') +
-      (t.check ? '<p class="spl-how">' + t.check + (t.check === 1 ? ' word waits' : ' words wait') + ' for a grown-up to check.</p>' : '') +
       (rev ? '<p class="spl-how">Right, but written backwards: ' + rev + '.</p>' : '') +
-      /* the words she missed, spelled right, to look at: nothing to write and nothing to tap through (JB, Nov 13, 2026:
-         "Take them out and show the words"); what she wrote is not shown to her */
-      (t.misses.length ? '<h2 class="spl-h2">' + (t.misses.length === 1 ? 'The word you missed, spelled right' : 'The ' + t.misses.length + ' words you missed, spelled right') + '</h2>' +
-        '<ul class="spl-missed">' + t.misses.map((m) => '<li>' + esc(m.w) + '</li>').join('') + '</ul>' : '') + '</section>' +
-      acts('<button class="btn btn-gold btn-big" data-act="splDayBack">Done</button>');
+      /* the words she spelled right and the words she missed, each missed word spelled right, to look at (JB, Nov 13,
+         2026: "Take them out and show the words"; Nov 26: "break down correctly spelled words and incorrectly spelled
+         words into two columns or groups"); what she wrote is not shown to her */
+      splGroupsHTML(t, fixing, false) + '</section>' +
+      acts(fixing ? '<button class="btn btn-gold btn-big" data-act="splFixDone">Done fixing</button>' : '<button class="btn btn-gold btn-big" data-act="splDayBack">Done</button>') +
+      (fixing || !t.scored || s.voided ? '' : '<div class="actions center"><button class="spl-fixbtn" data-act="splFixOpen">' + ICON.lock + '<span>Grown-ups: fix the score</span></button></div>');
     if (all && S.anim) after(200, () => Confetti.party());
   }
   return '<div class="screen fill spl-screen">' + head + body + '</div>';
@@ -18993,7 +19268,8 @@ function spellParentHTML(l) {
     const rev = t.reversed.map((p) => esc(p.rev.map((r) => r.letter).join(', ')) + ' in ' + esc(p.w)).join(' · ');
     const stat = st === 'void' ? '<span class="chip chip-void">Voided</span>' : st === 'checking' ? '<span class="chip">Claude is checking</span>' : st === 'error' ? '<span class="chip chip-warn">Not scored</span><div class="muted">' + esc((s.scoreError && s.scoreError.why) || '') + '</div>'
       : st === 'check' ? '<span class="chip chip-warn">' + t.check + ' for you to decide</span>' : '<span class="chip chip-ok">Scored' + (s.hand ? ' by hand' : '') + '</span>';
-    const acts = s.voided ? '' : (!t.scored || st === 'error' ? '<button class="btn-link" data-act="splHand" data-id="' + esc(s.id) + '">Score by hand</button>' : '') +
+    const acts = s.voided ? '' : (t.scored ? '<button class="btn-link" data-act="splFixParent" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '">Fix the score</button> ' : '') +
+      (!t.scored || st === 'error' ? '<button class="btn-link" data-act="splHand" data-id="' + esc(s.id) + '">Score by hand</button>' : '') +
       (st === 'error' ? ' <button class="btn-link" data-act="splRescore" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '">Try Claude again</button>' : '') +
       ' <button class="btn-link" data-act="splVoid" data-kid="' + esc(l.id) + '" data-id="' + esc(s.id) + '">Void</button>';
     return '<tr' + (s.voided ? ' class="voided"' : '') + '><td>' + esc(fmtWhen(s.at)) + '<div class="muted">' + nm(s) + '</div></td><td>' + (t.scored ? t.right + '/' + t.n : '—') + (stars ? '<div class="spl-starn">' + ICON.star + ' ' + starWord(stars) + '</div>' : '') + (miss ? '<div class="muted">Missed: ' + miss + '</div>' : '') + (rev ? '<div class="muted">Backwards: ' + rev + '</div>' : '') +
@@ -19002,6 +19278,7 @@ function spellParentHTML(l) {
   const more = every.length > 12 ? '<p><button class="btn-link" data-act="splAll">' + (S.spAll ? 'Show the 12 newest' : 'Show all ' + every.length + ' tests') + '</button></p>' : '';
   return '<section class="glass panel"><h3>Spelling</h3>' +
     '<p class="sub">Each day ' + esc(l.name) + ' writes both lists on paper and sends a picture of each. Claude reads each picture twice, separately, and a word the two readings disagree on waits for you here. A capital is never a mistake, and a letter written backwards or upside down counts as right, with a note.</p>' +
+    '<p class="sub">If Claude counted a word the wrong way, tap Fix the score beside that list, then tap the word.</p>' +
     (hasBuddy(l) ? '<p class="sub">Each list earns ' + esc(l.name) + ' stars for her buddy: 1 for finishing it, 3 with 90% of the words right or more, 5 with every word right. A word you decide here counts once you decide it, and a voided list’s stars are taken back.</p>' : '') +
     /* in plain words (JB, Nov 13, 2026: "talk in simple English"): what these words are and what to do */
     (checks.length ? '<h4>' + checks.length + (checks.length === 1 ? ' word for you to decide' : ' words for you to decide') + '</h4>' +
@@ -19009,11 +19286,12 @@ function spellParentHTML(l) {
     (rows ? '<div class="table-wrap"><table class="hist spl-table"><thead><tr><th>When</th><th>Score</th><th>Status</th></tr></thead><tbody>' + rows + '</tbody></table></div>' + more : '<p class="muted">No spelling tests yet.</p>') +
     '<p class="help">Every picture of ' + esc(l.name) + '’s pages is kept for good, a voided test’s too. Tap a page to see it whole.</p></section>';
 }
+/* a word decided here is saved as a fix, a field of its own written once (Spelling.newFix), as on the score screens */
 function splMark(kid, id, i, v) {
-  const s = spellTests(kid).find((x) => x.id === id);
-  if (!s) return;
-  Store.updateSession(kid, id, s.at, { marks: Object.assign({}, s.marks || {}, { [i]: v }) }, 'spelling');
-  Sfx.tap(); render(); toast(v === 'right' ? 'Marked right' : 'Marked wrong');
+  const s = spellTests(kid).find((x) => x.id === id), f = s && Spelling.newFix(s, i, v);
+  if (!s || !f) return;
+  Store.updateSession(kid, s.id, s.at, f.patch, 'spelling');
+  Sfx.tap(); render(); toast('“' + s.words[i] + '” counts as ' + (v === 'right' ? 'spelled right' : 'missed'));
 }
 /* a test saved by mistake comes off the record; spelling moves no level, and its stars are taken back where they were
    given (the kids' iPads: spellStars, on this device now or on the iPad the next time it opens) */
@@ -19051,8 +19329,14 @@ function spellAct(act, t) {
     case 'splView': if (S.sp) { const id = t.getAttribute('data-id'), s = spellTests(S.sp.kid).find((x) => x.id === id); if (s && Spelling.status(s) !== 'checking') markSpellSeen(id);
       S.sp.sid = id; S.sp.phase = 'view'; S.anim = true; Sfx.tap(); render(); window.scrollTo(0, 0); } return true;
     case 'splPic': splPicOpen(t.getAttribute('data-src')); return true;
+    case 'splPaperOpen': { let pp = null; try { pp = JSON.parse(t.getAttribute('data-paper')); } catch (e) { pp = null; } splPicOpen(t.getAttribute('data-src'), pp); return true; }
     case 'splAll': S.spAll = !S.spAll; Sfx.tap(); render(); return true;
-    case 'splDayBack': if (S.sp) { S.sp.phase = 'day'; S.anim = true; Sfx.tap(); render(); window.scrollTo(0, 0); } return true;
+    case 'splDayBack': if (S.sp) { S.sp.fix = null; S.sp.phase = 'day'; S.anim = true; Sfx.tap(); render(); window.scrollTo(0, 0); } return true;
+    case 'splFixOpen': splFixOpen(); return true;
+    case 'splFixParent': splFixFromParents(t.getAttribute('data-kid'), t.getAttribute('data-id')); return true;
+    case 'splFixWord': splFixWord(Number(t.getAttribute('data-i'))); return true;
+    case 'splFixSet': splFixSet(t.getAttribute('data-v')); return true;
+    case 'splFixDone': splFixDone(); return true;
     case 'splQuit': splQuit(); return true;
     case 'splMark': splMark(t.getAttribute('data-kid'), t.getAttribute('data-id'), Number(t.getAttribute('data-i')), t.getAttribute('data-v')); return true;
     case 'splHand': S.spHand = { id: t.getAttribute('data-id'), wrong: {} }; Sfx.tap(); render(); return true;
@@ -19319,6 +19603,7 @@ function overlayHTML() {
   }
   if (o.type === 'sheet') return sheetInfoHTML(o.kid, o.id);
   if (o.type === 'bookLog') return bookQuickHTML(o);
+  if (o.type === 'splFix') return splFixHTML(o);
   if (o.type === 'confirm') {
     return '<div class="overlay" role="dialog" aria-modal="true" aria-labelledby="cfTitle"><div class="dialog glass"><h2 id="cfTitle">' + esc(o.title) + '</h2><p>' + esc(o.body) + '</p>' +
       '<div class="actions"><button class="btn ' + (o.danger ? 'btn-danger' : 'btn-gold') + '" data-act="confirmYes">' + esc(o.yes) + '</button><button class="btn btn-glass" data-act="closeOverlay">Cancel</button></div></div></div>';
@@ -19661,6 +19946,8 @@ function render() {
   if (S.view === 'sheet') updateClock();
   if (typeof Buddy3D !== 'undefined') Buddy3D.mount(app);
   if (typeof Tutor !== 'undefined') Tutor.afterRender();
+  /* her spelling paper, cut out of its picture, is drawn once the picture is in (ui-spelling.js) */
+  if (typeof splAfterRender === 'function') splAfterRender(app);
 }
 function onStore() {
   /* a spelling score that came in, or a grown-up's decision, may earn stars (ui-spelling.js) */
